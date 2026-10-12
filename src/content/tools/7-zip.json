@@ -1,0 +1,103 @@
+{
+  "name": "7-Zip",
+  "category": "유틸리티",
+  "notes": [
+    "Mac·Linux는 명령어 버전",
+    "공식 개발은 GitHub 밖, 이 저장소는 공개용"
+  ],
+  "schoolUse": {
+    "value": "압축·해제",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/ip7z/7zip",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 조사값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "usageMode": {
+    "value": "pc",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/ip7z/7zip",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 조사값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/ip7z/7zip",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 (reviewed)",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "partial",
+      "linux": "yes",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "no",
+      "ios": "no"
+    },
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/ip7z/7zip",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "공식 배포 현황 조사값, 검증 필요",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "license": {
+    "value": null,
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/ip7z/7zip",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "GitHub 검색 API 조회값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "officialSite": {
+    "value": null,
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/ip7z/7zip",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터에 없음",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "github": {
+    "repo": "ip7z/7zip",
+    "stars": 4145,
+    "lastPush": "2026-10-06",
+    "archived": false,
+    "latestRelease": null,
+    "fetchedAt": "2026-10-12"
+  },
+  "health": "active"
+}

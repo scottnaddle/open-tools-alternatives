@@ -1,0 +1,41 @@
+{
+  "name": "한컴오피스",
+  "category": "문서·오피스",
+  "icon": "doc",
+  "source": "field",
+  "bundle": 6,
+  "procurementNote": null,
+  "gap": {
+    "value": "HWP 파일을 열어 보는 건 되지만, 편집 후 서식이 그대로 유지되진 않아요.",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://school-edtech.kr",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 조사값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "alternatives": [
+    {
+      "tool": "h2orestart",
+      "summary": "LibreOffice에 확장을 설치해 HWP·HWPX 열기. 편집 호환은 제한적",
+      "installDifficulty": "보통",
+      "level": {
+        "value": "부분 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    }
+  ]
+}

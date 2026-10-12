@@ -1,0 +1,8 @@
+---
+const { fact } = Astro.props;
+const label = fact.status === 'verified' ? '확인됨' : '확인 중';
+---
+<span class={`st st-${fact.status}`}>{label}</span>
+<details class="src"><summary>출처 {fact.sources.length}</summary>
+  <ul>{fact.sources.map((s) => <li><a href={s.url}>{s.url}</a> · {s.method} · {s.fetchedAt.slice(0, 10)}{s.excerpt && ` · ${s.excerpt}`}</li>)}</ul>
+</details>

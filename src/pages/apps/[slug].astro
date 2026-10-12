@@ -1,0 +1,29 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import Status from '../../components/Status.astro';
+export async function getStaticPaths() {
+  return (await getCollection('schoolApps')).map((a) => ({ params: { slug: a.id }, props: { app: a } }));
+}
+const { app } = Astro.props;
+const alts = await Promise.all(app.data.alternatives.map(async (x) => ({ ...x, t: await getEntry(x.tool) })));
+---
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{app.data.name} 대신 — 열린도구</title></head>
+<body>
+  <p><a href="/">← 대안 찾기</a></p>
+  <h1>{app.data.name} 대신 쓸 수 있는 도구</h1>
+  {app.data.procurementNote && <p>{app.data.procurementNote.value} <Status fact={app.data.procurementNote} /></p>}
+  {app.data.gap && <p><strong>미리 알아두세요:</strong> {app.data.gap.value} <Status fact={app.data.gap} /></p>}
+  {alts.map(({ t, level, installDifficulty, summary }) => (
+    <section>
+      <h2>{t.data.name}</h2>
+      <p>{summary}</p>
+      <ul>
+        <li>대체 정도: {level.value} <Status fact={level} /></li>
+        <li>설치 난이도: {installDifficulty}</li>
+        <li>학교 활용: {t.data.schoolUse.value} <Status fact={t.data.schoolUse} /></li>
+        <li>라이선스: {t.data.license.value ?? '확인 필요'} <Status fact={t.data.license} /></li>
+        <li>저장소: <a href={`https://github.com/${t.data.github.repo}`}>{t.data.github.repo}</a> · 활동 {t.data.health} · 확인 {t.data.github.fetchedAt}</li>
+      </ul>
+    </section>
+  ))}
+</body></html>

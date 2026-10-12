@@ -1,0 +1,102 @@
+{
+  "name": "GIMP",
+  "category": "이미지·디자인",
+  "notes": [
+    "GitHub는 미러"
+  ],
+  "schoolUse": {
+    "value": "사진 편집",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/GNOME/gimp",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 조사값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "usageMode": {
+    "value": "pc",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/GNOME/gimp",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 조사값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/GNOME/gimp",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 (reviewed)",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "yes",
+      "linux": "yes",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "no",
+      "ios": "no"
+    },
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/GNOME/gimp",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "공식 배포 현황 조사값, 검증 필요",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "license": {
+    "value": "NOASSERTION",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/GNOME/gimp",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "GitHub 검색 API 조회값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "officialSite": {
+    "value": null,
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/GNOME/gimp",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터에 없음",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "github": {
+    "repo": "GNOME/gimp",
+    "stars": 6506,
+    "lastPush": "2026-10-12",
+    "archived": false,
+    "latestRelease": null,
+    "fetchedAt": "2026-10-12"
+  },
+  "health": "active"
+}

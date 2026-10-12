@@ -1,0 +1,29 @@
+{
+  "name": "메신저 파일 전송·AirDrop",
+  "category": "유틸리티",
+  "icon": "send",
+  "source": "field",
+  "bundle": 4,
+  "procurementNote": null,
+  "gap": null,
+  "alternatives": [
+    {
+      "tool": "localsend",
+      "summary": "인터넷 없이 같은 와이파이 안에서 전송",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "거의 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    }
+  ]
+}

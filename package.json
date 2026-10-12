@@ -1,0 +1,1 @@
+{"name":"yeollin-dogu-alternatives","type":"module","private":true,"scripts":{"dev":"astro dev","build":"astro build"},"dependencies":{"astro":"^5.18.2"}}

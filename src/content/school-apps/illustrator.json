@@ -1,0 +1,41 @@
+{
+  "name": "Adobe Illustrator",
+  "category": "이미지·디자인",
+  "icon": "vector",
+  "source": "procurement",
+  "bundle": 2,
+  "procurementNote": {
+    "value": "2026년 1~10월 학교 구매 Adobe 512개교",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://school-edtech.kr",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "2026년 1~10월 조달 기록",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "gap": null,
+  "alternatives": [
+    {
+      "tool": "inkscape",
+      "summary": "벡터 그림, 포스터, 로고",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "거의 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "name": "알집",
+  "category": "유틸리티",
+  "icon": "archive",
+  "source": "procurement",
+  "bundle": 1,
+  "procurementNote": {
+    "value": "2026년 1~10월 학교 구매 알툴즈 492개교",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://school-edtech.kr",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "2026년 1~10월 조달 기록",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "gap": null,
+  "alternatives": [
+    {
+      "tool": "7-zip",
+      "summary": "압축·해제의 사실상 표준",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "거의 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "nanazip",
+      "summary": "Windows 11 오른쪽 클릭 메뉴에 맞춘 7-Zip",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "거의 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "peazip",
+      "summary": "Windows·Mac·Linux 모두 지원",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "거의 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    }
+  ]
+}

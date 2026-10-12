@@ -1,0 +1,71 @@
+{
+  "name": "CapCut",
+  "category": "영상·오디오",
+  "icon": "video",
+  "source": "procurement",
+  "bundle": 5,
+  "procurementNote": {
+    "value": "2026년 1~10월 학교 구매 414개교",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://school-edtech.kr",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "2026년 1~10월 조달 기록",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "gap": {
+    "value": "템플릿, 자동 효과, 휴대폰 앱은 아직 없어요. 기본 편집과 자막은 충분해요.",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://school-edtech.kr",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 조사값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "alternatives": [
+    {
+      "tool": "opencut",
+      "summary": "브라우저 영상 편집. 템플릿·효과는 아직 적고 재작성 진행 중",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "부분 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "shotcut",
+      "summary": "편집 기능은 충분, 템플릿과 자동 효과는 없음",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "부분 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    }
+  ]
+}

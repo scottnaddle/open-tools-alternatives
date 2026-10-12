@@ -1,0 +1,29 @@
+{
+  "name": "Visio·알마인드",
+  "category": "이미지·디자인",
+  "icon": "diagram",
+  "source": "field",
+  "bundle": 4,
+  "procurementNote": null,
+  "gap": null,
+  "alternatives": [
+    {
+      "tool": "draw-io",
+      "summary": "순서도, 마인드맵, 조직도",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "거의 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    }
+  ]
+}

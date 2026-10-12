@@ -1,0 +1,29 @@
+{
+  "name": "반디캠·오캠",
+  "category": "영상·오디오",
+  "icon": "record",
+  "source": "field",
+  "bundle": 3,
+  "procurementNote": null,
+  "gap": null,
+  "alternatives": [
+    {
+      "tool": "obs-studio",
+      "summary": "수업 녹화와 실시간 방송",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "거의 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+---
+import { getCollection } from 'astro:content';
+const apps = (await getCollection('schoolApps')).sort((a, b) => a.data.bundle - b.data.bundle);
+---
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>열린도구 Alternatives (시안)</title></head>
+<body>
+  <h1>학교 앱 대신 쓸 수 있는 오픈소스</h1>
+  <p>AI 에이전트가 작성·관리하는 정보입니다. 현재 모든 항목은 "확인 중"입니다.</p>
+  <ul>{apps.map((a) => <li><a href={`/apps/${a.id}/`}>{a.data.name}</a> ({a.data.category}) — 대안 {a.data.alternatives.length}개</li>)}</ul>
+</body></html>

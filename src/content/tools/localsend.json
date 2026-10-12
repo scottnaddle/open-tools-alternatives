@@ -1,0 +1,100 @@
+{
+  "name": "LocalSend",
+  "category": "유틸리티",
+  "notes": [],
+  "schoolUse": {
+    "value": "인터넷 없이 교실 내 파일 전송",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/localsend/localsend",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 조사값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "usageMode": {
+    "value": "pc",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/localsend/localsend",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 조사값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/localsend/localsend",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터 (reviewed)",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "yes",
+      "linux": "yes",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "yes",
+      "ios": "yes"
+    },
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/localsend/localsend",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "공식 배포 현황 조사값, 검증 필요",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "license": {
+    "value": "Apache-2.0",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/localsend/localsend",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "GitHub 검색 API 조회값",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "officialSite": {
+    "value": null,
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/localsend/localsend",
+        "fetchedAt": "2026-10-12T00:00:00+09:00",
+        "excerpt": "씨앗 데이터에 없음",
+        "method": "manual-seed"
+      }
+    ]
+  },
+  "github": {
+    "repo": "localsend/localsend",
+    "stars": 94048,
+    "lastPush": "2026-10-10",
+    "archived": false,
+    "latestRelease": null,
+    "fetchedAt": "2026-10-12"
+  },
+  "health": "active"
+}
