@@ -71,10 +71,10 @@
     "lastVerified": null,
     "sources": [
       {
-        "url": "https://api.github.com/repos/M2Team/NanaZip/license",
-        "fetchedAt": "2026-10-12T22:35:34+00:00",
-        "excerpt": "spdx_id=NOASSERTION",
-        "method": "github-api"
+        "url": "https://raw.githubusercontent.com/M2Team/NanaZip/main/License.md",
+        "fetchedAt": "2026-10-12T22:39:11+00:00",
+        "method": "readme",
+        "excerpt": "﻿# NanaZip License / For giving the maximum respect for the upstream projects and following the / philosophy about open-source software from Kenji Mouri (MouriNaruto), the one / of the M2-Team founders. / The source code of NanaZip (not including the source code from third-party / libraries, 7-Zip o … [sha256 97a7e4a93532]"
       },
       {
         "url": "https://github.com/M2Team/NanaZip",
@@ -114,10 +114,24 @@
     "runId": "verify-20261013033534",
     "at": "2026-10-12T22:35:34+00:00",
     "unresolved": [
-      "라이선스 자동 판별 불가(spdx=NOASSERTION) — 라이선스 파일 원문 확인 필요"
+      "라이선스 C등급 대기: 제안 MIT AND LicenseRef-7-Zip (24시간 뒤 재확인)"
     ],
     "notes": [
       "GitHub homepage 필드: https://nanazip.org (공식 사이트 후보, 미반영 — B등급·공식 사이트 확인 필요)"
+    ]
+  },
+  "pendingLicense": {
+    "value": "MIT AND LicenseRef-7-Zip",
+    "note": "NanaZip 자체 코드 MIT, 7-Zip 유래 코드는 7-Zip 라이선스, 로고·아이콘은 CC BY-ND 4.0",
+    "proposedAt": "2026-10-12T22:39:11+00:00",
+    "earliestApply": "2026-10-13T22:39:11+00:00",
+    "sources": [
+      {
+        "url": "https://raw.githubusercontent.com/M2Team/NanaZip/main/License.md",
+        "fetchedAt": "2026-10-12T22:39:11+00:00",
+        "method": "readme",
+        "excerpt": "﻿# NanaZip License / For giving the maximum respect for the upstream projects and following the / philosophy about open-source software from Kenji Mouri (MouriNaruto), the one / of the M2-Team founders. / The source code of NanaZip (not including the source code from third-party / libraries, 7-Zip o … [sha256 97a7e4a93532]"
+      }
     ]
   }
 }

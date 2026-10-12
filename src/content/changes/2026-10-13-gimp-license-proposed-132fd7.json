@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-12T22:39:11+00:00",
+  "agent": "verifier",
+  "runId": "license-text-20261013033911",
+  "target": "tools/gimp.license",
+  "before": "NOASSERTION",
+  "after": "GPL-3.0",
+  "sources": [
+    {
+      "url": "https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING",
+      "fetchedAt": "2026-10-12T22:39:11+00:00",
+      "method": "official-site",
+      "excerpt": "GNU GENERAL PUBLIC LICENSE / Version 3, 29 June 2007 / Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> / Everyone is permitted to copy and distribute verbatim copies / of this license document, but changing it is not allowed. / Preamble / The GNU General Public License is a free … [sha256 e79e9c8a0c85]"
+    }
+  ],
+  "tier": "C",
+  "gates": [
+    "license-text",
+    "pending:recheck-24h"
+  ],
+  "commit": "pending"
+}

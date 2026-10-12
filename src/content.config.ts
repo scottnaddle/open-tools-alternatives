@@ -47,6 +47,7 @@ const tools = defineCollection({
         latestRelease: z.object({ tag: z.string(), date: z.string(), url: z.string().url(), fromTag: z.boolean().optional() }).nullable().optional(),
         fetchedAt: z.string() }).optional(),
     }),
+    pendingLicense: z.object({ value: z.string(), note: z.string(), proposedAt: z.string(), earliestApply: z.string(), sources: z.array(Source).min(1) }).optional(),
     verification: z.object({ runId: z.string(), at: z.string(), unresolved: z.array(z.string()), notes: z.array(z.string()) }).optional(),
     health: z.enum(['active', 'slowing', 'stale', 'archived']),
   }),
