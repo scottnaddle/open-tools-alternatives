@@ -71,6 +71,12 @@
     "lastVerified": null,
     "sources": [
       {
+        "url": "https://api.github.com/repos/ip7z/7zip/license",
+        "fetchedAt": "2026-10-12T22:35:34+00:00",
+        "excerpt": "spdx_id=None",
+        "method": "github-api"
+      },
+      {
         "url": "https://github.com/ip7z/7zip",
         "fetchedAt": "2026-10-12T00:00:00+09:00",
         "excerpt": "GitHub 검색 API 조회값",
@@ -93,11 +99,23 @@
   },
   "github": {
     "repo": "ip7z/7zip",
-    "stars": 4145,
+    "stars": 4150,
     "lastPush": "2026-10-06",
     "archived": false,
-    "latestRelease": null,
+    "latestRelease": {
+      "tag": "26.04",
+      "date": "2026-10-06",
+      "url": "https://github.com/ip7z/7zip/releases/tag/26.04"
+    },
     "fetchedAt": "2026-10-12"
   },
-  "health": "active"
+  "health": "active",
+  "verification": {
+    "runId": "verify-20261013033534",
+    "at": "2026-10-12T22:35:34+00:00",
+    "unresolved": [
+      "라이선스 자동 판별 불가(spdx=None) — 라이선스 파일 원문 확인 필요"
+    ],
+    "notes": []
+  }
 }

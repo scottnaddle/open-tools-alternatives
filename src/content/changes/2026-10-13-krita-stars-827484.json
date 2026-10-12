@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-12T22:35:34+00:00",
+  "agent": "verifier",
+  "runId": "verify-20261013033534",
+  "target": "tools/krita.github.stars",
+  "before": 10529,
+  "after": 10536,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/KDE/krita",
+      "fetchedAt": "2026-10-12T22:35:34+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

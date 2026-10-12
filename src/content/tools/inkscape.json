@@ -70,6 +70,12 @@
     "lastVerified": null,
     "sources": [
       {
+        "url": "https://api.github.com/repos/inkscape/inkscape/license",
+        "fetchedAt": "2026-10-12T22:35:34+00:00",
+        "excerpt": "spdx_id=None",
+        "method": "github-api"
+      },
+      {
         "url": "https://github.com/inkscape/inkscape",
         "fetchedAt": "2026-10-12T00:00:00+09:00",
         "excerpt": "GitHub 검색 API 조회값",
@@ -92,11 +98,39 @@
   },
   "github": {
     "repo": "inkscape/inkscape",
-    "stars": 4007,
+    "stars": 4009,
     "lastPush": "2022-03-03",
     "archived": false,
-    "latestRelease": null,
-    "fetchedAt": "2026-10-12"
+    "latestRelease": {
+      "tag": "INKSCAPE_1_4",
+      "date": "2024-10-12",
+      "url": "https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4"
+    },
+    "fetchedAt": "2026-10-12",
+    "official": {
+      "host": "https://gitlab.com/inkscape/inkscape",
+      "lastActivity": "2026-10-12",
+      "latestRelease": {
+        "tag": "INKSCAPE_1_4",
+        "date": "2024-10-12",
+        "url": "https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4"
+      },
+      "license": "other",
+      "fetchedAt": "2026-10-12"
+    }
   },
-  "health": "stale"
+  "health": "active",
+  "verification": {
+    "runId": "verify-20261013033534",
+    "at": "2026-10-12T22:35:34+00:00",
+    "unresolved": [
+      "라이선스 자동 판별 불가(spdx=None) — 라이선스 파일 원문 확인 필요"
+    ],
+    "notes": [
+      "GitHub 저장소는 미러로 보임(설명: 'Project Website: https://inkscape.org - Code Repository: https://gitlab.com/inkscape/inkscape - Draw freely. 🖌')",
+      "공식 저장소 https://gitlab.com/inkscape/inkscape 활동 2026-10-12, 최신 {'tag': 'INKSCAPE_1_4', 'date': '2024-10-12', 'url': 'https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4'}",
+      "공식 저장소 라이선스 키: other (SPDX 표기 확인 후 반영 — C등급)",
+      "GitHub homepage 필드: http://www.inkscape.org/ (공식 사이트 후보, 미반영 — B등급·공식 사이트 확인 필요)"
+    ]
+  }
 }

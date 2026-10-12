@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-12T22:35:34+00:00",
+  "agent": "verifier",
+  "runId": "verify-20261013033534",
+  "target": "tools/h2orestart.github.latestRelease",
+  "before": null,
+  "after": {
+    "tag": "v0.7.14",
+    "date": "2026-09-06",
+    "url": "https://github.com/ebandal/H2Orestart/releases/tag/v0.7.14"
+  },
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/ebandal/H2Orestart/releases/latest",
+      "fetchedAt": "2026-10-12T22:35:34+00:00",
+      "excerpt": "latest release/tag",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

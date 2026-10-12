@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-12T22:35:34+00:00",
+  "agent": "verifier",
+  "runId": "verify-20261013033534",
+  "target": "tools/opencut.github.latestRelease",
+  "before": null,
+  "after": {
+    "tag": "v0.3.0",
+    "date": "2026-04-15",
+    "url": "https://github.com/OpenCut-app/OpenCut/releases/tag/v0.3.0"
+  },
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/OpenCut-app/OpenCut/releases/latest",
+      "fetchedAt": "2026-10-12T22:35:34+00:00",
+      "excerpt": "latest release/tag",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

@@ -43,7 +43,11 @@ const tools = defineCollection({
       repo: z.string(), stars: z.number().int(), lastPush: z.string(), archived: z.boolean(),
       latestRelease: z.object({ tag: z.string(), date: z.string(), url: z.string().url() }).nullable(),
       fetchedAt: z.string(),
+      official: z.object({ host: z.string().url(), lastActivity: z.string(), license: z.string().nullable().optional(),
+        latestRelease: z.object({ tag: z.string(), date: z.string(), url: z.string().url(), fromTag: z.boolean().optional() }).nullable().optional(),
+        fetchedAt: z.string() }).optional(),
     }),
+    verification: z.object({ runId: z.string(), at: z.string(), unresolved: z.array(z.string()), notes: z.array(z.string()) }).optional(),
     health: z.enum(['active', 'slowing', 'stale', 'archived']),
   }),
 });
