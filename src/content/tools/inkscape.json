@@ -135,7 +135,7 @@
   },
   "pendingLicense": {
     "value": "GPL-3.0-or-later",
-    "note": "배포 바이너리 기준 GPL 3 이상. 소스 대부분은 GPL-2.0-or-later, 일부 CC0·LGPL·MPL",
+    "note": "배포 바이너리 기준 GPL-3.0-or-later. 소스는 혼합: 대부분 GPL-2.0-or-later, 일부 CC0·LGPL·MPL, GIMP 유래 파일은 (L)GPL 3 이상, 일부 이중 라이선스.",
     "proposedAt": "2026-10-12T22:39:11+00:00",
     "earliestApply": "2026-10-13T22:39:11+00:00",
     "sources": [
