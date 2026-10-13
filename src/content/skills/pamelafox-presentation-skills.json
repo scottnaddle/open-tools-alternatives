@@ -1,0 +1,19 @@
+{
+  "name": "Presentation Skills",
+  "slug": "pamelafox-presentation-skills",
+  "category": "수업자료·발표",
+  "description": "발표 자료 작업을 위한 AI 에이전트 스킬 모음. PDF를 마크다운으로 변환, RevealJS 발표 자료 제작, 슬라이드 검토, 비디오 프레임 캡처 등.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/pamelafox/presentation-skills",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "pamelafox/presentation-skills",
+    "stars": 125,
+    "createdAt": "2026-04-23T19:40:08Z",
+    "license": "MIT"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Garden Skills",
+  "slug": "ConardLi-garden-skills",
+  "category": "기타",
+  "description": "웹 디자인, 지식 검색, 이미지 생성을 포함한 프로덕션급 AI 에이전트 스킬 모음입니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": true,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/ConardLi/garden-skills",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "ConardLi/garden-skills",
+    "stars": 12864,
+    "createdAt": "2026-04-21T11:56:17Z",
+    "license": "MIT"
+  }
+}

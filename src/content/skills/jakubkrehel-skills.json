@@ -1,0 +1,19 @@
+{
+  "name": "Skills",
+  "slug": "jakubkrehel-skills",
+  "category": "웹·앱 만들기",
+  "description": "UI, 타이포그래피, 색상, 접근성, 레이아웃, 제품 문구를 다루는 에이전트 스킬 모음. 뛰어난 인터페이스 제작을 돕습니다.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/jakubkrehel/skills",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "jakubkrehel/skills",
+    "stars": 7889,
+    "createdAt": "2026-07-10T08:58:36Z",
+    "license": "MIT"
+  }
+}

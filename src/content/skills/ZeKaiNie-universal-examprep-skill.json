@@ -1,0 +1,19 @@
+{
+  "name": "Universal Examprep Skill",
+  "slug": "ZeKaiNie-universal-examprep-skill",
+  "category": "교사 업무·글쓰기",
+  "description": "시험 대비 AI 튜터. 강의 슬라이드, 노트, 숙제, 기출문제로 챕터별 학습, 페이지 인용, 그림 표시, 퀴즈, 실수 추적, 요약 정리 지원.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/ZeKaiNie/universal-examprep-skill",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "ZeKaiNie/universal-examprep-skill",
+    "stars": 304,
+    "createdAt": "2026-06-24T15:25:04Z",
+    "license": "MIT"
+  }
+}

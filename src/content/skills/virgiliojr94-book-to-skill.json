@@ -1,0 +1,19 @@
+{
+  "name": "Book To Skill",
+  "slug": "virgiliojr94-book-to-skill",
+  "category": "교사 업무·글쓰기",
+  "description": "기술 서적 PDF를 Claude Code 스킬로 변환합니다. 학습, 참고, 실무 적용이 가능한 형태로 정리합니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/virgiliojr94/book-to-skill",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "virgiliojr94/book-to-skill",
+    "stars": 34751,
+    "createdAt": "2026-05-01T02:09:39Z",
+    "license": "MIT"
+  }
+}
