@@ -24,8 +24,9 @@ const sceneData: Record<string, { device: string; alts: string[] }> = {
 <Base title={`${app.data.name} 대신 쓸 수 있는 오픈소스`}>
   <div class="detail" style={tone(app.data.category)}>
     <a class="back" href="/">홈으로</a>
-    <p class="kick">{app.data.category}, {app.data.procurementNote?.value || '현장에서 많이 쓰는 앱'} <Status fact={app.data.procurementNote} />
-    {app.data.procurementNote?.sources && <details class="src"><summary>출처 {app.data.procurementNote.sources.length}</summary><ul>{app.data.procurementNote.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}
+    <p class="kick">{app.data.category}, {app.data.procurementNote?.value || '현장에서 많이 쓰는 앱'} 
+    {app.data.procurementNote && <><Status fact={app.data.procurementNote} />
+    {app.data.procurementNote.sources && <details class="src"><summary>출처 {app.data.procurementNote.sources.length}</summary><ul>{app.data.procurementNote.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}</>}
     </p>
     <div class="dhead">
       <span class="tile" aria-hidden="true"><Icon icon={app.data.icon} /></span>
