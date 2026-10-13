@@ -32,6 +32,8 @@ jobs:
         run: sudo apt-get update -q && sudo apt-get install -y -q sshpass
 
       - name: Build
+        env:
+          ASTRO_BASE: /alternatives # astro.config.mjs의 기본값과 동일 — 이중 안전장치
         run: npm run build
 
       - name: Deploy

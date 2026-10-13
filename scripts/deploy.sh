@@ -69,6 +69,23 @@ for u in \
   echo "  ${CODE}  ${u}"
   [ "$CODE" = "200" ] || FAIL=1
 done
+
+# 4-1) HTML이 실제로 참조하는 CSS·JS가 로드되는지 + 하위경로 누락 감지 (2026-10-13 사고 재발 방지)
+echo "▶ 에셋 참조 검사 (홈 HTML 기준)"
+HTML=$(curl -s --max-time 20 "https://edtechnewsroom.com/alternatives/")
+echo "$HTML" | grep -oE '(href|src)="/[^"]+\.(css|js)"' | sed -E 's/^(href|src)="//; s/"$//' | sort -u | head -8 > /tmp/live-assets.txt
+if [ ! -s /tmp/live-assets.txt ]; then
+  echo "✗ 홈 HTML에서 에셋 참조를 찾지 못함"; FAIL=1
+fi
+while IFS= read -r a; do
+  CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "https://edtechnewsroom.com${a}" || echo "000")
+  echo "  ${CODE}  ${a}"
+  [ "$CODE" = "200" ] || FAIL=1
+done < /tmp/live-assets.txt
+if echo "$HTML" | grep -qE 'href="/(apps|tools|skills|compare|_astro)/'; then
+  echo "✗ 하위경로(/alternatives) 누락 빌드로 보임 — 루트 절대 링크 발견"; FAIL=1
+fi
+
 if [ "$FAIL" != "0" ]; then
   echo "✗ 헬스체크 실패 — 롤백합니다"
   exit 1
