@@ -1,10 +1,28 @@
 ---
+import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 const apps = (await getCollection('schoolApps')).sort((a, b) => a.data.bundle - b.data.bundle);
 ---
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>열린도구 Alternatives (시안)</title></head>
-<body>
-  <h1>학교 앱 대신 쓸 수 있는 오픈소스</h1>
-  <p>AI 에이전트가 작성·관리하는 정보입니다. 현재 모든 항목은 "확인 중"입니다.</p>
-  <ul>{apps.map((a) => <li><a href={`/apps/${a.id}/`}>{a.data.name}</a> ({a.data.category}) — 대안 {a.data.alternatives.length}개</li>)}</ul>
-</body></html>
+<Base title="대안 찾기">
+  <h1>학교에서 쓰는 유료 앱, 대신 쓸 오픈소스 찾기</h1>
+  <p class="lead">교사가 아는 앱 이름으로 찾아보세요. 모든 정보에는 출처와 확인 시각이 붙어요.</p>
+  <form class="search" action="/" onsubmit="event.preventDefault();filterApps()">
+    <input id="q" type="search" placeholder="예: 캡컷, 알집, 포토샵" aria-label="앱 이름 검색" oninput="filterApps()"><button class="btn">찾기</button>
+  </form>
+  <div class="roles">
+    <a class="card role" href="/for/teacher/"><b>담임·교과 선생님</b><span>수업 장면·학생 기기로 찾기, 학생과 쓸 때 확인할 점</span></a>
+    <a class="card role" href="/for/it-lead/"><b>정보부장·전산 담당</b><span>컴퓨터실 일괄 설치, 관리자 권한, 오프라인 환경</span></a>
+    <a class="card role" href="/for/office/"><b>행정·교무</b><span>문서·PDF·HWP 호환 도구</span></a>
+  </div>
+  <h2>학교 앱별 대안 <small class="count">({apps.length}개, 1차 공개 묶음)</small></h2>
+  <div class="grid" id="apps">
+    {apps.map((a) => <a class="card app" href={`/apps/${a.id}/`} data-name={`${a.data.name} ${a.id}`} style="text-decoration:none;color:inherit">
+      <div class="cat">{a.data.category}</div><h2>{a.data.name}</h2>
+      <div class="alts">→ {a.data.alternatives.map((x) => x.tool.id).join(', ')}</div></a>)}
+  </div>
+  <script is:inline>
+    const syn={'캡컷':'capcut','포토샵':'photoshop','일러스트':'illustrator','한글':'hancom','반디캠':'bandicam','오캠':'ocam'};
+    function filterApps(){let q=document.getElementById('q').value.trim().toLowerCase();for(const k in syn)if(q.includes(k))q+=' '+syn[k];
+      document.querySelectorAll('#apps .app').forEach(el=>{const n=el.dataset.name.toLowerCase();el.hidden=q&&!q.split(/\s+/).some(w=>w&&n.includes(w));});}
+  </script>
+</Base>

@@ -1,0 +1,21 @@
+---
+import Status from './Status.astro';
+import ScopeChips from './ScopeChips.astro';
+import { exampleFor, deriveScope, KO } from '../lib/facts';
+const { t } = Astro.props;
+const d = t.data; const ex = exampleFor(t.id); const p = d.platforms.value;
+const plat = `Windows ${KO[p.windows]} · macOS ${KO[p.macos]} · Linux ${KO[p.linux]} · 웹 ${KO[p.web]} · Android ${KO[p.android]} · iOS ${KO[p.ios]}`;
+---
+<ScopeChips scopes={deriveScope(ex)} />
+<table class="facts">
+  <tr><th>학교 활용</th><td>{d.schoolUse.value}<Status fact={d.schoolUse} /></td></tr>
+  <tr><th>쓸 수 있는 곳</th><td>{plat}<Status fact={d.platforms} /></td></tr>
+  <tr><th>설치 난이도</th><td>{d.installDifficulty.value}<Status fact={d.installDifficulty} /></td></tr>
+  <tr><th>라이선스</th><td>{d.license.value ?? (d.pendingLicense ? `확인 중 (제안: ${d.pendingLicense.value})` : '확인 필요')}<Status fact={d.license} />{d.pendingLicense?.plainKo && <><br/><small>{d.pendingLicense.plainKo}</small></>}</td></tr>
+  <tr><th>최신 릴리스</th><td>{d.github.latestRelease ? `${d.github.latestRelease.tag} (${d.github.latestRelease.date})` : '확인 필요'} <small>· GitHub {d.github.repo} · 확인 {d.github.fetchedAt}</small></td></tr>
+  <tr><th>관리자 권한</th><td>{({ yes: '필요', no: '필요 없음', 'portable-available': '포터블판 있음(권한 없이 실행)' })[ex.adminRequired]}<Status example /></td></tr>
+  <tr><th>인터넷</th><td>{KO[ex.network]}<Status example /></td></tr>
+  <tr><th>학생 정보</th><td>{KO[ex.studentData]} · 계정 {KO[ex.account]}<Status example /></td></tr>
+  <tr><th>한국어 화면</th><td>{KO[ex.koreanUI]}<Status example /></td></tr>
+  <tr><th>HWP</th><td>읽기 {KO[ex.hwp.read]} · 쓰기 {KO[ex.hwp.write]}<Status example /></td></tr>
+</table>

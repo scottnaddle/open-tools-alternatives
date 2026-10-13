@@ -1,0 +1,12 @@
+---
+const { title } = Astro.props;
+---
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title} — 열린도구</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header class="top"><div class="wrap"><a class="logo" href="/"><b>열린도구</b> <span>Alternatives · 시안</span></a>
+<nav><a href="/for/teacher/">담임·교과</a><a href="/for/it-lead/">정보부장·전산</a><a href="/for/office/">행정·교무</a><a href="/suggest/">대안 제안</a></nav></div></header>
+<div class="notice"><div class="wrap">AI 에이전트가 작성·관리하는 정보입니다. 시안 단계라 모든 사실이 "확인 중"이며, <span class="ex">예시 데이터</span> 표시 값은 화면 시연용으로 사실이 아닙니다.</div></div>
+<main class="wrap"><slot /></main>
+<footer class="wrap foot">정렬 규칙: 대체 정도 → 설치 난이도 → 마지막 확인일 · 인기 투표 순위 없음 · 학교 적합성·학운위 심의 대상 여부는 판정하지 않습니다.</footer>
+</body></html>

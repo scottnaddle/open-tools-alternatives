@@ -1,0 +1,159 @@
+{
+  "_label": "예시 데이터 — 검증 전 화면 시연용 값이며 사실이 아님",
+  "tools": {
+    "7-zip": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "yes"
+    },
+    "draw-io": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "portable-available"
+    },
+    "flameshot": {
+      "koreanUI": "partial",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "yes"
+    },
+    "gimp": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "yes"
+    },
+    "h2orestart": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "yes",
+        "write": "partial"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "yes"
+    },
+    "inkscape": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "yes"
+    },
+    "krita": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "yes"
+    },
+    "localsend": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "online",
+      "studentData": "local-only",
+      "account": "none",
+      "adminRequired": "yes"
+    },
+    "nanazip": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "yes"
+    },
+    "obs-studio": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "yes"
+    },
+    "opencut": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "online",
+      "studentData": "sent-to-server",
+      "account": "optional",
+      "adminRequired": "no"
+    },
+    "peazip": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "portable-available"
+    },
+    "sharex": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "portable-available"
+    },
+    "shotcut": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "yes"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+---
+import { SCOPE_NAME, MOE_URL } from '../lib/facts';
+const { scopes } = Astro.props;
+---
+<div class="chips">
+  {scopes.map((s) => <span class={`chip scope-${s}`}>{SCOPE_NAME[s]}</span>)}
+  <span class="st st-ex">예시 데이터</span>
+</div>
+{scopes.includes('student-use-check') && <p class="warn">학생이 직접 쓰면 학생 정보가 처리될 수 있어요. <b>학교 절차 확인 필요</b> — <a href={MOE_URL}>교육부 학습지원 소프트웨어 선정 기준 안내</a></p>}

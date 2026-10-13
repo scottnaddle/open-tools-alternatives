@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import ToolFacts from '../../components/ToolFacts.astro';
+import { getCollection, getEntry } from 'astro:content';
+export async function getStaticPaths() {
+  const seen = new Set(); const out = [];
+  for (const a of await getCollection('schoolApps')) {
+    const ids = a.data.alternatives.map((x) => x.tool.id);
+    for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) {
+      const k = `${ids[i]}-vs-${ids[j]}`; if (!seen.has(k)) { seen.add(k); out.push({ params: { pair: k }, props: { a: ids[i], b: ids[j], app: a.data.name } }); }
+    }
+  }
+  return out;
+}
+const { a, b, app } = Astro.props;
+const ta = await getEntry('tools', a); const tb = await getEntry('tools', b);
+---
+<Base title={`${ta.data.name} vs ${tb.data.name}`}>
+  <p><a href="/">← 대안 찾기</a></p>
+  <h1>{ta.data.name} · {tb.data.name} 사실 비교</h1>
+  <p class="lead">{app} 대안 중 두 도구의 사실을 나란히 놓았어요. 점수나 순위는 매기지 않습니다.</p>
+  <div class="cmp">
+    <section class="card"><h2>{ta.data.name}</h2><ToolFacts t={ta} /></section>
+    <section class="card"><h2>{tb.data.name}</h2><ToolFacts t={tb} /></section>
+  </div>
+</Base>

@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="대안 제안">
+  <h1>대안 제안하기</h1>
+  <p class="lead">제안은 바로 게시되지 않아요. 에이전트가 공식 출처에서 다시 확인한 뒤, 반영 여부를 변경 이력에 남깁니다.</p>
+  <form onsubmit="event.preventDefault();document.getElementById('done').hidden=false">
+    <label for="app">대신하고 싶은 학교 앱</label><input id="app" placeholder="예: 미리캔버스">
+    <label for="tool">추천하는 오픈소스 이름 또는 주소</label><input id="tool" placeholder="예: https://github.com/...">
+    <label for="why">수업·업무에서 어떻게 쓰나요? (선택)</label><textarea id="why" rows="4"></textarea>
+    <p class="warn">이름·학교명·연락처 등 개인정보는 적지 마세요.</p>
+    <button class="btn">제안 보내기</button>
+    <p id="done" hidden class="card">시안 화면입니다. 실제 전송 기능은 아직 없어요.</p>
+  </form>
+</Base>
