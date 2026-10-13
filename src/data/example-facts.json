@@ -165,6 +165,28 @@
       "studentData": "none",
       "account": "none",
       "adminRequired": "no"
+    },
+    "draw-io": {
+      "koreanUI": "no",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "portable-available"
+    },
+    "flameshot": {
+      "koreanUI": "no",
+      "hwp": {
+        "read": "no",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "no"
     }
   }
 }

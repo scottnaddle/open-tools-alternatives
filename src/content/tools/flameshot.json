@@ -76,15 +76,15 @@
     ]
   },
   "officialSite": {
-    "value": null,
-    "status": "unverified",
-    "lastVerified": null,
+    "value": "https://flameshot.org",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
     "sources": [
       {
-        "url": "https://github.com/flameshot-org/flameshot",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "씨앗 데이터에 없음",
-        "method": "manual-seed"
+        "url": "https://flameshot.org",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Flameshot official website - Open Source Screenshot Software",
+        "method": "official-site"
       }
     ]
   },
@@ -107,6 +107,71 @@
     "unresolved": [],
     "notes": [
       "GitHub homepage 필드: https://flameshot.org (공식 사이트 후보, 미반영 — B등급·공식 사이트 확인 필요)"
+    ]
+  },
+  "koreanUI": {
+    "value": "no",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/flameshot-org/flameshot",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "No Korean translation mentioned in README or locale files",
+        "method": "readme"
+      }
+    ]
+  },
+  "network": {
+    "value": "offline",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://flameshot.org",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Desktop screenshot software, operates locally",
+        "method": "official-site"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://flameshot.org",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Free and open-source screenshot tool, no account required",
+        "method": "official-site"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://flameshot.org",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Local screenshot tool, no data collection mentioned",
+        "method": "official-site"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "no",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://flameshot.org",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Standard package installation available for all platforms",
+        "method": "official-site"
+      }
     ]
   }
 }
