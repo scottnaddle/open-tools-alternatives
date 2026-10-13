@@ -62,13 +62,13 @@ def get(url, gh=True):
 def src(url, excerpt, method="github-api"):
     return {"url": url, "fetchedAt": NOW, "excerpt": excerpt, "method": method}
 
-def record(tid, target, before, after, sources, tier):
+def record(tid, target, before, after, sources, tier, prefix="tools"):
     rid = f"{datetime.date.today()}-{tid}-{target.split('.')[-1]}-{uuid.uuid4().hex[:6]}"
     data = {
         "at": NOW,
         "agent": "daily-verifier",
         "runId": RUN,
-        "target": f"tools/{tid}.{target}",
+        "target": f"{prefix}/{tid}.{target}",
         "before": before,
         "after": after,
         "sources": sources,
@@ -258,22 +258,121 @@ def process_tool(f):
     
     return {"tool": tid, "changes": changes, "modified": modified}
 
+def recheck_passed(sid, target, new_val):
+    """24시간 전 C등급 제안(같은 값)이 있었는지 changes 기록으로 확인."""
+    cutoff = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=24)).isoformat()
+    for f in glob.glob(f"{CHG}/*.json"):
+        try:
+            with open(f) as fp:
+                rec = json.load(fp)
+        except Exception:
+            continue
+        if (rec.get("target") == f"skills/{sid}.{target}"
+                and rec.get("after") == new_val and rec.get("tier") == "C"
+                and "pending-recheck" in rec.get("gates", [])
+                and rec.get("at", "") <= cutoff):
+            return True
+    return False
+
+def process_skill(f):
+    """한 스킬 처리: stars(A)·라이선스(C, 24시간 재확인)·삭제 감지."""
+    sid = os.path.basename(f)[:-5]
+    with open(f) as fp:
+        s = json.load(fp)
+    g = s["github"]
+    api = f"https://api.github.com/repos/{g['repo']}"
+    changes = []
+    modified = False
+
+    r = get(api)
+    if not r:
+        # 저장소 소실은 스키마를 바꾸지 않고 요약으로만 보고 (에이전트가 수동 조사)
+        return {"skill": sid, "error": "GitHub 저장소 조회 실패(404) — 삭제·이전 확인 필요", "changes": []}
+
+    new_stars = r["stargazers_count"]
+    if g.get("stars") != new_stars:
+        before_stars = g.get("stars")
+        rid = record(sid, "stars", before_stars, new_stars, [src(api, "stars from repos API")], "A", prefix="skills")
+        g["stars"] = new_stars
+        changes.append({"field": "github.stars", "before": before_stars, "after": new_stars, "tier": "A", "record": rid})
+        modified = True
+
+    new_lic = (r.get("license") or {}).get("spdx_id")
+    if new_lic in ("NOASSERTION", "Other"):
+        new_lic = None
+    if new_lic and g.get("license") != new_lic:
+        before_lic = g.get("license")
+        tier = "C"
+        rid = record(sid, "license", before_lic, new_lic, [src(api, "license from repos API")], tier, prefix="skills")
+        if recheck_passed(sid, "license", new_lic):
+            g["license"] = new_lic
+            changes.append({"field": "github.license", "before": before_lic, "after": new_lic, "tier": tier, "record": rid, "status": "approved"})
+            modified = True
+            with open(f"{CHG}/{rid}.json") as fp:
+                rec = json.load(fp)
+            rec["gates"] = ["pending-recheck", "recheck-24h"]
+            with open(f"{CHG}/{rid}.json", "w") as fp:
+                json.dump(rec, fp, ensure_ascii=False, indent=2)
+        else:
+            changes.append({"field": "github.license", "before": before_lic, "after": new_lic, "tier": tier, "record": rid, "status": "pending-24h (미적용)"})
+
+    s["dateChecked"] = NOW[:10]
+    if modified:
+        with open(f, "w") as fp:
+            json.dump(s, fp, ensure_ascii=False, indent=2)
+    return {"skill": sid, "changes": changes, "modified": modified}
+
+def stale_facts(max_age_days=90):
+    """verified 팩트 중 lastVerified가 max_age_days를 넘은 목록."""
+    out = []
+    today = datetime.date.today()
+    for f in sorted(glob.glob("src/content/tools/*.json")):
+        tid = os.path.basename(f)[:-5]
+        with open(f) as fp:
+            t = json.load(fp)
+        for k, v in t.items():
+            if (isinstance(v, dict) and v.get("status") == "verified"
+                    and isinstance(v.get("lastVerified"), str) and "lastVerified" in v):
+                try:
+                    age = (today - datetime.date.fromisoformat(v["lastVerified"][:10])).days
+                except ValueError:
+                    continue
+                if age > max_age_days:
+                    out.append({"tool": tid, "field": k, "ageDays": age})
+    return out
+
 def main():
+    if os.path.exists("ops/FREEZE"):
+        reason = open("ops/FREEZE").read().strip()[:200]
+        print(f"⛔ FREEZE 중 — 검증 중단. 사유: {reason or '(사유 미기재)'}")
+        return
+
     all_results = []
     for f in sorted(glob.glob("src/content/tools/*.json")):
         result = process_tool(f)
         all_results.append(result)
         time.sleep(0.3)  # rate limit
+
+    skill_results = []
+    for f in sorted(glob.glob("src/content/skills/*.json")):
+        skill_results.append(process_skill(f))
+        time.sleep(0.3)  # rate limit
     
     # 요약
-    total_changes = sum(len(r["changes"]) for r in all_results)
-    a_grade = sum(1 for r in all_results for c in r["changes"] if c["tier"] == "A")
-    c_grade = sum(1 for r in all_results for c in r["changes"] if c["tier"] == "C")
-    
+    combined = all_results + skill_results
+    total_changes = sum(len(r["changes"]) for r in combined)
+    a_grade = sum(1 for r in combined for c in r["changes"] if c["tier"] == "A")
+    c_grade = sum(1 for r in combined for c in r["changes"] if c["tier"] == "C")
+    stale = stale_facts()
+
     print(f"\n=== Daily Verifier Summary ===")
     print(f"Run ID: {RUN}")
     print(f"Total changes: {total_changes} (A-grade: {a_grade}, C-grade: {c_grade})")
-    print(f"Tools modified: {sum(1 for r in all_results if r['modified'])}")
+    print(f"Tools modified: {sum(1 for r in all_results if r.get('modified'))} / Skills modified: {sum(1 for r in skill_results if r.get('modified'))}")
+    if stale:
+        print(f"\n⏰ 90일 경과 verified 팩트 {len(stale)}건 (재확인 필요):")
+        for srow in stale:
+            print(f"  - {srow['tool']}.{srow['field']} ({srow['ageDays']}일 경과)")
     
     # 변경 세부사항
     for r in all_results:
@@ -288,8 +387,9 @@ def main():
         json.dump({
             "runId": RUN,
             "timestamp": NOW,
-            "summary": {"total": total_changes, "a_grade": a_grade, "c_grade": c_grade},
-            "results": all_results
+            "summary": {"total": total_changes, "a_grade": a_grade, "c_grade": c_grade,
+                        "staleFacts": stale},
+            "results": combined
         }, f, ensure_ascii=False, indent=2)
     
     print(f"\n저장: /tmp/daily_verifier_summary.json")

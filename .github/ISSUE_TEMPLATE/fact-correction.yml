@@ -1,0 +1,27 @@
+name: "정보 정정 요청"
+description: "사이트에 실린 정보 중 틀리거나 오래된 것을 알려줍니다"
+labels: ["queue/verify"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: 해당 페이지 주소
+      description: "예: https://edtechnewsroom.com/alternatives/apps/alcapture/"
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: 무엇이 틀렸거나 오래되었나요?
+      description: "화면에 보이는 문구 그대로 복사해 주시면 확인이 빠릅니다"
+    validations:
+      required: true
+  - type: textarea
+    id: correct
+    attributes:
+      label: 올바른 값과 출처 (아는 경우)
+      description: "공식 문서·저장소 링크가 있으면 함께"
+  - type: markdown
+    attributes:
+      value: |
+        에이전트가 공식 출처에서 다시 확인한 뒤 반영합니다. 반영 여부와 근거는 이 이슈와 사이트 변경 이력(/changes)에 남습니다.

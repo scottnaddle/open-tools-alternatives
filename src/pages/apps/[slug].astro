@@ -8,6 +8,7 @@ import { getCollection, getEntry } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { exampleFor, deriveScope, devices, PLAT, SCOPE_NAME, MOE_URL, tone, col, EXAMPLE_LABEL, SYNONYMS } from '../../lib/facts';
 import { APP_TOOL_MAP } from '../../lib/search-synonyms';
+import scenesData from '../../data/scenes.json';
 const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
@@ -25,12 +26,15 @@ const LV: Record<string, number> = { '거의 대체': 0, '부분 대체': 1 }, D
 const alts = (await Promise.all(app.data.alternatives.map(async (x) => ({ ...x, t: await getEntry(x.tool) }))))
   .sort((a, b) => LV[a.level.value] - LV[b.level.value] || DF[a.installDifficulty] - DF[b.installDifficulty] || b.t.data.github.fetchedAt.localeCompare(a.t.data.github.fetchedAt));
 
-// Build scene guidance for device types
-const sceneData: Record<string, { device: string; alts: string[] }> = {
-  '웨일북·크롬북': { device: '웨일북·크롬북', alts: alts.filter(({ t }) => t.data.platforms.value.web === 'official').slice(0, 2).map(({ t }) => t.data.name) },
-  '컴퓨터실 PC': { device: '컴퓨터실 PC', alts: alts.filter(({ t }) => ['yes', 'partial'].includes(t.data.platforms.value.windows)).slice(0, 2).map(({ t }) => t.data.name) },
-  '휴대폰': { device: '휴대폰', alts: [] },
-};
+// 장면 카드 — src/data/scenes.json (데이터만 고쳐도 기기별 안내가 바뀌게 분리. 규칙: ops/RESEARCH.md)
+const platMatch = (p: any, m: any) =>
+  m === 'always' ? false : Object.entries(m).every(([k, v]) =>
+    Array.isArray(v) ? (v as string[]).includes(p[k]) : p[k] === v);
+const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesData.scenes.map((s: any) => ({
+  device: s.label,
+  alts: s.match === 'always' ? [] : alts.filter(({ t }) => platMatch(t.data.platforms.value, s.match)).slice(0, s.max ?? 2).map(({ t }) => t.data.name),
+  hint: s.hint,
+}));
 ---
 <Base title={`${app.data.name} 대신 쓸 수 있는 오픈소스`}>
   <!-- Hidden search metadata for Pagefind -->
@@ -52,11 +56,11 @@ const sceneData: Record<string, { device: string; alts: string[] }> = {
     {sceneData && <div class="scene">
       <b>어디서 쓰나요?</b>
       <dl>
-        {Object.values(sceneData).map(({ device, alts }) => (
+        {sceneData.map(({ device, alts, hint }) => (
           <>
             <dt>{device}</dt>
             <dd>
-              {alts.length > 0 ? <><b>{alts.join(', ')}</b> <span class="hint">{alts[0] && alts.filter(({ }) => true).length > 0 ? '설치 없이 브라우저로' : '설치해서 사용'}</span></> : <span class="hint">아직 마땅한 오픈소스가 없어요</span>}
+              {alts.length > 0 ? <><b>{alts.join(', ')}</b> <span class="hint">{hint || '설치해서 사용'}</span></> : <span class="hint">아직 마땅한 오픈소스가 없어요</span>}
             </dd>
           </>
         ))}

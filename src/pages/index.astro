@@ -7,6 +7,7 @@ import SearchAutocomplete from '../components/SearchAutocomplete.astro';
 import QuickChips from '../components/QuickChips.astro';
 import { getCollection } from 'astro:content';
 import { CATEGORIES, SYNONYMS, CAT, tone, EXAMPLE_LABEL } from '../lib/facts';
+import featuredData from '../data/featured.json';
 const base = import.meta.env.BASE_URL;
 const apps = (await getCollection('schoolApps')).sort((a, b) => a.data.bundle - b.data.bundle);
 const tools = new Map((await getCollection('tools')).map((t) => [t.id, t]));
@@ -23,8 +24,13 @@ const recentTools = [...tools.values()]
   .sort((a, b) => String(b.data.github.lastPush).localeCompare(String(a.data.github.lastPush)))
   .slice(0, 6);
 
-// Featured tools (placeholder)
-const featuredTools = [...tools.values()].slice(0, 3);
+// Featured tools — src/data/featured.json (ops/RESEARCH.md 5절). 항목이 없거나 매칭 실패면 기존 방식(예시 표시)으로 대체.
+const featuredEntries: { meta?: any; t: any }[] = (featuredData.items ?? [])
+  .map((meta: any) => ({ meta, t: tools.get(meta.tool) }))
+  .filter((e: any) => e.t);
+if (featuredEntries.length === 0) {
+  for (const t of [...tools.values()].slice(0, 3)) featuredEntries.push({ meta: null, t });
+}
 
 // Swap diagram data for hero
 const swapExamples = [
@@ -119,16 +125,16 @@ const swapExamples = [
           <span class="hint">선정 이유를 밝힙니다. 추천이 아닙니다.</span>
         </div>
         <div class="list">
-          {featuredTools.map((t) => (
+          {featuredEntries.map(({ meta, t }) => (
             <div class="row">
               <span class="mono2" aria-hidden="true" style={`background:${CAT[t.data.category]?.[1] || '#4B3A9A'}`}>
                 {t.data.name.replace(/[^A-Za-z0-9]/g, '').slice(0, 2) || t.data.name.slice(0, 2)}
               </span>
               <span class="mid">
                 <b>{t.data.name}</b>
-                <span>학기 말 수업 영상 녹화 문의가 많은 시기라 소개합니다</span>
+                <span>{meta?.reason || '학교에서 많이 묻는 도구라 소개합니다'}</span>
               </span>
-              <span class="st st-ex">{EXAMPLE_LABEL}</span>
+              {(!meta || meta.status === 'example') && <span class="st st-ex">{EXAMPLE_LABEL}</span>}
             </div>
           ))}
         </div>

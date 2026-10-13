@@ -1,0 +1,24 @@
+{
+  "_comment": "이달에 소개하는 도구. 기간(period)에 맞는 항목만 표시. status가 example이면 화면에 '예시 데이터' 배지가 붙는다. 검증된 선정 근거(출처)가 생기면 status를 verified로 바꾸고 source를 채운다. 규칙: ops/RESEARCH.md 5절.",
+  "period": "2026-11",
+  "items": [
+    {
+      "tool": "7-zip",
+      "reason": "압축 파일로 수업 자료를 나누는 문의가 많은 시기라 소개합니다",
+      "status": "example",
+      "source": { "url": "https://github.com/ip7z/7zip", "fetchedAt": "2026-10-13T00:00:00+09:00", "method": "manual-seed" }
+    },
+    {
+      "tool": "draw-io",
+      "reason": "실습 자료에 넣을 순서도·다이어그램 문의가 많은 시기라 소개합니다",
+      "status": "example",
+      "source": { "url": "https://github.com/jgraph/drawio", "fetchedAt": "2026-10-13T00:00:00+09:00", "method": "manual-seed" }
+    },
+    {
+      "tool": "flameshot",
+      "reason": "수업 화면 캡처 문의가 많은 시기라 소개합니다",
+      "status": "example",
+      "source": { "url": "https://github.com/flameshot-org/flameshot", "fetchedAt": "2026-10-13T00:00:00+09:00", "method": "manual-seed" }
+    }
+  ]
+}

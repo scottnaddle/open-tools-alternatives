@@ -1,0 +1,8 @@
+{
+  "_comment": "앱 페이지 '어디서 쓰나요?' 장면 카드 정의. match는 도구 platforms 값에 대한 조건: 키=기기필드, 값=허용값(배열 또는 문자열). 'always'면 조건 없이 항상 '아직 마땅한 오픈소스가 없어요' 표시. 규칙: ops/RESEARCH.md.",
+  "scenes": [
+    { "id": "whalebook", "label": "웨일북·크롬북", "match": { "web": "official" }, "max": 2, "hint": "설치 없이 브라우저로" },
+    { "id": "computer-room", "label": "컴퓨터실 PC", "match": { "windows": ["yes", "partial"] }, "max": 2, "hint": "설치해서 사용" },
+    { "id": "phone", "label": "휴대폰", "match": "always", "max": 0 }
+  ]
+}

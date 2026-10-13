@@ -1,0 +1,42 @@
+name: "오픈스킬 제안"
+description: "교육에 쓸 수 있는 AI 에이전트 스킬을 제안합니다"
+labels: ["queue/research"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: 스킬 이름
+    validations:
+      required: true
+  - type: input
+    id: repo
+    attributes:
+      label: GitHub 저장소 주소
+      description: "예: https://github.com/owner/repo"
+    validations:
+      required: true
+  - type: input
+    id: license
+    attributes:
+      label: 라이선스 (아는 경우)
+      description: "예: MIT, Apache-2.0. 없음·AGPL·불명은 반영되지 않습니다"
+  - type: textarea
+    id: education
+    attributes:
+      label: 학교에서 어떻게 쓸 수 있나요?
+      description: "수업자료 제작, 시각화, 데이터 처리 등"
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: 누가 쓰나요?
+      options:
+        - "수업용 (학생이 직접)"
+        - "교사 개인용"
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        **반영 기준**: 공개 라이선스(OSI 계열) + 교육 활용 가능성. 보안 공격용·개발운영 전용 도구는 제외됩니다. 에이전트가 라이선스와 저장소를 직접 확인합니다.

@@ -47,3 +47,6 @@ jobs:
       
       - name: Check usageScope rules
         run: python3 scripts/check_usagescope.py
+      
+      - name: Check skill gates
+        run: python3 scripts/check_skills.py
