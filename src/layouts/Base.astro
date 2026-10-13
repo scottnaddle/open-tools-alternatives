@@ -3,11 +3,8 @@ const { title } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const path = Astro.url.pathname;
 const navLinks = [
-  { href: `${base}apps/capcut/`, label: 'CapCut 대신', match: `${base}apps/` },
-  { href: `${base}compare/shotcut-vs-opencut/`, label: '비교', match: `${base}compare/` },
-  { href: `${base}for/teacher/`, label: '담임·교과', match: `${base}for/teacher/` },
-  { href: `${base}for/it-lead/`, label: '정보부장·전산', match: `${base}for/it-lead/` },
-  { href: `${base}suggest/`, label: '대안 요청', match: `${base}suggest/` },
+  { href: base, label: '오픈소스', match: `${base}` },
+  { href: `${base}skills/`, label: '오픈스킬', match: `${base}skills/` },
 ];
 ---
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">

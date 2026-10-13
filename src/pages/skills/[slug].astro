@@ -1,0 +1,165 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const skills = await getCollection('skills');
+  return skills.map((skill) => ({
+    params: { slug: skill.data.slug },
+    props: { skill },
+  }));
+}
+
+const { skill } = Astro.props;
+const { data } = skill;
+const base = import.meta.env.BASE_URL;
+---
+<Base title={`${data.name} — 오픈스킬`}>
+  <div class="detail">
+    <a class="back" href={`${base}skills/`}>← 스킬 목록</a>
+    
+    <h1 class="ph">{data.name}</h1>
+    <p class="lead">{data.description}</p>
+    
+    <div class="skill-preview-large">
+      {data.previewType === 'iframe' && data.previewPath && (
+        <iframe src={`${base}${data.previewPath.replace(/^\//, '')}`} title={`${data.name} 미리보기`} loading="lazy"></iframe>
+      )}
+    </div>
+    
+    <div class="skill-details">
+      <div class="detail-grid">
+        <div class="detail-item">
+          <h3>용도</h3>
+          <p>{data.usageScope}</p>
+        </div>
+        
+        <div class="detail-item">
+          <h3>설치 필요</h3>
+          <p>{data.installNeeded ? '예' : '아니오'}</p>
+        </div>
+        
+        <div class="detail-item">
+          <h3>API 키 필요</h3>
+          <p>{data.apiKeyNeeded ? '예' : '아니오'}</p>
+        </div>
+        
+        <div class="detail-item">
+          <h3>라이선스</h3>
+          <p>{data.license || '확인 중'}</p>
+        </div>
+        
+        <div class="detail-item">
+          <h3>GitHub Stars</h3>
+          <p>⭐ {data.github.stars.toLocaleString('ko-KR')}</p>
+        </div>
+        
+        <div class="detail-item">
+          <h3>확인일</h3>
+          <p>{data.dateChecked}</p>
+        </div>
+      </div>
+      
+      <div class="detail-links">
+        <a class="btn primary" href={data.sourceUrl} target="_blank" rel="noopener noreferrer">GitHub에서 보기 →</a>
+      </div>
+    </div>
+    
+    <div class="explainer">
+      <h2>사용 방법</h2>
+      {data.slug === 'anatomy' && (
+        <div>
+          <p>Claude Code나 Codex에서 이 스킬을 설치하면 복잡한 기계나 시스템을 상세한 아이소메트릭 일러스트로 시각화할 수 있습니다.</p>
+          <p><strong>예시:</strong> 위 미리보기는 1984년대 데스크톱 컴퓨터를 실제로 생성한 결과입니다. 타이핑이 가능한 키보드와 CRT 모니터가 포함되어 있습니다.</p>
+          <p><strong>교육 활용:</strong> 캐시, 해시맵, 컴파일러 같은 컴퓨터 과학 개념을 시각적으로 설명하거나, 물리 실험 장치를 3D로 보여줄 때 유용합니다.</p>
+        </div>
+      )}
+      {data.slug === 'answer-me-with-html' && (
+        <div>
+          <p>어려운 질문에 대해 읽기 쉬운 단일 페이지 HTML로 답변을 생성합니다. 복잡한 개념을 시각화와 인터랙션을 통해 설명합니다.</p>
+          <p><strong>예시:</strong> 위 미리보기는 실제 데모 페이지입니다.</p>
+          <p><strong>교육 활용:</strong> 과학 개념, 역사적 사건, 수학 공식 등을 학생들이 직접 탐색할 수 있는 인터랙티브 자료로 만들 수 있습니다.</p>
+        </div>
+      )}
+      {data.slug === 'mapstage' && (
+        <div>
+          <p>지도와 지구본을 실시간으로 조정하며 다양한 시각화 옵션을 제공합니다. 지형도, 위성 이미지, 지역 강조 등을 손쉽게 설정할 수 있습니다.</p>
+          <p><strong>예시:</strong> 위 미리보기는 MapStage 튜너 인터페이스입니다.</p>
+          <p><strong>교육 활용:</strong> 지리 수업 자료, 역사적 지역 설명, 환경 교육 시각화에 활용할 수 있습니다.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</Base>
+
+<style>
+.skill-preview-large {
+  width: 100%;
+  height: 500px;
+  background: var(--ground);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 32px 0;
+}
+
+.skill-preview-large iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.skill-details {
+  margin: 48px 0;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.detail-item h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-3);
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-item p {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.detail-links {
+  display: flex;
+  gap: 12px;
+}
+
+.explainer {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 32px;
+  margin: 48px 0;
+}
+
+.explainer h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+}
+
+.explainer p {
+  margin: 0 0 16px 0;
+  line-height: 1.7;
+}
+
+.explainer p:last-child {
+  margin-bottom: 0;
+}
+</style>

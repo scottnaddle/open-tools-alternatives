@@ -1,0 +1,19 @@
+{
+  "name": "Anatomy",
+  "slug": "anatomy",
+  "description": "실제 작동하는 기계와 복잡한 시스템을 상세하고 인터랙티브한 아이소메트릭 일러스트로 표현합니다. SVG와 선택적 WebGL 셰이더, 3D 효과로 완성도 높은 시각화를 생성합니다.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/wheresryan22/anatomy",
+  "dateChecked": "2026-10-13",
+  "previewType": "iframe",
+  "previewPath": "/skills-outputs/anatomy-desk-computer.html",
+  "github": {
+    "repo": "wheresryan22/anatomy",
+    "stars": 7678,
+    "createdAt": "2026-10-08T10:12:49Z",
+    "license": "MIT"
+  }
+}

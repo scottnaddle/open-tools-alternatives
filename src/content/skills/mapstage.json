@@ -1,0 +1,19 @@
+{
+  "name": "MapStage",
+  "slug": "mapstage",
+  "description": "지도와 지구본, 위성 이미지, 지형도 등을 실시간으로 조정하고 시각화합니다. 교육용 지리 자료 제작에 적합한 Mapterhorn DEM과 JSON 프리셋을 지원합니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/hopechen067/MapStage",
+  "dateChecked": "2026-10-13",
+  "previewType": "iframe",
+  "previewPath": "/skills-outputs/mapstage-tuner.html",
+  "github": {
+    "repo": "hopechen067/MapStage",
+    "stars": 472,
+    "createdAt": "2026-08-11T07:53:51Z",
+    "license": "MIT"
+  }
+}

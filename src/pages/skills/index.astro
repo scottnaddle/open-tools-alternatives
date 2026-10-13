@@ -1,0 +1,125 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+const skills = await getCollection('skills');
+---
+<Base title="오픈스킬">
+  <div class="detail wide">
+    <h1 class="ph">오픈스킬</h1>
+    <p class="lead">AI 에이전트가 쓸 수 있는 오픈소스 스킬을 모아 확인합니다. Claude Code, Codex 등에서 설치해 교육 자료를 만들 수 있습니다.</p>
+    
+    <div class="skills-grid">
+      {skills.map((skill) => {
+        const { data } = skill;
+        return (
+          <a class="skill-card" href={`${base}skills/${data.slug}/`}>
+            <div class="skill-preview">
+              {data.previewType === 'iframe' && data.previewPath && (
+                <iframe src={`${base}${data.previewPath.replace(/^\//, '')}`} title={`${data.name} 미리보기`} loading="lazy"></iframe>
+              )}
+            </div>
+            <div class="skill-info">
+              <h3>{data.name}</h3>
+              <p>{data.description}</p>
+              <div class="skill-meta">
+                <span class="badge">{data.usageScope}</span>
+                <span class="badge stars">⭐ {data.github.stars.toLocaleString('ko-KR')}</span>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</Base>
+
+<style>
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.skill-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .3s var(--spring), box-shadow .3s;
+}
+
+.skill-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.skill-preview {
+  width: 100%;
+  height: 200px;
+  background: var(--ground);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  position: relative;
+}
+
+.skill-preview iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  width: 200%;
+  height: 200%;
+}
+
+.skill-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skill-info h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.skill-info p {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin: 0;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.skill-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--line-2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.badge.stars {
+  background: var(--brand-tint);
+  color: var(--brand-ink);
+}
+</style>

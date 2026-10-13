@@ -112,4 +112,27 @@ const changes = defineCollection({
   }),
 });
 
-export const collections = { tools, schoolApps, changes };
+const skills = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/skills' }),
+  schema: z.object({
+    name: z.string(),
+    slug: z.string(),
+    description: z.string(),
+    usageScope: z.enum(['수업용', '교사 개인용']),
+    installNeeded: z.boolean(),
+    apiKeyNeeded: z.boolean(),
+    license: z.string().nullable(),
+    sourceUrl: z.string().url(),
+    dateChecked: z.string(),
+    previewType: z.enum(['iframe', 'image']),
+    previewPath: z.string().optional(),
+    github: z.object({
+      repo: z.string(),
+      stars: z.number().int(),
+      createdAt: z.string(),
+      license: z.string().nullable(),
+    }),
+  }),
+});
+
+export const collections = { tools, schoolApps, changes, skills };
