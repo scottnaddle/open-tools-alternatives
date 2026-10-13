@@ -4,11 +4,18 @@ import Status from '../../components/Status.astro';
 import Mono from '../../components/Mono.astro';
 import ScopeChips from '../../components/ScopeChips.astro';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import { PLAT, HEALTH, exampleFor, deriveScope, EXAMPLE_LABEL, MOE_URL } from '../../lib/facts';
 import { TOOL_SYNONYMS, CATEGORY_TASKS } from '../../lib/search-synonyms';
+
 export async function getStaticPaths() {
   return (await getCollection('tools')).map((t) => ({ params: { slug: t.id }, props: { tool: t } }));
 }
+
+interface Props {
+  tool: CollectionEntry<'tools'>;
+}
+
 const { tool } = Astro.props;
 const t = tool.data;
 const ex = exampleFor(tool.id);

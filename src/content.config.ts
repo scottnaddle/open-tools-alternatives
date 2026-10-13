@@ -1,6 +1,7 @@
 // PLAN.md 7.2 모델을 Zod로 옮김. 씨앗 데이터는 전부 unverified / manual-seed.
 import { defineCollection, reference, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import type { ZodTypeAny } from 'zod';
 
 const Source = z.object({
   url: z.string().url(),
@@ -8,7 +9,7 @@ const Source = z.object({
   excerpt: z.string().optional(),
   method: z.enum(['github-api', 'release-assets', 'official-site', 'readme', 'procurement-data', 'manual-seed']),
 });
-const fact = <T extends z.ZodTypeAny>(v: T) =>
+const fact = <T extends ZodTypeAny>(v: T) =>
   z.object({
     value: v,
     sources: z.array(Source).min(1),
