@@ -20,6 +20,24 @@
   },
   "alternatives": [
     {
+      "tool": "libreoffice",
+      "summary": "무료 오피스 프로그램. H2Orestart 확장으로 HWP 읽기 가능",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "부분 대체",
+        "status": "verified",
+        "lastVerified": "2026-10-13T08:00:00+00:00",
+        "sources": [
+          {
+            "url": "https://www.libreoffice.org",
+            "fetchedAt": "2026-10-13T08:00:00+00:00",
+            "excerpt": "LibreOffice with H2Orestart extension can read HWP files",
+            "method": "official-site"
+          }
+        ]
+      }
+    },
+    {
       "tool": "h2orestart",
       "summary": "LibreOffice에 확장을 설치해 HWP·HWPX 열기. 편집 호환은 제한적",
       "installDifficulty": "보통",

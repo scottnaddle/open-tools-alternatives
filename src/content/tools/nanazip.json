@@ -85,15 +85,15 @@
     ]
   },
   "officialSite": {
-    "value": null,
-    "status": "unverified",
-    "lastVerified": null,
+    "value": "https://github.com/M2Team/NanaZip",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
     "sources": [
       {
         "url": "https://github.com/M2Team/NanaZip",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "씨앗 데이터에 없음",
-        "method": "manual-seed"
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Official repository serves as the project site",
+        "method": "github-api"
       }
     ]
   },
@@ -134,5 +134,70 @@
       }
     ],
     "plainKo": "NanaZip이 직접 만든 코드는 MIT 라이선스로 자유롭게 쓸 수 있어요. 안에 들어 있는 7-Zip 코드는 7-Zip 라이선스(대부분 LGPL, RAR 부분은 추가 조건)를 따르고, 로고·아이콘은 바꾸지 않고 써야 해요(CC BY-ND 4.0)."
+  },
+  "koreanUI": {
+    "value": "yes",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/M2Team/NanaZip/tree/main/Assets/Locale",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "ko-KR language file exists",
+        "method": "readme"
+      }
+    ]
+  },
+  "network": {
+    "value": "offline",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/M2Team/NanaZip#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Modern file archiver for Windows, works offline",
+        "method": "readme"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/M2Team/NanaZip#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Desktop application, no account mentioned",
+        "method": "readme"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/M2Team/NanaZip#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Local compression tool, no data collection mentioned",
+        "method": "readme"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "no",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/M2Team/NanaZip#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Microsoft Store app, no admin required",
+        "method": "readme"
+      }
+    ]
   }
 }

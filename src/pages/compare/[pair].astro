@@ -4,8 +4,10 @@ import Status from '../../components/Status.astro';
 import Mono from '../../components/Mono.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { PLAT, EXAMPLE_LABEL, exampleFor } from '../../lib/facts';
+
 export async function getStaticPaths() {
-  const seen = new Set(); const out = [];
+  const seen = new Set<string>();
+  const out: Array<{ params: { pair: string }; props: { a: string; b: string; app: string } }> = [];
   for (const a of await getCollection('schoolApps')) {
     const ids = a.data.alternatives.map((x) => x.tool.id);
     for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) {
@@ -18,9 +20,20 @@ export async function getStaticPaths() {
   }
   return out;
 }
+
+interface Props {
+  a: string;
+  b: string;
+  app: string;
+}
 const { a, b, app } = Astro.props;
 const ta = await getEntry('tools', a); 
 const tb = await getEntry('tools', b);
+
+if (!ta || !tb) {
+  return Astro.redirect('/');
+}
+
 const exA = exampleFor(a);
 const exB = exampleFor(b);
 

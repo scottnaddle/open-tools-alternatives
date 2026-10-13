@@ -5,11 +5,18 @@ import Mono from '../../components/Mono.astro';
 import Icon from '../../components/Icon.astro';
 import ScopeChips from '../../components/ScopeChips.astro';
 import { getCollection, getEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import { exampleFor, deriveScope, devices, PLAT, SCOPE_NAME, MOE_URL, tone, col, EXAMPLE_LABEL, SYNONYMS } from '../../lib/facts';
 import { APP_TOOL_MAP } from '../../lib/search-synonyms';
+
 export async function getStaticPaths() {
   return (await getCollection('schoolApps')).map((a) => ({ params: { slug: a.id }, props: { app: a } }));
 }
+
+interface Props {
+  app: CollectionEntry<'schoolApps'>;
+}
+
 const { app } = Astro.props;
 const synonyms = SYNONYMS[app.id] || [];
 const alternativeTools = APP_TOOL_MAP[app.id] || [];
