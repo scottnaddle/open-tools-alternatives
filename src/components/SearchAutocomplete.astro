@@ -1,5 +1,9 @@
 <!-- Lucian UX/UI Prompt #034 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#034 -->
 ---
+interface Props {
+  index: Array<{ id: string; name: string; syn: string[]; n: number }>;
+  base: string;
+}
 const { index, base } = Astro.props;
 ---
 <style>
