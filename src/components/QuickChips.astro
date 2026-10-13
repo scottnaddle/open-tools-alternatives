@@ -1,16 +1,6 @@
 <!-- Lucian UX/UI Prompt #019 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#019 -->
 ---
-type AppItem = {
-  id: string;
-  data: {
-    name: string;
-  };
-};
-
-type Props = {
-  apps: AppItem[];
-  base: string;
-};
+type Props = Record<"apps" | "base", unknown>;
 ---
 <style>
 .u019{position:relative;width:100%}

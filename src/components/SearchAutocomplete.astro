@@ -1,16 +1,6 @@
 <!-- Lucian UX/UI Prompt #034 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#034 -->
 ---
-type IndexItem = {
-  id: string;
-  name: string;
-  syn: string[];
-  n: number;
-};
-
-type Props = {
-  index: IndexItem[];
-  base: string;
-};
+type Props = Record<"index" | "base", unknown>;
 ---
 <style>
 .u034{position:relative;width:100%;max-width:680px;margin:0 auto}
@@ -88,7 +78,7 @@ type Props = {
     hl.style.opacity = shown.length ? '1' : '0';
     
     if (q && !shown.length) {
-      list.insertAdjacentHTML('beforeend', '<li class="u034-none"><span class="u034-none-txt">'' + esc(q) + '' 앱을 찾지 못했어요</span><a class="u034-none-link" href="' + BASE + 'suggest/"><svg viewBox="0 0 14 14"><path d="M7 1v12M1 7h12"/></svg>대안 요청하기</a></li>');
+      list.insertAdjacentHTML("beforeend", "<li class=\"u034-none\"><span class=\"u034-none-txt\">'" + esc(q) + "' 앱을 찾지 못했어요</span><a class=\"u034-none-link\" href=\"" + BASE + "suggest/\"><svg viewBox=\"0 0 14 14\"><path d=\"M7 1v12M1 7h12\"/></svg>대안 요청하기</a></li>");
     }
     
     shown.forEach((d, i) => {

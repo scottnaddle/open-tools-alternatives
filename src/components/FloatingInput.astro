@@ -1,12 +1,6 @@
 <!-- Lucian UX/UI Prompt #025 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#025 -->
 ---
-type Props = {
-  id: string;
-  label: string;
-  type: string;
-  placeholder: string;
-  required: boolean;
-};
+type Props = Record<"id" | "label" | "type" | "placeholder" | "required", string | boolean>;
 ---
 <style>
 .u025-f{position:relative;margin-bottom:18px}
