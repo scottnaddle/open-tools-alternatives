@@ -37,7 +37,11 @@ const { index, base } = Astro.props satisfies Props;
 .u034-o b mark{background:none;color:var(--ux-accent)}
 .u034-o small{display:block;margin-top:2px;font-size:12.5px;color:var(--ux-ink-3)}
 .u034-o em{margin-left:auto;font-style:normal;font-size:12px;font-weight:650;color:var(--ux-ink-3);font-variant-numeric:tabular-nums}
-.u034-none{padding:90px 0;text-align:center;font-size:14px;color:var(--ux-ink-3)}
+.u034-none{padding:60px 20px;text-align:center;font-size:14px;color:var(--ux-ink-3);display:flex;flex-direction:column;align-items:center;gap:12px}
+.u034-none-txt{font-weight:600}
+.u034-none-link{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px;border-radius:999px;background:var(--ux-surface-2);color:var(--ux-ink);font-size:13px;font-weight:700;text-decoration:none;transition:transform .3s var(--ux-spring),background-color .2s}
+.u034-none-link:hover{background:var(--ux-surface-3);transform:translateY(-2px)}
+.u034-none-link svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 <div class="ux u034">
   <form class="u034-box" role="search" data-index={JSON.stringify(Astro.props.index)} data-base={Astro.props.base}>
@@ -84,7 +88,7 @@ const { index, base } = Astro.props satisfies Props;
     hl.style.opacity = shown.length ? '1' : '0';
     
     if (q && !shown.length) {
-      list.insertAdjacentHTML('beforeend', '<li class="u034-none">'' + esc(q) + '' 앱을 찾지 못했어요</li>');
+      list.insertAdjacentHTML('beforeend', '<li class="u034-none"><span class="u034-none-txt">'' + esc(q) + '' 앱을 찾지 못했어요</span><a class="u034-none-link" href="' + BASE + 'suggest/"><svg viewBox="0 0 14 14"><path d="M7 1v12M1 7h12"/></svg>대안 요청하기</a></li>');
     }
     
     shown.forEach((d, i) => {
