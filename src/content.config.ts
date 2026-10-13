@@ -140,6 +140,9 @@ const skills = defineCollection({
     dateChecked: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'dateChecked는 YYYY-MM-DD 형식'),
     previewType: z.enum(['iframe', 'image', 'none']).optional(),
     previewPath: z.string().optional(),
+    // 미리보기 제작 방식 (AGENTS.md 원칙 1·2: 출처 표기 없는 데모는 게시하지 않는다)
+    previewMethod: z.enum(['self-made', 'official-example']).optional(),
+    previewNote: z.string().optional(),
     github: z.object({
       repo: z.string(),
       stars: z.number().int(),

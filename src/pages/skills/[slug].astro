@@ -35,16 +35,22 @@ const hasPreview = data.previewType && data.previewType !== 'none' && data.previ
 
     {hasPreview && (
       <div class="skill-preview-detail">
+        <div class="preview-meta">
+          {data.previewMethod === 'self-made' && <span class="pm-badge self">직접 생성 — 에이전트 제작</span>}
+          {data.previewMethod === 'official-example' && <span class="pm-badge official">공식 예시 — 출처 프로젝트 제공</span>}
+          <a class="pm-open" href={`${base}${data.previewPath.replace(/^\//, '')}`} target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
+        </div>
+        {data.previewNote && <p class="preview-note">{data.previewNote}</p>}
         {data.previewType === 'iframe' && data.previewPath && (
-          <iframe 
-            src={`${base}${data.previewPath.replace(/^\//, '')}`} 
+          <iframe
+            src={`${base}${data.previewPath.replace(/^\//, '')}`}
             title={`${data.name} 미리보기`}
             loading="lazy"
           ></iframe>
         )}
         {data.previewType === 'image' && data.previewPath && (
-          <img 
-            src={`${base}${data.previewPath.replace(/^\//, '')}`} 
+          <img
+            src={`${base}${data.previewPath.replace(/^\//, '')}`}
             alt={`${data.name} 미리보기`}
           />
         )}
@@ -123,6 +129,25 @@ const hasPreview = data.previewType && data.previewType !== 'none' && data.previ
 </Base>
 
 <style>
+.preview-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.pm-badge {
+  font-size: 11.5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid #C4DCCD;
+  background: #E4EFE8;
+  color: #1E6A47;
+  font-weight: 600;
+}
+.pm-badge.official { border-color: #C6D6EE; background: #E3ECF8; color: #1F4E8C; }
+.pm-open { font-size: 12.5px; color: #1F4E8C; }
+.preview-note { font-size: 12.5px; color: #5a6a7a; margin-bottom: 8px; line-height: 1.55; }
 .skill-preview-detail {
   width: 100%;
   min-height: 500px;

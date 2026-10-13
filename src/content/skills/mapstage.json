@@ -16,5 +16,6 @@
     "stars": 472,
     "createdAt": "2026-08-11T07:53:51Z",
     "license": "MIT"
-  }
+  },
+  "previewMethod": "official-example"
 }

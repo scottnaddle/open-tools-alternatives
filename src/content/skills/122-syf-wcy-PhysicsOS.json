@@ -9,11 +9,14 @@
   "license": "Apache-2.0",
   "sourceUrl": "https://github.com/122-syf-wcy/PhysicsOS",
   "dateChecked": "2026-10-13",
-  "previewType": "none",
+  "previewType": "iframe",
   "github": {
     "repo": "122-syf-wcy/PhysicsOS",
     "stars": 243,
     "createdAt": "2026-08-15T03:22:17Z",
     "license": "Apache-2.0"
-  }
+  },
+  "previewPath": "/skills-outputs/physicsos-demo.html",
+  "previewMethod": "self-made",
+  "previewNote": "PhysicsOS 스킬의 지침(대화형·관찰·계산·검증 가능한 물리 장면)에 따라 열린도구 에이전트가 직접 제작한 데모 산출물입니다. 외부 라이브러리 없는 단일 HTML이라 오프라인 수업에서도 동작합니다."
 }

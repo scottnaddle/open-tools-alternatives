@@ -13,7 +13,7 @@
 |---|---|---|
 | 도구(tools) | 15 | 라이선스 verified 11건 |
 | 학교 앱(school-apps) | 9 | 대안 링크 15건 |
-| 오픈스킬(skills) | 28 | 미리보기 3개(Anatomy, Answer Me With HTML, MapStage), 준비 중 25개 |
+| 오픈스킬(skills) | 28 | 미리보기 4개(Anatomy, Answer Me With HTML, MapStage, PhysicsOS), 준비 중 24개 |
 | 변경 기록(changes) | 34 | daily-verifier가 매일 추가 |
 
 - 라이선스 제안 대기(pendingLicense): **GIMP, Inkscape, 7-Zip, NanaZip** — 24시간 재확인 통과 시 daily-verifier가 approved 처리. `--apply`는 사용자가 요청할 때만.
@@ -32,7 +32,7 @@
 ## 진행 중 / 보류
 
 - [ ] Threads 좋아요 기반 스킬 수집 — 인스타그램 SMS 2단계 인증 문제로 보류. **사용자가 로그인 가능할 때 재개** (`status/blocked-human`)
-- [ ] 오픈스킬 미리보기 25개 — 라이선스 허용 범위 내 실제 결과물 생성해서 `previewPath` 채우기
+- [ ] 오픈스킬 미리보기 24개 — 라이선스 허용 범위 내 실제 결과물 생성해서 `previewPath` 채우기 (1차 샘플 PhysicsOS 완료, `previewMethod` 필드로 제작 방식 표기)
 - [ ] 선생님 페이지 장면 카드 / 앱 페이지 "어디서 쓰나요?" 데이터 — `src/data/scenes.json` 분리 완료, 데이터 고도화는 진행 중
 - [ ] 제안 폼 실동작화 (현재 정적) — 4단계 과제: 서버리스 → 이슈 접수 연결
 - [x] GitHub 시크릿 설정 완료 (2026-10-13) — 배포 자동화 가동
