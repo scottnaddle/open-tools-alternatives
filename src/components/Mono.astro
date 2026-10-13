@@ -1,0 +1,5 @@
+---
+import { mono, col } from '../lib/facts';
+const { name, size = 40 } = Astro.props;
+---
+<span class="mono" style={`background:${col(name)};width:${size}px;height:${size}px;font-size:${Math.round(size * 0.36)}px`} title={`${name} (로고 대신 머리글자)`}>{mono(name)}</span>

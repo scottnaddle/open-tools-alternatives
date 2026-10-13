@@ -1,28 +1,83 @@
 ---
 import Base from '../layouts/Base.astro';
+import Mono from '../components/Mono.astro';
 import { getCollection } from 'astro:content';
+import { CATEGORIES, SYNONYMS } from '../lib/facts';
 const apps = (await getCollection('schoolApps')).sort((a, b) => a.data.bundle - b.data.bundle);
+const tools = new Map((await getCollection('tools')).map((t) => [t.id, t]));
+const changes = (await getCollection('changes'))
+  .filter((c) => c.data.target.endsWith('.latestRelease') && c.data.after)
+  .sort((a, b) => String((b.data.after as any).date).localeCompare(String((a.data.after as any).date))).slice(0, 6);
+const nTools = tools.size, nAlt = apps.reduce((n, a) => n + a.data.alternatives.length, 0);
+const verified = [...tools.values()].filter((t) => t.data.license.status === 'verified').length;
+const index = apps.map((a) => ({ id: a.id, name: a.data.name, syn: SYNONYMS[a.id] ?? [], n: a.data.alternatives.length }));
 ---
-<Base title="대안 찾기">
-  <h1>학교에서 쓰는 유료 앱, 대신 쓸 오픈소스 찾기</h1>
-  <p class="lead">교사가 아는 앱 이름으로 찾아보세요. 모든 정보에는 출처와 확인 시각이 붙어요.</p>
-  <form class="search" action="/" onsubmit="event.preventDefault();filterApps()">
-    <input id="q" type="search" placeholder="예: 캡컷, 알집, 포토샵" aria-label="앱 이름 검색" oninput="filterApps()"><button class="btn">찾기</button>
-  </form>
-  <div class="roles">
-    <a class="card role" href="/for/teacher/"><b>담임·교과 선생님</b><span>수업 장면·학생 기기로 찾기, 학생과 쓸 때 확인할 점</span></a>
-    <a class="card role" href="/for/it-lead/"><b>정보부장·전산 담당</b><span>컴퓨터실 일괄 설치, 관리자 권한, 오프라인 환경</span></a>
-    <a class="card role" href="/for/office/"><b>행정·교무</b><span>문서·PDF·HWP 호환 도구</span></a>
+<Base title="어떤 앱 대신 쓸 걸 찾으세요?">
+  <section class="hero">
+    <p class="kicker">학교 유료 앱 {apps.length}개 · 오픈소스 대안 {nTools}종 · 연결 {nAlt}건 · 모든 사실에 출처</p>
+    <h1>어떤 앱 대신 쓸 걸 찾으세요?</h1>
+    <p class="lead">교사가 아는 앱 이름으로 찾으면, 대신 쓸 수 있는 오픈소스를 출처와 확인 상태와 함께 보여 드려요.</p>
+    <form class="search big" role="search" onsubmit="event.preventDefault();go()">
+      <label class="sr" for="q">앱 이름</label>
+      <input id="q" type="search" autocomplete="off" placeholder="예: 캡컷, 알집, 포토샵, 한글" aria-autocomplete="list" aria-controls="ac" oninput="ac()">
+      <button class="btn">찾기</button>
+      <ul id="ac" class="ac" role="listbox" hidden></ul>
+    </form>
+    <p class="hint">자주 찾는 앱: {apps.slice(0, 5).map((a) => <a href={`/apps/${a.id}/`}>{a.data.name}</a>)}</p>
+  </section>
+
+  <ul class="trust">
+    <li><b>출처 공개</b> 모든 사실에 원 출처 URL과 확인 시각</li>
+    <li><b>검증 상태 표시</b> 확인됨 / 확인 중 — 현재 라이선스 확인 {verified}/{nTools}종</li>
+    <li><b>AI 사용 표시</b> AI 에이전트가 작성·관리, 변경 이력 공개</li>
+    <li><b>순위 없음</b> 좋아요·투표 대신 공개 정렬 규칙</li>
+  </ul>
+
+  <h2 class="sec">이 앱들 대신 쓸 걸 많이 찾아요 <small>(1차 공개 묶음 · 조회수 아님)</small></h2>
+  <div class="grid">
+    {apps.map((a) => <a class="card app" href={`/apps/${a.id}/`}>
+      <div class="cat">{a.data.category}</div>
+      <h3>{a.data.name} 대신</h3>
+      <div class="monos">{a.data.alternatives.slice(0, 3).map((x) => <Mono name={tools.get(x.tool.id)?.data.name ?? x.tool.id} size={34} />)}</div>
+      <div class="alts">{a.data.alternatives.slice(0, 3).map((x) => tools.get(x.tool.id)?.data.name).join(' · ')}</div>
+      <div class="count">오픈소스 {a.data.alternatives.length}개</div>
+    </a>)}
   </div>
-  <h2>학교 앱별 대안 <small class="count">({apps.length}개, 1차 공개 묶음)</small></h2>
-  <div class="grid" id="apps">
-    {apps.map((a) => <a class="card app" href={`/apps/${a.id}/`} data-name={`${a.data.name} ${a.id}`} style="text-decoration:none;color:inherit">
-      <div class="cat">{a.data.category}</div><h2>{a.data.name}</h2>
-      <div class="alts">→ {a.data.alternatives.map((x) => x.tool.id).join(', ')}</div></a>)}
+
+  <h2 class="sec">분야별로 찾기</h2>
+  <div class="cats">
+    {CATEGORIES.map(([k, n, ids]) => <a class="catbtn" href={`/apps/${ids[0]}/`} title={ids.join(', ')}><b>{n}</b><small>{ids.length}개 앱</small></a>)}
   </div>
-  <script is:inline>
-    const syn={'캡컷':'capcut','포토샵':'photoshop','일러스트':'illustrator','한글':'hancom','반디캠':'bandicam','오캠':'ocam'};
-    function filterApps(){let q=document.getElementById('q').value.trim().toLowerCase();for(const k in syn)if(q.includes(k))q+=' '+syn[k];
-      document.querySelectorAll('#apps .app').forEach(el=>{const n=el.dataset.name.toLowerCase();el.hidden=q&&!q.split(/\s+/).some(w=>w&&n.includes(w));});}
+
+  <div class="two">
+    <section>
+      <h2 class="sec">최근 확인된 업데이트 <small>(Verifier 실행 기록)</small></h2>
+      <ul class="feed">
+        {changes.map((c) => { const id = c.data.target.split('/')[1].split('.')[0]; const t = tools.get(id); const r = c.data.after as any;
+          return <li><Mono name={t?.data.name ?? id} size={30} /><div><b>{t?.data.name}</b> {r.tag} <small>릴리스 {r.date}</small><br/>
+          <small>확인 {c.data.at.slice(0, 10)} · <a href={r.url}>릴리스 페이지</a> · <a href={c.data.sources[0].url}>출처</a> · {c.data.tier}등급 변경 기록</small></div></li>; })}
+      </ul>
+      <p><a href="/changes/">전체 변경 이력 →</a> <small class="count">(시안: 페이지 미구현)</small></p>
+    </section>
+    <section>
+      <h2 class="sec">선생님 역할로 찾기</h2>
+      <div class="roles col">
+        <a class="card role" href="/for/teacher/"><b>담임·교과</b><span>수업 장면·학생 기기로 찾기, 학생과 쓸 때 확인할 점</span></a>
+        <a class="card role" href="/for/it-lead/"><b>정보부장·전산 담당</b><span>컴퓨터실 일괄 설치, 관리자 권한, 오프라인 환경</span></a>
+        <a class="card role" href="/for/office/"><b>행정·교무</b><span>문서·PDF·HWP 호환</span></a>
+      </div>
+      <div class="card cta"><b>찾는 앱이 없나요?</b><p>대신 쓸 오픈소스를 알려 주세요. 원 출처를 확인한 뒤 반영 여부를 변경 이력에 남겨요.</p><a class="btn" href="/suggest/">대안 제안하기</a></div>
+    </section>
+  </div>
+
+  <script is:inline define:vars={{ index }}>
+    const norm = (s) => s.toLowerCase().replace(/\s+/g, '');
+    function match(q) { q = norm(q); if (!q) return []; return index.filter((a) => [a.name, a.id, ...a.syn].some((n) => norm(n).includes(q))); }
+    function ac() { const ul = document.getElementById('ac'); const m = match(document.getElementById('q').value).slice(0, 6);
+      ul.innerHTML = m.map((a) => `<li role="option"><a href="/apps/${a.id}/"><b>${a.name}</b> 대신 · 오픈소스 ${a.n}개<small>${a.syn.slice(0, 3).join(', ')}</small></a></li>`).join('')
+        || (document.getElementById('q').value ? '<li class="none">아직 없는 앱이에요. <a href="/suggest/">대안 제안하기</a></li>' : '');
+      ul.hidden = !ul.innerHTML; }
+    function go() { const m = match(document.getElementById('q').value); if (m[0]) location.href = `/apps/${m[0].id}/`; else ac(); }
+    if (new URL(location.href).searchParams.get('q')) { document.getElementById('q').value = new URL(location.href).searchParams.get('q'); ac(); }
   </script>
 </Base>
