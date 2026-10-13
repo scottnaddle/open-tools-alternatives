@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import Mono from '../components/Mono.astro';
 import Icon from '../components/Icon.astro';
 import Status from '../components/Status.astro';
+import SearchAutocomplete from '../components/SearchAutocomplete.astro';
+import QuickChips from '../components/QuickChips.astro';
 import { getCollection } from 'astro:content';
 import { CATEGORIES, SYNONYMS, CAT, tone, EXAMPLE_LABEL } from '../lib/facts';
 const base = import.meta.env.BASE_URL;
@@ -38,16 +40,8 @@ const swapExamples = [
       <div>
         <h1>학교에서 쓰는 앱, 무료 오픈소스로 바꿔 쓸 수 있을까?</h1>
         <p class="stat">학교 앱 <b>{apps.length}개</b>에 대한 오픈소스 대안 <b>{nAlt}건</b>. 기기 지원과 설치 난이도까지 출처와 함께 정리하고, AI 에이전트가 매일 다시 확인합니다.</p>
-        <form class="hsearch" role="search" onsubmit="event.preventDefault();doSearch()">
-          <label class="sr" for="hq">프로그램 이름 검색</label>
-          <input id="hq" type="search" autocomplete="off" placeholder="지금 쓰는 프로그램 이름 (예: CapCut, 알집, 한글, 포토샵, 영상 편집)">
-          <button>대안 찾기</button>
-        </form>
-        <ul class="ac" id="ac" hidden></ul>
-        <div class="quick">
-          <span class="hint">많이 찾는 대체</span>
-          {apps.slice(0, 4).map((a) => <a href={`${base}apps/${a.id}/`}>{a.data.name} 대신</a>)}
-        </div>
+        <SearchAutocomplete index={index} base={base} />
+        <QuickChips apps={apps.slice(0, 4)} base={base} />
       </div>
       <ol class="swap" aria-label="바꿔 쓰기 예">
         {swapExamples.map(({ app, tool }) => {
@@ -241,28 +235,4 @@ const swapExamples = [
       </div>
     </div>
   </div>
-
-  <script is:inline define:vars={{ index, base }}>
-    const norm = (s) => s.toLowerCase().replace(/\s+/g, '');
-    function match(q) { q = norm(q); if (!q) return []; return index.filter((a) => [a.name, a.id, ...a.syn].some((n) => norm(n).includes(q))); }
-    function ac() { 
-      const ul = document.getElementById('ac'); 
-      const m = match(document.getElementById('hq').value).slice(0, 6);
-      ul.innerHTML = m.map((a) => `<li><a href="${base}apps/${a.id}/">${a.name} 대신<small>${a.syn.slice(0, 2).join(', ')}</small></a></li>`).join('')
-        || (document.getElementById('hq').value ? `<li><a href="${base}suggest/">찾는 앱이 없어요. 대안을 요청해 주세요</a></li>` : '');
-      ul.hidden = !ul.innerHTML;
-    }
-    function go() { const m = match(document.getElementById('hq').value); if (m[0]) location.href = `${base}apps/${m[0].id}/`; else ac(); }
-    function doSearch() {
-      const query = document.getElementById('hq').value.trim();
-      if (!query) return;
-      const m = match(query);
-      if (m[0]) {
-        location.href = `${base}apps/${m[0].id}/`;
-      } else {
-        location.href = `${base}search/?q=${encodeURIComponent(query)}`;
-      }
-    }
-    document.getElementById('hq')?.addEventListener('input', ac);
-  </script>
 </Base>

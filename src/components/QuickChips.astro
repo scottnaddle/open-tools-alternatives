@@ -1,0 +1,25 @@
+<!-- Lucian UX/UI Prompt #019 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#019 -->
+---
+const { apps, base } = Astro.props;
+---
+<style>
+.u019{position:relative;width:100%}
+.u019-head{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:10px}
+.u019-head b{font-size:14px;font-weight:600;color:var(--ux-muted);white-space:nowrap}
+.u019-list{display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:8px}
+.u019-chip{display:inline-flex;align-items:center;height:38px;padding:0 16px;border:0;border-radius:999px;background:var(--ux-surface);color:var(--ux-ink-2);font-size:14px;font-weight:600;text-decoration:none;
+  box-shadow:inset 0 0 0 1px var(--ux-line);transition:background-color .35s var(--ux-ease),color .3s var(--ux-ease),box-shadow .3s var(--ux-ease),transform .4s var(--ux-spring)}
+.u019-chip:hover{color:var(--ux-ink);box-shadow:inset 0 0 0 1px var(--ux-ink-3);transform:translateY(-2px)}
+.u019-chip:active{transform:scale(.96)}
+.u019-chip:focus-visible{outline:2px solid var(--ux-accent);outline-offset:3px}
+</style>
+<div class="ux u019">
+  <div class="u019-head">
+    <b>많이 찾는 대체</b>
+  </div>
+  <div class="u019-list">
+    {apps.map((a) => (
+      <a class="u019-chip" href={`${base}apps/${a.id}/`}>{a.data.name} 대신</a>
+    ))}
+  </div>
+</div>

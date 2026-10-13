@@ -144,7 +144,48 @@ footer{border-top:1px solid var(--line);background:var(--surface)}footer .wrap{p
 .report select,.report textarea{font:inherit;font-size:14px;padding:10px;border:1px solid #B9B7AD;border-radius:10px;background:#fff}
 .teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 .teams div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}.teams b{display:block;margin-bottom:6px}.teams p{margin:0;font-size:14px;color:var(--ink-2)}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+/* ── Lucian UX/UI token mapping ── */
+/* Map Lucian --ux-* tokens to the mockup design tokens without altering the overall aesthetic */
+.ux,.ux *,.ux *::before,.ux *::after{box-sizing:border-box}
+.ux{
+  --ux-page:var(--ground);
+  --ux-surface:var(--surface);
+  --ux-surface-2:#FBFAF7;
+  --ux-surface-3:var(--line-2);
+  --ux-ink:var(--ink);
+  --ux-ink-2:var(--ink-2);
+  --ux-ink-3:var(--muted);
+  --ux-line:var(--line);
+  --ux-line-2:var(--line-2);
+  --ux-accent:var(--brand);
+  --ux-accent-2:#1F4E8C;
+  --ux-accent-soft:var(--brand-tint);
+  --ux-accent-ink:#FFFFFF;
+  --ux-mint:#1E6A47;
+  --ux-warn:#D6731E;
+  --ux-danger:#D93A55;
+  --ux-glass:rgba(255,255,255,.6);
+  --ux-glass-line:rgba(255,255,255,.85);
+  --ux-shadow:rgba(40,30,80,.14);
+  --ux-shadow-strong:rgba(40,30,80,.3);
+  --ux-grad:linear-gradient(120deg,#1E6A47,#1F4E8C 55%,#22C3A6);
+  --ux-ease:cubic-bezier(.2,.8,.2,1);
+  --ux-spring:cubic-bezier(.34,1.45,.64,1);
+  font-family:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  color:var(--ux-ink);
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;
+  -webkit-tap-highlight-color:transparent;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+}
+:where(.ux) :is(button,input,textarea,select){font:inherit;color:inherit}
+:where(.ux) button{cursor:pointer}
+.ux :focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.ux [hidden]{display:none!important}
+
 /* ── 열린도구 v3 추가: 사실 상태·예시·바꿔 쓰기 사다리 ── */
 :focus-visible{outline:3px solid var(--brand);outline-offset:2px}
 .st{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;margin-left:6px;vertical-align:2px;white-space:nowrap}
