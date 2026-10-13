@@ -1,0 +1,43 @@
+name: Deploy
+
+on:
+  workflow_dispatch: # 수동 실행만 허용 — push 자동 배포는 켜지 않는다 (AGENTS.md·ops/RUNBOOK.md)
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Freeze guard
+        run: |
+          if [ -f ops/FREEZE ]; then
+            echo "⛔ ops/FREEZE 존재 — 배포 중단"; cat ops/FREEZE; exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy
+        env:
+          GHOST_SERVER_ROOT_PASSWORD: ${{ secrets.GHOST_SERVER_ROOT_PASSWORD }}
+          GHOST_SERVER_HOST: ${{ secrets.GHOST_SERVER_HOST }}
+          SKIP_BUILD: '1'
+        run: bash scripts/deploy.sh
+
+      - name: Result
+        if: always()
+        run: echo "배포 결과를 확인했습니다. 실패 시 ops/RUNBOOK.md 3절(롤백) 참고."

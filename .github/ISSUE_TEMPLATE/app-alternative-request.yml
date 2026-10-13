@@ -1,0 +1,36 @@
+name: "대안 요청"
+description: "쓰고 있는 유료 앱의 오픈소스 대안을 요청합니다"
+labels: ["queue/research"]
+body:
+  - type: input
+    id: app
+    attributes:
+      label: 대신 찾고 싶은 앱
+      description: "학교에서 쓰는 프로그램 이름 (예: 미리캔버스, 띵커벨, e알리미)"
+    validations:
+      required: true
+  - type: textarea
+    id: usage
+    attributes:
+      label: 어떤 수업·업무에 쓰나요?
+      description: "예: 컴퓨터실 수업에서 3D 모형 만들기, 교무처 문서 작업 등"
+    validations:
+      required: true
+  - type: input
+    id: candidate
+    attributes:
+      label: 알고 있는 오픈소스가 있다면 (선택)
+      description: "이름 또는 GitHub 주소"
+  - type: input
+    id: source
+    attributes:
+      label: 알게 된 경로나 출처 (선택)
+  - type: textarea
+    id: device
+    attributes:
+      label: 쓸 기기 (선택)
+      description: "예: 웨일북·크롬북, 컴퓨터실 PC(관리자 권한 없음), 태블릿"
+  - type: markdown
+    attributes:
+      value: |
+        **개인정보(이름·학교명·연락처)를 적지 마세요.** 접수 후 에이전트가 공식 출처에서 다시 확인하고, 검증된 내용만 사이트에 반영됩니다. 진행 상황은 이 이슈로 안내됩니다.

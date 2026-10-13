@@ -112,6 +112,16 @@ const changes = defineCollection({
   }),
 });
 
+// 스킬 라이선스 허용목록 (ops/RESEARCH.md 4절 규칙과 동일하게 유지).
+// 없음(null)·AGPL·NOASSERTION·비OSI(CC-BY-SA 등)는 게시하지 않는다. scripts/check_skills.py와 목록 일치 필수.
+export const ALLOWED_SKILL_LICENSES = [
+  'MIT', 'Apache-1.1', 'Apache-2.0',
+  'BSD-1-Clause', 'BSD-2-Clause', 'BSD-2-Clause-FreeBSD', 'BSD-3-Clause',
+  'GPL-2.0', 'GPL-2.0-only', 'GPL-2.0-or-later', 'GPL-3.0', 'GPL-3.0-only', 'GPL-3.0-or-later',
+  'LGPL-2.1', 'LGPL-2.1-only', 'LGPL-2.1-or-later', 'LGPL-3.0', 'LGPL-3.0-only', 'LGPL-3.0-or-later',
+  'MPL-1.1', 'MPL-2.0', 'ISC', 'Unlicense', 'CC0-1.0', '0BSD', 'Zlib', 'Artistic-2.0', 'EPL-2.0',
+];
+
 const skills = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/skills' }),
   schema: z.object({
@@ -122,9 +132,12 @@ const skills = defineCollection({
     usageScope: z.enum(['수업용', '교사 개인용']),
     installNeeded: z.boolean(),
     apiKeyNeeded: z.boolean(),
-    license: z.string().nullable(),
+    license: z.string().nullable().refine(
+      (v) => v !== null && (ALLOWED_SKILL_LICENSES as readonly string[]).includes(v),
+      { message: '라이선스가 허용목록(OSI 계열)에 없음 — AGPL·NOASSERTION·라이선스 없음·비OSI는 게시 금지' },
+    ),
     sourceUrl: z.string().url(),
-    dateChecked: z.string(),
+    dateChecked: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'dateChecked는 YYYY-MM-DD 형식'),
     previewType: z.enum(['iframe', 'image', 'none']).optional(),
     previewPath: z.string().optional(),
     github: z.object({
@@ -133,7 +146,13 @@ const skills = defineCollection({
       createdAt: z.string(),
       license: z.string().nullable(),
     }),
-  }),
+  }).refine(
+    (s) => !s.previewType || s.previewType === 'none' || !!s.previewPath,
+    { message: 'previewType이 iframe/image면 previewPath가 필요함' },
+  ).refine(
+    (s) => s.sourceUrl.replace(/^https?:\/\/github\.com\//, '').replace(/\/+$/, '').toLowerCase() === s.github.repo.toLowerCase(),
+    { message: 'sourceUrl과 github.repo가 일치하지 않음' },
+  ),
 });
 
 export const collections = { tools, schoolApps, changes, skills };

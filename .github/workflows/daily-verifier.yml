@@ -33,8 +33,15 @@ jobs:
       
       - name: Install Node dependencies
         run: npm ci
-      
+
+      - name: Freeze guard
+        run: |
+          if [ -f ops/FREEZE ]; then
+            echo "⛔ ops/FREEZE 존재 — 일일 검증 중단"; cat ops/FREEZE
+          fi
+
       - name: Run daily verifier
+        if: ${{ !hashFiles('ops/FREEZE') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 scripts/daily_verifier.py
@@ -57,7 +64,10 @@ jobs:
       - name: Run build
         if: steps.check_changes.outputs.has_changes == 'true'
         run: npm run build
-      
+
+      - name: Fact age report
+        run: python3 scripts/fact_age.py 90 --json /tmp/fact_age_report.json || true
+
       - name: Create PR
         if: steps.check_changes.outputs.has_changes == 'true'
         env:
@@ -73,7 +83,7 @@ jobs:
           
           # 브랜치 생성 및 커밋
           git checkout -b "$BRANCH"
-          git add src/content/tools/ src/content/changes/
+          git add src/content/tools/ src/content/skills/ src/content/changes/
           git commit -m "chore: daily verification update ${DATE}
 
           A-grade changes (stars, releases, health) are ready to merge.
