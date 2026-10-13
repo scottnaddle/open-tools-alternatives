@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const changes = await getCollection('changes');
+const sortedChanges = changes.sort((a, b) => b.data.at.localeCompare(a.data.at));
+---
+<Base title="변경 이력">
+  <div class="detail wide">
+    <h1 class="ph">변경 이력</h1>
+    <p class="lead">사이트의 모든 변경은 기록됩니다. 언제, 무엇이, 어떤 출처로 바뀌었는지 확인하세요.</p>
+
+    {sortedChanges.length === 0 && (
+      <div class="panel">
+        <p>아직 기록된 변경 이력이 없습니다.</p>
+        <p class="hint">AI 에이전트가 사실을 확인하고 변경하면 여기에 기록됩니다.</p>
+      </div>
+    )}
+
+    {sortedChanges.length > 0 && (
+      <ul class="changes">
+        {sortedChanges.map((c) => {
+          const target = c.data.target;
+          const parts = target.split('/');
+          const toolId = parts[1]?.split('.')[0];
+          const field = parts.slice(1).join('.');
+          
+          return (
+            <li>
+              <div class="meta">
+                {c.data.at.slice(0, 10)} {c.data.at.slice(11, 16)} · 
+                {c.data.agent} · 
+                {c.data.tier}등급 변경 · 
+                실행 ID {c.data.runId.slice(0, 8)}
+              </div>
+              <strong>{toolId}</strong> › {field}
+              <br/>
+              <code>{JSON.stringify(c.data.before)}</code> → <code>{JSON.stringify(c.data.after)}</code>
+              <br/>
+              <details class="src">
+                <summary>출처 {c.data.sources.length}</summary>
+                <ul>
+                  {c.data.sources.map((s) => (
+                    <li>
+                      <a href={s.url}>{s.url}</a>
+                      <br/>
+                      <small>{s.method}, {s.fetchedAt}</small>
+                      {s.excerpt && <><br/><small>{s.excerpt}</small></>}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+              <br/>
+              <small>게이트: {c.data.gates.join(', ')} · 커밋 {c.data.commit.slice(0, 7)}</small>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+
+    <div class="panel" style="margin-top:32px;background:var(--warn-tint);color:#4A3000">
+      <h2>변경 이력의 역할</h2>
+      <p>모든 변경은 되돌릴 수 있습니다. 에이전트가 잘못된 정보를 반영했다면 이 이력을 근거로 이전 상태로 복구할 수 있어요.</p>
+      <p class="hint">변경 이력은 투명성과 신뢰의 기반입니다. 누가, 언제, 무엇을, 어떤 출처로 바꿨는지 모두 공개됩니다.</p>
+    </div>
+  </div>
+</Base>
