@@ -8,6 +8,7 @@ import { getCollection, getEntry } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { exampleFor, deriveScope, devices, PLAT, SCOPE_NAME, MOE_URL, tone, col, EXAMPLE_LABEL, SYNONYMS } from '../../lib/facts';
 import { APP_TOOL_MAP } from '../../lib/search-synonyms';
+const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
   return (await getCollection('schoolApps')).map((a) => ({ params: { slug: a.id }, props: { app: a } }));
@@ -38,7 +39,7 @@ const sceneData: Record<string, { device: string; alts: string[] }> = {
   <div data-pagefind-meta="app_name" style="display:none">{app.data.name}</div>
   
   <div class="detail" style={tone(app.data.category)}>
-    <a class="back" href="/">홈으로</a>
+    <a class="back" href={base}>홈으로</a>
     <p class="kick">{app.data.category}, {app.data.procurementNote?.value || '현장에서 많이 쓰는 앱'} 
     {app.data.procurementNote && <><Status fact={app.data.procurementNote} />
     {app.data.procurementNote.sources && <details class="src"><summary>출처 {app.data.procurementNote.sources.length}</summary><ul>{app.data.procurementNote.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}</>}
@@ -118,9 +119,9 @@ const sceneData: Record<string, { device: string; alts: string[] }> = {
           <ScopeChips scopes={sc} isExample={true} />
           {sc.includes('student-use-check') && <p class="warnbox">학생이 직접 쓰면 학생 정보가 처리될 수 있어요. 학교 절차를 확인하세요. <a href={MOE_URL}>교육부 학습지원 소프트웨어 선정 기준 안내</a></p>}
           <div class="actions">
-            <a class="btn primary" href={`/compare/${t.id}-vs-${alts[0]?.t?.id !== t.id ? alts[0]?.t?.id : alts[1]?.t?.id}/`}>다른 대안과 비교</a>
+            <a class="btn primary" href={`${base}compare/${t.id}-vs-${alts[0]?.t?.id !== t.id ? alts[0]?.t?.id : alts[1]?.t?.id}/`}>다른 대안과 비교</a>
             <a class="btn" href={`https://github.com/${t.data.github.repo}`}>원 프로젝트 보기</a>
-            <a class="btn ghost" href="/suggest/#report">정보가 틀렸나요?</a>
+            <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
           </div>
         </article>;
       })}

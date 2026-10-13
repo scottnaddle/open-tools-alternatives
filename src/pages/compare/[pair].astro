@@ -4,6 +4,7 @@ import Status from '../../components/Status.astro';
 import Mono from '../../components/Mono.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { PLAT, EXAMPLE_LABEL, exampleFor } from '../../lib/facts';
+const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
   const seen = new Set<string>();
@@ -54,7 +55,7 @@ const compareRows = [
 ---
 <Base title={`${ta.data.name}과 ${tb.data.name} 비교`}>
   <div class="detail wide">
-    <a class="back" href={`/apps/${app ? app.toLowerCase().replace(/ /g, '-') : 'capcut'}/`}>← {app} 대안 목록</a>
+    <a class="back" href={`${base}apps/${app ? app.toLowerCase().replace(/ /g, '-') : 'capcut'}/`}>← {app} 대안 목록</a>
     <h1 class="ph">{ta.data.name}과 {tb.data.name} 비교</h1>
     <p class="lead">{app} 대안 중 두 도구의 사실을 나란히 놓았어요. 점수나 순위는 매기지 않습니다.</p>
     

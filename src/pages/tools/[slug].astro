@@ -7,6 +7,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { PLAT, HEALTH, exampleFor, deriveScope, EXAMPLE_LABEL, MOE_URL } from '../../lib/facts';
 import { TOOL_SYNONYMS, CATEGORY_TASKS } from '../../lib/search-synonyms';
+const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
   return (await getCollection('tools')).map((t) => ({ params: { slug: t.id }, props: { tool: t } }));
@@ -31,7 +32,7 @@ const categoryTasks = CATEGORY_TASKS[t.category] || [];
   <div data-pagefind-meta="tool_name" style="display:none">{t.name}</div>
   
   <div class="detail">
-    <a class="back" href="/">← 대안 찾기</a>
+    <a class="back" href={base}>← 대안 찾기</a>
     <div style="display:flex;align-items:center;gap:18px;margin:16px 0">
       <Mono name={t.name} size={64} />
       <div>
@@ -123,14 +124,14 @@ const categoryTasks = CATEGORY_TASKS[t.category] || [];
 
     <div class="panel" style="margin:24px 0">
       <h2>변경 이력</h2>
-      <p class="hint">이 도구에 대한 최근 5건의 변경 기록입니다. <a href="/changes/">전체 변경 이력 →</a></p>
+      <p class="hint">이 도구에 대한 최근 5건의 변경 기록입니다. <a href={`${base}changes/`}>전체 변경 이력 →</a></p>
       <p class="hint"><span class="st st-ex">{EXAMPLE_LABEL}</span> 아직 변경 기록이 없습니다. 검증 에이전트가 실행되면 여기에 표시됩니다.</p>
     </div>
 
     <div class="actions" style="margin-top:32px">
       <a class="btn primary" href={`https://github.com/${t.github.repo}`}>GitHub 저장소 →</a>
       {t.officialSite.value && <a class="btn" href={t.officialSite.value}>공식 사이트 →</a>}
-      <a class="btn ghost" href="/suggest/#report">정보가 틀렸나요?</a>
+      <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
     </div>
   </div>
 </Base>

@@ -1,0 +1,19 @@
+{
+  "name": "Lineage Skill",
+  "slug": "JuneYaooo-lineage-skill",
+  "category": "교사 업무·글쓰기",
+  "description": "비디오, PDF, 강의록을 출처가 명확한 교사 에이전트 스킬로 정리합니다. 체계적 학습 로드맵과 연습 문제 포함.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "Apache-2.0",
+  "sourceUrl": "https://github.com/JuneYaooo/lineage-skill",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "JuneYaooo/lineage-skill",
+    "stars": 454,
+    "createdAt": "2026-06-01T15:19:46Z",
+    "license": "Apache-2.0"
+  }
+}

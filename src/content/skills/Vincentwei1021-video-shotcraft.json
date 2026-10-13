@@ -1,0 +1,19 @@
+{
+  "name": "Video Shotcraft",
+  "slug": "Vincentwei1021-video-shotcraft",
+  "category": "영상·미디어",
+  "description": "Claude Code와 Codex를 위한 AI 비디오 스킬. Remotion으로 영화 같은 제품 영상을 만듭니다. 152가지 샷 레시피와 209가지 모션 프리뷰 포함.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "Apache-2.0",
+  "sourceUrl": "https://github.com/Vincentwei1021/video-shotcraft",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "Vincentwei1021/video-shotcraft",
+    "stars": 11690,
+    "createdAt": "2026-07-19T11:44:41Z",
+    "license": "Apache-2.0"
+  }
+}

@@ -1,9 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import FloatingInput from '../components/FloatingInput.astro';
+import Toast from '../components/Toast.astro';
+const base = import.meta.env.BASE_URL;
 ---
 <Base title="대안 요청하기">
   <div class="detail wide">
-    <a class="back" href="/">← 홈으로</a>
+    <a class="back" href={base}>← 홈으로</a>
     <h1 class="ph">대안 요청하기</h1>
     <p class="lead">대신 쓸 오픈소스를 알려 주세요. 원 출처를 확인한 뒤 반영 여부를 변경 이력에 남겨요.</p>
 
@@ -16,50 +19,66 @@ import Base from '../layouts/Base.astro';
       </ul>
     </div>
 
-    <form class="fform" onsubmit="event.preventDefault();document.getElementById('done').hidden=false">
-      <label for="app">대신하고 싶은 학교 앱</label>
-      <input id="app" placeholder="예: 미리캔버스, 띵커벨">
+    <form class="suggest-form" id="suggest-form">
+      <FloatingInput id="app" label="대신하고 싶은 학교 앱" placeholder="예: 미리캔버스, 띵커벨" required={true} />
+      <FloatingInput id="tool" label="추천하는 오픈소스 이름 또는 주소" placeholder="예: Excalidraw 또는 https://github.com/excalidraw/excalidraw" required={true} />
       
-      <label for="tool">추천하는 오픈소스 이름 또는 주소</label>
-      <input id="tool" placeholder="예: Excalidraw 또는 https://github.com/excalidraw/excalidraw">
+      <div style="margin-bottom:18px">
+        <label for="why" style="display:block;margin-bottom:8px;font-size:14px;font-weight:600">수업·업무에서 어떻게 쓰나요? (선택)</label>
+        <textarea id="why" rows="4" style="width:100%;padding:12px;border:1.5px solid var(--ux-line-2);border-radius:16px;font:inherit;font-size:16px" placeholder="예: 수업 시간에 칠판 대신 쓰고 싶어요. 학생이 태블릿에서 그림을 그릴 수 있었으면 좋겠어요."></textarea>
+      </div>
       
-      <label for="why">수업·업무에서 어떻게 쓰나요? (선택)</label>
-      <textarea id="why" rows="4" placeholder="예: 수업 시간에 칠판 대신 쓰고 싶어요. 학생이 태블릿에서 그림을 그릴 수 있었으면 좋겠어요."></textarea>
-      
-      <div class="warnbox">
+      <div class="warnbox" style="background:var(--warn-tint);color:var(--warn-ink);border-radius:12px;padding:16px;margin-bottom:18px;font-size:14px">
         <strong>개인정보 보호:</strong> 이름·학교명·연락처 등 개인정보는 적지 마세요. 제안 내용은 원 출처 확인 계기로만 사용됩니다.
       </div>
 
-      <button class="btn primary">제안 보내기 (시안 전용)</button>
-      
-      <div id="done" hidden class="panel" style="background:var(--brand-tint);color:var(--brand-ink);margin-top:16px">
-        <h3 style="margin:0 0 8px">제안 감사합니다</h3>
-        <p style="margin:0">시안 화면입니다. 실제 전송 기능은 구현되지 않았습니다. Phase 2 완료 후 서버리스 함수로 GitHub Issue에 전달할 예정이에요.</p>
-      </div>
+      <button class="btn primary" type="submit">제안 보내기</button>
     </form>
 
     <h2 id="report" style="margin-top:48px">정보가 틀렸나요?</h2>
     <p class="lead">사이트에 있는 정보가 틀렸다면 알려 주세요. 원 출처를 다시 확인해요.</p>
     
-    <form class="fform" onsubmit="event.preventDefault();document.getElementById('reportdone').hidden=false">
-      <label for="item">어떤 항목이 틀렸나요?</label>
-      <select id="item">
-        <option>도구 이름</option>
-        <option>라이선스</option>
-        <option>기기 지원</option>
-        <option>최근 개발일</option>
-        <option>기타</option>
-      </select>
-      
-      <label for="desc">설명 (선택)</label>
-      <textarea id="desc" rows="3" placeholder="어떤 부분이 틀렸는지 간단히 적어 주세요"></textarea>
-      
-      <button class="btn primary">신고하기 (시안 전용)</button>
-      
-      <div id="reportdone" hidden class="panel" style="background:var(--brand-tint);color:var(--brand-ink);margin-top:16px">
-        <h3 style="margin:0 0 8px">확인 요청을 받았어요</h3>
-        <p style="margin:0">원 출처를 다시 확인한 뒤 반영 여부를 변경 이력에 남깁니다.</p>
+    <form class="report-form" id="report-form">
+      <div style="margin-bottom:18px">
+        <label for="item" style="display:block;margin-bottom:8px;font-size:14px;font-weight:600">어떤 항목이 틀렸나요?</label>
+        <select id="item" style="width:100%;height:56px;padding:0 16px;border:1.5px solid var(--ux-line-2);border-radius:16px;font:inherit;font-size:16px;background:var(--ux-surface)">
+          <option>도구 이름</option>
+          <option>라이선스</option>
+          <option>기기 지원</option>
+          <option>최근 개발일</option>
+          <option>기타</option>
+        </select>
       </div>
+      
+      <div style="margin-bottom:18px">
+        <label for="desc" style="display:block;margin-bottom:8px;font-size:14px;font-weight:600">설명 (선택)</label>
+        <textarea id="desc" rows="3" style="width:100%;padding:12px;border:1.5px solid var(--ux-line-2);border-radius:16px;font:inherit;font-size:16px" placeholder="어떤 부분이 틀렸는지 간단히 적어 주세요"></textarea>
+      </div>
+      
+      <button class="btn primary" type="submit">신고하기</button>
     </form>
   </div>
+  
+  <Toast />
+  
+  <script is:inline>
+    document.getElementById('suggest-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      window.showToast('제안 감사합니다', '원 출처를 확인한 뒤 반영 여부를 알려 드릴게요');
+      e.target.reset();
+      // Trigger lift reset on all fields
+      document.querySelectorAll('.u025-f').forEach(function(f) {
+        var input = f.querySelector('.u025-in');
+        var lab = f.querySelector('.u025-lab');
+        f.classList.remove('is-up', 'is-focus');
+        f.querySelector('.u025-line').style.setProperty('--gap', '0px');
+      });
+    });
+    
+    document.getElementById('report-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      window.showToast('확인 요청을 받았어요', '원 출처를 다시 확인한 뒤 반영 여부를 변경 이력에 남깁니다');
+      e.target.reset();
+    });
+  </script>
 </Base>

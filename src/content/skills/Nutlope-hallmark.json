@@ -1,0 +1,19 @@
+{
+  "name": "Hallmark",
+  "slug": "Nutlope-hallmark",
+  "category": "웹·앱 만들기",
+  "description": "Claude Code, Cursor, Codex를 위한 안티-AI-슬롭 디자인 스킬. AI가 만들었다는 티가 나지 않는 웹 UI를 생성합니다. 21가지 테마와 슬롭 테스트 게이트 포함.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/Nutlope/hallmark",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "Nutlope/hallmark",
+    "stars": 29997,
+    "createdAt": "2026-04-27T20:47:10Z",
+    "license": "MIT"
+  }
+}

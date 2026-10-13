@@ -1,0 +1,19 @@
+{
+  "name": "Mindmap Skills",
+  "slug": "galiacheng-mindmap-skills",
+  "category": "그림·도해",
+  "description": "파일, URL, 메모, 주제를 인터랙티브한 Markmap 마인드맵으로 변환합니다. 19개 언어 지원.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/galiacheng/mindmap-skills",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "galiacheng/mindmap-skills",
+    "stars": 22,
+    "createdAt": "2026-06-16T07:12:16Z",
+    "license": "MIT"
+  }
+}

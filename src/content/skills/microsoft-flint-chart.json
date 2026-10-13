@@ -1,0 +1,19 @@
+{
+  "name": "Flint Chart",
+  "slug": "microsoft-flint-chart",
+  "category": "데이터·차트",
+  "description": "AI 에이전트가 간단한 차트 스펙으로 표현력 있고 보기 좋은 시각화를 만들 수 있는 시각화 언어입니다. Vega-Lite, ECharts, Chart.js, Plotly, Excel로 내보내기 가능.",
+  "usageScope": "수업용",
+  "installNeeded": false,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/microsoft/flint-chart",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "microsoft/flint-chart",
+    "stars": 4367,
+    "createdAt": "2026-05-13T00:00:28Z",
+    "license": "MIT"
+  }
+}

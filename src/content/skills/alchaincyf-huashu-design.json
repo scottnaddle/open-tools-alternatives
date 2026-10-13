@@ -1,0 +1,19 @@
+{
+  "name": "Huashu Design",
+  "slug": "alchaincyf-huashu-design",
+  "category": "수업자료·발표",
+  "description": "HTML 원생 디자인 스킬로 고품질 프로토타입, 슬라이드, 애니메이션을 제작합니다. 20가지 디자인 철학과 MP4 내보내기 지원.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/alchaincyf/huashu-design",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "alchaincyf/huashu-design",
+    "stars": 24906,
+    "createdAt": "2026-04-19T14:42:06Z",
+    "license": "MIT"
+  }
+}

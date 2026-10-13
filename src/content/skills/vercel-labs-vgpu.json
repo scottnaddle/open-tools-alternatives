@@ -1,0 +1,19 @@
+{
+  "name": "Vgpu",
+  "slug": "vercel-labs-vgpu",
+  "category": "웹·앱 만들기",
+  "description": "셰이더, 3D 장면, GPU 텐서, 신경망, 수학 시각화를 위한 모듈형 크로스 런타임 WebGPU 라이브러리.",
+  "usageScope": "교사 개인용",
+  "installNeeded": false,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/vercel-labs/vgpu",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "vercel-labs/vgpu",
+    "stars": 2511,
+    "createdAt": "2026-05-05T18:36:04Z",
+    "license": "MIT"
+  }
+}

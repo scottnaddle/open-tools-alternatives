@@ -1,0 +1,19 @@
+{
+  "name": "I Have Adhd",
+  "slug": "ayghri-i-have-adhd",
+  "category": "기타",
+  "description": "코딩 에이전트가 답을 묻지 않고 바로 보여주도록 만드는 스킬. ADHD 친화적인 출력 형식으로 핵심만 전달합니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/ayghri/i-have-adhd",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "ayghri/i-have-adhd",
+    "stars": 56860,
+    "createdAt": "2026-05-13T20:42:06Z",
+    "license": "MIT"
+  }
+}

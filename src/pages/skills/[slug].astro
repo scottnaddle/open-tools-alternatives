@@ -1,0 +1,198 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Status from '../../components/Status.astro';
+import Mono from '../../components/Mono.astro';
+import { col } from '../../lib/facts';
+
+export async function getStaticPaths() {
+  const skills = await getCollection('skills');
+  return skills.map((skill) => ({
+    params: { slug: skill.data.slug },
+    props: { skill },
+  }));
+}
+
+const { skill } = Astro.props;
+const { data } = skill;
+const base = import.meta.env.BASE_URL;
+
+const hasPreview = data.previewType && data.previewType !== 'none' && data.previewPath;
+---
+<Base title={`${data.name} — 오픈스킬`}>
+  <div class="detail">
+    <a class="back" href={`${base}skills/`}>← 스킬 목록</a>
+    <p class="kick">{data.category}, {data.usageScope}</p>
+    
+    <div class="dhead">
+      <span class="tile" aria-hidden="true" style={`background:${col(data.name)}`}>
+        <Mono name={data.name} size={56} />
+      </span>
+      <h1>{data.name}</h1>
+    </div>
+
+    <p class="lead">{data.description}</p>
+
+    {hasPreview && (
+      <div class="skill-preview-detail">
+        {data.previewType === 'iframe' && data.previewPath && (
+          <iframe 
+            src={`${base}${data.previewPath.replace(/^\//, '')}`} 
+            title={`${data.name} 미리보기`}
+            loading="lazy"
+          ></iframe>
+        )}
+        {data.previewType === 'image' && data.previewPath && (
+          <img 
+            src={`${base}${data.previewPath.replace(/^\//, '')}`} 
+            alt={`${data.name} 미리보기`}
+          />
+        )}
+      </div>
+    )}
+
+    {!hasPreview && (
+      <div class="skill-placeholder">
+        <svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="10" y="15" width="100" height="50" rx="4" />
+          <path d="M10 25h100M30 15v-8M50 15v-8M70 15v-8M90 15v-8" />
+          <circle cx="30" cy="40" r="8" />
+          <path d="M50 35l15 10l15-15" />
+        </svg>
+        <p>미리보기가 준비 중입니다</p>
+      </div>
+    )}
+
+    <article class="alt">
+      <div class="ahead">
+        <div class="amain">
+          <div>
+            <h2>스킬 정보</h2>
+          </div>
+        </div>
+        <div class="badges">
+          <span class="badge">{data.usageScope}</span>
+          <span class="badge">⭐ {data.github.stars.toLocaleString('ko-KR')}</span>
+        </div>
+      </div>
+
+      <div class="meta-row">
+        <span class="tagh">설치 필요 {data.installNeeded ? '예' : '아니오'}</span>
+        <span class="tagh">API 키 필요 {data.apiKeyNeeded ? '예' : '아니오'}</span>
+      </div>
+
+      <div class="meta-row">
+        <span class="tagh">라이선스 {data.license || '확인 중'}</span>
+        <span class="tagh">확인일 {data.dateChecked}</span>
+      </div>
+
+      <div class="skill-explainer">
+        <h3>사용 방법</h3>
+        {data.slug === 'anatomy' && (
+          <div>
+            <p>Claude Code나 Codex에서 이 스킬을 설치하면 복잡한 기계나 시스템을 상세한 아이소메트릭 일러스트로 시각화할 수 있습니다.</p>
+            <p><strong>예시:</strong> 위 미리보기는 1984년대 데스크톱 컴퓨터를 실제로 생성한 결과입니다. 타이핑이 가능한 키보드와 CRT 모니터가 포함되어 있습니다.</p>
+            <p><strong>교육 활용:</strong> 캐시, 해시맵, 컴파일러 같은 컴퓨터 과학 개념을 시각적으로 설명하거나, 물리 실험 장치를 3D로 보여줄 때 유용합니다.</p>
+          </div>
+        )}
+        {data.slug === 'answer-me-with-html' && (
+          <div>
+            <p>어려운 질문에 대해 읽기 쉬운 단일 페이지 HTML로 답변을 생성합니다. 복잡한 개념을 시각화와 인터랙션을 통해 설명합니다.</p>
+            <p><strong>예시:</strong> 위 미리보기는 실제 데모 페이지입니다.</p>
+            <p><strong>교육 활용:</strong> 과학 개념, 역사적 사건, 수학 공식 등을 학생들이 직접 탐색할 수 있는 인터랙티브 자료로 만들 수 있습니다.</p>
+          </div>
+        )}
+        {data.slug === 'mapstage' && (
+          <div>
+            <p>지도와 지구본을 실시간으로 조정하며 다양한 시각화 옵션을 제공합니다. 지형도, 위성 이미지, 지역 강조 등을 손쉽게 설정할 수 있습니다.</p>
+            <p><strong>예시:</strong> 위 미리보기는 MapStage 튜너 인터페이스입니다.</p>
+            <p><strong>교육 활용:</strong> 지리 수업 자료, 역사적 지역 설명, 환경 교육 시각화에 활용할 수 있습니다.</p>
+          </div>
+        )}
+        {!['anatomy', 'answer-me-with-html', 'mapstage'].includes(data.slug) && (
+          <p>이 스킬은 AI 에이전트가 {data.description} 수행할 수 있도록 돕습니다. 자세한 사용법은 GitHub 저장소를 참고하세요.</p>
+        )}
+      </div>
+
+      <div class="actions">
+        <a class="btn primary" href={data.sourceUrl} target="_blank" rel="noopener noreferrer">GitHub에서 보기 →</a>
+        <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
+      </div>
+    </article>
+  </div>
+</Base>
+
+<style>
+.skill-preview-detail {
+  width: 100%;
+  min-height: 500px;
+  background: var(--ground);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 32px 0;
+}
+
+.skill-preview-detail iframe {
+  width: 100%;
+  height: 600px;
+  border: 0;
+}
+
+.skill-preview-detail img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.skill-placeholder {
+  width: 100%;
+  min-height: 400px;
+  background: var(--ground);
+  border: 2px dashed var(--line-2);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 32px 0;
+  gap: 20px;
+}
+
+.skill-placeholder svg {
+  width: 120px;
+  height: 80px;
+  color: var(--ink-3);
+  opacity: 0.5;
+}
+
+.skill-placeholder p {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+.skill-explainer {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+}
+
+.skill-explainer h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+
+.skill-explainer p {
+  margin: 0 0 12px 0;
+  line-height: 1.7;
+}
+
+.skill-explainer p:last-child {
+  margin-bottom: 0;
+}
+</style>

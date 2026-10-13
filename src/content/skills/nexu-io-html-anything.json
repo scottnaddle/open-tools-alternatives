@@ -1,0 +1,19 @@
+{
+  "name": "Html Anything",
+  "slug": "nexu-io-html-anything",
+  "category": "웹·앱 만들기",
+  "description": "AI 에이전트용 HTML 편집기. 75가지 스킬과 9가지 표면(잡지, 발표자료, 포스터, 프로토타입 등)으로 로컬에서 즉시 HTML 콘텐츠를 생성합니다.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "Apache-2.0",
+  "sourceUrl": "https://github.com/nexu-io/html-anything",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "nexu-io/html-anything",
+    "stars": 9098,
+    "createdAt": "2026-05-11T09:40:38Z",
+    "license": "Apache-2.0"
+  }
+}

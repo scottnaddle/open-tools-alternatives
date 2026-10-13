@@ -1,0 +1,19 @@
+{
+  "name": "K12 Teacher Skills",
+  "slug": "anthropics-k12-teacher-skills",
+  "category": "수업자료·발표",
+  "description": "초중고 교사를 위한 수업 계획 작성, 차별화 학습 자료 제작, 수업 준비, 이해도 확인 문제 생성 스킬입니다. Anthropic과 Learning Commons가 공동 개발했습니다.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "Apache-2.0",
+  "sourceUrl": "https://github.com/anthropics/k12-teacher-skills",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "anthropics/k12-teacher-skills",
+    "stars": 562,
+    "createdAt": "2026-07-10T23:00:03Z",
+    "license": "Apache-2.0"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Guided Learning Skill",
+  "slug": "WSE-research-guided-learning-skill",
+  "category": "교사 업무·글쓰기",
+  "description": "Obsidian 볼트를 구조화된 학습 환경으로 만듭니다. 나선형 커리큘럼, 간격 반복, 인터랙티브 HTML 시각화, 이해도 확인 포함.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/WSE-research/guided-learning-skill",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "WSE-research/guided-learning-skill",
+    "stars": 8,
+    "createdAt": "2026-05-13T08:06:33Z",
+    "license": "MIT"
+  }
+}

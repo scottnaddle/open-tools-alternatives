@@ -1,0 +1,19 @@
+{
+  "name": "Velocut",
+  "slug": "open-ribbi-velocut",
+  "category": "영상·미디어",
+  "description": "AI 네이티브 로컬 우선 비디오 편집기. 브라우저에서 완전히 실행. Rust/WASM 엔진, WebGPU 합성, WebCodecs 내보내기.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/open-ribbi/velocut",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "open-ribbi/velocut",
+    "stars": 456,
+    "createdAt": "2026-07-08T05:04:00Z",
+    "license": "MIT"
+  }
+}

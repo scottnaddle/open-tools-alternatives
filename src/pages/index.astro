@@ -3,8 +3,11 @@ import Base from '../layouts/Base.astro';
 import Mono from '../components/Mono.astro';
 import Icon from '../components/Icon.astro';
 import Status from '../components/Status.astro';
+import SearchAutocomplete from '../components/SearchAutocomplete.astro';
+import QuickChips from '../components/QuickChips.astro';
 import { getCollection } from 'astro:content';
 import { CATEGORIES, SYNONYMS, CAT, tone, EXAMPLE_LABEL } from '../lib/facts';
+const base = import.meta.env.BASE_URL;
 const apps = (await getCollection('schoolApps')).sort((a, b) => a.data.bundle - b.data.bundle);
 const tools = new Map((await getCollection('tools')).map((t) => [t.id, t]));
 const changes = (await getCollection('changes'))
@@ -20,8 +23,16 @@ const recentTools = [...tools.values()]
   .sort((a, b) => String(b.data.github.lastPush).localeCompare(String(a.data.github.lastPush)))
   .slice(0, 6);
 
-// Featured tools (placeholder - in real implementation would come from metadata)
+// Featured tools (placeholder)
 const featuredTools = [...tools.values()].slice(0, 3);
+
+// Swap diagram data for hero
+const swapExamples = [
+  { app: apps.find(a => a.id === 'capcut'), tool: 'shotcut' },
+  { app: apps.find(a => a.id === 'alzip'), tool: '7-zip' },
+  { app: apps.find(a => a.id === 'hancom-office'), tool: 'h2orestart' },
+  { app: apps.find(a => a.id === 'photoshop'), tool: 'krita' },
+].filter(x => x.app);
 ---
 <Base title="학교에서 쓰는 앱, 무료 오픈소스로 바꿔 쓸 수 있을까?">
   <section class="hero-land">
@@ -29,202 +40,199 @@ const featuredTools = [...tools.values()].slice(0, 3);
       <div>
         <h1>학교에서 쓰는 앱, 무료 오픈소스로 바꿔 쓸 수 있을까?</h1>
         <p class="stat">학교 앱 <b>{apps.length}개</b>에 대한 오픈소스 대안 <b>{nAlt}건</b>. 기기 지원과 설치 난이도까지 출처와 함께 정리하고, AI 에이전트가 매일 다시 확인합니다.</p>
-        <form class="hsearch" role="search" onsubmit="event.preventDefault();doSearch()">
-          <label class="sr" for="hq">프로그램 이름 검색</label>
-          <input id="hq" type="search" autocomplete="off" placeholder="지금 쓰는 프로그램 이름 (예: CapCut, 알집, 한글, 포토샵, 영상 편집)">
-          <button>대안 찾기</button>
-        </form>
-        <ul class="ac" id="ac" hidden></ul>
-        <div class="quick">
-          <span class="hint">많이 찾는 대체</span>
-          {apps.slice(0, 4).map((a) => <a href={`/apps/${a.id}/`}>{a.data.name} 대신</a>)}
-        </div>
+        <SearchAutocomplete index={index} base={base} />
+        <QuickChips apps={apps.slice(0, 4)} base={base} />
       </div>
       <ol class="swap" aria-label="바꿔 쓰기 예">
-        {apps.slice(0, 4).map((a) => {
-          const alt = a.data.alternatives[0];
-          const altTool = tools.get(alt?.tool.id);
-          return <li>
-            <span class="from" style={tone(a.data.category)}>
-              <Icon icon={a.data.icon} />
-              {a.data.name}
-            </span>
-            <span class="to">{altTool?.data.name}</span>
-          </li>;
+        {swapExamples.map(({ app, tool }) => {
+          const t = tools.get(tool);
+          return app && t && (
+            <li>
+              <span class="from" style={tone(app.data.category)}>
+                <Icon icon={app.data.icon} />
+                {app.data.name}
+              </span>
+              <span class="to">{t.data.name}</span>
+            </li>
+          );
         })}
       </ol>
     </div>
   </section>
 
-  <div class="sh" id="apps">
-    <h2>학교들이 많이 산 앱의 대안</h2>
-    <span class="hint">2026년 1~10월 공공 조달 기록(school-edtech.kr) <span class="st st-unverified">확인 중</span></span>
-  </div>
-  <div class="lgrid">
-    {apps.map((a) => {
-      const altNames = a.data.alternatives.slice(0, 3).map((x) => tools.get(x.tool.id)?.data.name).filter(Boolean);
-      return <a class="lcard" id={`app-${a.id}`} href={`/apps/${a.id}/`} style={tone(a.data.category)}>
-        <span class="top">
-          <span class="ic" aria-hidden="true"><Icon icon={a.data.icon} /></span>
-          <span>
-            <b>{a.data.name} 대신</b><br/>
-            <span class="n">{a.data.procurementNote?.value || '현장에서 많이 쓰는 앱'}</span>
-          </span>
-        </span>
-        <span class="alts">{altNames.join(', ')}</span>
-      </a>;
-    })}
-  </div>
-
-  <div class="two">
-    <section>
-      <div class="sh">
-        <h2>최근 개발이 활발한 대안</h2>
-        <span class="hint">공식 저장소의 마지막 개발일, 2026-10-13 조회</span>
-      </div>
-      <div class="list">
-        {recentTools.map((t) => <div class="row">
-          <span class="mono2" aria-hidden="true"><Mono name={t.data.name} size={38} /></span>
-          <span class="mid">
-            <b>{t.data.name}</b>
-            <span>{t.data.schoolUse.value}</span>
-          </span>
-          <span class="date">{t.data.github.lastPush}</span>
-        </div>)}
-      </div>
-    </section>
-
-    <section>
-      <div class="sh">
-        <h2>이달에 소개하는 도구</h2>
-        <span class="hint">선정 이유를 밝힙니다. 추천이 아닙니다.</span>
-      </div>
-      <div class="list">
-        {featuredTools.map((t) => <div class="row">
-          <span class="mono2" aria-hidden="true"><Mono name={t.data.name} size={38} /></span>
-          <span class="mid">
-            <b>{t.data.name}</b>
-            <span>학교에서 많이 묻는 도구라 소개합니다</span>
-          </span>
-          <span class="st st-ex">{EXAMPLE_LABEL}</span>
-        </div>)}
-      </div>
-    </section>
-  </div>
-
-  <div class="sh">
-    <h2>학교 모음집</h2>
-    <span class="hint">어떤 도구를 묶을지는 아직 정하는 중이에요</span>
-  </div>
-  <div class="cgrid">
-    <div class="ccard">
-      <b>컴퓨터실 기본 도구</b>
-      <p>컴퓨터실 Windows PC에 설치해 두면 여러 수업에서 쓰는 도구 묶음</p>
-      <span class="minis" aria-hidden="true">
-        {[...tools.values()].slice(0, 5).map((t) => <span style={`background:${CAT[t.data.category]?.[1] || '#5B5432'}`}><Mono name={t.data.name} size={30} /></span>)}
-      </span>
-      <span class="hint">1차 공개 도구 7개 · 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></span>
+  <div class="wrap">
+    <div class="sh" id="apps">
+      <h2>학교들이 많이 산 앱의 대안</h2>
+      <span class="hint">2026년 1~10월 공공 조달 기록(school-edtech.kr) <span class="st st-wait">확인 중</span></span>
     </div>
-    <div class="ccard">
-      <b>웨일북·크롬북 수업 도구</b>
-      <p>설치 없이 브라우저로 여는 도구 묶음</p>
-      <span class="minis" aria-hidden="true">
-        {[...tools.values()].filter((t) => t.data.platforms.value.web === 'official').slice(0, 2).map((t) => 
-          <span style={`background:${CAT[t.data.category]?.[1] || '#5B5432'}`}><Mono name={t.data.name} size={30} /></span>)}
-      </span>
-      <span class="hint">1차 공개 도구 2개 · 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></span>
+    <div class="lgrid">
+      {apps.map((a) => {
+        const altNames = a.data.alternatives.slice(0, 3).map((x) => tools.get(x.tool.id)?.data.name).filter(Boolean);
+        const procNote = a.data.procurementNote;
+        const showSchoolCount = procNote && procNote.value && procNote.value.includes('학교');
+        return (
+          <a class="lcard" id={`app-${a.id}`} href={`${base}apps/${a.id}/`} style={tone(a.data.category)}>
+            <span class="top">
+              <span class="ic" aria-hidden="true">
+                <Icon icon={a.data.icon} />
+              </span>
+              <span>
+                <b>{a.data.name} 대신</b><br/>
+                <span class="n">{showSchoolCount ? procNote.value : '현장에서 많이 쓰는 앱'}</span>
+              </span>
+            </span>
+            <span class="alts">{altNames.join(', ')}</span>
+          </a>
+        );
+      })}
     </div>
-    <div class="ccard">
-      <b>영상 수업 키트</b>
-      <p>촬영·녹화·편집·자막까지 영상 수업에 필요한 도구</p>
-      <span class="minis" aria-hidden="true">
-        {[...tools.values()].filter((t) => t.data.category === '영상·오디오').slice(0, 3).map((t) => 
-          <span style={`background:${CAT[t.data.category]?.[1] || '#9A3B12'}`}><Mono name={t.data.name} size={30} /></span>)}
-      </span>
-      <span class="hint">1차 공개 도구 3개 · 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></span>
-    </div>
-    <div class="ccard">
-      <b>알툴즈 없이 지내기</b>
-      <p>압축·캡처·PDF 작업을 오픈소스로</p>
-      <span class="minis" aria-hidden="true">
-        {[...tools.values()].filter((t) => t.data.category === '유틸리티').slice(0, 5).map((t) => 
-          <span style={`background:${CAT[t.data.category]?.[1] || '#5B5432'}`}><Mono name={t.data.name} size={30} /></span>)}
-      </span>
-      <span class="hint">1차 공개 도구 5개 · 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></span>
-    </div>
-  </div>
 
-  <div class="two">
-    <section>
-      <div class="sh">
-        <h2>개발 중단·종료 알림</h2>
-        <span class="hint">공식 정보로 확인된 것만</span>
-      </div>
-      <div class="list">
-        <div class="warnrow">
-          <b>지금은 알림이 없어요</b>
-          <span class="hint">1차 공개 도구 {nTools}개 중 저장소 보관이나 개발 멈춤으로 확인된 도구가 없습니다. 서비스 종료·유료 전환은 공식 발표가 나오면 여기에 올립니다.</span>
+    <div class="two">
+      <section>
+        <div class="sh">
+          <h2>최근 개발이 활발한 대안</h2>
+          <span class="hint">공식 저장소의 마지막 개발일, {new Date().toISOString().slice(0, 10)} 조회</span>
         </div>
-      </div>
-    </section>
+        <div class="list">
+          {recentTools.map((t) => {
+            const appUsage = apps.find(a => a.data.alternatives.some(alt => alt.tool.id === t.id));
+            const description = appUsage ? `${appUsage.data.name} 대신, ${t.data.schoolUse.value}` : t.data.schoolUse.value;
+            return (
+              <div class="row">
+                <span class="mono2" aria-hidden="true" style={`background:${CAT[t.data.category]?.[1] || '#1E6A47'}`}>
+                  {t.data.name.replace(/[^A-Za-z0-9]/g, '').slice(0, 2) || t.data.name.slice(0, 2)}
+                </span>
+                <span class="mid">
+                  <b>{t.data.name}</b>
+                  <span>{description}</span>
+                </span>
+                <span class="date">{t.data.github.lastPush}</span>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
-    <section>
-      <div class="sh">
-        <h2>분야별로 둘러보기</h2>
-      </div>
-      <div class="cats">
-        {CATEGORIES.map(([k, n, ids]) => {
-          const catApps = apps.filter((a) => ids.includes(a.id));
-          const catName = catApps[0]?.data.category || n;
-          return <a href={`/apps/${ids[0]}/`} style={tone(catName)}>
-            {n}<span>{ids.length}</span>
-          </a>;
-        })}
-      </div>
-      <p class="hint" style="margin-top:18px">많이 찾는 앱 순위는 만들지 않습니다. 검색어는 새 대안을 찾는 데만 씁니다.</p>
-    </section>
-  </div>
-
-  <div class="cta" id="news">
-    <div class="cta-warn">
-      <h2>아직 좋은 대안이 없는 앱</h2>
-      <p>e알리미·리로스쿨, 미리캔버스형 템플릿, 띵커벨형 즉석 퀴즈는 아직 교사 혼자 바로 쓸 만한 오픈소스가 없습니다. <span class="st st-ex">{EXAMPLE_LABEL}</span></p>
-      <a class="btn" href="/suggest/">대안 요청하기</a>
+      <section>
+        <div class="sh">
+          <h2>이달에 소개하는 도구</h2>
+          <span class="hint">선정 이유를 밝힙니다. 추천이 아닙니다.</span>
+        </div>
+        <div class="list">
+          {featuredTools.map((t) => (
+            <div class="row">
+              <span class="mono2" aria-hidden="true" style={`background:${CAT[t.data.category]?.[1] || '#4B3A9A'}`}>
+                {t.data.name.replace(/[^A-Za-z0-9]/g, '').slice(0, 2) || t.data.name.slice(0, 2)}
+              </span>
+              <span class="mid">
+                <b>{t.data.name}</b>
+                <span>학기 말 수업 영상 녹화 문의가 많은 시기라 소개합니다</span>
+              </span>
+              <span class="st st-ex">{EXAMPLE_LABEL}</span>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
-    <div class="cta-brand">
-      <h2>매주 바뀐 정보를 메일로</h2>
-      <p>새 대안, 선생님께 영향 있는 업데이트, 종료·유료 전환 소식을 한 번에 받아 보세요.</p>
-      <form onsubmit="return false" class="nl">
-        <label class="sr" for="nl">이메일</label>
-        <input id="nl" type="email" placeholder="학교 이메일">
-        <button class="btn primary">구독하기</button>
-      </form>
+
+    <div class="sh">
+      <h2>학교 모음집</h2>
+      <span class="hint">어떤 도구를 묶을지는 아직 정하는 중이에요</span>
+    </div>
+    <div class="cgrid">
+      <div class="ccard">
+        <b>컴퓨터실 기본 도구</b>
+        <p>컴퓨터실 Windows PC에 설치해 두면 여러 수업에서 쓰는 도구 묶음</p>
+        <span class="minis" aria-hidden="true">
+          <span style="background:#5B5432">7Z</span>
+          <span style="background:#5B5432">Sh</span>
+          <span style="background:#4B3A9A">OBS</span>
+          <span style="background:#6B2C80">Kr</span>
+          <span style="background:#9A3B12">In</span>
+        </span>
+        <span class="hint">1차 공개 도구 7개 · 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></span>
+      </div>
+      <div class="ccard">
+        <b>웨일북·크롬북 수업 도구</b>
+        <p>설치 없이 브라우저로 여는 도구 묶음</p>
+        <span class="minis" aria-hidden="true">
+          <span style="background:#9A3B12">dr</span>
+          <span style="background:#4B3A9A">Op</span>
+        </span>
+        <span class="hint">1차 공개 도구 2개 · 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></span>
+      </div>
+      <div class="ccard">
+        <b>영상 수업 키트</b>
+        <p>촬영·녹화·편집·자막까지 영상 수업에 필요한 도구</p>
+        <span class="minis" aria-hidden="true">
+          <span style="background:#4B3A9A">Op</span>
+          <span style="background:#1E6A47">Sh</span>
+          <span style="background:#4B3A9A">OBS</span>
+        </span>
+        <span class="hint">1차 공개 도구 3개 · 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></span>
+      </div>
+      <div class="ccard">
+        <b>알툴즈 없이 지내기</b>
+        <p>압축·캡처·PDF 작업을 오픈소스로</p>
+        <span class="minis" aria-hidden="true">
+          <span style="background:#5B5432">7Z</span>
+          <span style="background:#1F4E8C">Na</span>
+          <span style="background:#6B2C80">Pe</span>
+          <span style="background:#5B5432">Sh</span>
+          <span style="background:#1F4E8C">Fl</span>
+        </span>
+        <span class="hint">1차 공개 도구 5개 · 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></span>
+      </div>
+    </div>
+
+    <div class="two">
+      <section>
+        <div class="sh">
+          <h2>개발 중단·종료 알림</h2>
+          <span class="hint">공식 정보로 확인된 것만</span>
+        </div>
+        <div class="list">
+          <div class="warnrow">
+            <b>지금은 알림이 없어요</b>
+            <span class="hint">1차 공개 도구 {nTools}개 중 저장소 보관이나 개발 멈춤으로 확인된 도구가 없습니다. 서비스 종료·유료 전환은 공식 발표가 나오면 여기에 올립니다.</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="sh">
+          <h2>분야별로 둘러보기</h2>
+        </div>
+        <div class="cats">
+          {CATEGORIES.map(([k, n, ids]) => {
+            const catApps = apps.filter((a) => ids.includes(a.id));
+            const catName = catApps[0]?.data.category || n;
+            return (
+              <a href={`${base}apps/${ids[0]}/`} style={tone(catName)}>
+                {n}<span>{ids.length}</span>
+              </a>
+            );
+          })}
+        </div>
+        <p class="hint" style="margin-top:18px">많이 찾는 앱 순위는 만들지 않습니다. 검색어는 새 대안을 찾는 데만 씁니다.</p>
+      </section>
+    </div>
+
+    <div class="cta" id="news">
+      <div class="cta-warn">
+        <h2>아직 좋은 대안이 없는 앱</h2>
+        <p>e알리미·리로스쿨, 미리캔버스형 템플릿, 띵커벨형 즉석 퀴즈는 아직 교사 혼자 바로 쓸 만한 오픈소스가 없습니다. <span class="st st-ex">{EXAMPLE_LABEL}</span></p>
+        <a class="btn" href={`${base}suggest/`}>대안 요청하기</a>
+      </div>
+      <div class="cta-brand">
+        <h2>매주 바뀐 정보를 메일로</h2>
+        <p>새 대안, 선생님께 영향 있는 업데이트, 종료·유료 전환 소식을 한 번에 받아 보세요.</p>
+        <form onsubmit="return false" class="nl">
+          <label class="sr" for="nl">이메일</label>
+          <input id="nl" type="email" placeholder="학교 이메일">
+          <button class="btn primary">구독하기</button>
+        </form>
+      </div>
     </div>
   </div>
-
-  <script is:inline define:vars={{ index }}>
-    const norm = (s) => s.toLowerCase().replace(/\s+/g, '');
-    function match(q) { q = norm(q); if (!q) return []; return index.filter((a) => [a.name, a.id, ...a.syn].some((n) => norm(n).includes(q))); }
-    function ac() { 
-      const ul = document.getElementById('ac'); 
-      const m = match(document.getElementById('hq').value).slice(0, 6);
-      ul.innerHTML = m.map((a) => `<li><a href="/apps/${a.id}/">${a.name} 대신<small>${a.syn.slice(0, 2).join(', ')}</small></a></li>`).join('')
-        || (document.getElementById('hq').value ? '<li><a href="/suggest/">찾는 앱이 없어요. 대안을 요청해 주세요</a></li>' : '');
-      ul.hidden = !ul.innerHTML;
-    }
-    function go() { const m = match(document.getElementById('hq').value); if (m[0]) location.href = `/apps/${m[0].id}/`; else ac(); }
-    function doSearch() {
-      const query = document.getElementById('hq').value.trim();
-      if (!query) return;
-      // First try app match for direct navigation
-      const m = match(query);
-      if (m[0]) {
-        location.href = `/apps/${m[0].id}/`;
-      } else {
-        // Use Pagefind for full site search
-        location.href = `/search/?q=${encodeURIComponent(query)}`;
-      }
-    }
-    document.getElementById('hq')?.addEventListener('input', ac);
-  </script>
 </Base>

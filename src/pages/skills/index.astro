@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SearchAutocomplete from '../../components/SearchAutocomplete.astro';
+import QuickChips from '../../components/QuickChips.astro';
+import { CAT } from '../../lib/facts';
+
+const base = import.meta.env.BASE_URL;
+const skills = await getCollection('skills');
+
+// Category counts
+const categories = [
+  '수업자료·발표',
+  '그림·도해',
+  '영상·미디어',
+  '데이터·차트',
+  '교사 업무·글쓰기',
+  '웹·앱 만들기',
+  '기타'
+];
+
+const categoryData = categories.map(cat => ({
+  name: cat,
+  count: skills.filter(s => s.data.category === cat).length,
+  skills: skills.filter(s => s.data.category === cat)
+})).filter(c => c.count > 0);
+
+// Search index for autocomplete
+const skillsIndex = skills.map(s => ({
+  id: s.data.slug,
+  name: s.data.name,
+  syn: [],
+  n: 1
+}));
+
+// Quick chips - first 4 skills
+const quickSkills = skills.slice(0, 4).map(s => ({
+  id: s.data.slug,
+  data: { name: s.data.name }
+}));
+
+// Stats
+const totalSkills = skills.length;
+const withPreview = skills.filter(s => s.data.previewPath).length;
+---
+<Base title="오픈스킬 — AI 에이전트 스킬">
+  <section class="hero-land">
+    <div class="wrap herogrid">
+      <div>
+        <h1>AI 에이전트가 쓸 수 있는 오픈스킬</h1>
+        <p class="stat">Claude Code, Codex 등에 설치하는 오픈소스 스킬 <b>{totalSkills}개</b>. 교육 자료 제작, 시각화, 데이터 처리 등 학교 업무에 쓸 수 있는 스킬을 모아 출처와 함께 정리합니다.</p>
+        <SearchAutocomplete index={skillsIndex} base={`${base}skills/`} />
+        <QuickChips apps={quickSkills} base={`${base}skills/`} />
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="sh">
+      <h2>분야별 스킬</h2>
+      <span class="hint">설치만 하면 바로 쓸 수 있는 오픈소스 에이전트 스킬</span>
+    </div>
+
+    {categoryData.map(cat => (
+      <div style="margin-bottom: 48px;">
+        <div class="sh" style="margin-top: 32px; margin-bottom: 16px;">
+          <h3 style="font-size: 20px; font-weight: 700;">{cat.name}</h3>
+          <span class="hint">{cat.count}개 스킬</span>
+        </div>
+        <div class="lgrid">
+          {cat.skills.map(skill => {
+            const { data } = skill;
+            const hasPreview = data.previewType && data.previewType !== 'none' && data.previewPath;
+            
+            return (
+              <a class="lcard skill-card" href={`${base}skills/${data.slug}/`} style={`--cat:${CAT['기타']?.[1] || '#6B2C80'}`}>
+                <span class="top">
+                  <span class="ic skill-preview-mini" aria-hidden="true">
+                    {hasPreview ? (
+                      data.previewType === 'iframe' && data.previewPath ? (
+                        <iframe 
+                          src={`${base}${data.previewPath.replace(/^\//, '')}`} 
+                          title={`${data.name} preview`}
+                          loading="lazy"
+                          style="transform: scale(0.15); transform-origin: 0 0; width: 667%; height: 667%; border: 0; pointer-events: none;"
+                        ></iframe>
+                      ) : data.previewPath ? (
+                        <img src={`${base}${data.previewPath.replace(/^\//, '')}`} alt={data.name} style="width: 100%; height: 100%; object-fit: cover;" />
+                      ) : null
+                    ) : (
+                      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="6" y="8" width="20" height="16" rx="2" />
+                        <path d="M6 12h20M12 8v-4M20 8v-4" />
+                      </svg>
+                    )}
+                  </span>
+                  <span>
+                    <b>{data.name}</b><br/>
+                    <span class="n">{data.usageScope} · ⭐ {data.github.stars.toLocaleString('ko-KR')}</span>
+                  </span>
+                </span>
+                <span class="alts">{data.description}</span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    ))}
+
+    <div class="two">
+      <section>
+        <div class="sh">
+          <h2>스킬 사용 안내</h2>
+        </div>
+        <div class="list">
+          <div class="row">
+            <span class="mid">
+              <b>설치 방법</b>
+              <span>Claude Code나 Codex에서 각 스킬의 GitHub 저장소를 연결하면 바로 사용할 수 있습니다</span>
+            </span>
+          </div>
+          <div class="row">
+            <span class="mid">
+              <b>수업용 vs 교사 개인용</b>
+              <span>교육부 가이드라인 개념을 따라 학생에게 바로 쓸 수 있는지 구분합니다</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="sh">
+          <h2>스킬 제안하기</h2>
+        </div>
+        <div class="list">
+          <div class="row">
+            <span class="mid">
+              <b>GitHub에서 찾은 스킬이 있나요?</b>
+              <span>교육에 쓸 만한 오픈소스 스킬을 알고 계시다면 제안해 주세요</span>
+            </span>
+          </div>
+        </div>
+        <a class="btn" href={`${base}suggest/`} style="margin-top: 12px;">스킬 제안하기</a>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+.skill-card .ic.skill-preview-mini {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--ground);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skill-card .ic.skill-preview-mini svg {
+  width: 24px;
+  height: 24px;
+  opacity: 0.5;
+}
+</style>

@@ -1,0 +1,19 @@
+{
+  "name": "Antenna Forge",
+  "slug": "1ove9-antenna-forge",
+  "category": "기타",
+  "description": "AI 주도 역설계 안테나 설계. 실제 NEC2와 openEMS를 루프에 포함. 브라우저 내 플레이그라운드 제공.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/1ove9/antenna-forge",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "1ove9/antenna-forge",
+    "stars": 1031,
+    "createdAt": "2026-05-25T03:00:24Z",
+    "license": "MIT"
+  }
+}

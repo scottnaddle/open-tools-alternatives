@@ -1,0 +1,19 @@
+{
+  "name": "PhysicsOS",
+  "slug": "122-syf-wcy-PhysicsOS",
+  "category": "수업자료·발표",
+  "description": "물리학 시뮬레이션과 시각화를 위한 오픈소스 플랫폼입니다. 교육용 물리 실험과 개념 설명을 인터랙티브하게 구현할 수 있습니다.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "Apache-2.0",
+  "sourceUrl": "https://github.com/122-syf-wcy/PhysicsOS",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "122-syf-wcy/PhysicsOS",
+    "stars": 243,
+    "createdAt": "2026-08-15T03:22:17Z",
+    "license": "Apache-2.0"
+  }
+}

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL;
 ---
 <Base title="검색">
   <div class="search-container">
@@ -18,13 +19,14 @@ import Base from '../layouts/Base.astro';
     }
   </style>
 
-  <link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
-  <script is:inline src="/_pagefind/pagefind-ui.js"></script>
-  <script is:inline>
+  <link href={`${base}pagefind/pagefind-ui.css`} rel="stylesheet">
+  <script is:inline src={`${base}pagefind/pagefind-ui.js`} define:vars={{ base }}></script>
+  <script is:inline define:vars={{ base }}>
     window.addEventListener('DOMContentLoaded', () => {
       const ui = new PagefindUI({ 
         element: "#search",
         showSubResults: true,
+        baseUrl: base,
         translations: {
           placeholder: "프로그램 이름 또는 작업 검색 (예: 포토샵, 사진 편집, 압축)",
           clear_search: "지우기",

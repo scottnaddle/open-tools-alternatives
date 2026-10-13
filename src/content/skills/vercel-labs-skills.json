@@ -1,0 +1,19 @@
+{
+  "name": "Skills",
+  "slug": "vercel-labs-skills",
+  "category": "기타",
+  "description": "Claude Code, Cursor, Codex 등 75개 이상의 AI 에이전트를 위한 오픈 스킬 생태계 CLI 도구입니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/vercel-labs/skills",
+  "dateChecked": "2026-10-13",
+  "previewType": "none",
+  "github": {
+    "repo": "vercel-labs/skills",
+    "stars": 34266,
+    "createdAt": "2026-01-14T21:31:18Z",
+    "license": "MIT"
+  }
+}
