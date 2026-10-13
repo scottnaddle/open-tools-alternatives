@@ -78,7 +78,7 @@ const { index, base } = Astro.props;
     hl.style.opacity = shown.length ? '1' : '0';
     
     if (q && !shown.length) {
-      list.insertAdjacentHTML('beforeend', '<li class="u034-none">'' + esc(q) + '' 앱을 찾지 못했어요</li>');
+      list.insertAdjacentHTML('beforeend', '<li class="u034-none">\u2018' + esc(q) + '\u2019 \uC571\uC744 \uCC3E\uC9C0 \uBABB\uD588\uC5B4\uC694</li>');
     }
     
     shown.forEach((d, i) => {
