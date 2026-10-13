@@ -1,6 +1,7 @@
 {
   "name": "MapStage",
   "slug": "mapstage",
+  "category": "수업자료·발표",
   "description": "지도와 지구본, 위성 이미지, 지형도 등을 실시간으로 조정하고 시각화합니다. 교육용 지리 자료 제작에 적합한 Mapterhorn DEM과 JSON 프리셋을 지원합니다.",
   "usageScope": "교사 개인용",
   "installNeeded": true,

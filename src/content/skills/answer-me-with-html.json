@@ -1,6 +1,7 @@
 {
   "name": "Answer Me With HTML",
   "slug": "answer-me-with-html",
+  "category": "수업자료·발표",
   "description": "어려운 질문에 실제로 읽을 수 있는 단일 페이지 HTML로 답변합니다. 복잡한 개념을 시각화와 인터랙션이 포함된 웹 페이지로 설명합니다.",
   "usageScope": "수업용",
   "installNeeded": true,
