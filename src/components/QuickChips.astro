@@ -1,16 +1,16 @@
 <!-- Lucian UX/UI Prompt #019 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#019 -->
 ---
-interface Props {
-  apps: Array<{
-    id: string;
-    data: {
-      name: string;
-    };
-  }>;
-  base: string;
-}
+type AppItem = {
+  id: string;
+  data: {
+    name: string;
+  };
+};
 
-const { apps, base } = Astro.props satisfies Props;
+type Props = {
+  apps: AppItem[];
+  base: string;
+};
 ---
 <style>
 .u019{position:relative;width:100%}

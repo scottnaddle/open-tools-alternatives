@@ -1,14 +1,12 @@
 <!-- Lucian UX/UI Prompt #025 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#025 -->
 ---
-interface Props {
+type Props = {
   id: string;
   label: string;
-  type?: string;
-  placeholder?: string;
-  required?: boolean;
-}
-
-const { id, label, type = "text", placeholder, required } = Astro.props satisfies Props;
+  type: string;
+  placeholder: string;
+  required: boolean;
+};
 ---
 <style>
 .u025-f{position:relative;margin-bottom:18px}
@@ -27,11 +25,11 @@ const { id, label, type = "text", placeholder, required } = Astro.props satisfie
 .u025-f.is-up .u025-in{padding-top:0}
 .u025-in:focus-visible{outline:none}
 </style>
-<div class="ux u025-f" data-field-id={id}>
+<div class="ux u025-f" data-field-id={Astro.props.id}>
   <div class="u025-box">
-    <input class="u025-in" type={type} id={id} placeholder={placeholder} required={required} />
+    <input class="u025-in" type={Astro.props.type || "text"} id={Astro.props.id} placeholder={Astro.props.placeholder} required={Astro.props.required} />
     <span class="u025-line" aria-hidden="true"><i class="l"></i><i class="g"></i><i class="r"></i></span>
-    <label class="u025-lab" for={id}>{label}</label>
+    <label class="u025-lab" for={Astro.props.id}>{Astro.props.label}</label>
   </div>
 </div>
 <script is:inline>
