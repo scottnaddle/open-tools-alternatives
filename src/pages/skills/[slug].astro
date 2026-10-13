@@ -35,14 +35,14 @@ const hasPreview = data.previewType && data.previewType !== 'none' && data.previ
 
     {hasPreview && (
       <div class="skill-preview-detail">
-        {data.previewType === 'iframe' && (
+        {data.previewType === 'iframe' && data.previewPath && (
           <iframe 
             src={`${base}${data.previewPath.replace(/^\//, '')}`} 
             title={`${data.name} 미리보기`}
             loading="lazy"
           ></iframe>
         )}
-        {data.previewType === 'image' && (
+        {data.previewType === 'image' && data.previewPath && (
           <img 
             src={`${base}${data.previewPath.replace(/^\//, '')}`} 
             alt={`${data.name} 미리보기`}
