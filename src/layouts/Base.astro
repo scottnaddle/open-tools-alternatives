@@ -2,11 +2,19 @@
 const { title } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const path = Astro.url.pathname;
+// 4축 콘텐츠 + 보조(소개). 4축은 edzip.kr(교사용 에듀테크 정보 플랫폼)의 정보 구조를 차용한 것이며,
+// 회원제/개인 콘텐츠는 도입하지 않는다 (운영 원칙 — 정적 정보 + AI 에이전트가 출처 검증).
+// 각 링크의 match는 동일 prefix 라우트에 대해 aria-current를 켜는 데 쓴다.
 const navLinks = [
-  { href: base, label: '오픈소스', match: `${base}` },
-  { href: `${base}skills/`, label: '오픈스킬', match: `${base}skills/` },
+  { href: base, label: '학습SW', match: `${base}apps/` },                                // 도구·학교앱(현 `apps/`) — 홈이 입구
+  { href: `${base}skills/`, label: '오픈스킬', match: `${base}skills/` },                  // AI 에이전트 스킬 갤러리
+  { href: `${base}cases/`, label: '현장사례', match: `${base}cases/` },                   // 학교 현장 적용 사례 (Stage 2b)
+  { href: `${base}lessons/`, label: '수업지도안', match: `${base}lessons/` },              // 도구×학년×단원 예시 지도안 (Stage 2c)
   { href: `${base}about/`, label: '소개', match: `${base}about/` },
 ];
+// 홈(`/`) 자체는 학습SW의 입구이자 4축 전체를 보여주는 인덱스 — 매칭 제외
+const isHome = path === base || path === `${base}` || path === `${base}index.html`;
+const matchPath = (m: string) => isHome ? false : (m === `${base}` ? path === base : path.startsWith(m));
 ---
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title} — 열린도구</title><link rel="stylesheet" href={`${base}style.css`}></head>
@@ -20,7 +28,7 @@ const navLinks = [
     </a>
     <nav class="main desktop" aria-label="주 메뉴">
       {navLinks.map((link) => (
-        <a href={link.href} aria-current={path.startsWith(link.match) ? 'page' : undefined}>{link.label}</a>
+        <a href={link.href} aria-current={matchPath(link.match) ? 'page' : undefined}>{link.label}</a>
       ))}
     </nav>
     <a class="btn soft desktop" href={`${base}#news`}>뉴스레터 구독</a>
@@ -30,7 +38,7 @@ const navLinks = [
     <small>메뉴</small>
     <ul class="u045-nav">
       {navLinks.map((link, i) => (
-        <li><a class="u045-ln" href={link.href} style={`--i:${i}`} aria-current={path.startsWith(link.match) ? 'page' : undefined}><span>{link.label}</span></a></li>
+        <li><a class="u045-ln" href={link.href} style={`--i:${i}`} aria-current={matchPath(link.match) ? 'page' : undefined}><span>{link.label}</span></a></li>
       ))}
     </ul>
     <div class="u045-foot"><a href={`${base}#news`}>뉴스레터 구독</a></div>
@@ -38,10 +46,143 @@ const navLinks = [
 </header>
 <main id="main"><slot /></main>
 <footer><div class="wrap">
-<span>각 프로젝트의 공개 자료로 정리한 정보입니다. 학교 적합성이나 법적 요건 충족 여부는 판정하지 않습니다.</span>
-<span>구매 학교 수 출처: school-edtech.kr (2026년 1~10월, 확인 중)</span>
-<span><a href={`${base}about/`}>사이트 소개</a></span>
+  <div class="foot-cols">
+    <div>
+      <b>열린도구</b>
+      <p>학교에서 이미 쓰는 유료·상용 앱 대신 쓸 수 있는 오픈소스 대안, 그리고 수업·업무에 쓸 수 있는 AI 에이전트 스킬을 정리합니다.</p>
+    </div>
+    <div>
+      <b>4축 콘텐츠</b>
+      <ul>
+        <li><a href={base}>학습SW (오픈소스 대안)</a></li>
+        <li><a href={`${base}skills/`}>오픈스킬</a></li>
+        <li><a href={`${base}cases/`}>현장사례</a></li>
+        <li><a href={`${base}lessons/`}>수업지도안</a></li>
+      </ul>
+    </div>
+    <div>
+      <b>함께</b>
+      <ul>
+        <li><a href={`${base}about/`}>사이트 소개</a></li>
+        <li><a href={`${base}suggest/`}>대안·정정 제안</a></li>
+        <li><a href={`${base}changes/`}>변경 이력</a></li>
+        <li><a href={`${base}#news`}>뉴스레터 구독</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-meta">
+    <span>각 프로젝트의 공개 자료로 정리한 정보입니다. 학교 적합성이나 법적 요건 충족 여부는 판정하지 않습니다.</span>
+    <span>구매 학교 수 출처: school-edtech.kr (2026년 1~10월, 확인 중)</span>
+    <span>운영: AI 에이전트가 매일 GitHub/GitLab API로 재확인 · <a href={`${base}about/`}>운영 원칙</a> · <a href="https://github.com/scottnaddle/open-tools-alternatives" target="_blank" rel="noopener">소스</a></span>
+  </div>
 </div></footer>
+<style>
+/* Lucian UX/UI Prompt #045 hamburger menu styles */
+.mobile{display:none}
+@media (max-width:768px){
+  .desktop{display:none!important}
+  .mobile{display:inline-flex}
+  header.top .wrap{position:relative;z-index:100}
+}
+.u045-ham{position:relative;width:46px;height:46px;border:0;padding:0;border-radius:50%;background:var(--ux-surface-2);color:var(--ux-ink);transition:transform .4s var(--ux-spring),background-color .4s}
+header.top.is-open .u045-ham{background:rgba(255,255,255,.12);color:#F4F0E8}
+.u045-ham:hover{transform:scale(1.06)}
+.u045-ham:active{transform:scale(.9)}
+.u045-ham:focus-visible{outline:2px solid var(--ux-accent);outline-offset:3px}
+.u045-ham i{position:absolute;left:50%;top:50%;width:18px;height:2px;margin:-1px 0 0 -9px;border-radius:2px;background:currentColor;transition:transform .55s var(--ux-spring),opacity .25s,width .4s var(--ux-ease)}
+.u045-ham i:nth-child(1){transform:translateY(-6px)}
+.u045-ham i:nth-child(2){width:12px;margin-left:-3px}
+.u045-ham i:nth-child(3){transform:translateY(6px)}
+header.top.is-open .u045-ham i:nth-child(1){transform:rotate(45deg)}
+header.top.is-open .u045-ham i:nth-child(2){opacity:0;transform:translateX(8px)}
+header.top.is-open .u045-ham i:nth-child(3){transform:rotate(-45deg)}
+.u045-sheet{position:fixed;inset:0;z-index:90;padding:96px 26px 26px;display:flex;flex-direction:column;background:radial-gradient(120% 70% at 100% 0%,#3A2A8C,transparent 60%),radial-gradient(90% 60% at 0% 100%,#0E5E63,transparent 65%),#0E0D16;color:#F4F0E8;clip-path:circle(0 at var(--cx,300px) var(--cy,34px));visibility:hidden;transition:clip-path .7s var(--ux-ease),visibility 0s .7s}
+header.top.is-open .u045-sheet{clip-path:circle(1200px at var(--cx,300px) var(--cy,34px));visibility:visible;transition:clip-path .8s var(--ux-ease),visibility 0s}
+.u045-sheet small{font-size:11.5px;font-weight:700;letter-spacing:.14em;color:rgba(244,240,232,.45)}
+.u045-nav{margin:12px 0 0;padding:0;list-style:none}
+.u045-ln{display:flex;align-items:baseline;gap:12px;padding:7px 0;font-size:34px;font-weight:800;letter-spacing:-.05em;color:inherit;text-decoration:none;opacity:0;transform:translateY(26px);transition:opacity .25s,transform .3s var(--ux-ease)}
+.u045-ln span{background:linear-gradient(90deg,#B7A4FF,#7DB4FF 55%,#A5F2D3) no-repeat 0 100%/0 3px;padding-bottom:2px;transition:background-size .45s var(--ux-ease)}
+.u045-ln:hover span,.u045-ln:focus-visible span{background-size:100% 3px}
+.u045-ln:focus-visible{outline:none}
+.u045-ln[aria-current="page"]{color:#A5F2D3}
+header.top.is-open .u045-ln{opacity:1;transform:none;transition:opacity .4s var(--ux-ease) calc(.22s + var(--i) * 60ms),transform .7s var(--ux-spring) calc(.22s + var(--i) * 60ms)}
+.u045-foot{margin-top:auto;display:flex;align-items:center;gap:8px;opacity:0;transform:translateY(14px);transition:opacity .25s,transform .3s}
+header.top.is-open .u045-foot{opacity:1;transform:none;transition:opacity .4s .5s,transform .6s var(--ux-spring) .5s}
+.u045-foot a{height:44px;padding:0 16px;border-radius:999px;display:inline-flex;align-items:center;font-size:13.5px;font-weight:700;color:inherit;text-decoration:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);transition:background-color .3s}
+.u045-foot a:hover{background:rgba(255,255,255,.08)}
+.u045-foot a:focus-visible{outline:2px solid #B7A4FF;outline-offset:2px}
+@media (max-width:375px){.u045-ln{font-size:28px}}
+
+/* 푸터 3열 + 메타 — 디자인 토큰 활용 */
+footer{padding:32px 0 40px;border-top:1px solid var(--line);background:var(--surface);margin-top:48px}
+.foot-cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;padding:20px 0 18px}
+.foot-cols b{display:block;font-size:13px;letter-spacing:.02em;color:var(--ink);margin-bottom:8px}
+.foot-cols p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.65}
+.foot-cols ul{margin:0;padding:0;list-style:none}
+.foot-cols li{margin:0 0 6px;font-size:13px}
+.foot-cols li a{color:var(--ink);text-decoration:none}
+.foot-cols li a:hover{color:var(--brand-ink);text-decoration:underline}
+.foot-meta{display:flex;flex-direction:column;gap:4px;padding:14px 0 0;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+.foot-meta a{color:var(--ink)}
+@media (max-width:768px){
+  .foot-cols{grid-template-columns:1fr;gap:20px}
+  .u045-ham{display:inline-flex}
+}
+</style>
+<script is:inline>
+(function () {
+  var header = document.querySelector('header.top');
+  if (!header) return;
+  var ham = header.querySelector('.u045-ham');
+  if (!ham) return;
+  var sheet = header.querySelector('.u045-sheet');
+  var main = document.getElementById('main');
+  var focusables = sheet ? Array.prototype.slice.call(sheet.querySelectorAll('a')) : [];
+  var open = false;
+  
+  function origin() {
+    if (!sheet) return;
+    var rect = ham.getBoundingClientRect();
+    sheet.style.setProperty('--cx', (rect.left + rect.width / 2) + 'px');
+    sheet.style.setProperty('--cy', (rect.top + rect.height / 2) + 'px');
+  }
+  
+  function set(v) {
+    open = v;
+    origin();
+    header.classList.toggle('is-open', v);
+    ham.setAttribute('aria-expanded', String(v));
+    ham.setAttribute('aria-label', v ? '메뉴 닫기' : '메뉴 열기');
+    if (sheet) sheet.setAttribute('aria-hidden', String(!v));
+    if (main) main.inert = v;
+    focusables.forEach(function (a) { a.tabIndex = v ? 0 : -1; });
+    document.body.style.overflow = v ? 'hidden' : '';
+  }
+  
+  ham.addEventListener('click', function () { set(!open); });
+  
+  focusables.forEach(function (a) {
+    a.addEventListener('click', function () {
+      set(false);
+      ham.focus();
+    });
+  });
+  
+  document.addEventListener('keydown', function (e) {
+    if (!open) return;
+    if (e.key === 'Escape') { e.preventDefault(); set(false); ham.focus(); return; }
+    if (e.key !== 'Tab') return;
+    var list = [ham].concat(focusables), i = list.indexOf(document.activeElement);
+    if (i < 0) return;
+    e.preventDefault();
+    list[(i + (e.shiftKey ? -1 : 1) + list.length) % list.length].focus();
+  });
+  
+  set(false);
+  window.addEventListener('resize', origin);
+})();
+</script>
+</body></html>
 <style>
 /* Lucian UX/UI Prompt #045 hamburger menu styles */
 .mobile{display:none}
