@@ -1,0 +1,48 @@
+<!-- 자유구성 쇼케이스 — PhysicsOS (데모형). 작성: 재구성 에이전트, 원료: 발굴 리포트 + 공식 저장소. 규칙: ops/RESEARCH.md -->
+<p class="show-lead">
+  물리 문제 한 줄을 던지면, 스킬이 그 상황을 <strong>직접 조작하고 측정하고 검증까지 되는 시뮬레이션</strong>으로 바꿔 줍니다.
+  아래 데모는 이 스킬의 설계 원칙(대화형·관찰·계산·검증)을 그대로 따라 만든 실제 동작 산출물입니다.
+</p>
+
+<h2>먼저 문제부터 — 공식으로 예측해 보세요</h2>
+<p>
+  "초속 20 m/s로 30° 위로 발사한 공은 몇 미터 앞에 떨어질까요?" 학생들이 먼저 <strong>v²·sin2θ ⁄ g</strong>로 계산해 적어 두면,
+  시뮬레이션은 그 답을 그대로 확인해 주는 도구가 됩니다. 정답을 알려주는 게 아니라, <strong>학생의 계산을 검증해 주는</strong> 구조가 핵심입니다.
+</p>
+
+<div class="show-demo">
+  <iframe src="/alternatives/skills-outputs/physicsos-demo.html" title="PhysicsOS 데모 — 포물선·단진자 시뮬레이션" loading="lazy" data-source="https://github.com/122-syf-wcy/PhysicsOS" data-credit="열린도구 에이전트가 스킬 지침에 따라 직접 제작 (직접 생성)"></iframe>
+</div>
+<p class="show-cap">▲ 발사 각도·속도를 바꿔 보세요. "공식 예측"과 "시뮬레이션 측정"이 일치하는 게 이 데모의 결론입니다. <a href="/alternatives/skills-outputs/physicsos-demo.html" target="_blank" rel="noopener">새 창에서 크게 ↗</a> · 외부 라이브러리 0개 단일 HTML이라 <strong>오프라인 컴퓨터실에서도 동작</strong>합니다.</p>
+
+<div class="show-callout">
+  <b>검증이 왜 중요하나요?</b> 시뮬레이션은 "그림 예쁜 장난감"이 되기 쉽습니다. 이 스킬은 공식 계산값과 시뮬레이션 측정값을 나란히 보여줘서
+  <strong>수식이 실제 운동을 정확히 기술한다는 경험</strong>을 남깁니다. 데모 안 단진자 탭에서는 각도를 키울 때 오차가 커지는 이유(작은 각 근사의 한계)까지 관찰할 수 있습니다.
+</div>
+
+<h2>수업에서 이렇게 써볼 수 있습니다</h2>
+<ol class="show-steps">
+  <li><strong>도입(5분)</strong> — 문제만 프로젝터에 띄우고 학생들이 계산해 적어 둔다.</li>
+  <li><strong>실험(10분)</strong> — 각도를 바꿔 가며 발사, 최고 거리가 나오는 각도를 찾는다. 45°가 나오는 이유를 식으로 확인.</li>
+  <li><strong>확장(10분)</strong> — 중력을 '달'로 바꿔 같은 각도로 발사. 거리가 몇 배가 되는지, 왜 그런지 토론.</li>
+  <li><strong>심화</strong> — 단진자 탭에서 줄 길이 4배 → 주기 2배(√4)를 측정으로 확인. 시계의 원리로 연결.</li>
+</ol>
+
+<h3>이런 교사께 특히 맞습니다</h3>
+<div class="show-stats">
+  <div class="st"><small>중학 과학</small><b>물체의 운동 단원</b></div>
+  <div class="st"><small>고1 통합과학·물리</small><b>포물선·단진자</b></div>
+  <div class="st"><small>컴퓨터실·태블릿</small><b>설치 없이 브라우저</b></div>
+</div>
+
+<h3>솔직한 한계</h3>
+<p>
+  위 데모는 이 스킬이 <strong>만들어내는 결과물의 형태</strong>를 보여주는 예시이지, 원본 스킬을 실행한 것이 아닙니다.
+  원본 PhysicsOS는 AI가 문장을 이해해 물리 엔진 씬을 생성하는 구조라 Claude Code 같은 에이전트와 함께 씁니다.
+  스킬 본체는 중국어 안내가 포함되어 있어 교사가 먼저 몇 번 실행해 보는 것을 권합니다.
+</p>
+
+<div class="show-actions">
+  <a class="primary" href="https://github.com/122-syf-wcy/PhysicsOS" target="_blank" rel="noopener">원본 스킬 저장소 ↗</a>
+  <a class="ghost" href="/alternatives/skills-outputs/physicsos-demo.html" target="_blank" rel="noopener">데모 새 창으로 ↗</a>
+</div>

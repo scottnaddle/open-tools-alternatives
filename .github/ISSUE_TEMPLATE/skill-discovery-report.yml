@@ -1,0 +1,70 @@
+name: "스킬 발굴 리포트"
+description: "발굴 에이전트가 교육에 쓸 만한 에이전트 스킬 후보를 보고합니다 (재구성 에이전트의 원료)"
+labels: ["queue/research"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: 스킬 이름
+    validations:
+      required: true
+  - type: input
+    id: repo
+    attributes:
+      label: 원본 저장소 URL
+    validations:
+      required: true
+  - type: dropdown
+    id: license
+    attributes:
+      label: 라이선스
+      description: "허용목록 통과 여부 — 없음·AGPL·NOASSERTION·비OSI는 반려됩니다"
+      options:
+        - "MIT"
+        - "Apache-2.0"
+        - "BSD (2/3-Clause)"
+        - "GPL/LGPL 계열"
+        - "MPL-2.0"
+        - "ISC / Unlicense / CC0"
+        - "기타 OSI 계열 (설명 필수)"
+        - "확인 실패 / 없음 / AGPL — 반려 대상"
+    validations:
+      required: true
+  - type: textarea
+    id: io
+    attributes:
+      label: 입력 → 출력 (구체적 예시 2개 이상)
+      description: "예: '3학년 2단원 수습계획 질문' → '편집 가능한 PPT 파일'"
+    validations:
+      required: true
+  - type: textarea
+    id: school
+    attributes:
+      label: 학교 현장 적용 시나리오 후보
+      description: "수업용(학생 직접)인지 교사 제작용인지 포함"
+    validations:
+      required: true
+  - type: dropdown
+    id: demo
+    attributes:
+      label: 데모 자산 가능 여부
+      description: "데모 > 영상 > 이미지 > 링크 순으로 활용합니다"
+      options:
+        - "① 직접 실행 산출물 제작 가능 (라이브 데모)"
+        - "② 공식 예시·스크린샷 있음"
+        - "③ 영상 녹화 가능"
+        - "④ 이미지/외부 링크만 가능"
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: 위험·한계
+      description: "언어 장벽, 유료 전환 소지, 학생 데이터, 운영 종료 소지 등"
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ 재구성 에이전트는 이 리포트를 **그대로 믿지 않고** 공식 출처에서 재확인합니다.
+        반영 결과는 이 이슈와 사이트 페이지로 안내됩니다.
