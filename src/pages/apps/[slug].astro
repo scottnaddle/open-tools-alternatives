@@ -5,11 +5,14 @@ import Mono from '../../components/Mono.astro';
 import Icon from '../../components/Icon.astro';
 import ScopeChips from '../../components/ScopeChips.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { exampleFor, deriveScope, devices, PLAT, SCOPE_NAME, MOE_URL, tone, col, EXAMPLE_LABEL } from '../../lib/facts';
+import { exampleFor, deriveScope, devices, PLAT, SCOPE_NAME, MOE_URL, tone, col, EXAMPLE_LABEL, SYNONYMS } from '../../lib/facts';
+import { APP_TOOL_MAP } from '../../lib/search-synonyms';
 export async function getStaticPaths() {
   return (await getCollection('schoolApps')).map((a) => ({ params: { slug: a.id }, props: { app: a } }));
 }
 const { app } = Astro.props;
+const synonyms = SYNONYMS[app.id] || [];
+const alternativeTools = APP_TOOL_MAP[app.id] || [];
 const LV: Record<string, number> = { '거의 대체': 0, '부분 대체': 1 }, DF: Record<string, number> = { '쉬움': 0, '보통': 1, '어려움': 2, '서버 구축': 3 };
 const alts = (await Promise.all(app.data.alternatives.map(async (x) => ({ ...x, t: await getEntry(x.tool) }))))
   .sort((a, b) => LV[a.level.value] - LV[b.level.value] || DF[a.installDifficulty] - DF[b.installDifficulty] || b.t.data.github.fetchedAt.localeCompare(a.t.data.github.fetchedAt));
@@ -22,6 +25,11 @@ const sceneData: Record<string, { device: string; alts: string[] }> = {
 };
 ---
 <Base title={`${app.data.name} 대신 쓸 수 있는 오픈소스`}>
+  <!-- Hidden search metadata for Pagefind -->
+  <div data-pagefind-meta="app_synonyms" style="display:none">{synonyms.join(', ')}</div>
+  <div data-pagefind-meta="alternative_tools" style="display:none">{alternativeTools.join(', ')}</div>
+  <div data-pagefind-meta="app_name" style="display:none">{app.data.name}</div>
+  
   <div class="detail" style={tone(app.data.category)}>
     <a class="back" href="/">홈으로</a>
     <p class="kick">{app.data.category}, {app.data.procurementNote?.value || '현장에서 많이 쓰는 앱'} 

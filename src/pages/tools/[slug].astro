@@ -5,6 +5,7 @@ import Mono from '../../components/Mono.astro';
 import ScopeChips from '../../components/ScopeChips.astro';
 import { getCollection } from 'astro:content';
 import { PLAT, HEALTH, exampleFor, deriveScope, EXAMPLE_LABEL, MOE_URL } from '../../lib/facts';
+import { TOOL_SYNONYMS, CATEGORY_TASKS } from '../../lib/search-synonyms';
 export async function getStaticPaths() {
   return (await getCollection('tools')).map((t) => ({ params: { slug: t.id }, props: { tool: t } }));
 }
@@ -13,8 +14,15 @@ const t = tool.data;
 const ex = exampleFor(tool.id);
 const sc = deriveScope(ex);
 const lic = t.license.value || (t.pendingLicense ? `${t.pendingLicense.value} (C등급 대기)` : '확인 필요');
+const synonyms = TOOL_SYNONYMS[tool.id] || [];
+const categoryTasks = CATEGORY_TASKS[t.category] || [];
 ---
 <Base title={`${t.name} — 오픈소스 도구`}>
+  <!-- Hidden search metadata for Pagefind -->
+  <div data-pagefind-meta="synonyms" style="display:none">{synonyms.join(', ')}</div>
+  <div data-pagefind-meta="category_tasks" style="display:none">{categoryTasks.join(', ')}</div>
+  <div data-pagefind-meta="tool_name" style="display:none">{t.name}</div>
+  
   <div class="detail">
     <a class="back" href="/">← 대안 찾기</a>
     <div style="display:flex;align-items:center;gap:18px;margin:16px 0">

@@ -29,9 +29,9 @@ const featuredTools = [...tools.values()].slice(0, 3);
       <div>
         <h1>학교에서 쓰는 앱, 무료 오픈소스로 바꿔 쓸 수 있을까?</h1>
         <p class="stat">학교 앱 <b>{apps.length}개</b>에 대한 오픈소스 대안 <b>{nAlt}건</b>. 기기 지원과 설치 난이도까지 출처와 함께 정리하고, AI 에이전트가 매일 다시 확인합니다.</p>
-        <form class="hsearch" role="search" onsubmit="event.preventDefault();go()">
+        <form class="hsearch" role="search" onsubmit="event.preventDefault();doSearch()">
           <label class="sr" for="hq">프로그램 이름 검색</label>
-          <input id="hq" type="search" autocomplete="off" placeholder="지금 쓰는 프로그램 이름 (예: CapCut, 알집, 한글)">
+          <input id="hq" type="search" autocomplete="off" placeholder="지금 쓰는 프로그램 이름 (예: CapCut, 알집, 한글, 포토샵, 영상 편집)">
           <button>대안 찾기</button>
         </form>
         <ul class="ac" id="ac" hidden></ul>
@@ -213,6 +213,18 @@ const featuredTools = [...tools.values()].slice(0, 3);
       ul.hidden = !ul.innerHTML;
     }
     function go() { const m = match(document.getElementById('hq').value); if (m[0]) location.href = `/apps/${m[0].id}/`; else ac(); }
+    function doSearch() {
+      const query = document.getElementById('hq').value.trim();
+      if (!query) return;
+      // First try app match for direct navigation
+      const m = match(query);
+      if (m[0]) {
+        location.href = `/apps/${m[0].id}/`;
+      } else {
+        // Use Pagefind for full site search
+        location.href = `/search/?q=${encodeURIComponent(query)}`;
+      }
+    }
     document.getElementById('hq')?.addEventListener('input', ac);
   </script>
 </Base>
