@@ -3,7 +3,7 @@ const { title } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const path = Astro.url.pathname;
 const navLinks = [
-  { href: base, label: '오픈소스', match: `${base}` },
+  { href: base, label: '학습SW', match: `${base}apps/` },
   { href: `${base}skills/`, label: '오픈스킬', match: `${base}skills/` },
   { href: `${base}about/`, label: '소개', match: `${base}about/` },
 ];
