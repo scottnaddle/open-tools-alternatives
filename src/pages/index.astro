@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Mono from '../components/Mono.astro';
 import { getCollection } from 'astro:content';
 import { CATEGORIES, SYNONYMS } from '../lib/facts';
+const base = import.meta.env.BASE_URL;
 const apps = (await getCollection('schoolApps')).sort((a, b) => a.data.bundle - b.data.bundle);
 const tools = new Map((await getCollection('tools')).map((t) => [t.id, t]));
 const changes = (await getCollection('changes'))
@@ -23,7 +24,7 @@ const index = apps.map((a) => ({ id: a.id, name: a.data.name, syn: SYNONYMS[a.id
       <button class="btn">찾기</button>
       <ul id="ac" class="ac" role="listbox" hidden></ul>
     </form>
-    <p class="hint">자주 찾는 앱: {apps.slice(0, 5).map((a) => <a href={`/apps/${a.id}/`}>{a.data.name}</a>)}</p>
+    <p class="hint">자주 찾는 앱: {apps.slice(0, 5).map((a) => <a href={`${base}apps/${a.id}/`}>{a.data.name}</a>)}</p>
   </section>
 
   <ul class="trust">
@@ -35,7 +36,7 @@ const index = apps.map((a) => ({ id: a.id, name: a.data.name, syn: SYNONYMS[a.id
 
   <h2 class="sec">이 앱들 대신 쓸 걸 많이 찾아요 <small>(1차 공개 묶음 · 조회수 아님)</small></h2>
   <div class="grid">
-    {apps.map((a) => <a class="card app" href={`/apps/${a.id}/`}>
+    {apps.map((a) => <a class="card app" href={`${base}apps/${a.id}/`}>
       <div class="cat">{a.data.category}</div>
       <h3>{a.data.name} 대신</h3>
       <div class="monos">{a.data.alternatives.slice(0, 3).map((x) => <Mono name={tools.get(x.tool.id)?.data.name ?? x.tool.id} size={34} />)}</div>
@@ -46,7 +47,7 @@ const index = apps.map((a) => ({ id: a.id, name: a.data.name, syn: SYNONYMS[a.id
 
   <h2 class="sec">분야별로 찾기</h2>
   <div class="cats">
-    {CATEGORIES.map(([k, n, ids]) => <a class="catbtn" href={`/apps/${ids[0]}/`} title={ids.join(', ')}><b>{n}</b><small>{ids.length}개 앱</small></a>)}
+    {CATEGORIES.map(([k, n, ids]) => <a class="catbtn" href={`${base}apps/${ids[0]}/`} title={ids.join(', ')}><b>{n}</b><small>{ids.length}개 앱</small></a>)}
   </div>
 
   <div class="two">
@@ -57,27 +58,27 @@ const index = apps.map((a) => ({ id: a.id, name: a.data.name, syn: SYNONYMS[a.id
           return <li><Mono name={t?.data.name ?? id} size={30} /><div><b>{t?.data.name}</b> {r.tag} <small>릴리스 {r.date}</small><br/>
           <small>확인 {c.data.at.slice(0, 10)} · <a href={r.url}>릴리스 페이지</a> · <a href={c.data.sources[0].url}>출처</a> · {c.data.tier}등급 변경 기록</small></div></li>; })}
       </ul>
-      <p><a href="/changes/">전체 변경 이력 →</a> <small class="count">(시안: 페이지 미구현)</small></p>
+      <p><a href={`${base}changes/`}>전체 변경 이력 →</a> <small class="count">(시안: 페이지 미구현)</small></p>
     </section>
     <section>
       <h2 class="sec">선생님 역할로 찾기</h2>
       <div class="roles col">
-        <a class="card role" href="/for/teacher/"><b>담임·교과</b><span>수업 장면·학생 기기로 찾기, 학생과 쓸 때 확인할 점</span></a>
-        <a class="card role" href="/for/it-lead/"><b>정보부장·전산 담당</b><span>컴퓨터실 일괄 설치, 관리자 권한, 오프라인 환경</span></a>
-        <a class="card role" href="/for/office/"><b>행정·교무</b><span>문서·PDF·HWP 호환</span></a>
+        <a class="card role" href={`${base}for/teacher/`}><b>담임·교과</b><span>수업 장면·학생 기기로 찾기, 학생과 쓸 때 확인할 점</span></a>
+        <a class="card role" href={`${base}for/it-lead/`}><b>정보부장·전산 담당</b><span>컴퓨터실 일괄 설치, 관리자 권한, 오프라인 환경</span></a>
+        <a class="card role" href={`${base}for/office/`}><b>행정·교무</b><span>문서·PDF·HWP 호환</span></a>
       </div>
-      <div class="card cta"><b>찾는 앱이 없나요?</b><p>대신 쓸 오픈소스를 알려 주세요. 원 출처를 확인한 뒤 반영 여부를 변경 이력에 남겨요.</p><a class="btn" href="/suggest/">대안 제안하기</a></div>
+      <div class="card cta"><b>찾는 앱이 없나요?</b><p>대신 쓸 오픈소스를 알려 주세요. 원 출처를 확인한 뒤 반영 여부를 변경 이력에 남겨요.</p><a class="btn" href={`${base}suggest/`}>대안 제안하기</a></div>
     </section>
   </div>
 
-  <script is:inline define:vars={{ index }}>
+  <script is:inline define:vars={{ index, base }}>
     const norm = (s) => s.toLowerCase().replace(/\s+/g, '');
     function match(q) { q = norm(q); if (!q) return []; return index.filter((a) => [a.name, a.id, ...a.syn].some((n) => norm(n).includes(q))); }
     function ac() { const ul = document.getElementById('ac'); const m = match(document.getElementById('q').value).slice(0, 6);
-      ul.innerHTML = m.map((a) => `<li role="option"><a href="/apps/${a.id}/"><b>${a.name}</b> 대신 · 오픈소스 ${a.n}개<small>${a.syn.slice(0, 3).join(', ')}</small></a></li>`).join('')
-        || (document.getElementById('q').value ? '<li class="none">아직 없는 앱이에요. <a href="/suggest/">대안 제안하기</a></li>' : '');
+      ul.innerHTML = m.map((a) => `<li role="option"><a href="${base}apps/${a.id}/"><b>${a.name}</b> 대신 · 오픈소스 ${a.n}개<small>${a.syn.slice(0, 3).join(', ')}</small></a></li>`).join('')
+        || (document.getElementById('q').value ? `<li class="none">아직 없는 앱이에요. <a href="${base}suggest/">대안 제안하기</a></li>` : '');
       ul.hidden = !ul.innerHTML; }
-    function go() { const m = match(document.getElementById('q').value); if (m[0]) location.href = `/apps/${m[0].id}/`; else ac(); }
+    function go() { const m = match(document.getElementById('q').value); if (m[0]) location.href = `${base}apps/${m[0].id}/`; else ac(); }
     if (new URL(location.href).searchParams.get('q')) { document.getElementById('q').value = new URL(location.href).searchParams.get('q'); ac(); }
   </script>
 </Base>

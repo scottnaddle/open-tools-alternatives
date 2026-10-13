@@ -5,6 +5,7 @@ import ToolFacts from '../../components/ToolFacts.astro';
 import Mono from '../../components/Mono.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { exampleFor, deriveScope, devices, PLAT, SCOPE_NAME, MOE_URL } from '../../lib/facts';
+const base = import.meta.env.BASE_URL;
 export async function getStaticPaths() {
   return (await getCollection('schoolApps')).map((a) => ({ params: { slug: a.id }, props: { app: a } }));
 }
@@ -21,13 +22,13 @@ const F = [
 const pairs = alts.length > 1 ? [[alts[0].t.id, alts[1].t.id]] : [];
 ---
 <Base title={`${app.data.name} 대신`}>
-  <p class="crumb"><a href="/">대안 찾기</a> › {app.data.category} › {app.data.name}</p>
+  <p class="crumb"><a href={base}>대안 찾기</a> › {app.data.category} › {app.data.name}</p>
   <header class="apphead">
     <div>
       <h1>{app.data.name} 대신 쓸 수 있는 오픈소스 <span class="n">{alts.length}개</span></h1>
       {app.data.procurementNote && <p class="lead">{app.data.procurementNote.value}<Status fact={app.data.procurementNote} /></p>}
     </div>
-    <a class="btn ghost" href="/suggest/">다른 대안 제안</a>
+    <a class="btn ghost" href={`${base}suggest/`}>다른 대안 제안</a>
   </header>
   {app.data.gap && <p class="warn"><b>미리 알아두세요:</b> {app.data.gap.value}<Status fact={app.data.gap} /></p>}
 
@@ -63,7 +64,7 @@ const pairs = alts.length > 1 ? [[alts[0].t.id, alts[1].t.id]] : [];
     </li>;
   })}
   </ol>
-  {pairs.map(([a, b]) => <p><a class="btn ghost" href={`/compare/${a}-vs-${b}/`}>{a} 와 {b} 사실 비교 →</a></p>)}
+  {pairs.map(([a, b]) => <p><a class="btn ghost" href={`${base}compare/${a}-vs-${b}/`}>{a} 와 {b} 사실 비교 →</a></p>)}
   <script is:inline>
     const u=new URL(location.href),on=new Set((u.searchParams.get('f')||'').split(',').filter(Boolean));
     function apply(){let n=0;document.querySelectorAll('.fchip').forEach(b=>b.setAttribute('aria-pressed',on.has(b.dataset.k)));
