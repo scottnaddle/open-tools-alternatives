@@ -27,6 +27,7 @@
 - 시크릿 설정 완료: `GHOST_SERVER_HOST`, `GHOST_SERVER_ROOT_PASSWORD` → 이제 `gh workflow run deploy.yml --ref main` 한 줄로 배포 가능
 - 배포 후 외부 확인됨: 이달의 도구 문구 교정·장면 카드 힌트 수정이 운영에 반영
 - (소소한 이슈) 워크플로 checkout 정리 단계에서 `lucian-uxui`가 .gitmodules 없는 gitlink라는 경고 출력 — 배포에는 영향 없음, 추후 정리
+- **사고 기록(2026-10-13)**: 첫 자동화 배포(22:31)가 ASTRO_BASE 누락으로 루트 절대경로 빌드 → CSS 전면 404, UI 붕괴. PR #8으로 base 기본값 '/alternatives' 반전 + 헬스체크에 "HTML 참조 CSS 실제 로드"·"루트 절대링크 감지" 추가, 22:39 재배포로 완치. 교훈: URL 200만 있는 헬스체크는 콘텐츠 깨짐을 못 잡는다
 
 ## 진행 중 / 보류
 
