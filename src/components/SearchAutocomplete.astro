@@ -1,10 +1,16 @@
 <!-- Lucian UX/UI Prompt #034 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#034 -->
 ---
 interface Props {
-  index: any[];
+  index: Array<{
+    id: string;
+    name: string;
+    syn: Array<string>;
+    n: number;
+  }>;
   base: string;
 }
-const { index, base } = Astro.props;
+
+const { index, base } = Astro.props satisfies Props;
 ---
 <style>
 .u034{position:relative;width:100%;max-width:680px;margin:0 auto}
@@ -34,7 +40,7 @@ const { index, base } = Astro.props;
 .u034-none{padding:90px 0;text-align:center;font-size:14px;color:var(--ux-ink-3)}
 </style>
 <div class="ux u034">
-  <form class="u034-box" role="search" data-index={JSON.stringify(index)} data-base={base}>
+  <form class="u034-box" role="search" data-index={JSON.stringify(Astro.props.index)} data-base={Astro.props.base}>
     <svg class="u034-pl" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
     <div class="u034-wrap">
       <span class="u034-ghost" aria-hidden="true"></span>
@@ -78,7 +84,7 @@ const { index, base } = Astro.props;
     hl.style.opacity = shown.length ? '1' : '0';
     
     if (q && !shown.length) {
-      list.insertAdjacentHTML('beforeend', '<li class="u034-none">\u2018' + esc(q) + '\u2019 \uC571\uC744 \uCC3E\uC9C0 \uBABB\uD588\uC5B4\uC694</li>');
+      list.insertAdjacentHTML('beforeend', '<li class="u034-none">'' + esc(q) + '' 앱을 찾지 못했어요</li>');
     }
     
     shown.forEach((d, i) => {

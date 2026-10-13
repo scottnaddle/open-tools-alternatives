@@ -1,10 +1,16 @@
 <!-- Lucian UX/UI Prompt #019 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#019 -->
 ---
 interface Props {
-  apps: any[];
+  apps: Array<{
+    id: string;
+    data: {
+      name: string;
+    };
+  }>;
   base: string;
 }
-const { apps, base } = Astro.props;
+
+const { apps, base } = Astro.props satisfies Props;
 ---
 <style>
 .u019{position:relative;width:100%}
@@ -22,8 +28,8 @@ const { apps, base } = Astro.props;
     <b>많이 찾는 대체</b>
   </div>
   <div class="u019-list">
-    {apps.map((a) => (
-      <a class="u019-chip" href={`${base}apps/${a.id}/`}>{a.data.name} 대신</a>
+    {Astro.props.apps.map((a) => (
+      <a class="u019-chip" href={`${Astro.props.base}apps/${a.id}/`}>{a.data.name} 대신</a>
     ))}
   </div>
 </div>
