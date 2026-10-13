@@ -154,6 +154,17 @@
       "studentData": "none",
       "account": "none",
       "adminRequired": "yes"
+    },
+    "libreoffice": {
+      "koreanUI": "yes",
+      "hwp": {
+        "read": "partial",
+        "write": "no"
+      },
+      "network": "offline",
+      "studentData": "none",
+      "account": "none",
+      "adminRequired": "no"
     }
   }
 }

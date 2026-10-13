@@ -44,3 +44,6 @@ jobs:
           else
             echo "Data verification script not found, skipping"
           fi
+      
+      - name: Check usageScope rules
+        run: python3 scripts/check_usagescope.py

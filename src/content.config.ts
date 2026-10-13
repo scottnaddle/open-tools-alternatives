@@ -22,6 +22,7 @@ const fact = <T extends z.ZodTypeAny>(v: T) =>
 const Difficulty = z.enum(['쉬움', '보통', '어려움', '서버 구축']);
 const Level = z.enum(['거의 대체', '부분 대체']);
 const Support = z.enum(['yes', 'partial', 'no']);
+const UsageScope = z.enum(['personal', 'demo', 'offline-install', 'student-use-check']);
 
 const tools = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/tools' }),
@@ -51,7 +52,34 @@ const tools = defineCollection({
     licenseNote: z.object({ note: z.string(), plainKo: z.string().optional() }).optional(),
     verification: z.object({ runId: z.string(), at: z.string(), unresolved: z.array(z.string()), notes: z.array(z.string()) }).optional(),
     health: z.enum(['active', 'slowing', 'stale', 'archived']),
-  }),
+    // v4 추가 필드 (PLAN 7.2, 7.4)
+    features: fact(z.array(z.string())).optional(),
+    tags: z.array(z.string()).default([]),
+    koreanUI: fact(Support).optional(),
+    hwp: fact(z.object({ read: Support, write: Support })).optional(),
+    network: fact(z.enum(['offline', 'first-run', 'online', 'external-server'])).optional(),
+    account: fact(z.enum(['none', 'optional', 'required'])).optional(),
+    studentData: fact(z.enum(['none', 'local-only', 'sent-to-server'])).optional(),
+    minAge: fact(z.number().int().nullable()).optional(),
+    adminRequired: fact(z.enum(['no', 'yes', 'portable-available'])).optional(),
+    massDeploy: fact(z.object({ msi: Support, winget: Support, silent: Support })).optional(),
+    minRequirements: fact(z.string().nullable()).optional(),
+    csap: fact(z.enum(['yes', 'no', 'n/a', 'unknown'])).optional(),
+    privacyPolicyUrl: fact(z.string().url().nullable()).optional(),
+    usageScope: z.array(UsageScope).default(['personal']), // 파생값, 빌드 시 계산
+  }).refine(
+    (tool) => {
+      // usageScope 규칙 검증 (PLAN 7.4): student-use-check가 있으면 필수 필드가 verified여야 함
+      if (tool.usageScope.includes('student-use-check')) {
+        const hasStudentData = tool.studentData && tool.studentData.status === 'verified';
+        const hasAccount = tool.account && tool.account.status === 'verified';
+        const hasMinAge = tool.minAge && tool.minAge.status === 'verified';
+        return hasStudentData || hasAccount || hasMinAge;
+      }
+      return true;
+    },
+    { message: 'student-use-check 태그가 있으면 studentData, account, minAge 중 하나는 verified 상태여야 함' }
+  ),
 });
 
 const schoolApps = defineCollection({
