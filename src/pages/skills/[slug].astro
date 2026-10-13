@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import Status from '../../components/Status.astro';
 import Mono from '../../components/Mono.astro';
 import { col } from '../../lib/facts';
 
@@ -17,6 +16,10 @@ const { skill } = Astro.props;
 const { data } = skill;
 const base = import.meta.env.BASE_URL;
 
+// 자유구성 쇼케이스 본문 — src/content/skill-pages/<slug>.html (ops/RESEARCH.md 발굴→재구성 루프의 산출물)
+const fragments = import.meta.glob('/src/content/skill-pages/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const fragment: string | undefined = fragments[`/src/content/skill-pages/${data.slug}.html`];
+
 const hasPreview = data.previewType && data.previewType !== 'none' && data.previewPath;
 const previewHref = hasPreview && data.previewPath ? `${base}${data.previewPath.replace(/^\//, '')}` : null;
 ---
@@ -24,7 +27,7 @@ const previewHref = hasPreview && data.previewPath ? `${base}${data.previewPath.
   <div class="detail">
     <a class="back" href={`${base}skills/`}>← 스킬 목록</a>
     <p class="kick">{data.category}, {data.usageScope}</p>
-    
+
     <div class="dhead">
       <span class="tile" aria-hidden="true" style={`background:${col(data.name)}`}>
         <Mono name={data.name} size={56} />
@@ -34,191 +37,164 @@ const previewHref = hasPreview && data.previewPath ? `${base}${data.previewPath.
 
     <p class="lead">{data.description}</p>
 
-    {hasPreview && (
-      <div class="skill-preview-detail">
-        <div class="preview-meta">
-          {data.previewMethod === 'self-made' && <span class="pm-badge self">직접 생성 — 에이전트 제작</span>}
-          {data.previewMethod === 'official-example' && <span class="pm-badge official">공식 예시 — 출처 프로젝트 제공</span>}
-          <a class="pm-open" href={previewHref} target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
-        </div>
-        {data.previewNote && <p class="preview-note">{data.previewNote}</p>}
-        {data.previewType === 'iframe' && data.previewPath && (
-          <iframe
-            src={previewHref}
-            title={`${data.name} 미리보기`}
-            loading="lazy"
-          ></iframe>
+    {fragment ? (
+      <article class="show-body">
+        <Fragment set:html={fragment} />
+      </article>
+    ) : (
+      <>
+        {hasPreview && (
+          <div class="skill-preview-detail">
+            <div class="preview-meta">
+              {data.previewMethod === 'self-made' && <span class="pm-badge self">직접 생성 — 에이전트 제작</span>}
+              {data.previewMethod === 'official-example' && <span class="pm-badge official">공식 예시 — 출처 프로젝트 제공</span>}
+              <a class="pm-open" href={previewHref} target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
+            </div>
+            {data.previewNote && <p class="preview-note">{data.previewNote}</p>}
+            {data.previewType === 'iframe' && data.previewPath && (
+              <iframe
+                src={previewHref}
+                title={`${data.name} 미리보기`}
+                loading="lazy"
+              ></iframe>
+            )}
+            {data.previewType === 'image' && data.previewPath && (
+              <img
+                src={previewHref}
+                alt={`${data.name} 미리보기`}
+              />
+            )}
+          </div>
         )}
-        {data.previewType === 'image' && data.previewPath && (
-          <img
-            src={previewHref}
-            alt={`${data.name} 미리보기`}
-          />
+
+        {!hasPreview && (
+          <div class="skill-placeholder">
+            <svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="10" y="15" width="100" height="50" rx="4" />
+              <path d="M10 25h100M30 15v-8M50 15v-8M70 15v-8M90 15v-8" />
+              <circle cx="30" cy="40" r="8" />
+              <path d="M50 35l15 10l15-15" />
+            </svg>
+            <p>소개 페이지가 준비 중입니다 — 발굴·재구성 루프(ops/RESEARCH.md)에서 순차 제작됩니다</p>
+          </div>
         )}
-      </div>
+
+        <article class="alt">
+          <div class="ahead">
+            <div class="amain">
+              <div>
+                <h2>스킬 정보</h2>
+              </div>
+            </div>
+            <div class="badges">
+              <span class="badge">{data.usageScope}</span>
+              <span class="badge">⭐ {data.github.stars.toLocaleString('ko-KR')}</span>
+            </div>
+          </div>
+
+          <div class="meta-row">
+            <span class="tagh">설치 필요 {data.installNeeded ? '예' : '아니오'}</span>
+            <span class="tagh">API 키 필요 {data.apiKeyNeeded ? '예' : '아니오'}</span>
+          </div>
+
+          <div class="meta-row">
+            <span class="tagh">라이선스 {data.license || '확인 중'}</span>
+            <span class="tagh">확인일 {data.dateChecked}</span>
+          </div>
+
+          <div class="skill-explainer">
+            <h3>사용 방법</h3>
+            <p>이 스킬은 AI 에이전트가 {data.description} 수행할 수 있도록 돕습니다. 자세한 사용법은 GitHub 저장소를 참고하세요.</p>
+          </div>
+
+          <div class="actions">
+            <a class="btn primary" href={data.sourceUrl} target="_blank" rel="noopener noreferrer">GitHub에서 보기 →</a>
+            <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
+          </div>
+        </article>
+      </>
     )}
 
-    {!hasPreview && (
-      <div class="skill-placeholder">
-        <svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="10" y="15" width="100" height="50" rx="4" />
-          <path d="M10 25h100M30 15v-8M50 15v-8M70 15v-8M90 15v-8" />
-          <circle cx="30" cy="40" r="8" />
-          <path d="M50 35l15 10l15-15" />
-        </svg>
-        <p>미리보기가 준비 중입니다</p>
-      </div>
-    )}
-
-    <article class="alt">
-      <div class="ahead">
-        <div class="amain">
-          <div>
-            <h2>스킬 정보</h2>
-          </div>
-        </div>
-        <div class="badges">
-          <span class="badge">{data.usageScope}</span>
-          <span class="badge">⭐ {data.github.stars.toLocaleString('ko-KR')}</span>
-        </div>
-      </div>
-
-      <div class="meta-row">
-        <span class="tagh">설치 필요 {data.installNeeded ? '예' : '아니오'}</span>
-        <span class="tagh">API 키 필요 {data.apiKeyNeeded ? '예' : '아니오'}</span>
-      </div>
-
-      <div class="meta-row">
-        <span class="tagh">라이선스 {data.license || '확인 중'}</span>
-        <span class="tagh">확인일 {data.dateChecked}</span>
-      </div>
-
-      <div class="skill-explainer">
-        <h3>사용 방법</h3>
-        {data.slug === 'anatomy' && (
-          <div>
-            <p>Claude Code나 Codex에서 이 스킬을 설치하면 복잡한 기계나 시스템을 상세한 아이소메트릭 일러스트로 시각화할 수 있습니다.</p>
-            <p><strong>예시:</strong> 위 미리보기는 1984년대 데스크톱 컴퓨터를 실제로 생성한 결과입니다. 타이핑이 가능한 키보드와 CRT 모니터가 포함되어 있습니다.</p>
-            <p><strong>교육 활용:</strong> 캐시, 해시맵, 컴파일러 같은 컴퓨터 과학 개념을 시각적으로 설명하거나, 물리 실험 장치를 3D로 보여줄 때 유용합니다.</p>
-          </div>
-        )}
-        {data.slug === 'answer-me-with-html' && (
-          <div>
-            <p>어려운 질문에 대해 읽기 쉬운 단일 페이지 HTML로 답변을 생성합니다. 복잡한 개념을 시각화와 인터랙션을 통해 설명합니다.</p>
-            <p><strong>예시:</strong> 위 미리보기는 실제 데모 페이지입니다.</p>
-            <p><strong>교육 활용:</strong> 과학 개념, 역사적 사건, 수학 공식 등을 학생들이 직접 탐색할 수 있는 인터랙티브 자료로 만들 수 있습니다.</p>
-          </div>
-        )}
-        {data.slug === 'mapstage' && (
-          <div>
-            <p>지도와 지구본을 실시간으로 조정하며 다양한 시각화 옵션을 제공합니다. 지형도, 위성 이미지, 지역 강조 등을 손쉽게 설정할 수 있습니다.</p>
-            <p><strong>예시:</strong> 위 미리보기는 MapStage 튜너 인터페이스입니다.</p>
-            <p><strong>교육 활용:</strong> 지리 수업 자료, 역사적 지역 설명, 환경 교육 시각화에 활용할 수 있습니다.</p>
-          </div>
-        )}
-        {!['anatomy', 'answer-me-with-html', 'mapstage'].includes(data.slug) && (
-          <p>이 스킬은 AI 에이전트가 {data.description} 수행할 수 있도록 돕습니다. 자세한 사용법은 GitHub 저장소를 참고하세요.</p>
-        )}
-      </div>
-
-      <div class="actions">
-        <a class="btn primary" href={data.sourceUrl} target="_blank" rel="noopener noreferrer">GitHub에서 보기 →</a>
-        <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
-      </div>
-    </article>
+    {/* 신원 프레임 — 어떤 자유구성 페이지에서도 동일한 위치·형식으로 신뢰성 유지 (AGENTS.md 원칙 1·4) */}
+    <aside class="skill-facts" aria-label="스킬 기본 정보">
+      <h2>스킬 기본 정보</h2>
+      <dl>
+        <div><dt>용도 구분</dt><dd>{data.usageScope}</dd></div>
+        <div><dt>라이선스</dt><dd>{data.license || '확인 중'}</dd></div>
+        <div><dt>저장소</dt><dd><a href={data.sourceUrl} target="_blank" rel="noopener noreferrer">{data.github.repo} ↗</a></dd></div>
+        <div><dt>GitHub 스타</dt><dd>⭐ {data.github.stars.toLocaleString('ko-KR')}</dd></div>
+        <div><dt>설치 / API 키</dt><dd>{data.installNeeded ? '설치 필요' : '설치 불필요'} · {data.apiKeyNeeded ? 'API 키 필요' : 'API 키 불필요'}</dd></div>
+        <div><dt>정보 확인일</dt><dd>{data.dateChecked}</dd></div>
+      </dl>
+      <p class="facts-note">위 값은 공식 저장소 기준 사실이며 daily-verifier가 매일 다시 확인합니다. 이 페이지의 소개·데모 구성은 발굴·재구성 에이전트가 작성했습니다(<a href={`${base}suggest/#report`}>정보 정정 요청</a>).</p>
+    </aside>
   </div>
 </Base>
 
 <style>
-.preview-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
-}
-.pm-badge {
-  font-size: 11.5px;
-  padding: 3px 9px;
-  border-radius: 999px;
-  border: 1px solid #C4DCCD;
-  background: #E4EFE8;
-  color: #1E6A47;
-  font-weight: 600;
-}
-.pm-badge.official { border-color: #C6D6EE; background: #E3ECF8; color: #1F4E8C; }
-.pm-open { font-size: 12.5px; color: #1F4E8C; }
-.preview-note { font-size: 12.5px; color: #5a6a7a; margin-bottom: 8px; line-height: 1.55; }
-.skill-preview-detail {
-  width: 100%;
-  min-height: 500px;
-  background: var(--ground);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  overflow: hidden;
-  margin: 32px 0;
-}
+  .skill-facts {
+    margin: 36px 0 8px;
+    background: var(--surface, #fff);
+    border: 1px solid var(--line, #e5e9ef);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .skill-facts h2 { font-size: 15px; margin: 0 0 12px; color: #5a6a7a; font-weight: 700; }
+  .skill-facts dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 18px; margin: 0; }
+  .skill-facts dl > div { display: flex; gap: 8px; align-items: baseline; }
+  .skill-facts dt { font-size: 12px; color: #7a8898; flex-shrink: 0; }
+  .skill-facts dd { margin: 0; font-size: 13.5px; font-weight: 600; }
+  .skill-facts dd a { color: #1F4E8C; }
+  .facts-note { font-size: 12px; color: #8a97a5; margin: 12px 0 0; line-height: 1.6; }
+  .facts-note a { color: #1F4E8C; }
+</style>
 
-.skill-preview-detail iframe {
-  width: 100%;
-  height: 600px;
-  border: 0;
-}
+<style is:global>
+  /* ── 에디토리얼 키트: 자유구성 본문(set:html)에서 쓰는 클래스 (ops/RESEARCH.md 발굴·재구성 규칙) ── */
+  .show-body { margin: 30px 0 0; line-height: 1.75; font-size: 15px; }
+  .show-body h2 { font-size: 21px; margin: 42px 0 12px; letter-spacing: -0.01em; }
+  .show-body h2:first-child { margin-top: 0; }
+  .show-body h3 { font-size: 16.5px; margin: 28px 0 10px; }
+  .show-body p { margin: 0 0 14px; }
+  .show-body ul, .show-body ol { margin: 0 0 14px; padding-left: 22px; }
+  .show-body li { margin-bottom: 6px; }
+  .show-body a { color: #1F4E8C; }
+  .show-body strong { background: linear-gradient(transparent 62%, #E4EFE8 62%); }
 
-.skill-preview-detail img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
+  .show-lead { font-size: 16.5px; color: #33424f; border-left: 3px solid #1E6A47; padding: 2px 0 2px 14px; margin-bottom: 26px; }
 
-.skill-placeholder {
-  width: 100%;
-  min-height: 400px;
-  background: var(--ground);
-  border: 2px dashed var(--line-2);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 32px 0;
-  gap: 20px;
-}
+  .show-demo { margin: 22px 0 8px; border: 1px solid #dfe6ee; border-radius: 14px; overflow: hidden; background: #fbfcfd; }
+  .show-demo iframe { width: 100%; height: 640px; border: 0; display: block; }
+  .show-cap { font-size: 12px; color: #7a8898; margin: 8px 0 20px; }
+  .show-cap a { color: #1F4E8C; }
 
-.skill-placeholder svg {
-  width: 120px;
-  height: 80px;
-  color: var(--ink-3);
-  opacity: 0.5;
-}
+  .show-callout { border: 1px solid #C4DCCD; background: #E4EFE8; border-radius: 12px; padding: 14px 16px; margin: 20px 0; font-size: 14px; }
+  .show-callout.warn { border-color: #F2E3C2; background: #FFF9EF; }
+  .show-callout b:first-child { display: inline-block; margin-right: 6px; }
 
-.skill-placeholder p {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--ink-3);
-  margin: 0;
-}
+  .show-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 18px 0 6px; }
+  .show-grid figure { margin: 0; border: 1px solid #dfe6ee; border-radius: 12px; overflow: hidden; background: #fff; }
+  .show-grid img { width: 100%; height: auto; display: block; }
+  .show-grid figcaption { font-size: 12px; color: #7a8898; padding: 8px 12px; line-height: 1.5; }
 
-.skill-explainer {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 24px;
-  margin: 24px 0;
-}
+  .show-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 18px 0; }
+  .show-stats .st { border: 1px solid #dfe6ee; border-radius: 10px; padding: 10px 12px; background: #fbfcfd; }
+  .show-stats .st small { display: block; color: #7a8898; font-size: 11.5px; margin-bottom: 2px; }
+  .show-stats .st b { font-size: 15px; }
 
-.skill-explainer h3 {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 0 16px 0;
-}
+  .show-compare { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 13.5px; }
+  .show-compare th, .show-compare td { border: 1px solid #dfe6ee; padding: 8px 10px; text-align: left; }
+  .show-compare th { background: #f2f5f8; }
 
-.skill-explainer p {
-  margin: 0 0 12px 0;
-  line-height: 1.7;
-}
+  .show-steps { counter-reset: showstep; list-style: none; padding: 0; margin: 14px 0 18px; }
+  .show-steps li { counter-increment: showstep; position: relative; padding-left: 34px; margin-bottom: 10px; }
+  .show-steps li::before { content: counter(showstep); position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 999px; background: #1E6A47; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
-.skill-explainer p:last-child {
-  margin-bottom: 0;
-}
+  .show-video { margin: 20px 0 8px; }
+  .show-video video { width: 100%; height: auto; display: block; border: 1px solid #dfe6ee; border-radius: 14px; background: #000; }
+
+  .show-actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 26px 0 6px; }
+  .show-actions a { display: inline-block; padding: 9px 16px; border-radius: 9px; font-size: 13.5px; font-weight: 700; text-decoration: none; }
+  .show-actions a.primary { background: #1E6A47; color: #fff; }
+  .show-actions a.ghost { border: 1px solid #dfe6ee; color: #33424f; background: #fff; }
 </style>

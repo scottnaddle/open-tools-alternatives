@@ -17,6 +17,9 @@ ALLOWED = {
 CATEGORIES = {"수업자료·발표", "그림·도해", "영상·미디어", "데이터·차트", "교사 업무·글쓰기", "웹·앱 만들기", "기타"}
 SCOPES = {"수업용", "교사 개인용"}
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+MEDIA_TAG = re.compile(r"<(img|iframe|video|source|audio)\b[^>]*>", re.I)
+DATA_SOURCE = re.compile(r'data-source="([^"]+)"', re.I)
+LOCAL_SRC = re.compile(r'(?:src|href)="/(?!alternatives/|https?:)', re.I)
 
 
 def check_file(path: Path) -> list[str]:
@@ -61,6 +64,31 @@ def check_file(path: Path) -> list[str]:
     return errors
 
 
+def check_fragment(path: Path, known_slugs: set[str]) -> list[str]:
+    """자유구성 쇼케이스 본문(src/content/skill-pages/<slug>.html) 검증.
+    규칙: ① 슬러그 일치 ② 모든 미디어에 data-source(출처) 필수 ③ 내부 경로는 /alternatives/ 절대경로."""
+    errors = []
+    sid = path.stem
+    if sid not in known_slugs:
+        errors.append(f"skill-pages/{path.name}: 슬러그 '{sid}'가 skills 컬렉션에 없음")
+        return errors
+    src_text = path.read_text()
+
+    for m in MEDIA_TAG.finditer(src_text):
+        tag = m.group(0)
+        name = m.group(1).lower()
+        if not DATA_SOURCE.search(tag):
+            snippet = tag[:90].replace("\n", " ")
+            errors.append(f"skill-pages/{sid}: <{name}>에 data-source(출처) 없음 — «{snippet}…»")
+
+    for m in LOCAL_SRC.finditer(src_text):
+        errors.append(f"skill-pages/{sid}: 루트 상대경로 발견 — 내부 자산은 반드시 /alternatives/ 절대경로")
+
+    if not src_text.strip():
+        errors.append(f"skill-pages/{sid}: 빈 파일")
+    return errors
+
+
 def main() -> int:
     files = sorted(Path("src/content/skills").glob("*.json"))
     if not files:
@@ -69,13 +97,25 @@ def main() -> int:
     all_errors = []
     for f in files:
         all_errors.extend(check_file(f))
+
+    known_slugs = set()
+    for f in files:
+        try:
+            known_slugs.add(json.loads(f.read_text()).get("slug", f.stem))
+        except json.JSONDecodeError:
+            pass
+    fragments = sorted(Path("src/content/skill-pages").glob("*.html")) if Path("src/content/skill-pages").exists() else []
+    for fp in fragments:
+        all_errors.extend(check_fragment(fp, known_slugs))
+
     if all_errors:
         print("❌ 스킬 게이트 위반:")
         for e in all_errors:
             print(f"  - {e}")
         print(f"\n총 {len(all_errors)}건. 규칙: ops/RESEARCH.md 4절. 데이터 수정 후 다시 실행하세요.")
         return 1
-    print(f"✓ 스킬 게이트 검증 통과 ({len(files)}개 스킬, 라이선스 허용목록 {len(ALLOWED)}종)")
+    extra = f", 자유구성 페이지 {len(fragments)}개" if fragments else ""
+    print(f"✓ 스킬 게이트 검증 통과 ({len(files)}개 스킬, 라이선스 허용목록 {len(ALLOWED)}종{extra})")
     return 0
 
 
