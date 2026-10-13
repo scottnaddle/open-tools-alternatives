@@ -91,15 +91,15 @@
     ]
   },
   "officialSite": {
-    "value": null,
-    "status": "unverified",
-    "lastVerified": null,
+    "value": "https://www.7-zip.org",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
     "sources": [
       {
-        "url": "https://github.com/ip7z/7zip",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "씨앗 데이터에 없음",
-        "method": "manual-seed"
+        "url": "https://github.com/ip7z/7zip/blob/main/README.md",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Official site: https://www.7-zip.org",
+        "method": "readme"
       }
     ]
   },
@@ -144,5 +144,70 @@
       }
     ],
     "plainKo": "대부분 자유롭게 쓰고 나눌 수 있는 LGPL 라이선스예요. 다만 RAR 압축 풀기 부분은 'RAR 압축 방식을 새로 만드는 데 쓰면 안 된다'는 조건(unRAR 제한)이 붙어 있어요. 학교에서 설치해 쓰는 데는 이 조건이 걸리지 않아요."
+  },
+  "koreanUI": {
+    "value": "yes",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.7-zip.org/download.html",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Language files available including Korean",
+        "method": "official-site"
+      }
+    ]
+  },
+  "network": {
+    "value": "offline",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.7-zip.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "File archiver for Windows, works completely offline",
+        "method": "official-site"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.7-zip.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Desktop compression tool, no account required",
+        "method": "official-site"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.7-zip.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Local file compression utility, no data collection",
+        "method": "official-site"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "portable-available",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.7-zip.org/download.html",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Both installer and portable version available",
+        "method": "official-site"
+      }
+    ]
   }
 }

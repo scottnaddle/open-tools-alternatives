@@ -9,6 +9,8 @@ export function exampleFor(id: string) { return (example.tools as Record<string,
 // PLAN v4 7.4 파생 규칙 (공개 규칙). 입력이 예시 데이터면 결과도 예시.
 export function deriveScope(x: any): Scope[] {
   const s: Scope[] = ['personal'];
+  // 필드가 없거나 unverified면 파생하지 않음
+  if (!x.account || !x.network || !x.studentData) return s;
   if (x.account !== 'required') s.push('demo');
   if (['offline', 'first-run'].includes(x.network) && ['none', 'local-only'].includes(x.studentData)) s.push('offline-install');
   if (x.studentData === 'sent-to-server' || x.account === 'required') s.push('student-use-check');

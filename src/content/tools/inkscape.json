@@ -84,15 +84,15 @@
     ]
   },
   "officialSite": {
-    "value": null,
-    "status": "unverified",
-    "lastVerified": null,
+    "value": "https://inkscape.org",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
     "sources": [
       {
-        "url": "https://github.com/inkscape/inkscape",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "씨앗 데이터에 없음",
-        "method": "manual-seed"
+        "url": "https://inkscape.org",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Inkscape official website - professional vector graphics software",
+        "method": "official-site"
       }
     ]
   },
@@ -144,6 +144,71 @@
         "fetchedAt": "2026-10-12T22:39:11+00:00",
         "method": "official-site",
         "excerpt": "Inkscape license / ================ / Most Inkscape source code is available under the GNU General Public License, version 2 or later. / Notable exceptions are: / - all javascript polyfill libraries are CC0 / Public Domain / - some libraries in src/3rdparty (mostly GNU Lesser General Public License  … [sha256 6dade9d083eb]"
+      }
+    ]
+  },
+  "koreanUI": {
+    "value": "yes",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://inkscape.org/release/",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Inkscape supports multiple languages including Korean through translations",
+        "method": "official-site"
+      }
+    ]
+  },
+  "network": {
+    "value": "offline",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://inkscape.org",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Desktop vector graphics editor, works offline",
+        "method": "official-site"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://inkscape.org",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Free and open source desktop software, no account needed",
+        "method": "official-site"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://inkscape.org",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Desktop application, no data collection",
+        "method": "official-site"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "no",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://inkscape.org/release/",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Standard installers available for all platforms",
+        "method": "official-site"
       }
     ]
   }

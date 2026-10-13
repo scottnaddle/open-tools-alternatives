@@ -79,15 +79,15 @@
     ]
   },
   "officialSite": {
-    "value": null,
-    "status": "unverified",
-    "lastVerified": null,
+    "value": "https://github.com/ebandal/H2Orestart",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
     "sources": [
       {
         "url": "https://github.com/ebandal/H2Orestart",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "씨앗 데이터에 없음",
-        "method": "manual-seed"
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Official repository",
+        "method": "github-api"
       }
     ]
   },
@@ -109,5 +109,73 @@
     "at": "2026-10-12T22:35:34+00:00",
     "unresolved": [],
     "notes": []
+  },
+  "koreanUI": {
+    "value": "yes",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/ebandal/H2Orestart#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "README written in Korean, LibreOffice extension for Korean HWP files",
+        "method": "readme"
+      }
+    ]
+  },
+  "hwp": {
+    "value": {
+      "read": "yes",
+      "write": "partial"
+    },
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/ebandal/H2Orestart#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "HWP/HWPX file import filter for LibreOffice. Write support is experimental",
+        "method": "readme"
+      }
+    ]
+  },
+  "network": {
+    "value": "offline",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/ebandal/H2Orestart#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "LibreOffice extension, works offline",
+        "method": "readme"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/ebandal/H2Orestart#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Extension for local LibreOffice installation, no account needed",
+        "method": "readme"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/ebandal/H2Orestart#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Local file filter extension, no data collection",
+        "method": "readme"
+      }
+    ]
   }
 }

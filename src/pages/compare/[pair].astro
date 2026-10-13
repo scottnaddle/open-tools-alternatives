@@ -1,27 +1,113 @@
 ---
 import Base from '../../layouts/Base.astro';
-import ToolFacts from '../../components/ToolFacts.astro';
+import Status from '../../components/Status.astro';
+import Mono from '../../components/Mono.astro';
 import { getCollection, getEntry } from 'astro:content';
+import { PLAT, EXAMPLE_LABEL, exampleFor } from '../../lib/facts';
 const base = import.meta.env.BASE_URL;
+
 export async function getStaticPaths() {
-  const seen = new Set(); const out = [];
+  const seen = new Set<string>();
+  const out: Array<{ params: { pair: string }; props: { a: string; b: string; app: string } }> = [];
   for (const a of await getCollection('schoolApps')) {
     const ids = a.data.alternatives.map((x) => x.tool.id);
     for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) {
-      const k = `${ids[i]}-vs-${ids[j]}`; if (!seen.has(k)) { seen.add(k); out.push({ params: { pair: k }, props: { a: ids[i], b: ids[j], app: a.data.name } }); }
+      const k = `${ids[i]}-vs-${ids[j]}`; 
+      if (!seen.has(k)) { 
+        seen.add(k); 
+        out.push({ params: { pair: k }, props: { a: ids[i], b: ids[j], app: a.data.name } }); 
+      }
     }
   }
   return out;
 }
+
+interface Props {
+  a: string;
+  b: string;
+  app: string;
+}
 const { a, b, app } = Astro.props;
-const ta = await getEntry('tools', a); const tb = await getEntry('tools', b);
+const ta = await getEntry('tools', a); 
+const tb = await getEntry('tools', b);
+
+if (!ta || !tb) {
+  return Astro.redirect('/');
+}
+
+const exA = exampleFor(a);
+const exB = exampleFor(b);
+
+// Comparison rows
+const compareRows = [
+  { label: '학교 활용', a: ta.data.schoolUse.value, b: tb.data.schoolUse.value },
+  { label: 'Windows', a: ta.data.platforms.value.windows, b: tb.data.platforms.value.windows },
+  { label: 'macOS', a: ta.data.platforms.value.macos, b: tb.data.platforms.value.macos },
+  { label: 'Linux', a: ta.data.platforms.value.linux, b: tb.data.platforms.value.linux },
+  { label: '웹 (브라우저)', a: ta.data.platforms.value.web, b: tb.data.platforms.value.web },
+  { label: 'Android', a: ta.data.platforms.value.android, b: tb.data.platforms.value.android },
+  { label: 'iOS', a: ta.data.platforms.value.ios, b: tb.data.platforms.value.ios },
+  { label: '설치 난이도', a: ta.data.installDifficulty.value, b: tb.data.installDifficulty.value },
+  { label: '라이선스', a: ta.data.license.value || '확인 필요', b: tb.data.license.value || '확인 필요' },
+  { label: '최근 개발일', a: ta.data.github.lastPush, b: tb.data.github.lastPush },
+  { label: '별 수', a: ta.data.github.stars, b: tb.data.github.stars },
+];
 ---
-<Base title={`${ta.data.name} vs ${tb.data.name}`}>
-  <p><a href={base}>← 대안 찾기</a></p>
-  <h1>{ta.data.name} · {tb.data.name} 사실 비교</h1>
-  <p class="lead">{app} 대안 중 두 도구의 사실을 나란히 놓았어요. 점수나 순위는 매기지 않습니다.</p>
-  <div class="cmp">
-    <section class="card"><h2>{ta.data.name}</h2><ToolFacts t={ta} /></section>
-    <section class="card"><h2>{tb.data.name}</h2><ToolFacts t={tb} /></section>
+<Base title={`${ta.data.name}과 ${tb.data.name} 비교`}>
+  <div class="detail wide">
+    <a class="back" href={`${base}apps/${app ? app.toLowerCase().replace(/ /g, '-') : 'capcut'}/`}>← {app} 대안 목록</a>
+    <h1 class="ph">{ta.data.name}과 {tb.data.name} 비교</h1>
+    <p class="lead">{app} 대안 중 두 도구의 사실을 나란히 놓았어요. 점수나 순위는 매기지 않습니다.</p>
+    
+    <p class="hint" style="margin:20px 0">
+      모든 값은 원 출처로 확인한 사실입니다. 
+      확인 상태는 각 도구 페이지에서 출처와 함께 볼 수 있어요.
+    </p>
+
+    <div class="cmpgrid">
+      <div class="panel">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <Mono name={ta.data.name} size={48} />
+          <h2 style="margin:0">{ta.data.name}</h2>
+        </div>
+        <p>{ta.data.schoolUse.value}</p>
+        <a class="btn ghost" href={`https://github.com/${ta.data.github.repo}`}>GitHub 저장소 →</a>
+      </div>
+
+      <div class="panel">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <Mono name={tb.data.name} size={48} />
+          <h2 style="margin:0">{tb.data.name}</h2>
+        </div>
+        <p>{tb.data.schoolUse.value}</p>
+        <a class="btn ghost" href={`https://github.com/${tb.data.github.repo}`}>GitHub 저장소 →</a>
+      </div>
+    </div>
+
+    <table class="ftable">
+      <tbody>
+        {compareRows.map((row) => (
+          <tr>
+            <th>{row.label}</th>
+            <td>
+              {typeof row.a === 'string' ? row.a : 
+               typeof row.a === 'number' ? row.a.toLocaleString() : 
+               JSON.stringify(row.a)}
+            </td>
+            <td>
+              {typeof row.b === 'string' ? row.b : 
+               typeof row.b === 'number' ? row.b.toLocaleString() : 
+               JSON.stringify(row.b)}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    <div class="panel" style="margin-top:32px;background:var(--brand-tint)">
+      <h2>비교의 한계</h2>
+      <p>이 표는 확인 가능한 사실만 나란히 놓은 것입니다. 어느 쪽이 더 나은지, 어떤 상황에 맞는지는 판정하지 않아요.</p>
+      <p class="hint">실제 선택은 여러분의 수업 장면, 학생 기기, 필요한 기능을 고려해 결정하세요.</p>
+    </div>
   </div>
 </Base>

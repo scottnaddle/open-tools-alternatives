@@ -1,0 +1,192 @@
+{
+  "name": "LibreOffice",
+  "category": "문서·오피스",
+  "notes": [],
+  "schoolUse": {
+    "value": "문서 작성, 편집, HWP 파일 읽기(확장 필요)",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Free office suite with Writer, Calc, Impress",
+        "method": "official-site"
+      }
+    ]
+  },
+  "usageMode": {
+    "value": "pc",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org/download/download/",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Desktop application for Windows, macOS, Linux",
+        "method": "official-site"
+      }
+    ]
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org/download/download/",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Standard installer packages available",
+        "method": "official-site"
+      }
+    ]
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "yes",
+      "linux": "yes",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "partial",
+      "ios": "no"
+    },
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org/download/download/",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Available for Windows, macOS, Linux. Android viewer available",
+        "method": "official-site"
+      }
+    ]
+  },
+  "license": {
+    "value": "MPL-2.0",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org/about-us/licenses/",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "LibreOffice is licensed under the Mozilla Public License v2.0",
+        "method": "official-site"
+      }
+    ]
+  },
+  "officialSite": {
+    "value": "https://www.libreoffice.org",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/LibreOffice/core",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Homepage: https://www.libreoffice.org",
+        "method": "github-api"
+      }
+    ]
+  },
+  "github": {
+    "repo": "LibreOffice/core",
+    "stars": 4856,
+    "lastPush": "2026-10-13",
+    "archived": false,
+    "latestRelease": null,
+    "fetchedAt": "2026-10-13"
+  },
+  "health": "active",
+  "koreanUI": {
+    "value": "yes",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org/download/download/",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Korean language pack available for download",
+        "method": "official-site"
+      }
+    ]
+  },
+  "hwp": {
+    "value": {
+      "read": "partial",
+      "write": "no"
+    },
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Basic HWP support via extensions like H2Orestart. Native support limited",
+        "method": "official-site"
+      },
+      {
+        "url": "https://github.com/ebandal/H2Orestart#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "H2Orestart extension enables HWP/HWPX file reading in LibreOffice",
+        "method": "readme"
+      }
+    ]
+  },
+  "network": {
+    "value": "offline",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Desktop office suite, works completely offline",
+        "method": "official-site"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Free desktop software, no account required",
+        "method": "official-site"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Desktop application with no data collection",
+        "method": "official-site"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "no",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://www.libreoffice.org/download/download/",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Standard installer, no admin privileges required on most systems",
+        "method": "official-site"
+      }
+    ]
+  },
+  "usageScope": [
+    "personal",
+    "demo",
+    "offline-install"
+  ]
+}

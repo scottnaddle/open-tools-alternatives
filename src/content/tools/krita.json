@@ -79,15 +79,15 @@
     ]
   },
   "officialSite": {
-    "value": null,
-    "status": "unverified",
-    "lastVerified": null,
+    "value": "https://krita.org",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
     "sources": [
       {
         "url": "https://github.com/KDE/krita",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "씨앗 데이터에 없음",
-        "method": "manual-seed"
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Homepage: https://krita.org from GitHub repository",
+        "method": "github-api"
       }
     ]
   },
@@ -123,6 +123,71 @@
       "공식 저장소 https://invent.kde.org/graphics/krita 활동 2026-10-12, 최신 {'tag': 'v6.0.4.1', 'date': '2026-09-30', 'url': 'https://invent.kde.org/graphics/krita/-/tags/v6.0.4.1', 'fromTag': True}",
       "공식 저장소 라이선스 키: gpl-3.0 (SPDX 표기 확인 후 반영 — C등급)",
       "GitHub homepage 필드: https://invent.kde.org/graphics/krita (공식 사이트 후보, 미반영 — B등급·공식 사이트 확인 필요)"
+    ]
+  },
+  "koreanUI": {
+    "value": "yes",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/KDE/krita",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "KDE project with extensive internationalization including Korean",
+        "method": "readme"
+      }
+    ]
+  },
+  "network": {
+    "value": "offline",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/KDE/krita",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Desktop painting program, operates locally",
+        "method": "readme"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/KDE/krita",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Free and open source desktop application, no account required",
+        "method": "readme"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/KDE/krita",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Desktop painting application, no data collection",
+        "method": "readme"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "no",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:20:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/KDE/krita",
+        "fetchedAt": "2026-10-13T08:20:00+00:00",
+        "excerpt": "Standard installation packages available",
+        "method": "readme"
+      }
     ]
   }
 }

@@ -76,15 +76,15 @@
     ]
   },
   "officialSite": {
-    "value": null,
-    "status": "unverified",
-    "lastVerified": null,
+    "value": "https://localsend.org",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
     "sources": [
       {
-        "url": "https://github.com/localsend/localsend",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "씨앗 데이터에 없음",
-        "method": "manual-seed"
+        "url": "https://github.com/localsend/localsend#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Website: https://localsend.org",
+        "method": "readme"
       }
     ]
   },
@@ -107,6 +107,71 @@
     "unresolved": [],
     "notes": [
       "GitHub homepage 필드: https://localsend.org (공식 사이트 후보, 미반영 — B등급·공식 사이트 확인 필요)"
+    ]
+  },
+  "koreanUI": {
+    "value": "yes",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/localsend/localsend/tree/main/app/assets/i18n",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Korean translation file _ko.i18n.json exists",
+        "method": "readme"
+      }
+    ]
+  },
+  "network": {
+    "value": "offline",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://localsend.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Share files to nearby devices using local network, no internet required",
+        "method": "official-site"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://localsend.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "No account or registration required, works via local network",
+        "method": "official-site"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://localsend.org",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Files shared locally, no external servers or data collection",
+        "method": "official-site"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "no",
+    "status": "verified",
+    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "sources": [
+      {
+        "url": "https://localsend.org/#/download",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "Available as standard installer and portable versions",
+        "method": "official-site"
+      }
     ]
   }
 }

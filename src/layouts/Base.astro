@@ -1,13 +1,28 @@
 ---
 const { title } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname;
 ---
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title} — 열린도구</title><link rel="stylesheet" href={`${base}style.css`}></head>
 <body>
-<header class="top"><div class="wrap"><a class="logo" href={base}><b>열린도구</b> <span>Alternatives · 시안</span></a>
-<nav><a href={`${base}for/teacher/`}>담임·교과</a><a href={`${base}for/it-lead/`}>정보부장·전산</a><a href={`${base}for/office/`}>행정·교무</a><a href={`${base}suggest/`}>대안 제안</a></nav></div></header>
-<div class="notice"><div class="wrap">AI 에이전트가 작성·관리하는 정보입니다. 시안 단계라 모든 사실이 "확인 중"이며, <span class="ex">예시 데이터</span> 표시 값은 화면 시연용으로 사실이 아닙니다.</div></div>
-<main class="wrap"><slot /></main>
-<footer class="wrap foot">정렬 규칙: 대체 정도 → 설치 난이도 → 마지막 확인일 · 인기 투표 순위 없음 · 학교 적합성·학운위 심의 대상 여부는 판정하지 않습니다.</footer>
+<div class="proto">시안입니다. 모든 값은 확인 중이며, <span class="st st-ex">예시 데이터</span> 표시는 화면을 보여 주기 위한 값입니다.</div>
+<header class="top"><div class="wrap">
+<a class="logo" href={base}>
+<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="6" width="24" height="18" rx="4" fill="none" stroke="#1E6A47" stroke-width="2"/><path d="M9 6V4h10v2" fill="none" stroke="#1E6A47" stroke-width="2"/><path d="M2 13h24" stroke="#1E6A47" stroke-width="2"/></svg>
+<b>열린도구</b><span>Alternatives</span></a>
+<nav class="main" aria-label="주 메뉴">
+<a href={`${base}apps/capcut/`} aria-current={path.startsWith(`${base}apps/`) ? 'page' : undefined}>CapCut 대신</a>
+<a href={`${base}compare/shotcut-vs-opencut/`} aria-current={path.startsWith(`${base}compare/`) ? 'page' : undefined}>비교</a>
+<a href={`${base}for/teacher/`} aria-current={path === `${base}for/teacher/` ? 'page' : undefined}>담임·교과</a>
+<a href={`${base}for/it-lead/`} aria-current={path === `${base}for/it-lead/` ? 'page' : undefined}>정보부장·전산</a>
+<a href={`${base}suggest/`} aria-current={path === `${base}suggest/` ? 'page' : undefined}>대안 요청</a>
+</nav>
+<a class="btn soft" href={`${base}#news`}>뉴스레터 구독</a>
+</div></header>
+<main><slot /></main>
+<footer><div class="wrap">
+<span>각 프로젝트의 공개 자료로 정리한 정보입니다. 학교 적합성이나 법적 요건 충족 여부는 판정하지 않습니다.</span>
+<span>구매 학교 수 출처: school-edtech.kr (2026년 1~10월, 확인 중)</span>
+</div></footer>
 </body></html>
