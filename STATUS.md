@@ -22,10 +22,11 @@
 
 ## 배포 상태
 
-- 운영: https://edtechnewsroom.com/alternatives/ (뉴스룸 VPS 정적 호스팅, 수동 배포)
-- **2026-10-13: PR #1~#4 전부 병합 완료 → main = 운영 디자인 동기화됨**
-- 운영 사이트의 현재 빌드는 PR #4 기반. main에 쌓인 최신 변경은 **아직 배포 안 됨** — 배포는 `ops/RUNBOOK.md` 절차(수동 트리거 워크플로 또는 deploy.sh)
-- 서버 접속정보·시크릿은 저장소에 없음. GitHub 시크릿 `GHOST_SERVER_ROOT_PASSWORD` 1회 설정 필요 (아직 미설정)
+- 운영: https://edtechnewsroom.com/alternatives/ (뉴스룸 VPS 정적 호스팅)
+- **2026-10-13 22:31 (Asia/Tashkent): main 기준 배포 완료** — deploy.yml 수동 실행(run 38439208024), 헬스체크 5종 200, 서버 백업 `alternatives.bak-20261013-173103`
+- 시크릿 설정 완료: `GHOST_SERVER_HOST`, `GHOST_SERVER_ROOT_PASSWORD` → 이제 `gh workflow run deploy.yml --ref main` 한 줄로 배포 가능
+- 배포 후 외부 확인됨: 이달의 도구 문구 교정·장면 카드 힌트 수정이 운영에 반영
+- (소소한 이슈) 워크플로 checkout 정리 단계에서 `lucian-uxui`가 .gitmodules 없는 gitlink라는 경고 출력 — 배포에는 영향 없음, 추후 정리
 
 ## 진행 중 / 보류
 
@@ -33,7 +34,7 @@
 - [ ] 오픈스킬 미리보기 25개 — 라이선스 허용 범위 내 실제 결과물 생성해서 `previewPath` 채우기
 - [ ] 선생님 페이지 장면 카드 / 앱 페이지 "어디서 쓰나요?" 데이터 — `src/data/scenes.json` 분리 완료, 데이터 고도화는 진행 중
 - [ ] 제안 폼 실동작화 (현재 정적) — 4단계 과제: 서버리스 → 이슈 접수 연결
-- [ ] GitHub 시크릿 설정 (배포 자동화 전제)
+- [x] GitHub 시크릿 설정 완료 (2026-10-13) — 배포 자동화 가동
 - [ ] 뉴스레터 초안·승인 흐름 (외부 발송은 반드시 초안 → 승인)
 
 ## 완료된 마일스톤
