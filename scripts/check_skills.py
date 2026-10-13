@@ -51,6 +51,10 @@ def check_file(path: Path) -> list[str]:
     if pt in ("iframe", "image") and not pp:
         errors.append(f"{sid}: previewType={pt}인데 previewPath 없음")
 
+    pm = s.get("previewMethod")
+    if pt in ("iframe", "image") and pm not in ("self-made", "official-example"):
+        errors.append(f"{sid}: 미리보기가 있는데 previewMethod(직접 생성/공식 예시) 표기 없음 — 출처 표기 원칙(AGENTS.md 1·2)")
+
     gh_lic = (s.get("github") or {}).get("license")
     if lic and gh_lic and gh_lic.startswith(("AGPL", "NOASSERTION", "Other")):
         errors.append(f"{sid}: github.license '{gh_lic}'이 제외 대상 — 재조사 필요")

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PhysicsOS 데모 — 문제로 보는 물리 시뮬레이션</title>
+<style>
+  :root { --ink:#1d2733; --line:#dfe6ee; --brand:#1E6A47; --brand2:#1F4E8C; --warn:#9A3B12; --bg:#f6f8fa; }
+  * { box-sizing:border-box; margin:0; }
+  body { font-family:'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; color:var(--ink); background:var(--bg); }
+  .wrap { max-width:980px; margin:0 auto; padding:16px; }
+  header { background:#fff; border-bottom:1px solid var(--line); }
+  .head { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:12px 16px; max-width:980px; margin:0 auto; }
+  .head b { font-size:17px; }
+  .badge { font-size:11px; padding:3px 8px; border-radius:999px; background:#E4EFE8; color:var(--brand); border:1px solid #C4DCCD; }
+  .badge.gray { background:#eef1f5; color:#5a6a7a; border-color:#dbe2ea; }
+  .tabs { display:flex; gap:6px; margin:14px 0 10px; }
+  .tabs button { flex:1; padding:10px 8px; border:1px solid var(--line); background:#fff; border-radius:10px; font-size:14px; cursor:pointer; font-weight:600; }
+  .tabs button.on { background:var(--brand); border-color:var(--brand); color:#fff; }
+  .problem { background:#FFF9EF; border:1px solid #F2E3C2; border-radius:12px; padding:12px 14px; margin-bottom:12px; font-size:14px; line-height:1.55; }
+  .problem b { color:var(--warn); }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .stage { position:relative; background:#EAF3EE; }
+  canvas { display:block; width:100%; height:auto; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; padding:14px; border-top:1px solid var(--line); }
+  .ctl label { display:flex; justify-content:space-between; font-size:12.5px; color:#4a5a6a; margin-bottom:4px; }
+  .ctl label output { font-weight:700; color:var(--ink); }
+  input[type=range] { width:100%; }
+  .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .seg { display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .seg button { border:0; background:#fff; padding:6px 10px; font-size:12.5px; cursor:pointer; }
+  .seg button.on { background:var(--brand2); color:#fff; }
+  .btn { border:0; background:var(--brand); color:#fff; padding:8px 14px; border-radius:8px; font-size:13.5px; font-weight:700; cursor:pointer; }
+  .btn.ghost { background:#fff; color:var(--ink); border:1px solid var(--line); }
+  .results { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; padding:0 14px 14px; }
+  .card { border:1px solid var(--line); border-radius:10px; padding:10px; background:#fbfcfd; }
+  .card small { display:block; color:#69798a; font-size:11.5px; margin-bottom:3px; }
+  .card b { font-size:16px; }
+  .verify { border-left:4px solid var(--brand); }
+  .verify b { color:var(--brand); }
+  footer { color:#7a8898; font-size:12px; line-height:1.6; padding:14px 4px 26px; }
+  footer a { color:var(--brand2); }
+  .hint { font-size:12px; color:#69798a; margin-top:6px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="head">
+    <b>PhysicsOS 데모</b>
+    <span class="badge">직접 생성 — 에이전트 제작</span>
+    <span class="badge gray">인터랙티브 · 관찰 · 계산 · 검증</span>
+    <span style="flex:1"></span>
+    <a class="badge" style="text-decoration:none" href="https://github.com/122-syf-wcy/PhysicsOS" target="_blank" rel="noopener">원본 스킬 ↗</a>
+  </div>
+</header>
+<div class="wrap">
+  <div class="tabs">
+    <button id="tab-proj" class="on" onclick="switchTab('proj')">포물선 — 어디에 떨어질까?</button>
+    <button id="tab-pend" onclick="switchTab('pend')">단진자 — 시계는 왜 정확할까?</button>
+  </div>
+
+  <!-- ── 포물선 ── -->
+  <section id="sec-proj">
+    <div class="problem" id="proj-problem">
+      <b>문제.</b> <span id="prob-text"></span><br>
+      공식으로 먼저 예측해 본 다음, 발사 버튼으로 시뮬레이션과 비교해 보세요. 두 값이 왜 (거의) 같은지가 포물선 운동의 핵심입니다.
+    </div>
+    <div class="panel">
+      <div class="stage"><canvas id="cv-proj" width="940" height="380"></canvas></div>
+      <div class="controls">
+        <div class="ctl">
+          <label>초기 속도 <output id="o-v0">20 m/s</output></label>
+          <input type="range" id="v0" min="5" max="40" step="1" value="20">
+        </div>
+        <div class="ctl">
+          <label>발사 각도 <output id="o-th">30°</output></label>
+          <input type="range" id="th" min="5" max="85" step="1" value="30">
+        </div>
+        <div class="ctl">
+          <label>중력 환경</label>
+          <div class="seg" id="gseg">
+            <button class="on" data-g="9.81">지구</button>
+            <button data-g="1.62">달</button>
+            <button data-g="24.79">목성</button>
+          </div>
+          <div class="hint" id="g-label">g = 9.81 m/s²</div>
+        </div>
+        <div class="ctl">
+          <label>&nbsp;</label>
+          <div class="row">
+            <button class="btn" onclick="fire()">▶ 발사</button>
+            <button class="btn ghost" onclick="toggleTrail(this)">궤적 남기기</button>
+          </div>
+        </div>
+      </div>
+      <div class="results">
+        <div class="card"><small>공식 예측 (v²·sin2θ / g)</small><b id="r-theory">—</b></div>
+        <div class="card"><small>시뮬레이션 측정</small><b id="r-sim">—</b></div>
+        <div class="card verify"><small>검증 (일치율)</small><b id="r-match">—</b></div>
+        <div class="card"><small>최고점 높이 (v²sin²θ / 2g)</small><b id="r-hmax">—</b></div>
+        <div class="card"><small>체공 시간 (2v·sinθ / g)</small><b id="r-t">—</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 단진자 ── -->
+  <section id="sec-pend" hidden>
+    <div class="problem">
+      <b>문제.</b> 진자의 길이를 4배로 늘리면 한 주기는 어떻게 될까요? 질량은 왜 빠져 있을까요?<br>
+      10번 왕복 시간을 직접 측정해 공식 T = 2π√(L/g)과 비교해 보세요. 각도가 클수록 오차가 커지는 이유도 관찰하세요.
+    </div>
+    <div class="panel">
+      <div class="stage"><canvas id="cv-pend" width="940" height="380"></canvas></div>
+      <div class="controls">
+        <div class="ctl">
+          <label>줄 길이 <output id="o-L">1.0 m</output></label>
+          <input type="range" id="L" min="0.3" max="3" step="0.05" value="1">
+        </div>
+        <div class="ctl">
+          <label>처음 각도 <output id="o-amp">15°</output></label>
+          <input type="range" id="amp" min="3" max="40" step="1" value="15">
+        </div>
+        <div class="ctl">
+          <label>중력 환경</label>
+          <div class="seg" id="gseg2">
+            <button class="on" data-g="9.81">지구</button>
+            <button data-g="1.62">달</button>
+            <button data-g="24.79">목성</button>
+          </div>
+          <div class="hint" id="g2-label">g = 9.81 m/s²</div>
+        </div>
+        <div class="ctl">
+          <label>&nbsp;</label>
+          <button class="btn" id="meas-btn" onclick="toggleMeasure()">⏱ 10주기 측정</button>
+        </div>
+      </div>
+      <div class="results">
+        <div class="card"><small>공식 예측 (2π√(L/g))</small><b id="p-theory">—</b></div>
+        <div class="card"><small>측정한 한 주기</small><b id="p-sim">—</b></div>
+        <div class="card verify"><small>검증 (오차)</small><b id="p-err">—</b></div>
+        <div class="card"><small>작은 각도 근사 유효?</small><b id="p-small">θ ≤ 약 10°</b></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    이 페이지는 <a href="https://github.com/122-syf-wcy/PhysicsOS" target="_blank" rel="noopener">PhysicsOS</a> 스킬의 지침(대화형·관찰·계산·검증 가능한 물리 장면)에 따라 열린도구 에이전트가 <b>직접 제작한 데모 산출물</b>입니다.
+    외부 라이브러리 없이 단일 HTML로 만들어 오프라인 수업에서도 동작합니다. 원본 스킬 자체를 실행하는 것이 아니며, 실제 결과물은 원본 저장소를 참고하세요.
+  </footer>
+</div>
+
+<script>
+/* ─────────── 공통 ─────────── */
+const G_PRESETS = { '9.81': '지구', '1.62': '달', '24.79': '목성' };
+function switchTab(t) {
+  document.getElementById('sec-proj').hidden = t !== 'proj';
+  document.getElementById('sec-pend').hidden = t !== 'pend';
+  document.getElementById('tab-proj').classList.toggle('on', t === 'proj');
+  document.getElementById('tab-pend').classList.toggle('on', t === 'pend');
+}
+
+/* ─────────── 1. 포물선 ─────────── */
+const cv = document.getElementById('cv-proj'), ctx = cv.getContext('2d');
+const W = cv.width, H = cv.height, GROUND = H - 46, PAD = 56;
+const SCALE = (W - PAD * 1.6) / 100;           // 100m 폭을 캔버스에
+let g = 9.81, trailMode = false, trails = [], shot = null, raf = null;
+const $ = (id) => document.getElementById(id);
+const rad = (d) => d * Math.PI / 180;
+
+function projParams() {
+  const v0 = +$('v0').value, th = +$('th').value;
+  const R = v0 * v0 * Math.sin(2 * rad(th)) / g;
+  const Hm = v0 * v0 * Math.sin(rad(th)) ** 2 / (2 * g);
+  const T = 2 * v0 * Math.sin(rad(th)) / g;
+  return { v0, th, R, Hm, T };
+}
+function updateProblem() {
+  const p = projParams();
+  $('prob-text').textContent = `초속 ${p.v0} m/s로 지면에서 ${p.th}° 위쪽으로 발사한 공은 몇 m 앞에 떨어질까요?  (g = ${g} m/s²)`;
+}
+function readouts(p, measured) {
+  $('r-theory').textContent = p.R.toFixed(1) + ' m';
+  $('r-hmax').textContent = p.Hm.toFixed(1) + ' m';
+  $('r-t').textContent = p.T.toFixed(2) + ' s';
+  if (measured != null) {
+    $('r-sim').textContent = measured.toFixed(1) + ' m';
+    const diff = Math.abs(measured - p.R) / p.R * 100;
+    $('r-match').textContent = diff < 0.5 ? `일치 (오차 ${diff.toFixed(2)}%)` : `오차 ${diff.toFixed(1)}%`;
+  }
+}
+function resetReadouts() { $('r-sim').textContent = '—'; $('r-match').textContent = '—'; }
+
+function drawProjScene(p, pos, tOfFlight) {
+  ctx.clearRect(0, 0, W, H);
+  // 하늘/땅
+  ctx.fillStyle = '#EAF3EE'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#DCE9DF'; ctx.fillRect(0, GROUND, W, H - GROUND);
+  ctx.strokeStyle = '#bcd4c4'; ctx.beginPath(); ctx.moveTo(0, GROUND); ctx.lineTo(W, GROUND); ctx.stroke();
+  // 거리 눈금 (5m)
+  ctx.fillStyle = '#6d8272'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+  const xmax = Math.max(60, p ? Math.min(100, p.R * 1.25) : 60);
+  for (let m = 0; m <= 100; m += 5) {
+    const x = PAD + m * SCALE;
+    if (x > W - 8) break;
+    ctx.fillRect(x, GROUND, 1, 6);
+    if (m % 10 === 0) ctx.fillText(m + 'm', x, GROUND + 18);
+  }
+  // 발사대
+  ctx.fillStyle = '#1E6A47';
+  ctx.beginPath(); ctx.moveTo(PAD, GROUND); ctx.lineTo(PAD + 26, GROUND); ctx.lineTo(PAD + 13, GROUND - 22); ctx.closePath(); ctx.fill();
+  // 예측 궤적(점선)
+  if (p) {
+    ctx.setLineDash([4, 5]); ctx.strokeStyle = 'rgba(31,78,140,.45)'; ctx.beginPath();
+    for (let i = 0; i <= 60; i++) {
+      const t = p.T * i / 60;
+      const x = PAD + p.v0 * Math.cos(rad(p.th)) * t * SCALE;
+      const y = GROUND - (p.v0 * Math.sin(rad(p.th)) * t - 0.5 * g * t * t) * SCALE;
+      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+    // 예측 낙하점
+    const lx = PAD + p.R * SCALE;
+    ctx.strokeStyle = '#1F4E8C'; ctx.beginPath(); ctx.moveTo(lx, GROUND - 26); ctx.lineTo(lx, GROUND); ctx.stroke();
+    ctx.fillStyle = '#1F4E8C'; ctx.fillText('예측 ' + p.R.toFixed(1) + 'm', lx, GROUND - 32);
+  }
+  // 발사체
+  if (pos) {
+    const x = PAD + pos.x * SCALE, y = GROUND - pos.y * SCALE;
+    ctx.fillStyle = '#9A3B12'; ctx.beginPath(); ctx.arc(x, y, 8, 0, 7); ctx.fill();
+    ctx.fillStyle = '#33424f'; ctx.font = '12px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(`t = ${tOfFlight.toFixed(2)}s`, x + 12, y - 10);
+  }
+  // 궤적 남기기
+  if (trailMode && shot && shot.pts) {
+    ctx.strokeStyle = 'rgba(154,59,18,.35)';
+    trails.forEach(tr => { ctx.beginPath(); tr.forEach((q, i) => {
+      const px = PAD + q.x * SCALE, py = GROUND - q.y * SCALE; i ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
+    }); ctx.stroke(); });
+  }
+}
+function fire() {
+  cancelAnimationFrame(raf);
+  const p = projParams(); resetReadouts();
+  const pts = [];
+  const start = performance.now();
+  const T = p.T;
+  function frame(now) {
+    const t = Math.min((now - start) / 1000, T);
+    const x = p.v0 * Math.cos(rad(p.th)) * t;
+    const y = Math.max(0, p.v0 * Math.sin(rad(p.th)) * t - 0.5 * g * t * t);
+    pts.push({ x, y });
+    drawProjScene(p, { x, y }, t);
+    if (t >= T) {
+      readouts(p, x);
+      if (trailMode) { trails.push(pts); if (trails.length > 4) trails.shift(); }
+      return;
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+}
+$('v0').addEventListener('input', () => { $('o-v0').textContent = $('v0').value + ' m/s'; syncProj(); });
+$('th').addEventListener('input', () => { $('o-th').textContent = $('th').value + '°'; syncProj(); });
+function syncProj() { cancelAnimationFrame(raf); shot = null; const p = projParams(); updateProblem(); readouts(p, null); drawProjScene(p, null); }
+document.querySelectorAll('#gseg button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#gseg button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); g = +b.dataset.g;
+  $('g-label').textContent = `g = ${g} m/s² (${G_PRESETS[b.dataset.g]})`;
+  document.querySelectorAll('#gseg2 button').forEach(x => x.classList.toggle('on', x.dataset.g === b.dataset.g));
+  $('g2-label').textContent = `g = ${g} m/s² (${G_PRESETS[b.dataset.g]})`;
+  syncProj(); pendReset();
+}));
+function toggleTrail(btn) {
+  trailMode = !trailMode; btn.textContent = trailMode ? '궤적 지우기' : '궤적 남기기';
+  if (!trailMode) trails = [];
+}
+
+/* ─────────── 2. 단진자 ─────────── */
+const cv2 = document.getElementById('cv-pend'), ctx2 = cv2.getContext('2d');
+const PIVOT = { x: cv2.width / 2, y: 64 };
+let L = 1, ampDeg = 15, g2 = 9.81;
+let theta = rad(ampDeg), omega = 0, simT = 0, lastTs = null, measure = null;
+
+function theoryT() { return 2 * Math.PI * Math.sqrt(L / g2); }
+function pendReadouts(measured) {
+  $('p-theory').textContent = theoryT().toFixed(3) + ' s';
+  if (measured != null) {
+    $('p-sim').textContent = measured.toFixed(3) + ' s';
+    const err = (measured - theoryT()) / theoryT() * 100;
+    $('p-err').textContent = (err >= 0 ? '+' : '') + err.toFixed(2) + '%';
+  }
+  $('p-small').textContent = Math.abs(ampDeg) <= 10 ? 'θ ≤ 약 10° — 근사 양호' : `θ = ${ampDeg}° — 근사 오차 관찰 중`;
+}
+function drawPend() {
+  const px = L * SCALE2;
+  ctx2.clearRect(0, 0, cv2.width, cv2.height);
+  ctx2.fillStyle = '#EAF3EE'; ctx2.fillRect(0, 0, cv2.width, cv2.height);
+  // 천장
+  ctx2.fillStyle = '#DCE9DF'; ctx2.fillRect(0, 0, cv2.width, 44);
+  ctx2.strokeStyle = '#bcd4c4'; ctx2.beginPath(); ctx2.moveTo(0, 44); ctx2.lineTo(cv2.width, 44); ctx2.stroke();
+  // 자 눈금
+  ctx2.fillStyle = '#6d8272'; ctx2.font = '11px sans-serif'; ctx2.textAlign = 'left';
+  for (let m = 0; m <= 3; m += 0.5) {
+    const y = PIVOT.y + m * SCALE2;
+    if (y > cv2.height - 20) break;
+    ctx2.fillRect(cv2.width - 56, y, 8, 1);
+    if (m % 1 === 0) ctx2.fillText(m + 'm', cv2.width - 42, y + 4);
+  }
+  const bx = PIVOT.x + Math.sin(theta) * px, by = PIVOT.y + Math.cos(theta) * px;
+  ctx2.strokeStyle = '#33424f'; ctx2.lineWidth = 2;
+  ctx2.beginPath(); ctx2.moveTo(PIVOT.x, PIVOT.y); ctx2.lineTo(bx, by); ctx2.stroke(); ctx2.lineWidth = 1;
+  ctx2.fillStyle = '#1F4E8C'; ctx2.beginPath(); ctx2.arc(PIVOT.x, PIVOT.y, 5, 0, 7); ctx2.fill();
+  ctx2.fillStyle = '#9A3B12'; ctx2.beginPath(); ctx2.arc(bx, by, 14, 0, 7); ctx2.fill();
+  ctx2.fillStyle = '#33424f'; ctx2.font = '12px sans-serif';
+  ctx2.fillText(`θ = ${(theta / Math.PI * 180).toFixed(1)}°`, bx + 18, by + 4);
+}
+const SCALE2 = (cv2.height - PIVOT.y - 60) / 3;   // 3m까지 그리기
+function stepPend(dt) {
+  // θ'' = -(g/L)·sinθ  (작은 각 근사 안 씀 — 진짜 운동방정식, 그래서 큰 각도 오차를 관찰할 수 있다)
+  const n = 8, h = dt / n;
+  for (let i = 0; i < n; i++) {
+    omega += -(g2 / L) * Math.sin(theta) * h;
+    theta += omega * h;
+  }
+  simT += dt;
+}
+function pendLoop(ts) {
+  if (lastTs == null) lastTs = ts;
+  const dt = Math.min((ts - lastTs) / 1000, 0.05); lastTs = ts;
+  stepPend(dt);
+  if (measure && measure.crossed === null) {
+    // 첫 통과(θ가 0을 지나는 순간) 기다림
+    if (theta * measure.prev < 0) { measure.t0 = simT; measure.crossed = true; }
+  }
+  if (measure && measure.crossed) {
+    if (theta * measure.prevSign < 0) {   // 한 주기 = 같은 방향 통과
+      measure.swings++;
+      if (measure.swings >= 10) {
+        const ten = simT - measure.t0;
+        pendReadouts(ten / 10);
+        const b = $('meas-btn'); b.textContent = '⏱ 10주기 측정'; b.disabled = false; measure = null;
+      }
+    }
+  }
+  if (measure) measure.prevSign = theta;
+  drawPend();
+  requestAnimationFrame(pendLoop);
+}
+function pendReset() {
+  theta = rad(ampDeg); omega = 0; simT = 0; lastTs = null; measure = null;
+  $('p-sim').textContent = '—'; $('p-err').textContent = '—';
+  pendReadouts(null); 
+}
+$('L').addEventListener('input', () => { $('o-L').textContent = (+$('L').value).toFixed(2) + ' m'; L = +$('L').value; pendReset(); });
+$('amp').addEventListener('input', () => { $('o-amp').textContent = $('amp').value + '°'; ampDeg = +$('amp').value; pendReset(); });
+document.querySelectorAll('#gseg2 button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#gseg2 button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); g2 = +b.dataset.g;
+  $('g2-label').textContent = `g = ${g2} m/s² (${G_PRESETS[b.dataset.g]})`;
+  pendReset();
+}));
+function toggleMeasure() {
+  const b = $('meas-btn');
+  if (measure) { measure = null; b.textContent = '⏱ 10주기 측정'; return; }
+  theta = rad(ampDeg); omega = 0; simT = 0; lastTs = null;
+  measure = { crossed: null, t0: null, swings: 0, prev: theta, prevSign: theta };
+  b.textContent = '⏹ 측정 중지';
+  $('p-sim').textContent = '측정 중…'; $('p-err').textContent = '—';
+}
+
+/* ─────────── 시작 ─────────── */
+syncProj();
+pendReadouts(null);
+requestAnimationFrame(pendLoop);
+</script>
+</body>
+</html>
