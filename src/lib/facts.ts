@@ -46,3 +46,24 @@ export const PLAT: [string, string, (p: any) => boolean][] = [
   ['win', 'Win', (p) => p.windows === 'yes'], ['mac', 'Mac', (p) => p.macos === 'yes'], ['linux', 'Linux', (p) => p.linux === 'yes'],
   ['web', '웹', (p) => p.web === 'official'], ['and', 'Android', (p) => p.android === 'yes'], ['ios', 'iOS', (p) => p.ios === 'yes'],
 ];
+
+// ── v3: 사용자 시안(2026-10-13) 디자인 토큰 ──
+export const CAT: Record<string, [string, string, string]> = {
+  '영상·오디오': ['#FCE9DE', '#9A3B12', '#F2CDB8'], '이미지·디자인': ['#F3E6F7', '#6B2C80', '#E0C8EA'],
+  '문서·오피스': ['#E3ECF8', '#1F4E8C', '#C6D6EE'], '수업 도구': ['#E4EFE8', '#1E6A47', '#C4DCCD'],
+  'AI': ['#ECE8FB', '#4B3A9A', '#D4CCF3'], '유틸리티': ['#F1EFE6', '#5B5432', '#DDD9C8'],
+};
+export const CAT_ORDER = ['영상·오디오', '이미지·디자인', '문서·오피스', '수업 도구', 'AI', '유틸리티'];
+export function tone(c: string) { const t = CAT[c] || CAT['유틸리티']; return `--tint:${t[0]};--tink:${t[1]};--tbd:${t[2]}`; }
+export const RANK: Record<string, number> = { '쉬움': 0, '보통': 1, '어려움': 2, '서버 구축': 3 };
+export const HEALTH: Record<string, string> = { active: '개발 활발', slowing: '개발 느려짐', stale: '개발 멈춤', archived: '개발 중단' };
+export const dfClass = (d: string) => 'df-' + d.split(' ')[0];
+// 시안의 "학교 사용 편의 점수" 공개 공식. 입력이 전부 확인 전(씨앗) 값이므로 결과는 예시로만 표시.
+// 학교 조건(15)은 아직 확인된 값이 없어 0으로 계산.
+export function score(level: string, diff: string, p: any, health: string) {
+  const lv = level === '거의 대체' ? 1 : 0.5;
+  const df = ({ '쉬움': 1, '보통': 0.6, '어려움': 0.3, '서버 구축': 0.1 } as any)[diff] ?? 0;
+  const dev = ([p.windows === 'yes', p.web === 'official', p.android === 'yes' || p.ios === 'yes' || p.mobileWeb === 'yes'].filter(Boolean).length) / 3;
+  const h = ({ active: 1, slowing: 0.6, stale: 0.2, archived: 0 } as any)[health] ?? 0.6;
+  return Math.round(lv * 30 + df * 25 + dev * 20 + 0 * 15 + h * 10);
+}

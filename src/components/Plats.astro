@@ -1,0 +1,6 @@
+---
+import Status from './Status.astro';
+const { t } = Astro.props; const p = t.data.platforms.value;
+const rows = [['Windows', p.windows], ['macOS', p.macos], ['Linux', p.linux], ['웹', p.web === 'official' ? 'yes' : p.web === 'self-host' ? 'partial' : p.web], ['휴대폰 브라우저', p.mobileWeb], ['Android', p.android], ['iOS', p.ios]];
+---
+<div class="plats"><span>쓸 수 있는 곳</span>{rows.map(([l, v]) => <span class={`plat ${v === 'yes' ? 'on' : v === 'partial' ? 'part' : 'off'}`}>{l}{v === 'partial' && ' (일부)'}</span>)}<Status fact={t.data.platforms} /></div>

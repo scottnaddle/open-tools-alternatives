@@ -1,0 +1,346 @@
+{
+ "_label": "예시 데이터 — 사용자 시안(2026-10-13)에서 가져온 화면 시연용 문구·큐레이션. 검증된 사실이 아님",
+ "featured": [
+  [
+   "obs-studio",
+   "학기 말 수업 영상 녹화 문의가 많은 시기라 소개합니다"
+  ],
+  [
+   "localsend",
+   "교실 안 태블릿으로 파일을 보내는 방법을 묻는 질문이 많았습니다"
+  ],
+  [
+   "h2orestart",
+   "한컴오피스 없이 HWP 파일을 여는 국내 오픈소스"
+  ]
+ ],
+ "collections": [
+  {
+   "id": "computer-lab",
+   "title": "컴퓨터실 기본 도구",
+   "intro": "컴퓨터실 Windows PC에 설치해 두면 여러 수업에서 쓰는 도구 묶음",
+   "tools": [
+    "7-zip",
+    "sharex",
+    "obs-studio",
+    "libreoffice",
+    "krita",
+    "inkscape",
+    "draw-io",
+    "localsend"
+   ]
+  },
+  {
+   "id": "whalebook",
+   "title": "웨일북·크롬북 수업 도구",
+   "intro": "설치 없이 브라우저로 여는 도구 묶음",
+   "tools": [
+    "excalidraw",
+    "draw-io",
+    "opencut",
+    "jupyterlite",
+    "entry",
+    "bentopdf",
+    "jitsi-meet",
+    "makecode"
+   ]
+  },
+  {
+   "id": "video-class",
+   "title": "영상 수업 키트",
+   "intro": "촬영·녹화·편집·자막까지 영상 수업에 필요한 도구",
+   "tools": [
+    "opencut",
+    "shotcut",
+    "openshot",
+    "obs-studio",
+    "audacity",
+    "buzz",
+    "losslesscut"
+   ]
+  },
+  {
+   "id": "no-altools",
+   "title": "알툴즈 없이 지내기",
+   "intro": "압축·캡처·PDF 작업을 오픈소스로",
+   "tools": [
+    "7-zip",
+    "nanazip",
+    "peazip",
+    "sharex",
+    "flameshot",
+    "bentopdf"
+   ]
+  }
+ ],
+ "noAlternative": "e알리미·리로스쿨, 미리캔버스형 템플릿, 띵커벨형 즉석 퀴즈는 아직 교사 혼자 바로 쓸 만한 오픈소스가 없습니다.",
+ "featureMatrix": [
+  {
+   "schoolAppId": "capcut",
+   "scenario": "모둠 발표 영상 만들기",
+   "features": [
+    {
+     "feature": "여러 트랙 타임라인 편집",
+     "anchor": "yes",
+     "alternatives": {
+      "opencut": {
+       "value": null,
+       "status": "unverified"
+      },
+      "shotcut": {
+       "value": null,
+       "status": "unverified"
+      }
+     }
+    },
+    {
+     "feature": "자동 자막",
+     "anchor": "yes",
+     "alternatives": {
+      "opencut": {
+       "value": null,
+       "status": "unverified"
+      },
+      "shotcut": {
+       "value": null,
+       "status": "unverified"
+      }
+     }
+    },
+    {
+     "feature": "템플릿·효과 모음",
+     "anchor": "yes",
+     "alternatives": {
+      "opencut": {
+       "value": null,
+       "status": "unverified"
+      },
+      "shotcut": {
+       "value": null,
+       "status": "unverified"
+      }
+     }
+    },
+    {
+     "feature": "글자를 음성으로(TTS)",
+     "anchor": "yes",
+     "alternatives": {
+      "opencut": {
+       "value": null,
+       "status": "unverified"
+      },
+      "shotcut": {
+       "value": null,
+       "status": "unverified"
+      }
+     }
+    },
+    {
+     "feature": "배경 제거",
+     "anchor": "yes",
+     "alternatives": {
+      "opencut": {
+       "value": null,
+       "status": "unverified"
+      },
+      "shotcut": {
+       "value": null,
+       "status": "unverified"
+      }
+     }
+    },
+    {
+     "feature": "브라우저에서 바로 사용",
+     "anchor": "yes",
+     "alternatives": {
+      "opencut": {
+       "value": "yes",
+       "status": "unverified",
+       "source": "tools.json 씨앗 데이터"
+      },
+      "shotcut": {
+       "value": "no",
+       "status": "unverified",
+       "source": "tools.json 씨앗 데이터"
+      }
+     }
+    },
+    {
+     "feature": "Windows PC 설치",
+     "anchor": "yes",
+     "alternatives": {
+      "opencut": {
+       "value": "no",
+       "status": "unverified",
+       "source": "tools.json 씨앗 데이터"
+      },
+      "shotcut": {
+       "value": "yes",
+       "status": "unverified",
+       "source": "tools.json 씨앗 데이터"
+      }
+     }
+    },
+    {
+     "feature": "휴대폰 앱",
+     "anchor": "yes",
+     "alternatives": {
+      "opencut": {
+       "value": "no",
+       "status": "unverified",
+       "source": "tools.json 씨앗 데이터"
+      },
+      "shotcut": {
+       "value": "no",
+       "status": "unverified",
+       "source": "tools.json 씨앗 데이터"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "schoolAppId": "alzip",
+   "scenario": "과제 파일 압축해서 제출하기",
+   "features": [
+    {
+     "feature": "ZIP 압축·해제",
+     "anchor": "yes",
+     "alternatives": {
+      "7-zip": {
+       "value": null,
+       "status": "unverified"
+      },
+      "nanazip": {
+       "value": null,
+       "status": "unverified"
+      },
+      "peazip": {
+       "value": null,
+       "status": "unverified"
+      }
+     }
+    },
+    {
+     "feature": "ALZ·EGG 등 국내 형식 풀기",
+     "anchor": "yes",
+     "alternatives": {
+      "7-zip": {
+       "value": null,
+       "status": "unverified"
+      },
+      "nanazip": {
+       "value": null,
+       "status": "unverified"
+      },
+      "peazip": {
+       "value": null,
+       "status": "unverified"
+      }
+     }
+    },
+    {
+     "feature": "오른쪽 클릭 메뉴",
+     "anchor": "yes",
+     "alternatives": {
+      "7-zip": {
+       "value": null,
+       "status": "unverified"
+      },
+      "nanazip": {
+       "value": null,
+       "status": "unverified"
+      },
+      "peazip": {
+       "value": null,
+       "status": "unverified"
+      }
+     }
+    },
+    {
+     "feature": "한국어 화면",
+     "anchor": "yes",
+     "alternatives": {
+      "7-zip": {
+       "value": null,
+       "status": "unverified"
+      },
+      "nanazip": {
+       "value": null,
+       "status": "unverified"
+      },
+      "peazip": {
+       "value": null,
+       "status": "unverified"
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "guides": {
+  "obs-studio": {
+   "intro": "화면, 웹캠, 마이크를 함께 녹화하는 무료 프로그램입니다. 워터마크나 녹화 시간 제한이 없어 수업 영상 녹화에 많이 쓰입니다.",
+   "uses": [
+    [
+     "수업 영상 녹화",
+     "PPT 화면과 선생님 얼굴을 한 화면에 담아 녹화"
+    ],
+    [
+     "학생 발표 연습",
+     "발표 장면을 녹화해 스스로 돌아보기"
+    ],
+    [
+     "행사 실시간 방송",
+     "입학식·학예회를 송출"
+    ]
+   ],
+   "limits": "녹화 후 자르기·자막 같은 편집은 되지 않아요. 편집은 Shotcut이나 OpenShot을 함께 쓰세요.",
+   "install": {
+    "Windows": [
+     [
+      "설치 파일 내려받기",
+      "공식 사이트에서 Windows용 설치 파일을 받습니다."
+     ],
+     [
+      "설치 파일 실행",
+      "안내에 따라 다음을 누르면 설치가 끝납니다. 학교 PC는 관리자 권한을 요구할 수 있어요."
+     ],
+     [
+      "자동 구성 마법사",
+      "처음 실행하면 나오는 자동 구성 마법사에서 녹화에 최적화를 고릅니다."
+     ]
+    ],
+    "macOS": [
+     [
+      "설치 파일 내려받기",
+      "내 Mac의 칩(Apple 실리콘 또는 Intel)에 맞는 파일을 고르세요."
+     ],
+     [
+      "응용 프로그램 폴더로 옮기기",
+      "받은 파일을 열어 OBS를 응용 프로그램 폴더로 끌어다 놓습니다."
+     ],
+     [
+      "화면 녹화 권한 허용",
+      "시스템 설정의 개인정보 보호 및 보안에서 화면 녹화와 마이크 권한을 허용합니다."
+     ]
+    ],
+    "Linux": [
+     [
+      "설치 방법 고르기",
+      "배포판의 소프트웨어 센터나 Flatpak(Flathub)으로 설치할 수 있습니다."
+     ],
+     [
+      "설치하기",
+      "소프트웨어 센터에서 OBS Studio를 찾아 설치를 누릅니다."
+     ],
+     [
+      "자동 구성 마법사",
+      "처음 실행하면 나오는 자동 구성 마법사에서 녹화에 최적화를 고릅니다."
+     ]
+    ]
+   },
+   "official": "https://obsproject.com"
+  }
+ }
+}

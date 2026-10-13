@@ -1,0 +1,6 @@
+---
+import icons from '../data/icons.json';
+const { name } = Astro.props;
+const svg = (icons as Record<string, string>)[name] ?? (icons as Record<string, string>)['cloud'];
+---
+<Fragment set:html={svg} />

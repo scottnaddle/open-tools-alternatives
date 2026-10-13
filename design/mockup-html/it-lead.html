@@ -1,0 +1,206 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>정보부장·전산 담당 | 열린도구</title><style>
+:root{
+  --ground:#F6F5F0; --surface:#FFFFFF; --ink:#1B2420; --ink-2:#3B4440; --muted:#5A635E; --line:#DAD8CF; --line-2:#ECEAE3;
+  --brand:#1E6A47; --brand-ink:#134430; --brand-tint:#E4EFE8;
+  --warn-tint:#FBF0DC; --warn-ink:#7A4800; --server-tint:#E3E8F2; --server-ink:#24365C; --hard-tint:#F6E0DA; --hard-ink:#7A2A14;
+  --radius-card:14px; --radius-ctl:10px; --radius-pill:999px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;line-height:1.5}
+a{color:var(--brand)}a:hover{color:var(--brand-ink)}
+:focus-visible{outline:3px solid #1F4E8C;outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+header.top{background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo b{font-size:20px;letter-spacing:-.02em}.logo span{font-size:13px;font-weight:600;color:var(--brand)}
+nav.main{display:flex;flex-wrap:wrap;gap:2px}nav.main a{padding:10px 12px;color:var(--muted);text-decoration:none}nav.main a[aria-current]{color:var(--ink);font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:var(--radius-ctl);font:inherit;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;border:1px solid #B9B7AD;background:var(--surface);color:var(--ink)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}.btn.soft{background:var(--brand-tint);border-color:var(--brand-tint);color:var(--brand-ink)}
+.hero{padding:48px 0 20px}.hero p.kicker{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--brand)}
+.hero h1{margin:0 0 14px;font-size:clamp(28px,4vw,38px);line-height:1.3;letter-spacing:-.02em;max-width:760px}
+.hero p.lead{margin:0 0 24px;font-size:16px;color:var(--muted);max-width:680px}
+label.field{display:block;font-size:14px;font-weight:600;margin-bottom:8px}
+input.search{width:100%;max-width:640px;height:52px;padding:0 18px;font:inherit;font-size:16px;border:1px solid #B9B7AD;border-radius:var(--radius-ctl);background:var(--surface)}
+.filters{display:flex;flex-direction:column;gap:12px;padding:8px 0}
+.frow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.frow>span{font-size:14px;color:var(--muted);width:64px}
+.chip{min-height:40px;padding:0 14px;border-radius:var(--radius-pill);border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.count{font-size:14px;color:var(--muted);margin:16px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);overflow:hidden;display:flex;flex-direction:column}
+.card:focus-visible{outline:3px solid #1F4E8C}
+.thumb{display:flex;align-items:center;gap:12px;height:112px;padding:0 20px;border-bottom:1px solid var(--tbd)}
+.tile{flex:none;width:64px;height:64px;border-radius:16px;background:#fff;border:1px solid var(--tbd);display:flex;align-items:center;justify-content:center;color:var(--tink)}
+.tile svg{width:36px;height:36px}
+.arrow{color:var(--tink);flex:none}
+.mono{flex:none;width:44px;height:44px;border-radius:50%;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;border:3px solid var(--tint)}
+.mono+.mono{margin-left:-10px}
+.cbody{padding:14px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.cat{font-size:12px;color:var(--muted)}.cname{font-size:20px;font-weight:700;letter-spacing:-.01em}.cnote{font-size:13px;color:var(--muted);min-height:18px}
+.calts{font-size:15px;font-weight:600;color:var(--brand-ink)}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.badge{font-size:12px;font-weight:600;padding:4px 9px;border-radius:var(--radius-pill)}
+.lv-거의{background:var(--brand-tint);color:var(--brand-ink)}.lv-부분{background:var(--warn-tint);color:var(--warn-ink)}
+.df-쉬움{background:var(--brand-tint);color:var(--brand-ink)}.df-보통{background:var(--warn-tint);color:var(--warn-ink)}.df-어려움{background:var(--hard-tint);color:var(--hard-ink)}.df-서버{background:var(--server-tint);color:var(--server-ink)}
+.note{background:var(--warn-tint);color:#4A3000;border-radius:var(--radius-card);padding:22px 24px;margin:32px 0 64px}
+.note h2{margin:0 0 8px;font-size:18px}.note p{margin:0;font-size:14px;line-height:1.65}
+.empty{background:var(--surface);border:1px dashed #B9B7AD;border-radius:var(--radius-card);padding:28px;text-align:center}
+.detail{max-width:1040px;margin:0 auto;padding:32px 24px 64px}
+.back{display:inline-flex;align-items:center;gap:4px;min-height:44px;color:var(--brand);text-decoration:none}
+.dhead{display:flex;align-items:center;gap:18px;margin:12px 0 18px}.dhead .tile{width:76px;height:76px;border-radius:20px;background:var(--tint)}.dhead .tile svg{width:42px;height:42px}
+.dhead h1{margin:0;font-size:clamp(26px,3.4vw,34px);letter-spacing:-.02em}
+.gap{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:24px}
+.alt{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:24px;display:flex;flex-direction:column;gap:14px;margin-bottom:16px}
+.alt.off{opacity:.6}
+.ahead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+.amain{display:flex;gap:16px;align-items:flex-start;flex:1 1 420px;min-width:0}
+.amono{flex:none;width:56px;height:56px;border-radius:16px;color:#fff;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.alt h2{margin:0 0 6px;font-size:22px}.alt p{margin:0;color:var(--ink-2)}
+.plats{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.plats>span:first-child{font-size:13px;color:var(--muted);margin-right:4px}
+.plat{font-size:13px;padding:4px 9px;border-radius:6px}.plat.on{background:var(--brand-tint);color:var(--brand-ink)}.plat.off{background:#F0EFE9;color:#6B726E;text-decoration:line-through}.plat.part{background:var(--warn-tint);color:var(--warn-ink)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.notify{margin-top:28px;background:var(--brand-tint);border-radius:var(--radius-card);padding:22px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;color:var(--brand-ink)}
+.notify h2{margin:0 0 6px;font-size:18px}.notify p{margin:0;font-size:14px}
+.notify form{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 320px}.notify input{flex:1 1 200px;min-width:0;height:44px;padding:0 14px;font:inherit;border:1px solid #9FC3AE;border-radius:var(--radius-ctl)}
+.tool{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;padding:28px 0 64px}
+.tool main{flex:999 1 600px;min-width:0;display:flex;flex-direction:column;gap:24px}.tool aside{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-card);padding:24px}.panel h2{margin:0 0 14px;font-size:20px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}.steps li{display:flex;gap:16px}
+.num{flex:none;width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.shot{margin-top:10px;height:140px;max-width:420px;border:1px dashed #B9B7AD;border-radius:10px;background:#FBFAF7;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6B726E}
+dl.facts{margin:0;display:grid;grid-template-columns:auto 1fr;gap:10px 14px;font-size:14px}dl.facts dt{color:var(--muted)}dl.facts dd{margin:0;font-weight:600}
+footer{border-top:1px solid var(--line);background:var(--surface)}footer .wrap{padding-top:20px;padding-bottom:20px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.proto{background:#1F4E8C;color:#fff;font-size:13px;text-align:center;padding:6px}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--warn-tint);color:var(--warn-ink)}
+.status.ok{background:var(--brand-tint);color:var(--brand-ink)}
+.chip[disabled]{opacity:.55;cursor:not-allowed}
+.sec{margin:36px 0 0}.sec h2{font-size:20px;margin:0 0 6px}.sec p.sub{margin:0 0 14px;font-size:14px;color:var(--muted)}
+.strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.strip a{flex:none;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink)}
+.strip .t{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--tink)}.strip .t svg{width:22px;height:22px}
+.strip b{display:block;font-size:15px}.strip span.n{font-size:12px;color:var(--muted)}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.ccard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:8px}
+.ccard b{font-size:17px}.ccard p{margin:0;font-size:14px;color:var(--ink-2)}
+.minis{display:flex;margin-top:auto}.minis span{width:30px;height:30px;border-radius:50%;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff}.minis span+span{margin-left:-8px}
+.scene{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--tink);border-radius:12px;padding:16px 18px;margin-bottom:16px;font-size:15px;line-height:1.7}
+.scene .by{display:block;font-size:12px;color:var(--server-ink);margin-top:6px}
+.toolbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin:0 0 14px}
+.toolbar select{min-height:44px;padding:0 12px;font:inherit;border:1px solid #B9B7AD;border-radius:10px;background:#fff}
+.meta-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tagf{font-size:12px;font-weight:600;padding:4px 9px;border-radius:999px;background:var(--hard-tint);color:var(--hard-ink)}
+.tagh{font-size:12px;padding:4px 9px;border-radius:999px;background:#F0EFE9;color:var(--ink-2)}
+.score{font-size:12px;color:var(--muted)}
+.react{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.react button{min-height:40px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:#fff;font:inherit;font-size:13px;cursor:pointer}
+.react button[aria-pressed="true"]{background:var(--brand-tint);border-color:var(--brand);color:var(--brand-ink);font-weight:600}
+.cmp{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:24px}
+.cmp table{width:100%;min-width:560px;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{padding:12px 14px;border-bottom:1px solid var(--line-2);text-align:left}
+.cmp thead th{font-size:13px;color:var(--muted);font-weight:600;background:#FBFAF7}
+.v{font-weight:600}.v.yes{color:var(--brand-ink)}.v.no{color:var(--hard-ink)}.v.partial{color:var(--warn-ink)}.v.null{color:var(--muted);font-weight:400}
+.hero-land{background:linear-gradient(180deg,#E4EFE8 0%,var(--ground) 100%);border-bottom:1px solid var(--line)}
+.hero-land .wrap{padding-top:56px;padding-bottom:40px;text-align:center}
+.hero-land h1{margin:0 auto 12px;font-size:clamp(28px,4.4vw,42px);line-height:1.25;letter-spacing:-.02em;max-width:820px}
+.hero-land .stat{margin:0 0 24px;color:var(--ink-2);font-size:16px}.hero-land .stat b{color:var(--brand-ink)}
+.hsearch{display:flex;gap:8px;max-width:680px;margin:0 auto}.hsearch input{flex:1;min-width:0;height:56px;padding:0 20px;font:inherit;font-size:17px;border:1px solid #B9B7AD;border-radius:12px;background:#fff}
+.hsearch button{height:56px;padding:0 24px;border:none;border-radius:12px;background:var(--brand);color:#fff;font:inherit;font-weight:700;font-size:16px;cursor:pointer}
+.quick{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:16px}.quick a{padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:14px}
+.sh{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px;margin:44px 0 6px}.sh h2{margin:0;font-size:22px;letter-spacing:-.01em}.sh a{font-size:14px;font-weight:600}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.lcard{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink)}
+.lcard .top{display:flex;align-items:center;gap:10px}.lcard .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--tink);flex:none}.lcard .ic svg{width:26px;height:26px}
+.lcard b{font-size:16px}.lcard .n{font-size:13px;color:var(--muted)}.lcard .alts{font-size:14px;color:var(--brand-ink);font-weight:600}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 16px}
+.list a.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-2);text-decoration:none;color:var(--ink)}.list a.row:last-child{border-bottom:none}
+.row .mono2{flex:none;width:38px;height:38px;border-radius:10px;color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.row .mid{flex:1;min-width:0}.row .mid b{display:block;font-size:15px}.row .mid span{font-size:13px;color:var(--muted)}
+.row .date{font-size:12px;color:var(--muted);flex:none}
+.warnrow{display:flex;flex-direction:column;gap:6px;padding:14px 0;border-bottom:1px solid var(--line-2)}.warnrow:last-child{border-bottom:none}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.cats a{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 16px;border-radius:12px;background:var(--tint);color:var(--tink);font-weight:700;text-decoration:none}
+.cta{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:44px 0 64px}
+.cta>div{border-radius:14px;padding:22px 24px}
+.ask-btn{position:fixed;right:20px;bottom:20px;z-index:20;min-height:52px;padding:0 20px;border-radius:999px;border:none;background:var(--brand);color:#fff;font:inherit;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.ask{position:fixed;right:20px;bottom:84px;z-index:21;width:min(400px,calc(100vw - 24px));max-height:min(620px,calc(100vh - 120px));background:var(--surface);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;overflow:hidden}
+.ask[hidden]{display:none}
+.ask header{padding:16px 18px;border-bottom:1px solid var(--line-2)}.ask header b{font-size:17px}
+.ai-note{margin-top:8px;font-size:12px;line-height:1.5;color:var(--server-ink);background:var(--server-tint);border-radius:8px;padding:8px 10px}
+.msgs{flex:1;overflow:auto;padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:10px 12px;border-radius:12px;font-size:14px;line-height:1.55}
+.msg.me{align-self:flex-end;background:var(--brand-tint);color:var(--brand-ink)}
+.msg.bot{align-self:flex-start;background:var(--ground)}
+.msg .cite{display:block;margin-top:6px;font-size:13px}
+.msg .tag{display:inline-block;font-size:11px;color:var(--muted);margin-bottom:4px}
+.ask form{border-top:1px solid var(--line-2);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.ask form .row{display:flex;gap:8px}.ask textarea{flex:1;min-height:44px;resize:vertical;padding:10px;font:inherit;font-size:14px;border:1px solid #B9B7AD;border-radius:10px}
+.hint{font-size:12px;color:var(--muted)}
+.changes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}.changes li{font-size:14px;border-left:3px solid var(--line);padding:4px 0 4px 12px}
+.changes .meta{font-size:12px;color:var(--muted)}
+.report{border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.report select,.report textarea{font:inherit;font-size:14px;padding:10px;border:1px solid #B9B7AD;border-radius:10px;background:#fff}
+.teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.teams div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}.teams b{display:block;margin-bottom:6px}.teams p{margin:0;font-size:14px;color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ── 열린도구 v3 추가: 사실 상태·예시·바꿔 쓰기 사다리 ── */
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.st{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;margin-left:6px;vertical-align:2px;white-space:nowrap}
+.st-wait{background:var(--warn-tint);color:var(--warn-ink)}.st-ok{background:var(--brand-tint);color:var(--brand-ink)}.st-ex{background:#ECE8FB;color:#4B3A9A}
+details.src{display:inline;margin-left:4px;font-size:12px}details.src summary{display:inline;cursor:pointer;color:var(--brand);text-decoration:underline}
+details.src[open]{display:block}details.src ul{margin:6px 0;padding:8px 10px 8px 24px;background:var(--surface);border:1px solid var(--line-2);border-radius:10px;word-break:break-all;max-width:520px}
+.herogrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:48px;align-items:center}
+.swap{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.swap li{display:grid;grid-template-columns:1fr 28px 1fr;align-items:center;gap:8px;animation:sw .5s both}
+.swap li:nth-child(2){animation-delay:.12s}.swap li:nth-child(3){animation-delay:.24s}.swap li:nth-child(4){animation-delay:.36s}
+.swap .from{display:flex;align-items:center;gap:8px;background:var(--tint);color:var(--tink);border:1px solid var(--tbd);border-radius:10px;padding:10px 12px;font-weight:600;font-size:15px}
+.swap .from svg{width:20px;height:20px;flex:none}
+.swap li::after{content:"";grid-column:2;grid-row:1;height:2px;background:var(--brand);position:relative;border-radius:2px}
+.swap .to{grid-column:3;grid-row:1;background:var(--surface);border:2px solid var(--brand);color:var(--brand-ink);border-radius:14px;padding:10px 14px;font-weight:700;font-size:16px}
+@keyframes sw{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.swap li{animation:none}}
+@media (max-width:860px){.herogrid{grid-template-columns:1fr;gap:24px}}
+.ac{list-style:none;margin:6px 0 0;padding:6px;background:#fff;border:1px solid var(--line);border-radius:12px;max-width:640px}.ac a{display:block;padding:9px 12px;border-radius:8px;text-decoration:none;color:var(--ink)}.ac a:hover,.ac a:focus{background:var(--brand-tint)}.ac small{color:var(--muted);margin-left:6px}
+.cta-warn{background:var(--warn-tint);color:#4A3000}.cta-brand{background:var(--brand-tint);color:var(--brand-ink)}.cta h2{margin:0 0 8px;font-size:18px}.cta p{margin:0 0 12px;font-size:14px}
+.nl{display:flex;flex-wrap:wrap;gap:8px}.nl input,.notify input{flex:1 1 180px;min-width:0;height:44px;padding:0 14px;font:inherit;border:1px solid #9FC3AE;border-radius:10px}
+.kick{margin:16px 0 0;font-size:14px;color:var(--muted)}
+.scene dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:6px 0 0}.scene dt{color:var(--muted)}.scene dd{margin:0}
+.schips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 0}.schip{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--brand-tint);color:var(--brand-ink)}.s-student-use-check{background:var(--warn-tint);color:var(--warn-ink)}
+.warnbox{background:var(--warn-tint);color:#4A3000;border-radius:10px;padding:10px 14px;font-size:14px;margin:10px 0 0}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--brand)}
+.cmph{padding:16px 16px 4px}.cmph h2{margin:0 0 4px;font-size:19px}.tscroll{overflow-x:auto}
+.ftable{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px}.ftable th{text-align:left;font-weight:600;color:var(--muted);width:130px;vertical-align:top;padding:8px 10px 8px 0}.ftable td{padding:8px 0;border-top:1px solid var(--line-2)}
+.cmpgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}@media(max-width:720px){.cmpgrid{grid-template-columns:1fr}}
+.detail.wide{max-width:1100px}.ph{font-size:clamp(26px,3.4vw,34px);margin:16px 0 10px}.lead{color:var(--ink-2);max-width:680px}
+.fform label{display:block;font-weight:600;margin:14px 0 6px}.fform input,.fform textarea{width:100%;max-width:560px;padding:10px 12px;font:inherit;border:1px solid #B9B7AD;border-radius:10px}.fform .btn{margin-top:14px}
+.askh{display:flex;justify-content:space-between;align-items:center}
+nav.main a[aria-current]{color:var(--brand-ink);font-weight:700}
+
+.list div.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-2)}.list div.row:last-child{border-bottom:none}
+@media(max-width:640px){header.top .btn.soft{display:none}nav.main{gap:12px;font-size:14px}}
+</style></head><body>
+<div class="proto">시안입니다. 모든 값은 확인 중이며, <span class="st st-ex">예시 데이터</span> 표시는 화면을 보여 주기 위한 값입니다.</div>
+<header class="top"><div class="wrap"><a class="logo" href="index.html"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="6" width="24" height="18" rx="4" fill="none" stroke="#1E6A47" stroke-width="2"/><path d="M9 6V4h10v2" fill="none" stroke="#1E6A47" stroke-width="2"/><path d="M2 13h24" stroke="#1E6A47" stroke-width="2"/></svg><b>열린도구</b><span>Alternatives</span></a>
+<nav class="main" aria-label="주 메뉴"><a href="app-capcut.html">CapCut 대신</a><a href="compare.html">비교</a><a href="teacher.html">담임·교과</a><a href="it-lead.html" aria-current=page>정보부장·전산</a><a href="suggest.html">대안 요청</a></nav><a class="btn soft" href="index.html#news">뉴스레터 구독</a></div></header>
+<main id="main"><div class="detail wide"><h1 class="ph">정보부장·전산 담당 선생님</h1><p class="lead">컴퓨터실 일괄 설치에 필요한 사실을 표 하나로 모았어요. 학교 PC 보안 프로그램이나 복원 솔루션을 우회하는 방법은 안내하지 않습니다.</p>
+<section class="cmp"><div class="cmph"><h2>도구 14개 설치 정보</h2><p class="hint">라이선스 확인됨 10개, 확인 중 4개</p></div><div class="tscroll"><table><thead><tr><th scope="col">도구</th><th scope="col">설치 난이도</th><th scope="col">라이선스</th><th scope="col">관리자 권한</th></tr></thead><tbody><tr><th scope="row">7-Zip</th><td>쉬움</td><td>미정 <span class="st st-wait">확인 중</span><details class="src"><summary>출처 3</summary><ul><li><a href="https://raw.githubusercontent.com/ip7z/7zip/main/DOC/License.txt">https://raw.githubusercontent.com/ip7z/7zip/main/DOC/License.txt</a><br><small>readme, 2026-10-12</small></li><li><a href="https://www.7-zip.org/license.txt">https://www.7-zip.org/license.txt</a><br><small>official-site, 2026-10-12</small></li><li><a href="https://github.com/ip7z/7zip">https://github.com/ip7z/7zip</a><br><small>manual-seed, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">draw.io</th><td>쉬움</td><td>GPL-3.0 <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/jgraph/drawio-desktop/license">https://api.github.com/repos/jgraph/drawio-desktop/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>포터블판 있음 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">Flameshot</th><td>쉬움</td><td>GPL-3.0 <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/flameshot-org/flameshot/license">https://api.github.com/repos/flameshot-org/flameshot/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">GIMP</th><td>쉬움</td><td>NOASSERTION <span class="st st-wait">확인 중</span><details class="src"><summary>출처 2</summary><ul><li><a href="https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING">https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING</a><br><small>official-site, 2026-10-12</small></li><li><a href="https://github.com/GNOME/gimp">https://github.com/GNOME/gimp</a><br><small>manual-seed, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">H2Orestart</th><td>보통</td><td>GPL-3.0 <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/ebandal/H2Orestart/license">https://api.github.com/repos/ebandal/H2Orestart/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">Inkscape</th><td>쉬움</td><td>미정 <span class="st st-wait">확인 중</span><details class="src"><summary>출처 2</summary><ul><li><a href="https://gitlab.com/inkscape/inkscape/-/raw/master/COPYING">https://gitlab.com/inkscape/inkscape/-/raw/master/COPYING</a><br><small>official-site, 2026-10-12</small></li><li><a href="https://github.com/inkscape/inkscape">https://github.com/inkscape/inkscape</a><br><small>manual-seed, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">Krita</th><td>쉬움</td><td>GPL-3.0 <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/KDE/krita/license">https://api.github.com/repos/KDE/krita/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">LocalSend</th><td>쉬움</td><td>Apache-2.0 <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/localsend/localsend/license">https://api.github.com/repos/localsend/localsend/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">NanaZip</th><td>쉬움</td><td>NOASSERTION <span class="st st-wait">확인 중</span><details class="src"><summary>출처 2</summary><ul><li><a href="https://raw.githubusercontent.com/M2Team/NanaZip/main/License.md">https://raw.githubusercontent.com/M2Team/NanaZip/main/License.md</a><br><small>readme, 2026-10-12</small></li><li><a href="https://github.com/M2Team/NanaZip">https://github.com/M2Team/NanaZip</a><br><small>manual-seed, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">OBS Studio</th><td>쉬움</td><td>GPL-2.0 <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/obsproject/obs-studio/license">https://api.github.com/repos/obsproject/obs-studio/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">OpenCut</th><td>쉬움</td><td>MIT <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/OpenCut-app/OpenCut/license">https://api.github.com/repos/OpenCut-app/OpenCut/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>미정 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">PeaZip</th><td>쉬움</td><td>LGPL-3.0 <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/peazip/PeaZip/license">https://api.github.com/repos/peazip/PeaZip/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>포터블판 있음 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">ShareX</th><td>쉬움</td><td>GPL-3.0 <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/ShareX/ShareX/license">https://api.github.com/repos/ShareX/ShareX/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>포터블판 있음 <span class="st st-ex">예시 데이터</span></td></tr><tr><th scope="row">Shotcut</th><td>쉬움</td><td>GPL-3.0 <span class="st st-ok">확인됨</span><details class="src"><summary>출처 1</summary><ul><li><a href="https://api.github.com/repos/mltframework/shotcut/license">https://api.github.com/repos/mltframework/shotcut/license</a><br><small>github-api, 2026-10-12</small></li></ul></details></td><td>필요 <span class="st st-ex">예시 데이터</span></td></tr></tbody></table></div></section>
+<section class="panel"><h2>준비 중인 자료</h2><ul class="changes"><li><b>7-Zip 컴퓨터실 일괄 배포</b><div class="meta">MSI, winget, 조용한 설치. 공식 문서로 확인한 뒤 올립니다.</div></li><li><b>무상 사용 근거 1쪽 서류</b><div class="meta">도구별 라이선스 이름, 원문 주소, 확인 날짜를 담은 서식. 법적 검토를 대신하지 않습니다.</div></li></ul></section>
+<section class="panel"><h2>최근 변경 기록</h2><ul class="changes"><li><b>tools/inkscape.license</b><div class="meta">2026-10-12, verifier, C등급 (검토 대기)</div></li><li><b>tools/nanazip.license</b><div class="meta">2026-10-12, verifier, C등급 (검토 대기)</div></li><li><b>tools/7-zip.license</b><div class="meta">2026-10-12, verifier, C등급 (검토 대기)</div></li><li><b>tools/gimp.license</b><div class="meta">2026-10-12, verifier, C등급 (검토 대기)</div></li><li><b>tools/flameshot.github.stars</b><div class="meta">2026-10-12, verifier, A등급 </div></li><li><b>tools/opencut.github.latestRelease</b><div class="meta">2026-10-12, verifier, A등급 </div></li><li><b>tools/7-zip.github.latestRelease</b><div class="meta">2026-10-12, verifier, A등급 </div></li><li><b>tools/obs-studio.github.latestRelease</b><div class="meta">2026-10-12, verifier, A등급 </div></li></ul></section></div></main>
+<footer><div class="wrap"><span>각 프로젝트의 공개 자료로 정리한 정보입니다. 학교 적합성이나 법적 요건 충족 여부는 판정하지 않습니다.</span><span>구매 학교 수 출처: school-edtech.kr (2026년 1~10월, 확인 중)</span></div></footer>
+<button class="ask-btn" id="askBtn" aria-expanded="false" aria-controls="askPanel"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>질문하기</button>
+<section class="ask" id="askPanel" role="dialog" aria-label="질문하기" hidden><header><div class="askh"><b>질문하기</b><button class="btn" id="askClose">닫기</button></div>
+<div class="ai-note">AI 에이전트가 이 사이트의 정보만 바탕으로 답합니다. 틀릴 수 있으니 근거 페이지를 확인하세요.</div></header>
+<div class="msgs"><div class="msg me">CapCut 대신 학생 웨일북에서 쓸 수 있는 거 있어요?</div><div class="msg bot"><span class="st st-ex">예시 답변</span><br>웨일북에서는 설치 없이 브라우저로 여는 OpenCut이 있어요. 템플릿·자동 효과와 휴대폰 앱은 아직 없어요. Shotcut은 컴퓨터실 PC에 설치해서 씁니다.<a class="cite" href="app-capcut.html">근거: CapCut 대신 쓸 수 있는 오픈소스</a></div></div>
+<form onsubmit="return false"><label class="sr" for="askInput">질문 입력</label><div class="row"><textarea id="askInput" maxlength="1000" placeholder="예: 알집 대신 쓸 프로그램은?"></textarea><button class="btn primary">보내기</button></div><span class="hint">이름·학교·연락처는 적지 마세요.</span></form></section>
+<script>const SEARCH=[{"id": "illustrator", "name": "Adobe Illustrator", "alts": ["Inkscape"]}, {"id": "photoshop", "name": "Adobe Photoshop", "alts": ["GIMP", "Krita"]}, {"id": "bandicam-ocam", "name": "반디캠·오캠", "alts": ["OBS Studio"]}, {"id": "alcapture", "name": "알캡처", "alts": ["ShareX", "Flameshot"]}, {"id": "alzip", "name": "알집", "alts": ["7-Zip", "NanaZip", "PeaZip"]}, {"id": "hancom-office", "name": "한컴오피스", "alts": ["H2Orestart"]}, {"id": "visio-almind", "name": "Visio·알마인드", "alts": ["draw.io"]}, {"id": "capcut", "name": "CapCut", "alts": ["OpenCut", "Shotcut"]}, {"id": "file-transfer", "name": "메신저 파일 전송·AirDrop", "alts": ["LocalSend"]}];(()=>{const q=document.getElementById('hq'),ac=document.getElementById('ac');
+if(q){q.addEventListener('input',()=>{const v=q.value.trim().toLowerCase();if(!v){ac.hidden=true;return}
+const r=SEARCH.filter(a=>(a.name+' '+a.alts.join(' ')).toLowerCase().includes(v)).slice(0,6);
+ac.innerHTML=r.length?r.map(a=>`<li><a href="${a.id==='capcut'?'app-capcut.html':'index.html#app-'+a.id}">${a.name} 대신<small>${a.alts.join(', ')}</small></a></li>`).join(''):'<li><a href="suggest.html">찾는 앱이 없어요. 대안을 요청해 주세요</a></li>';ac.hidden=false})}
+const s=document.getElementById('sortSel');if(s)s.addEventListener('change',()=>{const box=document.getElementById('alts');const c=[...box.children];
+const k={lv:x=>+x.dataset.lv*10+ +x.dataset.df,df:x=>+x.dataset.df,act:x=>-Date.parse(x.dataset.act)}[s.value];c.sort((a,b)=>k(a)-k(b)).forEach(x=>box.appendChild(x))});
+const b=document.getElementById('askBtn'),p=document.getElementById('askPanel'),c=document.getElementById('askClose');
+const t=o=>{p.hidden=!o;b.setAttribute('aria-expanded',o)};b.onclick=()=>t(p.hidden);c.onclick=()=>t(false);})();
+</script></body></html>
