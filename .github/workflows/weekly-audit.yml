@@ -8,8 +8,10 @@ on:
   workflow_dispatch:
 
 # summary 브랜치를 push하려면 contents: write가 필요하다. PR은 만들지 않는다.
+# issues: write — 주간 검증이 쓰는 라벨(priority/urgent 포함)을 실행 전에 만든다.
 permissions:
   contents: write
+  issues: write
 
 jobs:
   audit:
@@ -34,12 +36,19 @@ jobs:
             echo "frozen=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Run weekly audit
+      - name: Ensure issue labels
+        id: labels
         if: steps.freeze.outputs.frozen != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash scripts/ensure_labels.sh
+
+      - name: Run weekly audit
+        if: steps.freeze.outputs.frozen != 'true' && steps.labels.outcome == 'success'
         run: python3 scripts/weekly_audit.py
 
       - name: Upload summary artifact
-        if: steps.freeze.outputs.frozen != 'true'
+        if: steps.freeze.outputs.frozen != 'true' && steps.labels.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: weekly-audit-summary
@@ -47,7 +56,7 @@ jobs:
           retention-days: 90
 
       - name: Commit summary if changed
-        if: steps.freeze.outputs.frozen != 'true'
+        if: steps.freeze.outputs.frozen != 'true' && steps.labels.outcome == 'success'
         run: |
           if [ ! -f ops/weekly-audit-summary.json ]; then
             echo "summary 파일 없음 — 스킵"

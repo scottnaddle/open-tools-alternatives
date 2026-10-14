@@ -1,7 +1,7 @@
 # STATUS.md — 현재 상태 스냅샷
 
 > **에이전트 필독**: 이 파일은 프로젝트의 살아있는 상태입니다. 작업을 마칠 때마다 갱신하세요.
-> 마지막 갱신: 2026-10-14 18:50 (Asia/Tashkent) — daily-verifier 외부 호스트 403은 건너뛰고, 빈 gitlink `lucian-uxui` 제거
+> 마지막 갱신: 2026-10-14 19:30 (Asia/Tashkent) — 발굴 이슈가 `software` 라벨 없음으로 실패한 것 대응. 워크플로가 라벨을 먼저 만듦
 
 ## 한 줄 요약
 
@@ -43,6 +43,7 @@
 - [x] **6에이전트 시스템 도입 (2026-10-14)** — AGENTS.md + ops/RESEARCH.md 6에이전트 명세, 라벨 10종(agent/* 5 + queue/* 3 + status/* 1 + priority/* 1), 이슈 템플릿 5종, `.github/workflows/discover.yml` 매일 22:00 UTC 자동 슬롯 — **PR A(이번)**
 - [x] **워크플로 YAML·P0 공개 화면 (2026-10-14)** — discover/weekly-audit 파싱 복구(schedule+수동만), daily-verifier는 같은 날 브랜치 충돌을 처리하고 PR 생성 실패 시 설정 안내와 함께 실패. 도구·비교·변경 이력의 원시값(active, github-api 등)을 교사 문구로. 확인된 칸이 없는 기능표는 한 줄. 제안 폼은 GitHub 이슈, 뉴스레터는 준비 중. example 현장사례는 공개 빌드에 없음. **소유자가 Settings > Actions > General > Workflow permissions > Allow GitHub Actions to create and approve pull requests 를 켜야 daily-verifier PR이 만들어진다.**
 - [x] **daily-verifier 외부 호스트 403 (2026-10-14)** — GitHub API 한도만 실행을 중단한다. invent.kde.org 같은 비-GitHub 403/429는 짧게 재시도한 뒤 `skipped/unverified`로 남기고 도구 상태는 바꾸지 않는다. 실패한 실행: actions/runs/38572904587
+- [x] **발굴 라벨 (2026-10-14)** — Discover run 38580319310이 `software` 라벨 없음으로 실패. discover·weekly-audit이 `scripts/ensure_labels.sh`로 AGENTS.md 라벨과 `software`/`skill`을 먼저 만든다. `issues: write` 필요.
 - [ ] `.github/workflows/weekly-audit.yml` (6번 에이전트 자동) + 페이지 변경 이력 아카이빙 표시 — 워크플로 파일은 파싱되게 고쳤고, summary 브랜치 push는 `contents: write`가 필요. 페이지 아카이빙 표시는 도구 페이지 하단에 이미 있음
 - [ ] 오픈스킬 자유구성 페이지 22개(나머지) + 4축 사례/지도안/리뷰 백필
 - [x] **디자인 개선안 v2 (2026-10-14, PR #24)** — 홈 표형 목록(기기별 가능 여부 열), 학교 앱 상세 재구성, 색 토큰 통일(강조색 `#17694A`), 메뉴 "학습SW" → "대안 찾기", 대안 `can`/`cannot` 스키마(CapCut만 미검증 조사값). 화면 캡처 `design/v2-*.png`
@@ -83,4 +84,4 @@
 | 5 | 게시(Publish) | `agent/verify` | PR merge + `deploy.yml` + 이슈 close + `agent/published` |
 | 6 | 주간 검증(Weekly Audit) | 매주 일요일 22:00 UTC | 기존 모든 항목 팩트 재검사 + 변경 이력 갱신 |
 
-**라벨 10종** (모두 GitHub에 생성됨): `agent/{discovery,research,build,verify,published}` (5) + `queue/{research,verify,deploy}` (3) + `status/blocked-human` (1) + `priority/urgent` (1).
+**라벨**: AGENTS.md 10종 + 발굴 종류 `software`·`skill`. 기준 목록은 `ops/LABELS.md`. discover·weekly-audit이 `scripts/ensure_labels.sh`로 실행 전에 만든다 (`issues: write`). Discover run 38580319310은 `software` 라벨이 없어 이슈 생성이 실패했다.

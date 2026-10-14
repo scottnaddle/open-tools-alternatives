@@ -83,3 +83,4 @@ daily-verifier(매일 22:00 UTC)는 검증 결과를 **main에 직접 커밋하�
 - 같은 날 브랜치(`daily-verifier/YYYYMMDD`)에 열린 PR이 있으면 그 브랜치를 갱신하고, 브랜치만 있고 열린 PR이 없으면 `daily-verifier/YYYYMMDD-HHMMSS`로 새로 만든다.
 - 주간 검증(`weekly-audit.yml`)은 PR을 만들지 않는다. summary 브랜치만 push하므로 위 체크와는 별개로 `contents: write`가 필요하다.
 - 발굴 슬롯(`discover.yml`)과 주간 검증은 **schedule과 workflow_dispatch만** 사용한다. push 트리거를 넣지 않는다.
+- 두 워크플로는 이슈를 만들기 전에 `scripts/ensure_labels.sh`로 라벨을 만든다. `issues: write`가 필요하다. 목록은 `ops/LABELS.md`.

@@ -91,6 +91,9 @@
 - `agent/verify` — 4번 에이전트(검수) 처리 중
 - `agent/published` — 5번 에이전트(게시) 완료
 
+**발굴 슬롯 종류** (`discover.yml`이 `--label`로 붙임): `software`, `skill`.
+전체 이름·색·설명은 `ops/LABELS.md`. 워크플로는 붙이기 전에 `scripts/ensure_labels.sh`로 라벨을 만든다 (`issues: write` 필요).
+
 **이슈 템플릿 5종** (`.github/ISSUE_TEMPLATE/`):
 1. **대안 요청** — 선생님/사용자가 유료 앱의 대안을 요청
 2. **정보 정정** — 사이트의 틀린 정보/오래된 정보 정정
