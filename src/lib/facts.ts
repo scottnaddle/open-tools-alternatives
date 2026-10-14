@@ -25,6 +25,15 @@ export function devices(p: any) {
   };
 }
 export const KO: Record<string, string> = { yes: '지원', partial: '일부', no: '미지원', official: '공식 웹', 'self-host': '자체 호스팅', none: '없음', 'local-only': '기기 안에만', 'sent-to-server': '서버로 전송', offline: '인터넷 없이', 'first-run': '첫 실행만 인터넷', online: '인터넷 필요', optional: '선택', required: '필요', 'portable-available': '포터블판 있음' };
+// 1차 출처의 method enum을 교사용 한국어 이름표로 변환(원시값 화면 노출 방지)
+export const METHOD_NAME: Record<string, string> = {
+  'github-api': 'GitHub에서 자동 확인',
+  'release-assets': '릴리스 페이지',
+  'official-site': '공식 사이트',
+  'readme': '저장소 README',
+  'procurement-data': '조달 데이터',
+  'manual-seed': '초기 조사값(에이전트)',
+};
 // 홈 카테고리(앱 id 기준, 1차 공개 묶음)
 export const CATEGORIES: [string, string, string[]][] = [
   ['video', '영상 편집', ['capcut', 'bandicam-ocam']], ['image', '이미지', ['photoshop', 'illustrator']],
