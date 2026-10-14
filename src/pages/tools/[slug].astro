@@ -6,7 +6,7 @@ import ScopeChips from '../../components/ScopeChips.astro';
 import Changelog from '../../components/Changelog.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { PLAT, HEALTH, exampleFor, deriveScope, EXAMPLE_LABEL, MOE_URL } from '../../lib/facts';
+import { PLAT, HEALTH, exampleFor, deriveScope, MOE_URL } from '../../lib/facts';
 import { TOOL_SYNONYMS, CATEGORY_TASKS } from '../../lib/search-synonyms';
 const base = import.meta.env.BASE_URL;
 
@@ -110,7 +110,8 @@ const categoryTasks = CATEGORY_TASKS[t.category] || [];
         </p>
       )}
       <p class="hint" style="margin-top:12px">
-        쓰임 범위는 공개 규칙으로 계산한 값입니다. 원 사실(학생 정보 처리, 계정 필요, 네트워크)은 <span class="st st-ex">{EXAMPLE_LABEL}</span>
+        쓰임 범위는 공개 규칙으로 계산한 값입니다. 원 사실(학생 정보 처리, 계정 필요, 네트워크)은
+        <a href={`${base}changes/`}>변경 이력</a>에서 확인하세요.
       </p>
     </div>
 
@@ -126,7 +127,7 @@ const categoryTasks = CATEGORY_TASKS[t.category] || [];
     <div class="panel" style="margin:24px 0">
       <h2>변경 이력</h2>
       <p class="hint">이 도구에 대한 최근 5건의 변경 기록입니다. <a href={`${base}changes/`}>전체 변경 이력 →</a></p>
-      <p class="hint"><span class="st st-ex">{EXAMPLE_LABEL}</span> 아직 변경 기록이 없습니다. 검증 에이전트가 실행되면 여기에 표시됩니다.</p>
+      <p class="hint">아직 변경 기록이 없습니다. 검증 에이전트가 실행되면 여기에 표시됩니다.</p>
     </div>
 
     <div class="actions" style="margin-top:32px">
