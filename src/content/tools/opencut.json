@@ -93,7 +93,7 @@
   },
   "github": {
     "repo": "OpenCut-app/OpenCut",
-    "stars": 93833,
+    "stars": 94287,
     "lastPush": "2026-09-24",
     "archived": false,
     "latestRelease": {
@@ -101,15 +101,13 @@
       "date": "2026-04-15",
       "url": "https://github.com/OpenCut-app/OpenCut/releases/tag/v0.3.0"
     },
-    "fetchedAt": "2026-10-12"
+    "fetchedAt": "2026-10-14"
   },
   "health": "active",
   "verification": {
-    "runId": "verify-20261013033534",
-    "at": "2026-10-12T22:35:34+00:00",
+    "runId": "daily-20261014-142117",
+    "at": "2026-10-14T14:21:17+00:00",
     "unresolved": [],
-    "notes": [
-      "GitHub homepage 필드: https://opencut.app (공식 사이트 후보, 미반영 — B등급·공식 사이트 확인 필요)"
-    ]
+    "notes": []
   }
 }

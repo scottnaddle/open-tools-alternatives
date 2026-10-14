@@ -90,11 +90,11 @@
   },
   "github": {
     "repo": "LibreOffice/core",
-    "stars": 4856,
-    "lastPush": "2026-10-13",
+    "stars": 4516,
+    "lastPush": "2026-10-14",
     "archived": false,
     "latestRelease": null,
-    "fetchedAt": "2026-10-13"
+    "fetchedAt": "2026-10-14"
   },
   "health": "active",
   "koreanUI": {
@@ -188,5 +188,11 @@
     "personal",
     "demo",
     "offline-install"
-  ]
+  ],
+  "verification": {
+    "runId": "daily-20261014-142117",
+    "at": "2026-10-14T14:21:17+00:00",
+    "unresolved": [],
+    "notes": []
+  }
 }

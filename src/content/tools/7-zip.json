@@ -66,27 +66,21 @@
     ]
   },
   "license": {
-    "value": null,
-    "status": "unverified",
-    "lastVerified": null,
+    "value": "LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND LicenseRef-unRAR-restriction",
+    "status": "verified",
+    "lastVerified": "2026-10-14T14:21:17+00:00",
     "sources": [
       {
         "url": "https://raw.githubusercontent.com/ip7z/7zip/main/DOC/License.txt",
-        "fetchedAt": "2026-10-12T22:39:11+00:00",
-        "method": "readme",
-        "excerpt": "7-Zip source code / ~~~~~~~~~~~~~~~~~ / License for use and distribution / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ / 7-Zip Copyright (C) 1999-2026 Igor Pavlov. / The licenses for files are: / - CPP/7zip/Compress/Rar* files: the \"GNU LGPL\" with \"unRAR license restriction\" / - CPP/7zip/Compress/LzfseDecoder. … [sha256 dac8389b6bc3]"
+        "fetchedAt": "2026-10-14T14:21:17+00:00",
+        "excerpt": "7-Zip source code / ~~~~~~~~~~~~~~~~~ / License for use and distribution / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ / 7-Zip Copyright (C) 1999-2026 Igor Pavlov. / The licenses for files are: / - CPP/7zip/Compress/Rar* files: the \"GNU LGPL\" with \"unRAR license restriction\" / - CPP/7zip/Compress/LzfseDecoder. … [sha256 dac8389b6bc3]",
+        "method": "readme"
       },
       {
         "url": "https://www.7-zip.org/license.txt",
-        "fetchedAt": "2026-10-12T22:39:11+00:00",
-        "method": "official-site",
-        "excerpt": "7-Zip / ~~~~~ / License for use and distribution / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ / 7-Zip Copyright (C) 1999-2025 Igor Pavlov. / The licenses for files are: / - 7z.dll: / - The \"GNU LGPL\" as main license for most of the code / - The \"GNU LGPL\" with \"unRAR license restriction\" for some code / - The … [sha256 3a184aa13dc8]"
-      },
-      {
-        "url": "https://github.com/ip7z/7zip",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "GitHub 검색 API 조회값",
-        "method": "manual-seed"
+        "fetchedAt": "2026-10-14T14:21:17+00:00",
+        "excerpt": "7-Zip / ~~~~~ / License for use and distribution / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ / 7-Zip Copyright (C) 1999-2025 Igor Pavlov. / The licenses for files are: / - 7z.dll: / - The \"GNU LGPL\" as main license for most of the code / - The \"GNU LGPL\" with \"unRAR license restriction\" for some code / - The … [sha256 3a184aa13dc8]",
+        "method": "official-site"
       }
     ]
   },
@@ -105,7 +99,7 @@
   },
   "github": {
     "repo": "ip7z/7zip",
-    "stars": 4150,
+    "stars": 4163,
     "lastPush": "2026-10-06",
     "archived": false,
     "latestRelease": {
@@ -113,37 +107,14 @@
       "date": "2026-10-06",
       "url": "https://github.com/ip7z/7zip/releases/tag/26.04"
     },
-    "fetchedAt": "2026-10-12"
+    "fetchedAt": "2026-10-14"
   },
   "health": "active",
   "verification": {
-    "runId": "verify-20261013033534",
-    "at": "2026-10-12T22:35:34+00:00",
-    "unresolved": [
-      "라이선스 C등급 대기: 제안 LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND LicenseRef-unRAR-restriction (24시간 뒤 재확인)"
-    ],
+    "runId": "daily-20261014-142117",
+    "at": "2026-10-14T14:21:17+00:00",
+    "unresolved": [],
     "notes": []
-  },
-  "pendingLicense": {
-    "value": "LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND LicenseRef-unRAR-restriction",
-    "note": "대부분 GNU LGPL 2.1 이상, Rar* 파일은 LGPL+unRAR 제한, 일부 BSD 3/2-clause, 일부 public domain",
-    "proposedAt": "2026-10-12T22:39:11+00:00",
-    "earliestApply": "2026-10-13T22:39:11+00:00",
-    "sources": [
-      {
-        "url": "https://raw.githubusercontent.com/ip7z/7zip/main/DOC/License.txt",
-        "fetchedAt": "2026-10-12T22:39:11+00:00",
-        "method": "readme",
-        "excerpt": "7-Zip source code / ~~~~~~~~~~~~~~~~~ / License for use and distribution / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ / 7-Zip Copyright (C) 1999-2026 Igor Pavlov. / The licenses for files are: / - CPP/7zip/Compress/Rar* files: the \"GNU LGPL\" with \"unRAR license restriction\" / - CPP/7zip/Compress/LzfseDecoder. … [sha256 dac8389b6bc3]"
-      },
-      {
-        "url": "https://www.7-zip.org/license.txt",
-        "fetchedAt": "2026-10-12T22:39:11+00:00",
-        "method": "official-site",
-        "excerpt": "7-Zip / ~~~~~ / License for use and distribution / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ / 7-Zip Copyright (C) 1999-2025 Igor Pavlov. / The licenses for files are: / - 7z.dll: / - The \"GNU LGPL\" as main license for most of the code / - The \"GNU LGPL\" with \"unRAR license restriction\" for some code / - The … [sha256 3a184aa13dc8]"
-      }
-    ],
-    "plainKo": "대부분 자유롭게 쓰고 나눌 수 있는 LGPL 라이선스예요. 다만 RAR 압축 풀기 부분은 'RAR 압축 방식을 새로 만드는 데 쓰면 안 된다'는 조건(unRAR 제한)이 붙어 있어요. 학교에서 설치해 쓰는 데는 이 조건이 걸리지 않아요."
   },
   "koreanUI": {
     "value": "yes",

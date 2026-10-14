@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-14T14:21:17+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261014-142117",
+  "target": "skills/anthropics-k12-teacher-skills.stars",
+  "before": 562,
+  "after": 563,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/anthropics/k12-teacher-skills",
+      "fetchedAt": "2026-10-14T14:21:17+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}
