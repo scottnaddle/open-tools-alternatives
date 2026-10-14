@@ -67,7 +67,11 @@ def all_internal_routes(dist: Path) -> set:
         return routes
     for p in dist.rglob("index.html"):
         rel = p.relative_to(dist).parent.as_posix()
-        route = "/" + rel + "/"
+        # dist는 base prefix 없이 빌드됨(nginx가 /alternatives/ alias). 검사 시 운영 prefix로 정규화.
+        if rel == ".":
+            route = INTERNAL_PREFIX.rstrip("/") + "/"
+        else:
+            route = INTERNAL_PREFIX + rel + "/"
         routes.add(route)
     return routes
 
