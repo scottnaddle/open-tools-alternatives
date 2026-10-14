@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-10-14T14:27:04+00:00",
+  "staleDays": 90,
+  "counts": {
+    "cases": 1,
+    "lessons": 1,
+    "reviews": 1,
+    "tools": 15,
+    "skills": 28
+  },
+  "stale": [],
+  "headFailures": [],
+  "licenseIssues": []
+}
