@@ -1,0 +1,149 @@
+name: Discover (1번 에이전트 자동 슬롯)
+
+on:
+  schedule:
+    # 매일 22:00 UTC (Asia/Tashkent 03:00) — 1번 에이전트의 "오늘의 후보 1건" 슬롯 발행
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: "후보 종류 (software 또는 skill)"
+        required: true
+        type: choice
+        options: [software, skill]
+        default: software
+      note:
+        description: "이슈 본문에 추가할 메모 (선택)"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  emit-slot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check FREEZE
+        run: |
+          if [ -f ops/FREEZE ]; then
+            echo "::warning::ops/FREEZE 존재 — 자동 슬롯 발행 중단"
+            cat ops/FREEZE || true
+            exit 0
+          fi
+
+      - name: Compute kind
+        id: kind
+        run: |
+          # 수동 트리거(workflow_dispatch) 또는 cron. cron은 홀수=software, 짝수=skill 번갈아.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            KIND="${{ inputs.kind }}"
+            NOTE="${{ inputs.note }}"
+          else
+            DAY=$(date -u +%u)
+            if [ $((DAY % 2)) -eq 0 ]; then KIND="skill"; else KIND="software"; fi
+            NOTE="매일 자동 슬롯"
+          fi
+          [ -z "$KIND" ] && KIND="software"
+          echo "kind=$KIND" >> "$GITHUB_OUTPUT"
+          echo "note=$NOTE" >> "$GITHUB_OUTPUT"
+
+      - name: Create discovery issue
+        id: create
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          KIND: ${{ steps.kind.outputs.kind }}
+          NOTE: ${{ steps.kind.outputs.note }}
+        run: |
+          # 1번 에이전트의 "오늘의 후보 1건" 슬롯. 본문 비우고, 헤더 코멘트로 안내.
+          # 사람(또는 다음 에이전트 세션)이 템플릿을 골라 채움.
+          if [ "$KIND" = "skill" ]; then
+            TEMPLATE=".github/ISSUE_TEMPLATE/skill-discovery-report.yml"
+          else
+            TEMPLATE=".github/ISSUE_TEMPLATE/software-discovery-report.yml"
+          fi
+
+          TODAY=$(date -u +%Y-%m-%d)
+          TITLE="[발굴 슬롯] ${TODAY} — ${KIND} 후보 1건"
+          BODY=$(cat <<EOF
+## 발굴(1번) 에이전트 — 오늘의 후보 1건
+
+이 슬롯은 매일 22:00 UTC 자동 발행됩니다. 본문은 비어 있습니다.
+
+**다음 단계**
+1. 위의 템플릿에 맞춰 본문 채우기: \`${TEMPLATE}\`
+2. **보류** 시 이슈를 닫고 \`agent/discovery\` 라벨 제거
+3. **선정** 시 \`queue/research\` 라벨을 추가하고 그대로 두기 (2번 에이전트가 인수인계)
+
+**메모**: ${NOTE}
+EOF
+)
+
+          ISSUE_URL=$(gh issue create \
+            --title "$TITLE" \
+            --body "$BODY" \
+            --label "agent/discovery,${KIND}")
+          echo "issue_url=${ISSUE_URL}" >> "$GITHUB_OUTPUT"
+          echo "생성됨: ${ISSUE_URL}"
+
+      - name: Search candidates and comment
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          KIND: ${{ steps.kind.outputs.kind }}
+          ISSUE_URL: ${{ steps.create.outputs.issue_url }}
+        run: |
+          # GitHub Search API로 최근 후보 1~5개 추출 → 이슈 코멘트로 첨부(참고용).
+          # 결정론적이지 않아도 됨 — 1번 에이전트가 선택/기각.
+          if [ "$KIND" = "skill" ]; then
+            SINCE=$(date -u -d '7 days ago' +%Y-%m-%d)
+            Q="agent OR claude-code skill in:readme,description created:>${SINCE}"
+            SORT="updated"
+          else
+            SINCE=$(date -u -d '14 days ago' +%Y-%m-%d)
+            Q="topic:education topic:open-source created:>${SINCE}"
+            SORT="stars"
+          fi
+          ENC_Q=$(printf "%s" "$Q" | sed 's/ /+/g; s/:/%3A/g; s/>/%3E/g; s/</%3C/g')
+          RESP=$(curl -sS -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/search/repositories?q=${ENC_Q}&sort=${SORT}&order=desc&per_page=5")
+          if [ -z "$RESP" ]; then echo "Search API 빈 응답 — 코멘트 생략"; exit 0; fi
+
+          CANDIDATES=$(echo "$RESP" | python3 -c "
+import json, sys
+try:
+    d = json.load(sys.stdin)
+    items = d.get('items', [])
+    if not items:
+        print('검색 결과 0건 — 참고 후보 없음')
+        sys.exit(0)
+    out = ['### 참고 후보 (GitHub Search — 검토용)\n']
+    for r in items[:5]:
+        out.append(f\"- **{r['full_name']}** ⭐ {r['stargazers_count']} — {r.get('description') or '(설명 없음)'} — {r['html_url']}\")
+    print('\n'.join(out))
+except Exception as e:
+    print(f'검색 응답 파싱 실패: {e}')
+")
+          if [ -z "$CANDIDATES" ]; then exit 0; fi
+          if echo "$CANDIDATES" | grep -q "참고 후보 없음\|파싱 실패"; then
+            echo "참고 후보 코멘트 생략: $CANDIDATES"
+            exit 0
+          fi
+          # 이슈 번호 추출
+          ISSUE_NUM=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
+          if [ -z "$ISSUE_NUM" ]; then exit 0; fi
+          {
+            echo "$CANDIDATES"
+            echo ""
+            echo "---"
+            echo "위 후보는 GitHub Search의 참고용입니다. 1번 에이전트가 직접 후보를 발굴해 본문을 작성하면 됩니다."
+          } > /tmp/candidates.md
+          gh issue comment "$ISSUE_NUM" --body-file /tmp/candidates.md || echo "코멘트 실패(계속)"
+
+      - name: Summary
+        if: always()
+        run: |
+          URL="${{ steps.create.outputs.issue_url }}"
+          echo "1번 에이전트 슬롯 발행: ${URL:-발행 안 됨}"

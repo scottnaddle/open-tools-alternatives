@@ -1,11 +1,12 @@
 # STATUS.md — 현재 상태 스냅샷
 
 > **에이전트 필독**: 이 파일은 프로젝트의 살아있는 상태입니다. 작업을 마칠 때마다 갱신하세요.
-> 마지막 갱신: 2026-10-13 (Asia/Tashkent)
+> 마지막 갱신: 2026-10-14 (Asia/Tashkent) — 6에이전트 시스템 도입
 
 ## 한 줄 요약
 
 오픈소스 대안(15개 도구) + 오픈스킬(28개) 2축으로 운영 중. 소스 진실은 `main`, 운영 사이트는 main 빌드 결과물.
+**6에이전트 운영 시스템** (발굴/연구/제조/검수/게시/주간) 도입 완료 — 매일 22:00 UTC 자동 슬롯 + 매주 일요일 22:00 UTC 주간 검증.
 
 ## 콘텐츠 현황 (2026-10-13 기준)
 
@@ -32,11 +33,14 @@
 ## 진행 중 / 보류
 
 - [ ] Threads 좋아요 기반 스킬 수집 — 인스타그램 SMS 2단계 인증 문제로 보류. **사용자가 로그인 가능할 때 재개** (`status/blocked-human`)
-- [ ] 오픈스킬 자유구성 페이지 25개 중 3개 완료 — 발굴 리포트 이슈 → 재구성 루프로 순차 제작 (ops/RESEARCH.md 4절)
+- [ ] 오픈스킬 자유구성 페이지 25개 중 3개 완료 — 발굴 리포트 이슈 → 재구성 루프로 순차 제작
 - [ ] 선생님 페이지 장면 카드 / 앱 페이지 "어디서 쓰나요?" 데이터 — `src/data/scenes.json` 분리 완료, 데이터 고도화는 진행 중
 - [ ] 제안 폼 실동작화 (현재 정적) — 4단계 과제: 서버리스 → 이슈 접수 연결
 - [x] GitHub 시크릿 설정 완료 (2026-10-13) — 배포 자동화 가동
 - [ ] 뉴스레터 초안·승인 흐름 (외부 발송은 반드시 초안 → 승인)
+- [x] **6에이전트 시스템 도입 (2026-10-14)** — AGENTS.md + ops/RESEARCH.md 6에이전트 명세, 라벨 10종(agent/* 5 + queue/* 3 + status/* 1 + priority/* 1), 이슈 템플릿 5종, `.github/workflows/discover.yml` 매일 22:00 UTC 자동 슬롯 — **PR A(이번)**
+- [ ] `.github/workflows/weekly-audit.yml` (6번 에이전트 자동) + 페이지 변경 이력 아카이빙 표시 — **PR B(다음 세션)**
+- [ ] 오픈스킬 자유구성 페이지 22개(나머지) + 4축 사례/지도안/리뷰 백필
 
 ## 완료된 마일스톤
 
@@ -48,5 +52,26 @@
 
 ## 다음 담당 에이전트를 위한 안내
 
-1. `AGENTS.md` 읽기 → 2. GitHub Issues 확인 → 3. 위 "진행 중"에서 우선순위 높은 것 선택 → 4. 작업 후 이 파일 갱신.
+1. `AGENTS.md`(6에이전트 운영 매뉴얼) 정독 — 6에이전트 흐름 + 라벨 + 게이트
+2. `ops/RESEARCH.md` 정독 — 각 에이전트의 작업 절차·산출물·게이트 상세
+3. `STATUS.md`(이 파일) 확인
+4. GitHub Issues에서 **자신이 처리할 라벨** 이슈 확인:
+   - 매일 22:00 UTC 슬롯 직후라면: `agent/discovery` 이슈 1건(자동 발행됨)
+   - 2번 에이전트라면: `agent/research` 이슈
+   - 등등
+5. 작업 후 이 파일(`STATUS.md`) 갱신.
+
 질문이 생기면 저장소 밖 인수인계 문서(2026-10-13자, 워크스페이스 루트)를 참고하되, **그 문서의 서버 정보는 절대 커밋하지 말 것.**
+
+## 6에이전트 — 운영 노트
+
+| # | 에이전트 | 자동 트리거 | 산출물 |
+|---|---|---|---|
+| 1 | 발굴(Discovery) | 매일 22:00 UTC (`discover.yml` cron) | 이슈 1건(소프트웨어/스킬 발굴 리포트) |
+| 2 | 연구(Research) | 이슈 큐 `queue/research` | 코멘트(출처·라이선스·컬렉션 결정) |
+| 3 | 제조(Build) | `agent/build` 라벨 | 데이터 JSON + 자유구성 페이지 + PR |
+| 4 | 검수(Verify) | PR `agent/build` | `gh pr checks` + 운영 원칙 → `agent/verify` |
+| 5 | 게시(Publish) | `agent/verify` | PR merge + `deploy.yml` + 이슈 close + `agent/published` |
+| 6 | 주간 검증(Weekly Audit) | 매주 일요일 22:00 UTC | 기존 모든 항목 팩트 재검사 + 변경 이력 갱신 |
+
+**라벨 10종** (모두 GitHub에 생성됨): `agent/{discovery,research,build,verify,published}` (5) + `queue/{research,verify,deploy}` (3) + `status/blocked-human` (1) + `priority/urgent` (1).
