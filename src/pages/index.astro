@@ -109,7 +109,7 @@ const swapExamples = [
                   {t.data.name.replace(/[^A-Za-z0-9]/g, '').slice(0, 2) || t.data.name.slice(0, 2)}
                 </span>
                 <span class="mid">
-                  <b>{t.data.name}</b>
+                  <b><a href={`${base}tools/${t.id}/`}>{t.data.name}</a></b>
                   <span>{description}</span>
                 </span>
                 <span class="date">{t.data.github.lastPush}</span>
@@ -119,7 +119,7 @@ const swapExamples = [
         </div>
       </section>
 
-      <section>
+      {false && (<><section>
         <div class="sh">
           <h2>이달에 소개하는 도구</h2>
           <span class="hint">선정 이유를 밝힙니다. 추천이 아닙니다.</span>
@@ -134,18 +134,17 @@ const swapExamples = [
                 <b>{t.data.name}</b>
                 <span>{meta?.reason || '학교에서 많이 묻는 도구라 소개합니다'}</span>
               </span>
-              {(!meta || meta.status === 'example') && <span class="st st-ex">{EXAMPLE_LABEL}</span>}
             </div>
           ))}
         </div>
-      </section>
+      </section></>)}
     </div>
 
-    <div class="sh">
+    {false && (<><div class="sh">
       <h2>학교 모음집</h2>
       <span class="hint">어떤 도구를 묶을지는 아직 정하는 중이에요</span>
-    </div>
-    <div class="cgrid">
+    </div></>)}
+    {false && (<><div class="cgrid">
       <div class="ccard">
         <b>컴퓨터실 기본 도구</b>
         <p>컴퓨터실 Windows PC에 설치해 두면 여러 수업에서 쓰는 도구 묶음</p>
@@ -189,7 +188,7 @@ const swapExamples = [
         </span>
         <span class="hint">1차 공개 도구 5개 · 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></span>
       </div>
-    </div>
+    </div></>)}
 
     <div class="two">
       <section>
@@ -233,11 +232,7 @@ const swapExamples = [
       <div class="cta-brand">
         <h2>매주 바뀐 정보를 메일로</h2>
         <p>새 대안, 선생님께 영향 있는 업데이트, 종료·유료 전환 소식을 한 번에 받아 보세요.</p>
-        <form onsubmit="return false" class="nl">
-          <label class="sr" for="nl">이메일</label>
-          <input id="nl" type="email" placeholder="학교 이메일">
-          <button class="btn primary">구독하기</button>
-        </form>
+        <p class="hint" style="padding:10px 0"><b>준비 중.</b> 뉴스레터 수집은 1차 공개 직후에 시작합니다.</p>
       </div>
     </div>
   </div>

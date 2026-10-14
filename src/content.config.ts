@@ -99,6 +99,11 @@ const schoolApps = defineCollection({
       installDifficulty: Difficulty,
       summary: z.string(),
     })).min(1),
+    // 학교 앱별 기능 비교 매트릭스(선택). 1차 출처가 확인된 기능만 채움. 없으면 페이지에서 "한 줄" 안내.
+    featureMatrix: z.array(z.object({
+      name: z.string(),
+      sourceUrl: z.string().url().optional(),
+    })).optional(),
   }),
 });
 

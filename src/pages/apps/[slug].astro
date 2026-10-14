@@ -45,8 +45,7 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
   <div class="detail" style={tone(app.data.category)}>
     <a class="back" href={base}>홈으로</a>
     <p class="kick">{app.data.category}, {app.data.procurementNote?.value || '현장에서 많이 쓰는 앱'} 
-    {app.data.procurementNote && <><Status fact={app.data.procurementNote} />
-    {app.data.procurementNote.sources && <details class="src"><summary>출처 {app.data.procurementNote.sources.length}</summary><ul>{app.data.procurementNote.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}</>}
+    {app.data.procurementNote && <><Status fact={app.data.procurementNote} /></>}
     </p>
     <div class="dhead">
       <span class="tile" aria-hidden="true"><Icon icon={app.data.icon} /></span>
@@ -70,9 +69,7 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
 
     {app.data.gap && <div class="gap">
       <strong>미리 알아두세요.</strong>
-      <span>{app.data.gap.value} <Status fact={app.data.gap} />
-      {app.data.gap.sources && <details class="src"><summary>출처 {app.data.gap.sources.length}</summary><ul>{app.data.gap.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}
-      </span>
+      <span>{app.data.gap.value} <Status fact={app.data.gap} /></span>
     </div>}
 
     <div class="toolbar">
@@ -99,14 +96,13 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
                 <Mono name={t.data.name} size={56} />
               </span>
               <div>
-                <h2>{t.data.name}</h2>
+                <h2><a href={`${base}tools/${t.id}/`}>{t.data.name}</a></h2>
                 <p>{summary}</p>
               </div>
             </div>
             <div class="badges">
               <span class={`badge lv-${level.value === '거의 대체' ? '거의' : '부분'}`}>{level.value}</span>
               <Status fact={level} />
-              {level.sources && <details class="src"><summary>출처 {level.sources.length}</summary><ul>{level.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}
               <span class={`badge df-${installDifficulty.split(' ')[0]}`}>설치 {installDifficulty}</span>
             </div>
           </div>
@@ -114,16 +110,21 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
             <span>쓸 수 있는 곳</span>
             {PLAT.map(([k, n, f]) => <span class={`plat ${f(p) ? 'on' : 'off'}`}>{n}</span>)}
             <Status fact={t.data.platforms} />
-            {t.data.platforms.sources && <details class="src"><summary>출처 {t.data.platforms.sources.length}</summary><ul>{t.data.platforms.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}
+            <Status fact={t.data.platforms} />
           </div>
           <div class="meta-row">
             <span class="tagh">개발 {t.data.health}, 최근 개발 {t.data.github.lastPush}</span>
             <span class="tagh">라이선스 {lic} <Status fact={t.data.license} /></span>
           </div>
-          <ScopeChips scopes={sc} isExample={true} />
-          {sc.includes('student-use-check') && <p class="warnbox">학생이 직접 쓰면 학생 정보가 처리될 수 있어요. 학교 절차를 확인하세요. <a href={MOE_URL}>교육부 학습지원 소프트웨어 선정 기준 안내</a></p>}
+          <ScopeChips scopes={sc} />
           <div class="actions">
-            <a class="btn primary" href={`${base}compare/${t.id}-vs-${alts[0]?.t?.id !== t.id ? alts[0]?.t?.id : alts[1]?.t?.id}/`}>다른 대안과 비교</a>
+            {(() => {
+              const myId = t.id;
+              const other = alts.find(({ t: ot }) => ot.id !== myId);
+              if (!other) return null;
+              const [a, b] = [myId, other.t.id].sort();
+              return <a class="btn primary" href={`${base}compare/${a}-vs-${b}/`}>다른 대안과 비교</a>;
+            })()}
             <a class="btn" href={`https://github.com/${t.data.github.repo}`}>원 프로젝트 보기</a>
             <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
           </div>
@@ -131,31 +132,64 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
       })}
     </div>
 
-    <section class="cmp">
-      <div class="cmph">
-        <h2>기능 비교: {app.data.name === 'CapCut' ? '모둠 발표 영상 만들기' : '주요 기능'}</h2>
-        <p class="hint">공식 문서로 확인한 칸부터 채웁니다. 기능 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></p>
-      </div>
-      <div class="tscroll">
+    {alts.length >= 2 && (
+      <section class="cmp-matrix">
+        <div class="cmph">
+          <h2>대안 비교 매트릭스</h2>
+          <p class="hint">대안 도구들을 두 개씩 나란히 비교합니다. <code>{app.data.name}</code>은 1열에 고정.</p>
+        </div>
         <table>
           <thead>
             <tr>
-              <th scope="col">기능</th>
-              <th scope="col">{app.data.name}</th>
-              {alts.slice(0, 2).map(({ t }) => <th scope="col">{t.data.name}</th>)}
+              <th scope="col">비교</th>
+              {alts.map(({ t: ot }) => <th scope="col">{ot.data.name}</th>)}
             </tr>
           </thead>
           <tbody>
-            {['주요 기능 1', '주요 기능 2', '주요 기능 3'].map((feat) => (
+            {alts.map(({ t: otA }) => (
               <tr>
-                <th scope="row">{feat}</th>
-                <td><span class="v null">확인 중</span></td>
-                {alts.slice(0, 2).map(() => <td><span class="v null">확인 중</span></td>)}
+                <th scope="row">{otA.data.name}</th>
+                {alts.map(({ t: otB }) => {
+                  if (otA.id === otB.id) return <td class="self">—</td>;
+                  const [a, b] = [otA.id, otB.id].sort();
+                  return <td><a href={`${base}compare/${a}-vs-${b}/`}>vs {otB.data.name}</a></td>;
+                })}
               </tr>
             ))}
           </tbody>
         </table>
+      </section>
+    )}
+
+    <section class="cmp">
+      <div class="cmph">
+        <h2>기능 비교: {app.data.name === 'CapCut' ? '모둠 발표 영상 만들기' : '주요 기능'}</h2>
+        <p class="hint">공식 문서로 확인한 칸부터 채웁니다.</p>
       </div>
+      {app.data.featureMatrix ? (
+        <div class="tscroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">기능</th>
+                <th scope="col">{app.data.name}</th>
+                {alts.slice(0, 2).map(({ t }) => <th scope="col">{t.data.name}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {app.data.featureMatrix.map((feat) => (
+                <tr>
+                  <th scope="row">{feat.name}</th>
+                  <td>{feat.sourceUrl ? <a href={feat.sourceUrl}>확인됨</a> : <span class="v null">확인 중</span>}</td>
+                  {alts.slice(0, 2).map(() => <td><span class="v null">확인 중</span></td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p class="hint" style="padding:16px 0">기능 비교는 확인되는 대로 채웁니다.</p>
+      )}
     </section>
 
     <section class="notify">
@@ -163,11 +197,7 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
         <h2>설치 없이 학교에서 바로 쓰고 싶으신가요?</h2>
         <p>학교 기기에서 바로 열리는 버전이 생기면 알려 드릴게요.</p>
       </div>
-      <form onsubmit="return false">
-        <label class="sr" for="em">학교 이메일</label>
-        <input id="em" type="email" placeholder="학교 이메일">
-        <button class="btn primary">알림 받기</button>
-      </form>
+      <p class="hint" style="padding:12px 0"><b>준비 중.</b> 알림 수집은 1차 공개 직후에 시작합니다. 그 전까지는 제안·정정 페이지를 통해 알려 주셔도 좋습니다.</p>
     </section>
   </div>
 

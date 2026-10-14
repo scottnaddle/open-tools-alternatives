@@ -1,8 +1,9 @@
 ---
+import { METHOD_NAME } from '../lib/facts';
 const { fact, example = false } = Astro.props;
 ---
 {example ? <span class="st st-ex">예시 데이터</span> : <>
 <span class={`st st-${fact.status}`}>{fact.status === 'verified' ? '확인됨' : '확인 중'}</span>
 <details class="src"><summary>출처 {fact.sources.length}</summary>
-  <ul>{fact.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method} · {s.fetchedAt.slice(0, 10)}{s.excerpt && ` · ${s.excerpt.slice(0, 120)}`}</small></li>)}</ul>
+  <ul>{fact.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{METHOD_NAME[s.method] ?? s.method} · {s.fetchedAt.slice(0, 10)}{s.excerpt && ` · ${s.excerpt.slice(0, 120)}`}</small></li>)}</ul>
 </details></>}

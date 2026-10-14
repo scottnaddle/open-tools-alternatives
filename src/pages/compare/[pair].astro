@@ -3,19 +3,21 @@ import Base from '../../layouts/Base.astro';
 import Status from '../../components/Status.astro';
 import Mono from '../../components/Mono.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { PLAT, EXAMPLE_LABEL, exampleFor } from '../../lib/facts';
+import { PLAT, KO, EXAMPLE_LABEL, exampleFor } from '../../lib/facts';
 const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
   const seen = new Set<string>();
-  const out: Array<{ params: { pair: string }; props: { a: string; b: string; app: string } }> = [];
+  const out: Array<{ params: { pair: string }; props: { a: string; b: string; app: string; appId: string } }> = [];
   for (const a of await getCollection('schoolApps')) {
+    // 학교앱의 alternatives 전체(앱 자신 제외 — tools collection에 없음)로 페어 생성
     const ids = a.data.alternatives.map((x) => x.tool.id);
-    for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) {
-      const k = `${ids[i]}-vs-${ids[j]}`; 
-      if (!seen.has(k)) { 
-        seen.add(k); 
-        out.push({ params: { pair: k }, props: { a: ids[i], b: ids[j], app: a.data.name } }); 
+    const unique = Array.from(new Set(ids)).sort();
+    for (let i = 0; i < unique.length; i++) for (let j = i + 1; j < unique.length; j++) {
+      const k = `${unique[i]}-vs-${unique[j]}`;
+      if (!seen.has(k)) {
+        seen.add(k);
+        out.push({ params: { pair: k }, props: { a: unique[i], b: unique[j], app: a.data.name, appId: a.id } });
       }
     }
   }
@@ -26,13 +28,14 @@ interface Props {
   a: string;
   b: string;
   app: string;
+  appId: string;
 }
-const { a, b, app } = Astro.props;
-const ta = await getEntry('tools', a); 
+const { a, b, app, appId } = Astro.props;
+const ta = await getEntry('tools', a);
 const tb = await getEntry('tools', b);
 
 if (!ta || !tb) {
-  return Astro.redirect('/');
+  return Astro.redirect(`${base}`);
 }
 
 const exA = exampleFor(a);
@@ -40,28 +43,28 @@ const exB = exampleFor(b);
 
 // Comparison rows
 const compareRows = [
-  { label: '학교 활용', a: ta.data.schoolUse.value, b: tb.data.schoolUse.value },
-  { label: 'Windows', a: ta.data.platforms.value.windows, b: tb.data.platforms.value.windows },
-  { label: 'macOS', a: ta.data.platforms.value.macos, b: tb.data.platforms.value.macos },
-  { label: 'Linux', a: ta.data.platforms.value.linux, b: tb.data.platforms.value.linux },
-  { label: '웹 (브라우저)', a: ta.data.platforms.value.web, b: tb.data.platforms.value.web },
-  { label: 'Android', a: ta.data.platforms.value.android, b: tb.data.platforms.value.android },
-  { label: 'iOS', a: ta.data.platforms.value.ios, b: tb.data.platforms.value.ios },
-  { label: '설치 난이도', a: ta.data.installDifficulty.value, b: tb.data.installDifficulty.value },
-  { label: '라이선스', a: ta.data.license.value || '확인 필요', b: tb.data.license.value || '확인 필요' },
+  { label: '학교 활용', a: ta.data.schoolUse.value, b: tb.data.schoolUse.value, aStatus: ta.data.schoolUse.status, bStatus: tb.data.schoolUse.status },
+  { label: 'Windows', a: ta.data.platforms.value.windows, b: tb.data.platforms.value.windows, aStatus: ta.data.platforms.status, bStatus: tb.data.platforms.status },
+  { label: 'macOS', a: ta.data.platforms.value.macos, b: tb.data.platforms.value.macos, aStatus: ta.data.platforms.status, bStatus: tb.data.platforms.status },
+  { label: 'Linux', a: ta.data.platforms.value.linux, b: tb.data.platforms.value.linux, aStatus: ta.data.platforms.status, bStatus: tb.data.platforms.status },
+  { label: '웹 (브라우저)', a: ta.data.platforms.value.web, b: tb.data.platforms.value.web, aStatus: ta.data.platforms.status, bStatus: tb.data.platforms.status },
+  { label: 'Android', a: ta.data.platforms.value.android, b: tb.data.platforms.value.android, aStatus: ta.data.platforms.status, bStatus: tb.data.platforms.status },
+  { label: 'iOS', a: ta.data.platforms.value.ios, b: tb.data.platforms.value.ios, aStatus: ta.data.platforms.status, bStatus: tb.data.platforms.status },
+  { label: '설치 난이도', a: ta.data.installDifficulty.value, b: tb.data.installDifficulty.value, aStatus: ta.data.installDifficulty.status, bStatus: tb.data.installDifficulty.status },
+  { label: '라이선스', a: ta.data.license.value || '확인 필요', b: tb.data.license.value || '확인 필요', aStatus: ta.data.license.status, bStatus: tb.data.license.status },
   { label: '최근 개발일', a: ta.data.github.lastPush, b: tb.data.github.lastPush },
   { label: '별 수', a: ta.data.github.stars, b: tb.data.github.stars },
 ];
 ---
 <Base title={`${ta.data.name}과 ${tb.data.name} 비교`}>
   <div class="detail wide">
-    <a class="back" href={`${base}apps/${app ? app.toLowerCase().replace(/ /g, '-') : 'capcut'}/`}>← {app} 대안 목록</a>
+    <a class="back" href={`${base}apps/${appId}/`}>← {app} 대안 목록</a>
+    <a class="back" href={`${base}compare/`} style="margin-left:8px">모든 도구 비교</a>
     <h1 class="ph">{ta.data.name}과 {tb.data.name} 비교</h1>
     <p class="lead">{app} 대안 중 두 도구의 사실을 나란히 놓았어요. 점수나 순위는 매기지 않습니다.</p>
     
     <p class="hint" style="margin:20px 0">
-      모든 값은 원 출처로 확인한 사실입니다. 
-      확인 상태는 각 도구 페이지에서 출처와 함께 볼 수 있어요.
+      확인된 값과 확인 중인 값을 구분해 표시합니다. 각 칸의 확인 상태(확인됨/확인 중)와 1차 출처는 <a href={`${base}tools/${ta.id}/`}>{ta.data.name}</a> · <a href={`${base}tools/${tb.id}/`}>{tb.data.name}</a> 페이지에서 확인할 수 있어요.
     </p>
 
     <div class="cmpgrid">
@@ -90,14 +93,16 @@ const compareRows = [
           <tr>
             <th>{row.label}</th>
             <td>
-              {typeof row.a === 'string' ? row.a : 
-               typeof row.a === 'number' ? row.a.toLocaleString() : 
+              {typeof row.a === 'string' ? (KO[row.a] ?? row.a) :
+               typeof row.a === 'number' ? row.a.toLocaleString() :
                JSON.stringify(row.a)}
+              {row.aStatus && <small class="src-status" aria-label={`${ta.data.name} 확인 상태`}>{row.aStatus === 'verified' ? '확인됨' : '확인 중'}</small>}
             </td>
             <td>
-              {typeof row.b === 'string' ? row.b : 
-               typeof row.b === 'number' ? row.b.toLocaleString() : 
+              {typeof row.b === 'string' ? (KO[row.b] ?? row.b) :
+               typeof row.b === 'number' ? row.b.toLocaleString() :
                JSON.stringify(row.b)}
+              {row.bStatus && <small class="src-status" aria-label={`${tb.data.name} 확인 상태`}>{row.bStatus === 'verified' ? '확인됨' : '확인 중'}</small>}
             </td>
           </tr>
         ))}
