@@ -32,6 +32,9 @@ jobs:
       - name: Daily verifier non-GitHub 403 skip test
         run: python3 scripts/test_daily_verifier_host.py
 
+      - name: Verifier auto-merge policy
+        run: bash scripts/test_verifier_merge_policy.sh
+
       - name: Run data verification
         run: |
           if [ -f scripts/verify.py ]; then

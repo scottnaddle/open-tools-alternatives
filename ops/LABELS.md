@@ -16,6 +16,9 @@
 | `agent/build` | `0e8a16` | 3번 에이전트(제조) 처리 중 |
 | `agent/verify` | `5319e7` | 4번 에이전트(검수) 처리 중 |
 | `agent/published` | `0e8a16` | 5번 에이전트(게시) 완료 |
+| `agent/verifier` | `0a3069` | 일일 검증 PR. CI 통과 후 스쿼시 자동 병합 |
+
+`agent/verifier` 는 이슈 단계가 아니라 **일일 검증 PR**에만 붙입니다. 브랜치가 `daily-verifier/` 일 때 `scripts/daily_verifier_pr.sh` 가 붙입니다. 콘텐츠·디자인·발굴 PR에는 붙이지 않습니다.
 
 ## 큐·상태 (AGENTS.md)
 
