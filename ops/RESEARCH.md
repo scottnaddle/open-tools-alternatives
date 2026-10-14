@@ -123,7 +123,7 @@
 
 **절차**:
 1. **PR merge** — `gh pr merge <num> --merge` (브랜치 보호 없으므로 merge 직전 `gh pr checks`로 CI 최종 확인 — 원칙 10)
-2. **deploy.yml 수동 실행** — `gh workflow run deploy.yml --ref main`. 이 단계는 **사용자(인식님) 결정** — 자동으로 돌리지 않음(원칙 6: 큰 작업은 계획 승인)
+2. **배포** — 콘텐츠 PR은 사람이 병합한다. main 푸시와 일일 검증 자동 병합은 `ops/RUNBOOK.md` 대로 `deploy.yml`이 처리한다. SSH 키(`ops/DEPLOY_KEY_SETUP.md`)가 없으면 건너뛴다. 수동 실행은 `gh workflow run deploy.yml --ref main`.
 3. 배포 완료 확인 — `gh run watch <run-id>`. 헬스체크(5종) 200 확인
 4. **이슈 close** + 라벨 `agent/published` 추가 + 코멘트 "게시 완료, 라이브 URL"
 5. `STATUS.md` 갱신 — 콘텐츠 수·검증 현황·다음 할 일
@@ -148,7 +148,7 @@
 - C등급(license·archived·health) — `pending-24h` 변경기록, 24h 후 재확인 일치 시 `approved` 적용
 - 4축의 sourceUrl HEAD 실패 — C등급 alert (수동 조사 필요)
 
-**체인지로그**: 모든 변경은 PR로 사람 검토 → merge → 운영 반영. **자동 병합 안 함**(AGENTS.md §7).
+**체인지로그**: 주간 검증 산출물은 사람 검토 후 병합한다. 자동 병합은 일일 검증 PR(`daily-verifier/` + `agent/verifier`)만 해당한다.
 
 ## 8. 콘텐츠 추가·수정 절차 (게이트 순서 요약)
 
@@ -156,7 +156,7 @@
 2. **연구** — 공식 저장소·라이선스·문서 재확인
 3. **제조** — 데이터 JSON 작성, 게이트 로컬 통과, PR
 4. **PR** → **CI 실제 통과 확인** → **병합** (4번 검수와 함께)
-5. **게시** — `deploy.yml` 수동 실행
+5. **게시** — 사람이 병합하면 `deploy.yml` 이 경로에 맞게 배포한다. 키가 없으면 건너뛴다. 수동 실행은 `gh workflow run deploy.yml --ref main`
 6. **STATUS.md** 갱신
 
 자세한 절차는 각 에이전트 섹션(§2~§7) 참고.

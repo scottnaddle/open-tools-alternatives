@@ -1,6 +1,7 @@
 ## Daily Verification Results
 
 GitHub/GitLab API로 다시 확인한 사실 갱신입니다. main에 직접 커밋하지 않습니다.
+이 PR은 브랜치 `daily-verifier/` 와 라벨 `agent/verifier` 가 있을 때만, CI `build-and-check` 통과 후 스쿼시로 자동 병합됩니다. 콘텐츠·디자인·발굴 PR은 자동 병합하지 않습니다.
 
 ### 변경 등급
 
@@ -13,7 +14,7 @@ GitHub/GitLab API로 다시 확인한 사실 갱신입니다. main에 직접 커
 2. C등급 변경:
    - `pending-24h`: 24시간 뒤 워크플로를 다시 실행합니다.
    - `approved`: 24시간 재확인을 통과했으므로 병합할 수 있습니다.
-3. C등급이 모두 approved이거나, 대기 중인 C등급을 뺀 뒤에 PR을 ready로 바꿉니다.
+3. 라이선스 값 자체는 24시간 재확인 전에는 데이터에 반영되지 않습니다. 대기 중인 제안이 JSON에 있어도, 게시된 라이선스 값을 바꾸지 않은 상태라면 CI 통과 후 자동 병합됩니다.
 
 ### 참고
 

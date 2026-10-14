@@ -33,6 +33,7 @@ ensure "agent/research" "fbca04" "2번 에이전트(연구) 처리 중"
 ensure "agent/build" "0e8a16" "3번 에이전트(제조) 처리 중"
 ensure "agent/verify" "5319e7" "4번 에이전트(검수) 처리 중"
 ensure "agent/published" "0e8a16" "5번 에이전트(게시) 완료"
+ensure "agent/verifier" "0a3069" "일일 검증 PR. CI 통과 후 스쿼시 자동 병합"
 
 # AGENTS.md 큐·상태 라벨
 ensure "queue/research" "1d76db" "조사 필요 (새 대안·스킬 후보 또는 정정)"
