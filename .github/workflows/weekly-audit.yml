@@ -1,13 +1,15 @@
 name: Weekly Audit (6번 에이전트)
 
+# push로 돌리지 않는다. schedule + workflow_dispatch만.
 on:
   schedule:
     # 매주 일요일 22:00 UTC (Asia/Tashkent 03:00 월요일)
     - cron: '0 22 * * 0'
   workflow_dispatch:
 
+# summary 브랜치를 push하려면 contents: write가 필요하다. PR은 만들지 않는다.
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   audit:
@@ -22,17 +24,22 @@ jobs:
           python-version: '3.11'
 
       - name: Freeze guard
+        id: freeze
         run: |
           if [ -f ops/FREEZE ]; then
             echo "::warning::ops/FREEZE 존재 — 주간 검증 중단"
             cat ops/FREEZE || true
-            exit 0
+            echo "frozen=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "frozen=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run weekly audit
+        if: steps.freeze.outputs.frozen != 'true'
         run: python3 scripts/weekly_audit.py
 
       - name: Upload summary artifact
+        if: steps.freeze.outputs.frozen != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: weekly-audit-summary
@@ -40,33 +47,39 @@ jobs:
           retention-days: 90
 
       - name: Commit summary if changed
+        if: steps.freeze.outputs.frozen != 'true'
         run: |
           if [ ! -f ops/weekly-audit-summary.json ]; then
             echo "summary 파일 없음 — 스킵"
             exit 0
           fi
+          cp ops/weekly-audit-summary.json /tmp/weekly-audit-summary.json
           git config user.name "Weekly Audit Bot"
           git config user.email "bot@yeollin-dogu.dev"
+          TODAY=$(date -u +%Y-%m-%d)
+          BRANCH="weekly-audit/${TODAY}"
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            echo "같은 날짜 브랜치가 있어 갱신합니다: $BRANCH"
+            git fetch origin "$BRANCH"
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+          else
+            git checkout -B "$BRANCH"
+          fi
+          cp /tmp/weekly-audit-summary.json ops/weekly-audit-summary.json
           git add ops/weekly-audit-summary.json
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 스킵"
             exit 0
           fi
-          TODAY=$(date -u +%Y-%m-%d)
-          BRANCH="weekly-audit/${TODAY}"
-          git checkout -b "$BRANCH"
           git commit -m "chore: weekly-audit summary ${TODAY}"
           git push origin "$BRANCH"
-          # 사람이 검토 후 수동 merge (PR 자동 발행 안 함 — AGENTS.md §7)
           echo "branch=${BRANCH} — PR은 사람이 생성"
 
       - name: Report
         if: always()
         run: |
-          if [ -f ops/weekly-audit-summary.json ]; then
-            python3 -c "
-import json
-s = json.load(open('ops/weekly-audit-summary.json'))
-print(f\"stale: {len(s.get('stale', []))} / HEAD failures: {len(s.get('headFailures', []))} / license issues: {len(s.get('licenseIssues', []))}\")
-"
+          if [ -f ops/weekly-audit-summary.json ] || [ -f /tmp/weekly-audit-summary.json ]; then
+            SUMMARY="ops/weekly-audit-summary.json"
+            if [ ! -f "$SUMMARY" ]; then SUMMARY="/tmp/weekly-audit-summary.json"; fi
+            python3 -c 'import json,sys; s=json.load(open(sys.argv[1])); print("stale:", len(s.get("stale", [])), "/ HEAD failures:", len(s.get("headFailures", [])), "/ license issues:", len(s.get("licenseIssues", [])))' "$SUMMARY"
           fi
