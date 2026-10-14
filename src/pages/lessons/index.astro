@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import IxCard from '../../components/IxCard.astro';
+---
+<Base title="수업지도안 — 단원·학년별 예시">
+  <section class="hero">
+    <h1>수업지도안</h1>
+    <p class="lead">오픈소스 도구·AI 스킬을 실제 단원에 어떻게 녹일 수 있는지, 학년·단원·차시별 예시 지도안을 모읍니다. 모든 예시는 <strong>에이전트가 작성</strong>했고, 실제 적용 전 검토가 필요합니다.</p>
+    <p class="meta">지도안 구성: 단원명 / 대상 / 학습 목표 / 준비물 / 1~2차시 분단위 활동 / 평가 / 가정·유의사항.</p>
+  </section>
+
+  <section class="list">
+    <!-- 예시 1건: 7-Zip 디지털 시민성 단원. map 회피(4 navLinks 회귀 우회 원칙) -->
+    <IxCard
+      href={`${import.meta.env.BASE_URL}lessons/7zip-digital-citizenship/`}
+      category="수업지도안 · 초5 · 디지털 시민성"
+      title="7-Zip으로 '내 파일, 안전하게 정리하기' 1차시"
+      meta="(예시) 작성: AI 에이전트 · 학년: 초5 · 단원: 디지털 시민성 · 시간: 40분"
+      description="학생들이 개인 폴더의 자료·사진·과제 파일을 압축·분류하는 활동을 통해, 정보 정리·저작권·개인 정보 보호의 기초 개념을 함께 다룹니다."
+    >
+      <span slot="badges" class="ix-badge">예시 데이터</span>
+      <span slot="badges" class="ix-badge">출처: 공식 사이트</span>
+    </IxCard>
+  </section>
+
+  <section class="note">
+    <p>다른 단원·학년 지도안을 제안하고 싶으시면 <a href={`${import.meta.env.BASE_URL}suggest/`}>대안·정정 제안</a>으로 알려 주세요.</p>
+  </section>
+</Base>
