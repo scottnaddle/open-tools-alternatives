@@ -59,14 +59,12 @@ const categoryTasks = CATEGORY_TASKS[t.category] || [];
             <td>
               {PLAT.map(([k, n, f]) => <span class={`plat ${f(t.platforms.value) ? 'on' : 'off'}`} style="margin-right:6px">{n}</span>)}
               <Status fact={t.platforms} />
-              {t.platforms.sources && <details class="src"><summary>출처 {t.platforms.sources.length}</summary><ul>{t.platforms.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}
             </td>
           </tr>
           <tr>
             <th>라이선스</th>
             <td>
               {lic} <Status fact={t.license} />
-              {t.license.sources && <details class="src"><summary>출처 {t.license.sources.length}</summary><ul>{t.license.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small>{s.excerpt && <><br/><small>{s.excerpt.slice(0, 100)}...</small></>}</li>)}</ul></details>}
               {t.pendingLicense && <><br/><small class="hint">{t.pendingLicense.note} — 확인 시각 {t.pendingLicense.proposedAt.slice(0, 10)} 이후 24시간 뒤 적용 가능</small></>}
             </td>
           </tr>
