@@ -215,9 +215,9 @@ def main():
         print(f"    - {r}: '출처' {c}회")
 
     # 요약
-    fail = bool(missing_real) or bool(orphans) or bool(text_hits)
+    fail = bool(missing) or bool(orphans) or bool(text_hits)
     print(f"\n=== 요약 ===")
-    print(f"  404 링크: {len(missing_real)}")
+    print(f"  404 링크: {len(missing)}")
     print(f"  고아 페이지(for/* 제외): {len(orphans)}")
     print(f"  원시값/내부용어: {len(text_hits)}")
     print(f"  출처 중복 의심: {len(src_duplicate)}")
