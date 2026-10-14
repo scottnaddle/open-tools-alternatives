@@ -47,6 +47,40 @@
             "method": "manual-seed"
           }
         ]
+      },
+      "can": {
+        "value": [
+          "설치 없이 브라우저에서 편집",
+          "웨일북·크롬북에서 사용",
+          "기본 편집과 자막"
+        ],
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값(대안 요약 문장에서 분리)",
+            "method": "manual-seed"
+          }
+        ]
+      },
+      "cannot": {
+        "value": [
+          "템플릿·효과가 아직 적음",
+          "휴대폰 앱 없음",
+          "재작성 중이라 화면이 바뀔 수 있음"
+        ],
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값(대안 요약 문장에서 분리)",
+            "method": "manual-seed"
+          }
+        ]
       }
     },
     {
@@ -62,6 +96,40 @@
             "url": "https://school-edtech.kr",
             "fetchedAt": "2026-10-12T00:00:00+09:00",
             "excerpt": "씨앗 데이터 조사값",
+            "method": "manual-seed"
+          }
+        ]
+      },
+      "can": {
+        "value": [
+          "여러 트랙의 본격 편집",
+          "Windows·Mac·Linux 설치",
+          "기본 편집과 자막"
+        ],
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값(대안 요약 문장에서 분리)",
+            "method": "manual-seed"
+          }
+        ]
+      },
+      "cannot": {
+        "value": [
+          "템플릿·자동 효과 없음",
+          "웨일북·크롬북에서는 못 씀",
+          "휴대폰 앱 없음"
+        ],
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://school-edtech.kr",
+            "fetchedAt": "2026-10-12T00:00:00+09:00",
+            "excerpt": "씨앗 데이터 조사값(대안 요약 문장에서 분리)",
             "method": "manual-seed"
           }
         ]

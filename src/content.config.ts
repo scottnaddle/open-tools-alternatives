@@ -98,6 +98,9 @@ const schoolApps = defineCollection({
       level: fact(Level),
       installDifficulty: Difficulty,
       summary: z.string(),
+      // 디자인 v2: 카드의 "할 수 있어요 / 아직 안 돼요" (선택). 다른 사실과 같이 출처·확인 상태를 가진다.
+      can: fact(z.array(z.string())).optional(),
+      cannot: fact(z.array(z.string())).optional(),
     })).min(1),
     // 학교 앱별 기능 비교 매트릭스(선택). 1차 출처가 확인된 기능만 채움. 없으면 페이지에서 "한 줄" 안내.
     featureMatrix: z.array(z.object({

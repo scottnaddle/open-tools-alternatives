@@ -1,213 +1,149 @@
 ---
+// 디자인 개선안 v2: 답부터 크게(어디서 쓰나요 타일), 대안은 나란히, 확인 상태는 카드 맨 아래 한 줄.
 import Base from '../../layouts/Base.astro';
 import Status from '../../components/Status.astro';
-import Mono from '../../components/Mono.astro';
 import Icon from '../../components/Icon.astro';
-import ScopeChips from '../../components/ScopeChips.astro';
 import { getCollection, getEntry } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { exampleFor, deriveScope, devices, PLAT, SCOPE_NAME, MOE_URL, tone, col, EXAMPLE_LABEL, SYNONYMS } from '../../lib/facts';
+import { mono, HEALTH, SYNONYMS } from '../../lib/facts';
 import { APP_TOOL_MAP } from '../../lib/search-synonyms';
-import scenesData from '../../data/scenes.json';
 const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
   return (await getCollection('schoolApps')).map((a) => ({ params: { slug: a.id }, props: { app: a } }));
 }
-
-interface Props {
-  app: CollectionEntry<'schoolApps'>;
-}
-
+interface Props { app: CollectionEntry<'schoolApps'>; }
 const { app } = Astro.props;
 const synonyms = SYNONYMS[app.id] || [];
 const alternativeTools = APP_TOOL_MAP[app.id] || [];
 const LV: Record<string, number> = { '거의 대체': 0, '부분 대체': 1 }, DF: Record<string, number> = { '쉬움': 0, '보통': 1, '어려움': 2, '서버 구축': 3 };
+const dataOrder = app.data.alternatives.map((x) => x.tool.id);
 const alts = (await Promise.all(app.data.alternatives.map(async (x) => ({ ...x, t: await getEntry(x.tool) }))))
-  .sort((a, b) => LV[a.level.value] - LV[b.level.value] || DF[a.installDifficulty] - DF[b.installDifficulty] || b.t.data.github.fetchedAt.localeCompare(a.t.data.github.fetchedAt));
+  .sort((a, b) => (LV[a.level.value] ?? 1) - (LV[b.level.value] ?? 1) || (DF[a.installDifficulty] ?? 0) - (DF[b.installDifficulty] ?? 0));
 
-// 장면 카드 — src/data/scenes.json (데이터만 고쳐도 기기별 안내가 바뀌게 분리. 규칙: ops/RESEARCH.md)
-const platMatch = (p: any, m: any) =>
-  m === 'always' ? false : Object.entries(m).every(([k, v]) =>
-    Array.isArray(v) ? (v as string[]).includes(p[k]) : p[k] === v);
-const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesData.scenes.map((s: any) => ({
-  device: s.label,
-  alts: s.match === 'always' ? [] : alts.filter(({ t }) => platMatch(t.data.platforms.value, s.match)).slice(0, s.max ?? 2).map(({ t }) => t.data.name),
-  hint: s.hint,
-}));
+const desktop = (p: any) => [p.windows, p.macos, p.linux].includes('yes');
+const web = (p: any) => p.web === 'official';
+const phoneApp = (p: any) => p.android === 'yes' || p.ios === 'yes';
+// 학교 기기 3가지 기준 판정 (카드의 "쓸 수 있는 곳")
+function devs(p: any) {
+  return [
+    { label: '컴퓨터실 PC', k: desktop(p) ? 'yes' : web(p) ? 'yes' : 'no', note: !desktop(p) && web(p) ? '(브라우저)' : '' },
+    { label: '웨일북·크롬북', k: web(p) ? 'yes' : 'no', note: '' },
+    { label: '휴대폰', k: phoneApp(p) ? 'yes' : p.mobileWeb === 'yes' ? 'yes' : p.mobileWeb === 'partial' || p.android === 'partial' || p.ios === 'partial' ? 'part' : 'no', note: !phoneApp(p) && p.mobileWeb === 'yes' ? '(브라우저)' : '' },
+  ];
+}
+const MARK: Record<string, [string, string]> = { yes: ['●', '가능'], part: ['◐', '일부'], no: ['–', '없음'] };
+// "어디서 쓰나요?" 타일
+const names = (f: (p: any) => boolean) => alts.filter(({ t }) => f(t.data.platforms.value)).map(({ t }) => t);
+const wbT = names(web), pcT = names(desktop), phT = names((p) => phoneApp(p) || p.mobileWeb === 'yes');
+const phPart = alts.some(({ t }) => { const p = t.data.platforms.value; return p.mobileWeb === 'partial' || p.android === 'partial'; });
+const tiles = [
+  { label: '웨일북·크롬북', icon: 'laptop', tools: wbT.slice(0, 2), hint: '설치 없이 브라우저로' },
+  { label: '컴퓨터실 PC', icon: 'desktop', tools: (pcT.length ? pcT : wbT).slice(0, 2), hint: pcT.length ? '설치해서 사용' : '브라우저로 사용' },
+  { label: '휴대폰', icon: 'phone', tools: phT.slice(0, 2), hint: '앱 또는 브라우저', none: phPart ? '휴대폰 브라우저에서는 일부만 동작' : '' },
+];
+const md = (s: string) => { const [, m, d] = s.split('-'); return `${+m}월 ${+d}일`; };
+const sameCat = (await getCollection('schoolApps')).filter((a) => a.data.category === app.data.category && a.id !== app.id);
+const pairId = dataOrder.length >= 2 ? [dataOrder[0], dataOrder[1]].sort().join('-vs-') : null;
+const procText = app.data.procurementNote?.value?.replace('2026년 1~10월 학교 구매 ', '2026년 1~10월 학교 구매 ');
 ---
 <Base title={`${app.data.name} 대신 쓸 수 있는 오픈소스`}>
-  <!-- Hidden search metadata for Pagefind -->
   <div data-pagefind-meta="app_synonyms" style="display:none">{synonyms.join(', ')}</div>
   <div data-pagefind-meta="alternative_tools" style="display:none">{alternativeTools.join(', ')}</div>
   <div data-pagefind-meta="app_name" style="display:none">{app.data.name}</div>
-  
-  <div class="detail" style={tone(app.data.category)}>
-    <a class="back" href={base}>홈으로</a>
-    <p class="kick">{app.data.category}, {app.data.procurementNote?.value || '현장에서 많이 쓰는 앱'} 
-    {app.data.procurementNote && <><Status fact={app.data.procurementNote} /></>}
-    </p>
-    <div class="dhead">
-      <span class="tile" aria-hidden="true"><Icon icon={app.data.icon} /></span>
+
+  <div class="v2d">
+    <nav class="v2-crumb" aria-label="위치"><a href={base}>홈</a> <span aria-hidden="true">›</span> <span>{app.data.category}</span> <span aria-hidden="true">›</span> <span aria-current="page">{app.data.name}</span></nav>
+    <div class="v2-title">
+      <span class="v2-ico" aria-hidden="true"><Icon name={app.data.icon} /></span>
       <h1>{app.data.name} 대신 쓸 수 있는 오픈소스</h1>
     </div>
+    <p class="v2-meta">{procText ? <>{procText}(공공 조달 기록) <Status fact={app.data.procurementNote} /></> : '학교 현장에서 많이 쓰는 앱'}</p>
 
-    {sceneData && <div class="scene">
-      <b>어디서 쓰나요?</b>
-      <dl>
-        {sceneData.map(({ device, alts, hint }) => (
-          <>
-            <dt>{device}</dt>
-            <dd>
-              {alts.length > 0 ? <><b>{alts.join(', ')}</b> <span class="hint">{hint || '설치해서 사용'}</span></> : <span class="hint">아직 마땅한 오픈소스가 없어요</span>}
-            </dd>
-          </>
+    <section aria-labelledby="where" class="v2-where">
+      <h2 id="where">어디서 쓰나요?</h2>
+      <div class="v2-tiles">
+        {tiles.map((tl) => tl.tools.length ? (
+          <a class="v2-tile" href={`#t-${tl.tools[0].id}`}>
+            <span class="lab">{tl.label}</span>
+            <span><b>{tl.tools.map((t) => t.data.name).join(', ')}</b><small>{tl.hint}</small></span>
+          </a>
+        ) : (
+          <div class="v2-tile none">
+            <span class="lab">{tl.label}</span>
+            <span><b>아직 없어요</b><small>{tl.none || '마땅한 오픈소스가 없어요'}</small></span>
+          </div>
         ))}
-      </dl>
-      <span class="by">각 대안의 기기 지원 정보로 만든 요약입니다. 기기 지원은 확인 중이에요.</span>
-    </div>}
+      </div>
+      <p class="v2-small">각 대안의 기기 지원 정보로 만든 요약입니다. 기기 지원은 확인 중이에요.</p>
+    </section>
 
-    {app.data.gap && <div class="gap">
-      <strong>미리 알아두세요.</strong>
-      <span>{app.data.gap.value} <Status fact={app.data.gap} /></span>
-    </div>}
+    {app.data.gap && <div class="v2-gap"><b>{app.data.name}과 달라요.</b> {app.data.gap.value} <Status fact={app.data.gap} /></div>}
 
-    <div class="toolbar">
-      <span class="hint">대안 {alts.length}개. 점수나 인기로 줄 세우지 않습니다.</span>
-      <label class="hint">정렬 <select id="sortSel">
-        <option value="lv">대체 정도, 설치 쉬운 순</option>
-        <option value="df">설치 쉬운 순</option>
-        <option value="act">최근 개발일 순</option>
-      </select></label>
-    </div>
-
-    <div id="alts">
-      {alts.map(({ t, level, installDifficulty, summary }) => {
-        const ex = exampleFor(t.id); 
-        const p = t.data.platforms.value; 
-        const sc = deriveScope(ex);
-        const lic = t.data.license.value ?? (t.data.pendingLicense ? `${t.data.pendingLicense.value}` : '확인 필요');
-        const lvNum = LV[level.value] || 1;
-        const dfNum = DF[installDifficulty] || 0;
-        return <article class="alt" data-lv={lvNum} data-df={dfNum} data-act={t.data.github.lastPush}>
-          <div class="ahead">
-            <div class="amain">
-              <span class="amono" aria-hidden="true" style={`background:${col(t.data.name)}`}>
-                <Mono name={t.data.name} size={56} />
-              </span>
-              <div>
-                <h2><a href={`${base}tools/${t.id}/`}>{t.data.name}</a></h2>
-                <p>{summary}</p>
-              </div>
+    <h2 class="v2-h2">대안 {alts.length}개</h2>
+    <div class={`v2-cols ${alts.length >= 2 ? 'two' : ''}`}>
+      {alts.map(({ t, level, installDifficulty, summary, can, cannot }) => {
+        const p = t.data.platforms.value;
+        const lic = t.data.license.value ?? (t.data.pendingLicense ? '확인 중' : '확인 필요');
+        const checks = [['대체 정도', level], ['기기 지원', t.data.platforms], ['설치 난이도', t.data.installDifficulty], ['라이선스', t.data.license]] as [string, any][];
+        const okL = checks.filter(([, f]) => f?.status === 'verified').map(([n]) => n);
+        const waitL = checks.filter(([, f]) => f?.status !== 'verified').map(([n]) => n);
+        const allSrc = checks.flatMap(([, f]) => f?.sources ?? []).filter((s: any, i: number, arr: any[]) => arr.findIndex((x) => x.url === s.url && x.method === s.method) === i);
+        const near = level.value === '거의 대체';
+        return (
+          <article class="v2-card" id={`t-${t.id}`}>
+            <div class="v2-head">
+              <span class="v2-mono" aria-hidden="true">{mono(t.data.name)}</span>
+              <div><h3><a href={`${base}tools/${t.id}/`}>{t.data.name}</a></h3><p>{summary}</p></div>
             </div>
-            <div class="badges">
-              <span class={`badge lv-${level.value === '거의 대체' ? '거의' : '부분'}`}>{level.value}</span>
-              <Status fact={level} />
-              <span class={`badge df-${installDifficulty.split(' ')[0]}`}>설치 {installDifficulty}</span>
+            <dl class="v2-facts">
+              <div><dt>대체 정도</dt><dd><span class={`v2-lv ${near ? 'near' : 'part'}`}>{level.value}</span></dd></div>
+              <div><dt>설치</dt><dd>{installDifficulty}</dd></div>
+              <div><dt>라이선스</dt><dd>{lic}</dd></div>
+              <div><dt>최근 개발</dt><dd>{md(t.data.github.lastPush)}<small>{HEALTH[t.data.health] ?? ''}</small></dd></div>
+            </dl>
+            {(can || cannot) && <div class="v2-cando">
+              {can && <div><b class="ok">할 수 있어요</b><ul>{can.value.map((x) => <li><span aria-hidden="true">✓</span>{x}</li>)}</ul></div>}
+              {cannot && <div><b class="no">아직 안 돼요</b><ul>{cannot.value.map((x) => <li><span aria-hidden="true">–</span>{x}</li>)}</ul></div>}
+            </div>}
+            <div class="v2-dev"><span class="lab">쓸 수 있는 곳</span>
+              {devs(p).map((d) => <span class={`d-${d.k}`}><span aria-hidden="true">{MARK[d.k][0]}</span> {d.label} {MARK[d.k][1]}{d.note && <small> {d.note}</small>}</span>)}
             </div>
-          </div>
-          <div class="plats">
-            <span>쓸 수 있는 곳</span>
-            {PLAT.map(([k, n, f]) => <span class={`plat ${f(p) ? 'on' : 'off'}`}>{n}</span>)}
-            <Status fact={t.data.platforms} />
-            <Status fact={t.data.platforms} />
-          </div>
-          <div class="meta-row">
-            <span class="tagh">개발 {t.data.health}, 최근 개발 {t.data.github.lastPush}</span>
-            <span class="tagh">라이선스 {lic} <Status fact={t.data.license} /></span>
-          </div>
-          <ScopeChips scopes={sc} />
-          <div class="actions">
-            {(() => {
-              const myId = t.id;
-              const other = alts.find(({ t: ot }) => ot.id !== myId);
-              if (!other) return null;
-              const [a, b] = [myId, other.t.id].sort();
-              return <a class="btn primary" href={`${base}compare/${a}-vs-${b}/`}>다른 대안과 비교</a>;
-            })()}
-            <a class="btn" href={`https://github.com/${t.data.github.repo}`}>원 프로젝트 보기</a>
-            <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
-          </div>
-        </article>;
+            <div class="v2-act">
+              <a class="v2-btn" href={`${base}tools/${t.id}/`}>설치·사용 안내</a>
+              <a class="v2-link" href={`https://github.com/${t.data.github.repo}`} target="_blank" rel="noopener">원 프로젝트 ↗</a>
+            </div>
+            <div class="v2-verify">
+              {okL.length > 0 && <span>확인됨: {okL.join(', ')}</span>}
+              {okL.length > 0 && waitL.length > 0 && <span aria-hidden="true"> · </span>}
+              {waitL.length > 0 && <span>확인 중: {waitL.join(', ')}{(can || cannot) && ', 할 수 있어요/안 돼요'}</span>}
+              <span aria-hidden="true"> · </span>
+              <details class="src"><summary>출처 보기</summary><ul>{allSrc.map((s: any) => <li><a href={s.url}>{s.url}</a><br/><small>{s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>
+              <span aria-hidden="true"> · </span>
+              <a href={`${base}suggest/?tool=${t.id}&app=${app.id}#report`}>정보가 틀렸나요?</a>
+            </div>
+          </article>
+        );
       })}
     </div>
 
-    {alts.length >= 2 && (
-      <section class="cmp-matrix">
-        <div class="cmph">
-          <h2>대안 비교 매트릭스</h2>
-          <p class="hint">대안 도구들을 두 개씩 나란히 비교합니다. <code>{app.data.name}</code>은 1열에 고정.</p>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">비교</th>
-              {alts.map(({ t: ot }) => <th scope="col">{ot.data.name}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {alts.map(({ t: otA }) => (
-              <tr>
-                <th scope="row">{otA.data.name}</th>
-                {alts.map(({ t: otB }) => {
-                  if (otA.id === otB.id) return <td class="self">—</td>;
-                  const [a, b] = [otA.id, otB.id].sort();
-                  return <td><a href={`${base}compare/${a}-vs-${b}/`}>vs {otB.data.name}</a></td>;
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    {app.data.featureMatrix ? (
+      <section class="v2-fm">
+        <h2>기능 비교</h2>
+        <div class="tscroll"><table>
+          <thead><tr><th scope="col">기능</th><th scope="col">{app.data.name}</th>{alts.slice(0, 2).map(({ t }) => <th scope="col">{t.data.name}</th>)}</tr></thead>
+          <tbody>{app.data.featureMatrix.map((feat) => (
+            <tr><th scope="row">{feat.name}</th><td>{feat.sourceUrl ? <a href={feat.sourceUrl}>확인됨</a> : '확인 중'}</td>{alts.slice(0, 2).map(() => <td>확인 중</td>)}</tr>
+          ))}</tbody>
+        </table></div>
       </section>
+    ) : (
+      <p class="v2-note">{app.data.name} 기능별 비교는 공식 문서로 확인되는 대로 이곳에 채웁니다.{pairId && <> <a href={`${base}compare/${pairId}/`}>두 도구의 사실 나란히 보기 →</a></>}</p>
     )}
 
-    <section class="cmp">
-      <div class="cmph">
-        <h2>기능 비교: {app.data.name === 'CapCut' ? '모둠 발표 영상 만들기' : '주요 기능'}</h2>
-        <p class="hint">공식 문서로 확인한 칸부터 채웁니다.</p>
-      </div>
-      {app.data.featureMatrix ? (
-        <div class="tscroll">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">기능</th>
-                <th scope="col">{app.data.name}</th>
-                {alts.slice(0, 2).map(({ t }) => <th scope="col">{t.data.name}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {app.data.featureMatrix.map((feat) => (
-                <tr>
-                  <th scope="row">{feat.name}</th>
-                  <td>{feat.sourceUrl ? <a href={feat.sourceUrl}>확인됨</a> : <span class="v null">확인 중</span>}</td>
-                  {alts.slice(0, 2).map(() => <td><span class="v null">확인 중</span></td>)}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p class="hint" style="padding:16px 0">기능 비교는 확인되는 대로 채웁니다.</p>
-      )}
-    </section>
-
-    <section class="notify">
-      <div>
-        <h2>설치 없이 학교에서 바로 쓰고 싶으신가요?</h2>
-        <p>학교 기기에서 바로 열리는 버전이 생기면 알려 드릴게요.</p>
-      </div>
-      <p class="hint" style="padding:12px 0"><b>준비 중.</b> 알림 수집은 1차 공개 직후에 시작합니다. 그 전까지는 제안·정정 페이지를 통해 알려 주셔도 좋습니다.</p>
-    </section>
+    {sameCat.length > 0 && <section class="v2-more">
+      <h2>같은 분야의 다른 앱</h2>
+      <ul>{sameCat.map((a) => <li><a href={`${base}apps/${a.id}/`}>{a.data.name} 대신 → {a.data.alternatives.length}개 대안</a></li>)}</ul>
+    </section>}
   </div>
-
-  <script is:inline>
-    const s=document.getElementById('sortSel');
-    if(s)s.addEventListener('change',()=>{
-      const box=document.getElementById('alts');
-      const c=[...box.children];
-      const k={lv:x=>+x.dataset.lv*10+ +x.dataset.df,df:x=>+x.dataset.df,act:x=>-Date.parse(x.dataset.act)}[s.value];
-      c.sort((a,b)=>k(a)-k(b)).forEach(x=>box.appendChild(x))
-    });
-  </script>
 </Base>
