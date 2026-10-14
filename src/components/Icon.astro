@@ -1,6 +1,8 @@
 ---
 import icons from '../data/icons.json';
-const { name } = Astro.props;
-const svg = (icons as Record<string, string>)[name] ?? (icons as Record<string, string>)['cloud'];
+// 예전 호출(icon=)과 새 호출(name=) 모두 받는다. 예전에는 icon= 으로 넘겨도 무시돼 모든 앱이 같은 아이콘(cloud)으로 보였다.
+const { name, icon } = Astro.props;
+const key = name ?? icon;
+const svg = (icons as Record<string, string>)[key] ?? (icons as Record<string, string>)['cloud'];
 ---
 <Fragment set:html={svg} />
