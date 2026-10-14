@@ -1,7 +1,7 @@
 # STATUS.md — 현재 상태 스냅샷
 
 > **에이전트 필독**: 이 파일은 프로젝트의 살아있는 상태입니다. 작업을 마칠 때마다 갱신하세요.
-> 마지막 갱신: 2026-10-14 14:10 (Asia/Tashkent) — 디자인 개선안 v2 배포(PR #24) + CSS 캐시 사고 수정(PR #25)
+> 마지막 갱신: 2026-10-14 18:30 (Asia/Tashkent) — 워크플로 YAML·daily-verifier PR 실패 대응, 공개 화면 P0(원시값·예시·빈 기능표·폼)
 
 ## 한 줄 요약
 
@@ -41,7 +41,8 @@
 - [x] GitHub 시크릿 설정 완료 (2026-10-13) — 배포 자동화 가동
 - [ ] 뉴스레터 초안·승인 흐름 (외부 발송은 반드시 초안 → 승인)
 - [x] **6에이전트 시스템 도입 (2026-10-14)** — AGENTS.md + ops/RESEARCH.md 6에이전트 명세, 라벨 10종(agent/* 5 + queue/* 3 + status/* 1 + priority/* 1), 이슈 템플릿 5종, `.github/workflows/discover.yml` 매일 22:00 UTC 자동 슬롯 — **PR A(이번)**
-- [ ] `.github/workflows/weekly-audit.yml` (6번 에이전트 자동) + 페이지 변경 이력 아카이빙 표시 — **PR B(다음 세션)**
+- [x] **워크플로 YAML·P0 공개 화면 (2026-10-14)** — discover/weekly-audit 파싱 복구(schedule+수동만), daily-verifier는 같은 날 브랜치 충돌을 처리하고 PR 생성 실패 시 설정 안내와 함께 실패. 도구·비교·변경 이력의 원시값(active, github-api 등)을 교사 문구로. 확인된 칸이 없는 기능표는 한 줄. 제안 폼은 GitHub 이슈, 뉴스레터는 준비 중. example 현장사례는 공개 빌드에 없음. **소유자가 Settings > Actions > General > Workflow permissions > Allow GitHub Actions to create and approve pull requests 를 켜야 daily-verifier PR이 만들어진다.**
+- [ ] `.github/workflows/weekly-audit.yml` (6번 에이전트 자동) + 페이지 변경 이력 아카이빙 표시 — 워크플로 파일은 파싱되게 고쳤고, summary 브랜치 push는 `contents: write`가 필요. 페이지 아카이빙 표시는 도구 페이지 하단에 이미 있음
 - [ ] 오픈스킬 자유구성 페이지 22개(나머지) + 4축 사례/지도안/리뷰 백필
 - [x] **디자인 개선안 v2 (2026-10-14, PR #24)** — 홈 표형 목록(기기별 가능 여부 열), 학교 앱 상세 재구성, 색 토큰 통일(강조색 `#17694A`), 메뉴 "학습SW" → "대안 찾기", 대안 `can`/`cannot` 스키마(CapCut만 미검증 조사값). 화면 캡처 `design/v2-*.png`
 - [ ] 디자인 v2 남은 일(PR #24 체크리스트): `can`/`cannot` 나머지 8개 앱 채우기(출처와 함께), 도구 상세·비교·오픈스킬·소개 레이아웃 v2화, 홈 표 앱 순서 기준을 데이터로, 화면 캡처 비교 CI, 히어로 "매일 다시 확인" 문구와 실제 주기 대조
