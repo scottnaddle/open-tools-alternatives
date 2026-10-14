@@ -53,3 +53,13 @@ jobs:
       
       - name: Check 4-axis page gates
         run: python3 scripts/check_axis_pages.py
+      
+      - name: Check links, orphans, raw values
+        run: |
+          # 빌드 후 dist/ 검사. (Site는 운영 base /alternatives/ 사용)
+          python3 scripts/check_links.py
+          EXIT=$?
+          if [ $EXIT -ne 0 ]; then
+            echo "::error::내부 링크 404, 고아 페이지(for/* 외), 원시값/내부용어 노출이 발견됨"
+            exit $EXIT
+          fi
