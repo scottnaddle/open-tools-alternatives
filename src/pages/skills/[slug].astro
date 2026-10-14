@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Mono from '../../components/Mono.astro';
+import Changelog from '../../components/Changelog.astro';
 import { col } from '../../lib/facts';
 
 export async function getStaticPaths() {
@@ -128,6 +129,7 @@ const previewHref = hasPreview && data.previewPath ? `${base}${data.previewPath.
       </dl>
       <p class="facts-note">위 값은 공식 저장소 기준 사실이며 daily-verifier가 매일 다시 확인합니다. 이 페이지의 소개·데모 구성은 발굴·재구성 에이전트가 작성했습니다(<a href={`${base}suggest/#report`}>정보 정정 요청</a>).</p>
     </aside>
+    <Changelog targetPrefix={`skills/${data.slug}`} limit={5} />
   </div>
 </Base>
 
