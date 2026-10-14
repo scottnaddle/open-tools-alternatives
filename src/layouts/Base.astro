@@ -38,9 +38,35 @@ const navLinks = [
 </header>
 <main id="main"><slot /></main>
 <footer><div class="wrap">
-<span>각 프로젝트의 공개 자료로 정리한 정보입니다. 학교 적합성이나 법적 요건 충족 여부는 판정하지 않습니다.</span>
-<span>구매 학교 수 출처: school-edtech.kr (2026년 1~10월, 확인 중)</span>
-<span><a href={`${base}about/`}>사이트 소개</a></span>
+  <div class="foot-cols">
+    <section>
+      <b>열린도구</b>
+      <p>학교에서 이미 쓰는 유료·상용 앱 대신 쓸 수 있는 오픈소스 대안, 그리고 수업·업무에 쓸 수 있는 AI 에이전트 스킬을 정리합니다.</p>
+    </section>
+    <section>
+      <b>4축 콘텐츠</b>
+      <ul>
+        <li><a href={base}>학습SW (오픈소스 대안)</a></li>
+        <li><a href={`${base}skills/`}>오픈스킬</a></li>
+        <li><a href={`${base}cases/`}>현장사례</a></li>
+        <li><a href={`${base}lessons/`}>수업지도안</a></li>
+      </ul>
+    </section>
+    <section>
+      <b>함께</b>
+      <ul>
+        <li><a href={`${base}about/`}>사이트 소개</a></li>
+        <li><a href={`${base}suggest/`}>대안·정정 제안</a></li>
+        <li><a href={`${base}changes/`}>변경 이력</a></li>
+        <li><a href={`${base}#news`}>뉴스레터 구독</a></li>
+      </ul>
+    </section>
+  </div>
+  <div class="foot-meta">
+    <span>각 프로젝트의 공개 자료로 정리한 정보입니다. 학교 적합성이나 법적 요건 충족 여부는 판정하지 않습니다.</span>
+    <span>구매 학교 수 출처: school-edtech.kr (2026년 1~10월, 확인 중)</span>
+    <span>운영: AI 에이전트가 매일 GitHub/GitLab API로 재확인 · <a href={`${base}about/`}>운영 원칙</a> · <a href="https://github.com/scottnaddle/open-tools-alternatives" target="_blank" rel="noopener">소스</a></span>
+  </div>
 </div></footer>
 <style>
 /* Lucian UX/UI Prompt #045 hamburger menu styles */
@@ -78,6 +104,22 @@ header.top.is-open .u045-foot{opacity:1;transform:none;transition:opacity .4s .5
 .u045-foot a:hover{background:rgba(255,255,255,.08)}
 .u045-foot a:focus-visible{outline:2px solid #B7A4FF;outline-offset:2px}
 @media (max-width:375px){.u045-ln{font-size:28px}}
+
+/* 푸터 3열 (열린도구 / 4축 콘텐츠 / 함께) — edzip.kr 정보 구조 차용, 회원제 도입 없이 정적 정보 + AI 에이전트 검증 */
+footer{padding:32px 0 40px;border-top:1px solid var(--line);background:var(--surface);margin-top:48px}
+.foot-cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;padding:20px 0 18px}
+.foot-cols>section{min-width:0}
+.foot-cols b{display:block;font-size:13px;letter-spacing:.02em;color:var(--ink);margin-bottom:8px}
+.foot-cols p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.65}
+.foot-cols ul{margin:0;padding:0;list-style:none}
+.foot-cols li{margin:0 0 6px;font-size:13px}
+.foot-cols li a{color:var(--ink);text-decoration:none}
+.foot-cols li a:hover{color:var(--brand-ink);text-decoration:underline}
+.foot-meta{display:flex;flex-direction:column;gap:4px;padding:14px 0 0;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+.foot-meta a{color:var(--ink)}
+@media (max-width:768px){
+  .foot-cols{grid-template-columns:1fr;gap:20px}
+}
 </style>
 <script is:inline>
 (function () {
