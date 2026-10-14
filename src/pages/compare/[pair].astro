@@ -1,9 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Status from '../../components/Status.astro';
 import Mono from '../../components/Mono.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { PLAT, KO, EXAMPLE_LABEL, exampleFor } from '../../lib/facts';
+import { displayRaw } from '../../lib/facts';
 const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
@@ -38,10 +37,9 @@ if (!ta || !tb) {
   return Astro.redirect(`${base}`);
 }
 
-const exA = exampleFor(a);
-const exB = exampleFor(b);
+const ghStatus = (fetchedAt?: string) => (fetchedAt ? 'verified' as const : undefined);
 
-// Comparison rows
+// Comparison rows. 칸마다 확인 상태를 붙인다. 확인 전 값은 확인 중.
 const compareRows = [
   { label: '학교 활용', a: ta.data.schoolUse.value, b: tb.data.schoolUse.value, aStatus: ta.data.schoolUse.status, bStatus: tb.data.schoolUse.status },
   { label: 'Windows', a: ta.data.platforms.value.windows, b: tb.data.platforms.value.windows, aStatus: ta.data.platforms.status, bStatus: tb.data.platforms.status },
@@ -52,8 +50,8 @@ const compareRows = [
   { label: 'iOS', a: ta.data.platforms.value.ios, b: tb.data.platforms.value.ios, aStatus: ta.data.platforms.status, bStatus: tb.data.platforms.status },
   { label: '설치 난이도', a: ta.data.installDifficulty.value, b: tb.data.installDifficulty.value, aStatus: ta.data.installDifficulty.status, bStatus: tb.data.installDifficulty.status },
   { label: '라이선스', a: ta.data.license.value || '확인 필요', b: tb.data.license.value || '확인 필요', aStatus: ta.data.license.status, bStatus: tb.data.license.status },
-  { label: '최근 개발일', a: ta.data.github.lastPush, b: tb.data.github.lastPush },
-  { label: '별 수', a: ta.data.github.stars, b: tb.data.github.stars },
+  { label: '최근 개발일', a: ta.data.github.lastPush, b: tb.data.github.lastPush, aStatus: ghStatus(ta.data.github.fetchedAt), bStatus: ghStatus(tb.data.github.fetchedAt) },
+  { label: '별 수', a: ta.data.github.stars, b: tb.data.github.stars, aStatus: ghStatus(ta.data.github.fetchedAt), bStatus: ghStatus(tb.data.github.fetchedAt) },
 ];
 ---
 <Base title={`${ta.data.name}과 ${tb.data.name} 비교`}>
@@ -93,16 +91,12 @@ const compareRows = [
           <tr>
             <th>{row.label}</th>
             <td>
-              {typeof row.a === 'string' ? (KO[row.a] ?? row.a) :
-               typeof row.a === 'number' ? row.a.toLocaleString() :
-               JSON.stringify(row.a)}
-              {row.aStatus && <small class="src-status" aria-label={`${ta.data.name} 확인 상태`}>{row.aStatus === 'verified' ? '확인됨' : '확인 중'}</small>}
+              {displayRaw(row.a)}
+              <small class="src-status" aria-label={`${ta.data.name} 확인 상태`}>{row.aStatus === 'verified' ? '확인됨' : '확인 중'}</small>
             </td>
             <td>
-              {typeof row.b === 'string' ? (KO[row.b] ?? row.b) :
-               typeof row.b === 'number' ? row.b.toLocaleString() :
-               JSON.stringify(row.b)}
-              {row.bStatus && <small class="src-status" aria-label={`${tb.data.name} 확인 상태`}>{row.bStatus === 'verified' ? '확인됨' : '확인 중'}</small>}
+              {displayRaw(row.b)}
+              <small class="src-status" aria-label={`${tb.data.name} 확인 상태`}>{row.bStatus === 'verified' ? '확인됨' : '확인 중'}</small>
             </td>
           </tr>
         ))}
