@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
-"""UI/UX P0 검증 스크립트 (CI 통합) — 4.10, 5장 P0 완료 기준 검사.
-빌드 산출물 dist/에 대해:
-  1) 404 내부 링크 0개 (모든 <a href> 내부 라우트 → HTTP 200)
-  2) 고아 페이지 for/* 외 0개 (dist/ 모든 index.html에 외부 링크가 1개 이상)
-  3) 화면 텍스트에 manual-seed / yes·no / official / partial(지원 외) / active(개발 상태) 0건
+"""UI/UX P0 검증 스크립트 (CI 통합).
+빌드 산출물 dist/에 대해 실패(exit 1):
+  1) 내부 링크 404
+  2) 고아 페이지 (for/* 제외)
+  3) 보이는 원시값·내부 용어 (tools/compare/apps/changes 포함)
+  4) 같은 섹션 안의 출처 접기 중복
+  5) 자리표시 '주요 기능 1'
+  6) example 4축·'예시 데이터'·확인 단정 문구·'반영 여부를 알려' 공개
 
 사용법: python3 scripts/check_links.py [dist_dir] (기본 dist)
 """
 
+import json
 import os
 import re
 import sys
-import urllib.request
-import urllib.error
 from pathlib import Path
 from html.parser import HTMLParser
-from collections import defaultdict
 
 BASE = os.environ.get("SITE_BASE", "https://edtechnewsroom.com/alternatives")
 INTERNAL_PREFIX = "/alternatives/"
@@ -24,23 +25,39 @@ ASSET_RE = re.compile(r"\.(css|js|map|woff2?|png|jpe?g|gif|svg|ico|webmanifest|m
 
 
 class LinkExtractor(HTMLParser):
+    """보이는 텍스트만 모은다. script/style과 출처 인용문(details.src 안의 긴 발췌)은 따로 표시."""
+
     def __init__(self):
         super().__init__()
         self.hrefs = []
         self.texts = []
+        self._skip = 0
+        self._src_depth = 0
 
     def handle_starttag(self, tag, attrs):
+        d = dict(attrs)
+        if tag in ("script", "style", "noscript"):
+            self._skip += 1
+        if tag == "details" and "src" in (d.get("class") or "").split():
+            self._src_depth += 1
         if tag == "a":
-            d = dict(attrs)
             href = d.get("href")
             if href:
                 self.hrefs.append(href)
-        if tag == "link" and dict(attrs).get("rel") == "stylesheet":
-            h = dict(attrs).get("href")
+        if tag == "link" and d.get("rel") == "stylesheet":
+            h = d.get("href")
             if h:
                 self.hrefs.append(h)
 
+    def handle_endtag(self, tag):
+        if tag in ("script", "style", "noscript") and self._skip:
+            self._skip -= 1
+        if tag == "details" and self._src_depth:
+            self._src_depth -= 1
+
     def handle_data(self, data):
+        if self._skip:
+            return
         self.texts.append(data)
 
 
@@ -111,24 +128,114 @@ def collect_links(dist: Path) -> list:
     return internal
 
 
-def head(url, timeout=10):
-    try:
-        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "yeollin-dogu-check-links/1.0"})
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            return r.status
-    except urllib.error.HTTPError as e:
-        return e.code
-    except Exception:
-        return -1
+# readme는 GitHub URL의 #readme 앵커에 그대로 있으므로, # 나 / 바로 뒤는 제외한다.
+INTERNAL_RE = re.compile(
+    r"\b(manual-seed|github-api|official-site|release-assets|procurement-data)\b|(?<![#/\w])readme(?!\w)"
+)
+ENUM_RE = re.compile(r"(?<![A-Za-z0-9-])(yes|no|official|partial|active)(?![A-Za-z0-9-])")
+PLACEHOLDER_RE = re.compile(r"주요 기능\s*\d+")
+PROMISE_RE = re.compile(r"반영 여부를 알려")
+EXAMPLE_LABEL = "예시 데이터"
+FALSE_CLAIM = "모든 값은 원 출처로 확인한 사실"
 
 
-def get_text(url, timeout=10):
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": "yeollin-dogu-check-links/1.0"})
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            return r.read().decode("utf-8", "replace")
-    except Exception:
-        return ""
+def visible_text(html: str) -> str:
+    ext = LinkExtractor()
+    ext.feed(html)
+    return "\n".join(ext.texts)
+
+
+def raw_value_hits(text: str) -> list[tuple[str, str]]:
+    """내부 토큰은 어디서든, yes/no/official/partial/active는 값으로 보일 때만.
+
+    출처 발췌처럼 'official website'가 문장 안에 있는 경우는 원문 인용이므로 빼지 않는다.
+    한 텍스트 덩어리가 4단어 미만일 때만 enum을 본다.
+    """
+    hits = []
+    for chunk in text.split("\n"):
+        piece = chunk.strip()
+        if not piece:
+            continue
+        for m in INTERNAL_RE.finditer(piece):
+            hits.append((m.group(1) or m.group(0), "내부 용어"))
+        if len(piece.split()) >= 4:
+            continue
+        for m in ENUM_RE.finditer(piece):
+            hits.append((m.group(1), "원시값"))
+    return hits
+
+
+SECTION_TAGS = {"tr", "td", "li", "article", "section", "p"}
+VOID_TAGS = {"link", "meta", "img", "br", "input", "hr", "source", "area", "base", "col", "embed", "wbr"}
+
+
+class SourceSectionParser(HTMLParser):
+    """섹션(tr/td/li/article/section/p) 안에 details.src가 2개 이상이면 중복.
+
+    HTMLParser는 void 태그(<link>, <br>)를 닫지 않으므로, 스택은 짝이 맞는 태그만 쌓는다.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.stack: list[tuple[str, int | None]] = []
+        self.seq = 0
+        self.counts: dict[int, int] = {}
+        self._skip = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in VOID_TAGS:
+            return
+        if tag in ("script", "style"):
+            self._skip += 1
+        section_id = None
+        if tag in SECTION_TAGS:
+            self.seq += 1
+            section_id = self.seq
+            self.counts[section_id] = 0
+        self.stack.append((tag, section_id))
+        if self._skip:
+            return
+        d = dict(attrs)
+        if tag == "details" and "src" in (d.get("class") or "").split():
+            for _tag, sid in reversed(self.stack):
+                if sid is not None:
+                    self.counts[sid] += 1
+                    break
+
+    def handle_endtag(self, tag):
+        if tag in VOID_TAGS:
+            return
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i][0] == tag:
+                del self.stack[i:]
+                break
+        if tag in ("script", "style") and self._skip:
+            self._skip -= 1
+
+    def handle_startendtag(self, tag, attrs):
+        return
+
+
+def duplicate_source_sections(html: str) -> int:
+    parser = SourceSectionParser()
+    parser.feed(html)
+    return sum(1 for n in parser.counts.values() if n >= 2)
+
+
+def example_axis_entries() -> list[tuple[str, str, bool]]:
+    """(kind, title, example) — example 기본값은 true."""
+    rows = []
+    for kind in ("cases", "lessons", "reviews"):
+        folder = Path(f"src/content/{kind}")
+        if not folder.exists():
+            continue
+        for path in sorted(folder.glob("*.json")):
+            try:
+                data = json.loads(path.read_text())
+            except json.JSONDecodeError:
+                continue
+            rows.append((kind, data.get("title") or "", bool(data.get("example", True))))
+    return rows
 
 
 def main():
@@ -179,58 +286,100 @@ def main():
     if len(orphans) > 10:
         print(f"    ... {len(orphans) - 10}개 더")
 
-    # 3) 화면 텍스트에 원시값/manual-seed 검사
-    texts = page_texts(DIST)
-    # 패턴: 'manual-seed', 단독 'yes' / 'no' / 'official' / 'partial'(태그 사이), 'active'(개발 상태 맥락)
-    # 'yes' / 'no'는 '예' / '아니오' / '지원' / '미지원'으로 치환되므로 단어 경계 검사
-    bad_patterns = [
-        (r"\bmanual-seed\b", "manual-seed 노출"),
-        (r"\bgithub-api\b", "github-api 노출"),
-        (r"\bofficial-site\b", "official-site 노출"),
-        (r"\breadme\b", "readme 노출"),
-        (r"\bprocurement-data\b", "procurement-data 노출"),
-        # yes/no: 단독 단어로 (앞뒤가 공백/문장부호). 그러나 'Yes' 버튼 등 정상 텍스트도 있으므로 좁힘.
-        # 'partial'은 '부분'으로, 'official'은 '공식'으로 치환되므로
-    ]
+    # 3) 원시값 — 도구·비교·앱·변경 이력을 포함한 정식 페이지. script/style은 제외.
+    #    예전 검사는 /tools/ 와 /changes/ 를 빼서 inkscape의 active, 변경 이력의 github-api를 놓쳤다.
     text_hits = []
-    # /changes/는 변경기록 페이지로 method(s.method)가 정식 데이터로 화면에 정직히 노출됨(원시값 검사 제외).
-    # tools/[id]/도 정식 등록된 데이터로 인정. 검사 대상은 화면에서 정당화 안 되는 노출만.
-    # 라우트는 routes 정규화 후 /alternatives/... 또는 base-stripped /changes/, /tools/<id>/ 형태
-    def is_changes(r: str) -> bool:
-        return r in ("/changes/", "/alternatives/changes/") or r.endswith("/changes/") or "/changes/" in r
-    def is_tools_data(r: str) -> bool:
-        # 도구 페이지는 정식 등록된 데이터(라이선스·method 등) 화면 표시 → 검사 제외
-        return ("/tools/" in r) or r in ("/tools/", "/alternatives/tools/")
-    for route, t in texts.items():
-        if is_changes(route) or is_tools_data(route):
+    placeholder_hits = []
+    promise_hits = []
+    example_label_hits = []
+    false_claim_hits = []
+    html_by_route = {}
+    for p in DIST.rglob("index.html"):
+        rel = p.relative_to(DIST).as_posix()
+        if rel.startswith("pagefind/") or "/pagefind/" in rel:
             continue
-        for pat, label in bad_patterns:
-            for m in re.finditer(pat, t):
-                # 단순 매칭 (실제 노출 확인은 어렵지만 패턴은 보수적으로)
-                text_hits.append((route, label, m.group(0)))
-    print(f"\n[3] 원시값/내부용어 검사: {len(text_hits)}건")
-    for r, l, v in text_hits[:10]:
+        html = p.read_text(errors="ignore")
+        route = "/" + str(p.relative_to(DIST).parent.as_posix()) + "/"
+        if route == "/./":
+            route = "/"
+        html_by_route[route] = html
+        text = visible_text(html)
+        for token, label in raw_value_hits(text):
+            text_hits.append((route, label, token))
+        if PLACEHOLDER_RE.search(text):
+            placeholder_hits.append(route)
+        if PROMISE_RE.search(text):
+            promise_hits.append(route)
+        if EXAMPLE_LABEL in text:
+            example_label_hits.append(route)
+        if FALSE_CLAIM in text:
+            false_claim_hits.append(route)
+    print(f"\n[3] 원시값/내부용어 검사: {len(text_hits)}건 (tools·compare·apps·changes 포함)")
+    for r, l, v in text_hits[:12]:
         print(f"    - [{l}] '{v}' in {r}")
-    if len(text_hits) > 10:
-        print(f"    ... {len(text_hits) - 10}건 더")
+    if len(text_hits) > 12:
+        print(f"    ... {len(text_hits) - 12}건 더")
 
-    # 4) 출처 접기 중복 검사: 한 페이지 안에 .src 또는 <details><summary>출처가 2회 이상이면 의심
-    # 단순화: 페이지 텍스트에 '출처' 단어가 3회 이상이면 의심
+    # 4) 출처 접기 중복: 같은 섹션(tr/li/article/section) 안에 details.src가 2개 이상.
+    #    /changes/ 처럼 변경마다 출처가 하나인 목록은 통과한다. '출처' 단어 횟수는 세지 않는다.
     src_duplicate = []
-    for route, t in texts.items():
-        if t.count("출처") >= 3 and ("details" in open(DIST / route.lstrip("/").rstrip("/") / "index.html", errors="ignore").read() if (DIST / route.lstrip("/").rstrip("/") / "index.html").exists() else False):
-            src_duplicate.append((route, t.count("출처")))
-    print(f"\n[4] 출처 중복 의심: {len(src_duplicate)}건 (페이지당 '출처' 3회 이상)")
-    for r, c in src_duplicate[:5]:
-        print(f"    - {r}: '출처' {c}회")
+    for route, html in html_by_route.items():
+        n = duplicate_source_sections(html)
+        if n:
+            src_duplicate.append((route, n))
+    print(f"\n[4] 출처 접기 중복(섹션당 2개 이상): {len(src_duplicate)}건")
+    for r, c in src_duplicate[:8]:
+        print(f"    - {r}: {c}개 섹션")
 
-    # 요약
-    fail = bool(missing) or bool(orphans) or bool(text_hits)
+    print(f"\n[5] 자리표시 '주요 기능 N': {len(placeholder_hits)}건")
+    for r in placeholder_hits[:8]:
+        print(f"    - {r}")
+
+    # 6) example:true 4축은 공개 빌드에 없다. 비어 있으면 /cases 등 메뉴 링크도 없다.
+    axis = example_axis_entries()
+    leaked_titles = []
+    empty_axis_links = []
+    built_empty_axis = []
+    for kind, title, is_example in axis:
+        if not is_example or not title:
+            continue
+        for route, html in html_by_route.items():
+            if title in visible_text(html):
+                leaked_titles.append((kind, title, route))
+    public_by_kind = {}
+    for kind in ("cases", "lessons", "reviews"):
+        rows = [row for row in axis if row[0] == kind]
+        public_by_kind[kind] = any(not row[2] for row in rows) if rows else False
+        built = (DIST / kind).exists()
+        if built and rows and not public_by_kind[kind]:
+            built_empty_axis.append(kind)
+    axis_href = re.compile(r"/alternatives/(cases|lessons|reviews)/")
+    for route, html in html_by_route.items():
+        ext = LinkExtractor()
+        ext.feed(html)
+        for href in ext.hrefs:
+            m = axis_href.search(href if href.startswith("/") else "/" + href)
+            if not m:
+                continue
+            kind = m.group(1)
+            if not public_by_kind.get(kind):
+                empty_axis_links.append((route, href))
+    print(f"\n[6] 예시 4축 공개 노출: 제목 {len(leaked_titles)} · 빈 축 링크 {len(empty_axis_links)} · 빈 축 빌드 {len(built_empty_axis)}")
+    for kind, title, route in leaked_titles[:6]:
+        print(f"    - {kind} '{title}' in {route}")
+    print(f"\n[7] '예시 데이터' 라벨: {len(example_label_hits)} · 확인 사실 단정 문구: {len(false_claim_hits)} · '반영 여부를 알려': {len(promise_hits)}")
+
+    fail = bool(missing) or bool(orphans) or bool(text_hits) or bool(src_duplicate) or bool(placeholder_hits)
+    fail = fail or bool(leaked_titles) or bool(empty_axis_links) or bool(built_empty_axis)
+    fail = fail or bool(example_label_hits) or bool(false_claim_hits) or bool(promise_hits)
     print(f"\n=== 요약 ===")
     print(f"  404 링크: {len(missing)}")
     print(f"  고아 페이지(for/* 제외): {len(orphans)}")
     print(f"  원시값/내부용어: {len(text_hits)}")
-    print(f"  출처 중복 의심: {len(src_duplicate)}")
+    print(f"  출처 접기 중복 섹션: {len(src_duplicate)}")
+    print(f"  자리표시: {len(placeholder_hits)}")
+    print(f"  예시 4축 노출: {len(leaked_titles) + len(empty_axis_links) + len(built_empty_axis)}")
+    print(f"  예시 데이터 라벨: {len(example_label_hits)}")
     return 1 if fail else 0
 
 
