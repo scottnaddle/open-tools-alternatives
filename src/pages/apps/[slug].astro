@@ -132,6 +132,42 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
       })}
     </div>
 
+    {alts.length >= 2 && (
+      <section class="cmp-matrix">
+        <div class="cmph">
+          <h2>대안 비교 매트릭스</h2>
+          <p class="hint">대안 도구들을 두 개씩 나란히 비교합니다. <code>{app.data.name}</code>은 1열에 고정.</p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">비교</th>
+              {alts.map(({ t: ot }) => <th scope="col">{ot.data.name}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">{app.data.name}</th>
+              {alts.map(({ t: ot }) => {
+                const [a, b] = [app.id, ot.id].sort();
+                return <td><a href={`${base}compare/${a}-vs-${b}/`}>vs {ot.data.name}</a></td>;
+              })}
+            </tr>
+            {alts.map(({ t: otA }) => (
+              <tr>
+                <th scope="row">{otA.data.name}</th>
+                {alts.map(({ t: otB }) => {
+                  if (otA.id === otB.id) return <td class="self">—</td>;
+                  const [a, b] = [otA.id, otB.id].sort();
+                  return <td><a href={`${base}compare/${a}-vs-${b}/`}>vs {otB.data.name}</a></td>;
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    )}
+
     <section class="cmp">
       <div class="cmph">
         <h2>기능 비교: {app.data.name === 'CapCut' ? '모둠 발표 영상 만들기' : '주요 기능'}</h2>
