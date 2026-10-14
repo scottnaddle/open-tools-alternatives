@@ -287,14 +287,15 @@ a.v2-tile:hover{border-color:var(--brand)}
 .v2h-hero{background:var(--surface);border-bottom:1px solid var(--line)}.v2h-hero .v2h-wrap{padding-top:56px;padding-bottom:44px}
 .v2h-eyebrow{margin:0 0 12px;font-size:14px;font-weight:600;color:var(--brand)}
 .v2h-hero h1{margin:0 0 24px;font-size:clamp(28px,4vw,40px);line-height:1.3;letter-spacing:-.025em;max-width:760px}
-.v2h-hero .u034{max-width:760px}
+/* 홈 v2: 검색창을 제목과 같은 왼쪽 선에 맞춘다(컴포넌트 기본값은 가운데 정렬) */
+.v2h-hero .u034.u034{max-width:760px;margin:0}
 .v2h-quick{margin:16px 0 0;font-size:15px;color:var(--ink-2);line-height:1.9}.v2h-quick a{color:var(--brand);font-weight:600}.v2h-quick .sep{color:#C9C5B9}
 .v2h-main{padding-top:40px}
 .v2h-bar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px}
 .v2h-bar h2{margin:0 0 4px;font-size:24px;letter-spacing:-.02em}.v2h-count{margin:0;font-size:14px;color:var(--muted)}
 .v2h-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .v2h-seg{display:flex;flex-wrap:wrap;gap:4px;background:#F0EEE7;padding:4px;border-radius:10px}
-.v2h-seg button{min-height:36px;padding:0 12px;border:0;border-radius:7px;background:transparent;font:inherit;font-size:14px;color:var(--ink);cursor:pointer}
+.v2h-seg button{min-height:44px;padding:0 12px;border:0;border-radius:7px;background:transparent;font:inherit;font-size:14px;color:var(--ink);cursor:pointer}
 .v2h-seg button[aria-pressed="true"]{background:#fff;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .v2h-toggle{min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #D4D0C5;background:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
 .v2h-toggle[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
@@ -303,11 +304,14 @@ a.v2-tile:hover{border-color:var(--brand)}
 .v2h-tbl thead th{padding:12px 16px;background:#F6F4EE;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted);text-align:left;white-space:nowrap}
 .v2h-tbl tbody tr{border-bottom:1px solid var(--line-2);cursor:pointer}.v2h-tbl tbody tr:last-child{border-bottom:0}.v2h-tbl tbody tr:hover{background:#FBFAF6}
 .v2h-tbl tbody th,.v2h-tbl td{padding:16px;text-align:left;vertical-align:middle;font-size:14px}
-.v2h-tbl tbody th{display:flex;align-items:center;gap:14px;font-weight:400}
+/* th 자체는 표 칸으로 두고 안쪽 span 을 flex 로(th 를 flex 로 만들면 열이 밀림) */
+.v2h-tbl tbody th{font-weight:400}.v2h-app{display:flex;align-items:center;gap:14px}
 .v2h-tbl tbody th a{display:block;font-size:17px;font-weight:700;color:var(--ink);text-decoration:none}.v2h-tbl tbody th a:hover{text-decoration:underline}
 .v2h-tbl tbody th small{display:block;font-size:13px;color:var(--muted)}
 .v2h-ico{flex:none;width:40px;height:40px;border-radius:10px;background:#F2F0EA;color:var(--ink-2);display:flex;align-items:center;justify-content:center}.v2h-ico svg{width:22px;height:22px}
-.v2h-tbl td.alt{font-size:15px;font-weight:600;color:var(--brand)}
+/* 기존 상세 카드 .alt 와 겹치지 않게 v2h-alt 로 */
+.v2h-tbl td.v2h-alt{font-size:15px;font-weight:600;color:var(--brand)}
+.v2h-tbl td.dv{white-space:nowrap}
 .v2h-tbl td.d-yes{color:var(--brand);font-weight:600}.v2h-tbl td.d-part{color:#8A5300;font-weight:600}.v2h-tbl td.d-no{color:var(--none)}
 .v2h-empty{padding:28px 16px;text-align:center;color:var(--muted)}.v2h-empty a{color:var(--brand);font-weight:600}
 .v2h-foot{margin:10px 0 0;font-size:13px;color:var(--muted)}.v2h-foot a{color:var(--brand)}
@@ -321,13 +325,13 @@ a.v2-tile:hover{border-color:var(--brand)}
   .v2h-hero .v2h-wrap{padding-top:32px;padding-bottom:28px}
   .v2h-tbl thead{display:none}
   .v2h-tbl,.v2h-tbl tbody,.v2h-tbl tr{display:block}
-  .v2h-tbl tbody tr{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:4px 14px;padding:14px 16px}
+  /* 줄 목록: 아이콘 칸(54px)만큼 들여 쓰고, 기기 칸은 넘치면 다음 줄로(grid 는 좁은 폭에서 잘림) */
+  .v2h-tbl tbody tr{display:flex;flex-wrap:wrap;gap:4px 14px;padding:14px 16px 14px 70px}
   .v2h-tbl tbody tr[hidden]{display:none}
-  .v2h-tbl tbody th{grid-column:1/-1;padding:0}
-  .v2h-tbl td{padding:0;font-size:13px}
-  .v2h-tbl td.alt{grid-column:1/-1;padding-left:54px}
+  .v2h-tbl tbody th{display:block;flex:1 0 calc(100% + 54px);margin-left:-54px;padding:0}
+  .v2h-tbl td{display:block;padding:0;font-size:13px}
+  .v2h-tbl td.v2h-alt{flex:1 0 100%}
   .v2h-tbl td.dv::before{content:attr(data-label) " ";color:var(--muted);font-weight:400}
-  .v2h-tbl td.dv{padding-left:0}.v2h-tbl td.alt + td.dv{padding-left:54px}
   .v2h-tbl td:nth-last-child(-n+2){display:none}
   .v2h-band{grid-template-columns:1fr;gap:28px}
 }

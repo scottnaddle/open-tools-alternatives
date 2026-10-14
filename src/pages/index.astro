@@ -72,11 +72,11 @@ const flagged = [...tools.values()].filter((t) => t.data.github.archived || t.da
         <tbody>
           {rows.map((r) => (
             <tr data-cat={r.a.data.category} data-web={r.wb} data-href={`${base}apps/${r.a.id}/`}>
-              <th scope="row">
+              <th scope="row"><span class="v2h-app">
                 <span class="v2h-ico" aria-hidden="true"><Icon name={r.a.data.icon} /></span>
                 <span><a href={`${base}apps/${r.a.id}/`}>{r.a.data.name}</a><small>{r.note}</small></span>
-              </th>
-              <td class="alt" data-label="대안">{r.names}</td>
+              </span></th>
+              <td class="v2h-alt" data-label="대안">{r.names}</td>
               {[['컴퓨터실 PC', r.pc], ['웨일북·크롬북', r.wb], ['휴대폰', r.ph]].map(([l, k]) => (
                 <td class={`dv d-${k}`} data-label={l}><span aria-hidden="true">{MARK[k][0]}</span> {MARK[k][1]}</td>
               ))}
