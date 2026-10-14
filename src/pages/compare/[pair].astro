@@ -8,14 +8,15 @@ const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
   const seen = new Set<string>();
-  const out: Array<{ params: { pair: string }; props: { a: string; b: string; app: string } }> = [];
+  const out: Array<{ params: { pair: string }; props: { a: string; b: string; app: string; appId: string } }> = [];
   for (const a of await getCollection('schoolApps')) {
     const ids = a.data.alternatives.map((x) => x.tool.id);
     for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) {
-      const k = `${ids[i]}-vs-${ids[j]}`; 
-      if (!seen.has(k)) { 
-        seen.add(k); 
-        out.push({ params: { pair: k }, props: { a: ids[i], b: ids[j], app: a.data.name } }); 
+      const [ta, tb] = [ids[i], ids[j]].sort();
+      const k = `${ta}-vs-${tb}`;
+      if (!seen.has(k)) {
+        seen.add(k);
+        out.push({ params: { pair: k }, props: { a: ta, b: tb, app: a.data.name, appId: a.id } });
       }
     }
   }
@@ -26,13 +27,14 @@ interface Props {
   a: string;
   b: string;
   app: string;
+  appId: string;
 }
-const { a, b, app } = Astro.props;
-const ta = await getEntry('tools', a); 
+const { a, b, app, appId } = Astro.props;
+const ta = await getEntry('tools', a);
 const tb = await getEntry('tools', b);
 
 if (!ta || !tb) {
-  return Astro.redirect('/');
+  return Astro.redirect(`${base}`);
 }
 
 const exA = exampleFor(a);
@@ -55,7 +57,7 @@ const compareRows = [
 ---
 <Base title={`${ta.data.name}과 ${tb.data.name} 비교`}>
   <div class="detail wide">
-    <a class="back" href={`${base}apps/${app ? app.toLowerCase().replace(/ /g, '-') : 'capcut'}/`}>← {app} 대안 목록</a>
+    <a class="back" href={`${base}apps/${appId}/`}>← {app} 대안 목록</a>
     <h1 class="ph">{ta.data.name}과 {tb.data.name} 비교</h1>
     <p class="lead">{app} 대안 중 두 도구의 사실을 나란히 놓았어요. 점수나 순위는 매기지 않습니다.</p>
     

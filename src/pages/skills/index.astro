@@ -33,11 +33,8 @@ const skillsIndex = skills.map(s => ({
   n: 1
 }));
 
-// Quick chips - first 4 skills
-const quickSkills = skills.slice(0, 4).map(s => ({
-  id: s.data.slug,
-  data: { name: s.data.name }
-}));
+
+// '많이 찾는 대체' 블록은 P0-1(보고서 4.6, 4.10)에서 제거됨. 스킬은 '대신'하는 게 아니라 '더하는' 것.
 
 // Stats
 const totalSkills = skills.length;
@@ -50,7 +47,6 @@ const withPreview = skills.filter(s => s.data.previewPath).length;
         <h1>AI 에이전트가 쓸 수 있는 오픈스킬</h1>
         <p class="stat">Claude Code, Codex 등에 설치하는 오픈소스 스킬 <b>{totalSkills}개</b>. 교육 자료 제작, 시각화, 데이터 처리 등 학교 업무에 쓸 수 있는 스킬을 모아 출처와 함께 정리합니다.</p>
         <SearchAutocomplete index={skillsIndex} base={`${base}skills/`} />
-        <QuickChips apps={quickSkills} base={`${base}skills/`} />
       </div>
     </div>
   </section>

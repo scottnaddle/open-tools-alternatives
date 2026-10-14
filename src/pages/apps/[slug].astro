@@ -123,7 +123,13 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
           <ScopeChips scopes={sc} isExample={true} />
           {sc.includes('student-use-check') && <p class="warnbox">학생이 직접 쓰면 학생 정보가 처리될 수 있어요. 학교 절차를 확인하세요. <a href={MOE_URL}>교육부 학습지원 소프트웨어 선정 기준 안내</a></p>}
           <div class="actions">
-            <a class="btn primary" href={`${base}compare/${t.id}-vs-${alts[0]?.t?.id !== t.id ? alts[0]?.t?.id : alts[1]?.t?.id}/`}>다른 대안과 비교</a>
+            {(() => {
+              const myId = t.id;
+              const other = alts.find(({ t: ot }) => ot.id !== myId);
+              if (!other) return null;
+              const [a, b] = [myId, other.t.id].sort();
+              return <a class="btn primary" href={`${base}compare/${a}-vs-${b}/`}>다른 대안과 비교</a>;
+            })()}
             <a class="btn" href={`https://github.com/${t.data.github.repo}`}>원 프로젝트 보기</a>
             <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
           </div>
