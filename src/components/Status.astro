@@ -1,9 +1,11 @@
 ---
+// 디자인 v2: 확인 상태는 배지가 아니라 글자 + 작은 표시. 출처는 접어서, 방법은 사람이 읽는 말로(METHOD_NAME).
 import { METHOD_NAME } from '../lib/facts';
-const { fact, example = false } = Astro.props;
+const { fact, example = false, sources = true } = Astro.props;
+const ok = !example && fact?.status === 'verified';
 ---
-{example ? <span class="st st-ex">예시 데이터</span> : <>
-<span class={`st st-${fact.status}`}>{fact.status === 'verified' ? '확인됨' : '확인 중'}</span>
-<details class="src"><summary>출처 {fact.sources.length}</summary>
-  <ul>{fact.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{METHOD_NAME[s.method] ?? s.method} · {s.fetchedAt.slice(0, 10)}{s.excerpt && ` · ${s.excerpt.slice(0, 120)}`}</small></li>)}</ul>
-</details></>}
+{example ? <span class="stv stv-ex">예시</span> : <>
+<span class={`stv ${ok ? 'ok' : 'wait'}`}><span class="dot" aria-hidden="true"></span>{ok ? '확인됨' : '확인 중'}</span>
+{sources && fact?.sources?.length > 0 && <details class="src"><summary>출처 {fact.sources.length}</summary>
+  <ul>{fact.sources.map((s: any) => <li><a href={s.url}>{s.url}</a><br/><small>{METHOD_NAME[s.method] ?? s.method} · {s.fetchedAt.slice(0, 10)}{s.excerpt && ` · ${s.excerpt.slice(0, 120)}`}</small></li>)}</ul>
+</details>}</>}
