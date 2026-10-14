@@ -45,6 +45,9 @@ const tiles = [
 const md = (s: string) => { const [, m, d] = s.split('-'); return `${+m}월 ${+d}일`; };
 const sameCat = (await getCollection('schoolApps')).filter((a) => a.data.category === app.data.category && a.id !== app.id);
 const pairId = dataOrder.length >= 2 ? [dataOrder[0], dataOrder[1]].sort().join('-vs-') : null;
+const matrix = app.data.featureMatrix ?? [];
+// 확인된 칸(sourceUrl이 있는 행)이 없으면 표를 그리지 않는다. can/cannot을 만들어 채우지 않는다.
+const hasVerifiedCell = matrix.some((feat) => Boolean(feat.sourceUrl));
 const procText = app.data.procurementNote?.value?.replace('2026년 1~10월 학교 구매 ', '2026년 1~10월 학교 구매 ');
 ---
 <Base title={`${app.data.name} 대신 쓸 수 있는 오픈소스`}>
@@ -127,18 +130,18 @@ const procText = app.data.procurementNote?.value?.replace('2026년 1~10월 학�
       })}
     </div>
 
-    {app.data.featureMatrix ? (
+    {hasVerifiedCell ? (
       <section class="v2-fm">
         <h2>기능 비교</h2>
         <div class="tscroll"><table>
           <thead><tr><th scope="col">기능</th><th scope="col">{app.data.name}</th>{alts.slice(0, 2).map(({ t }) => <th scope="col">{t.data.name}</th>)}</tr></thead>
-          <tbody>{app.data.featureMatrix.map((feat) => (
+          <tbody>{matrix.map((feat) => (
             <tr><th scope="row">{feat.name}</th><td>{feat.sourceUrl ? <a href={feat.sourceUrl}>확인됨</a> : '확인 중'}</td>{alts.slice(0, 2).map(() => <td>확인 중</td>)}</tr>
           ))}</tbody>
         </table></div>
       </section>
     ) : (
-      <p class="v2-note">{app.data.name} 기능별 비교는 공식 문서로 확인되는 대로 이곳에 채웁니다.{pairId && <> <a href={`${base}compare/${pairId}/`}>두 도구의 사실 나란히 보기 →</a></>}</p>
+      <p class="v2-note">기능 비교는 확인되는 대로 채웁니다.{pairId && <> <a href={`${base}compare/${pairId}/`}>두 도구의 사실 나란히 보기 →</a></>}</p>
     )}
 
     {sameCat.length > 0 && <section class="v2-more">
