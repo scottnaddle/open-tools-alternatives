@@ -1,11 +1,11 @@
 ---
-import { readFileSync } from 'node:fs';
-import { createHash } from 'node:crypto';
-import { join } from 'node:path';
+import styleCss from '../../public/style.css?raw';
 const { title } = Astro.props;
 // public/style.css 는 해시 없는 고정 주소라 Cloudflare(4시간 캐시)가 배포 뒤에도 예전 파일을 내보낸다(2026-10-14 v2 배포 사고).
-// 내용 해시를 쿼리로 붙여, CSS가 바뀌면 주소도 바뀌게 한다. 빌드는 저장소 루트에서 실행된다.
-const cssVer = createHash('sha256').update(readFileSync(join(process.cwd(), 'public', 'style.css'))).digest('hex').slice(0, 10);
+// 내용 해시(FNV-1a)를 쿼리로 붙여, CSS가 바뀌면 주소도 바뀌게 한다(Node 타입 없이 빌드되도록 ?raw 로 읽음).
+let h = 0x811c9dc5;
+for (let i = 0; i < styleCss.length; i++) h = Math.imul(h ^ styleCss.charCodeAt(i), 0x01000193);
+const cssVer = (h >>> 0).toString(16).padStart(8, '0');
 const base = import.meta.env.BASE_URL;
 const path = Astro.url.pathname;
 const navLinks = [
