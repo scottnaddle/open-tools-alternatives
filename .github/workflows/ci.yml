@@ -12,10 +12,10 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: 'npm'
@@ -29,6 +29,9 @@ jobs:
       - name: Build
         run: npm run build
       
+      - name: Daily verifier non-GitHub 403 skip test
+        run: python3 scripts/test_daily_verifier_host.py
+
       - name: Run data verification
         run: |
           if [ -f scripts/verify.py ]; then

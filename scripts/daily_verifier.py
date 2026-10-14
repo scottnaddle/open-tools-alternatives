@@ -3,7 +3,12 @@ A등급 변경(별, 릴리스 등)과 C등급 변경(라이선스)을 PR로 제�
 C등급은 24시간 뒤 재확인 일치해야 게시(commit 'pending-recheck' → 재실행 후 'approved').
 --apply 없이 실행하면 PR만 생성하고 main에 직접 커밋하지 않음."""
 
-import json, os, sys, glob, datetime, urllib.request, urllib.error, uuid, subprocess, time, hashlib
+import json, os, sys, glob, datetime, urllib.request, urllib.parse, urllib.error, uuid, subprocess, time, hashlib
+
+# 비-GitHub 호스트의 403/429는 짧게 재시도한 뒤 건너뛴다.
+# GitHub API 한도만 전체 실행을 중단한다(SystemExit).
+NON_GITHUB_RATE_RETRIES = 2
+NON_GITHUB_RATE_BACKOFF = 1.0
 
 NOW = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat()
 RUN = "daily-" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -47,17 +52,34 @@ def get(url, gh=True):
         if os.environ.get("GITHUB_TOKEN"):
             h["Authorization"] = "Bearer " + os.environ["GITHUB_TOKEN"]
     req = urllib.request.Request(url, headers=h)
-    try:
-        with urllib.request.urlopen(req, timeout=20) as r:
-            if gh and r.headers.get("X-RateLimit-Remaining") == "0":
-                raise SystemExit("GitHub 요청 한도 소진 — 중단")
-            return json.load(r)
-    except urllib.error.HTTPError as e:
-        if e.code in (403, 429):
-            raise SystemExit(f"요청 제한({e.code}) — 중단: {url}")
-        if e.code == 404:
-            return None
-        raise
+    attempt = 0
+    while True:
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                if gh and r.headers.get("X-RateLimit-Remaining") == "0":
+                    raise SystemExit("GitHub 요청 한도 소진 — 중단")
+                return json.load(r)
+        except urllib.error.HTTPError as e:
+            if e.code in (403, 429):
+                if gh:
+                    raise SystemExit(f"요청 제한({e.code}) — 중단: {url}")
+                if attempt < NON_GITHUB_RATE_RETRIES:
+                    wait = NON_GITHUB_RATE_BACKOFF * (2 ** attempt)
+                    attempt += 1
+                    print(
+                        f"경고: 외부 호스트 요청 제한({e.code}) — {wait:.0f}초 후 재시도 ({attempt}/{NON_GITHUB_RATE_RETRIES}): {url}",
+                        file=sys.stderr,
+                    )
+                    time.sleep(wait)
+                    continue
+                print(
+                    f"경고: 외부 호스트 요청 제한({e.code}) — 건너뜀(skipped/unverified): {url}",
+                    file=sys.stderr,
+                )
+                return None
+            if e.code == 404:
+                return None
+            raise
 
 def src(url, excerpt, method="github-api"):
     return {"url": url, "fetchedAt": NOW, "excerpt": excerpt, "method": method}
@@ -108,6 +130,38 @@ def gitlab(base, path):
             "fromTag": True
         }
     return out
+
+def apply_official_mirror(tid, g, changes):
+    """공식 저장소 릴리스를 확인한다.
+
+    외부 호스트가 403/429 등으로 실패하면 'skipped/unverified'만 반환하고
+    github·health·license 등 데이터 상태는 바꾸지 않는다.
+    GitHub 요청 한도의 SystemExit은 Exception이 아니므로 여기서 삼키지 않는다.
+    """
+    repo = g.get("repo")
+    if repo not in OFFICIAL_HOMES:
+        return None
+    base, path = OFFICIAL_HOMES[repo]
+    try:
+        gl = gitlab(base, path)
+    except Exception as e:
+        print(
+            f"경고: {tid} 공식 저장소 조회 실패 — skipped/unverified ({e})",
+            file=sys.stderr,
+        )
+        return "skipped/unverified"
+    if not gl:
+        print(
+            f"경고: {tid} 공식 저장소 응답 없음 — skipped/unverified ({base})",
+            file=sys.stderr,
+        )
+        return "skipped/unverified"
+    if gl.get("release") and not gl["release"].get("fromTag"):
+        if g.get("latestRelease") != gl["release"]:
+            rid = record(tid, "github.latestRelease", g.get("latestRelease"), gl["release"], [src(gl["release"]["url"], "공식 저장소 releases API", "release-assets")], "A")
+            g["latestRelease"] = gl["release"]
+            changes.append({"field": "github.latestRelease", "before": g.get("latestRelease"), "after": gl["release"], "tier": "A", "record": rid})
+    return None
 
 def check_license_text(tid, cfg):
     """라이선스 원문 확인 (C등급)"""
@@ -176,19 +230,11 @@ def process_tool(f):
     
     g["fetchedAt"] = NOW[:10]
     
-    # 미러 체크
-    if repo in OFFICIAL_HOMES:
-        base, path = OFFICIAL_HOMES[repo]
-        try:
-            gl = gitlab(base, path)
-            if gl and gl.get("release") and not gl["release"].get("fromTag"):
-                if g.get("latestRelease") != gl["release"]:
-                    rid = record(tid, "github.latestRelease", g.get("latestRelease"), gl["release"], [src(gl["release"]["url"], "공식 저장소 releases API", "release-assets")], "A")
-                    g["latestRelease"] = gl["release"]
-                    changes.append({"field": "github.latestRelease", "before": g.get("latestRelease"), "after": gl["release"], "tier": "A", "record": rid})
-                    modified = True
-        except Exception as e:
-            pass  # 공식 저장소 조회 실패해도 계속 진행
+    # 미러 체크 — 외부 호스트 실패는 skipped/unverified 로만 남기고 값은 유지
+    n_before = len(changes)
+    mirror_status = apply_official_mirror(tid, g, changes)
+    if len(changes) != n_before:
+        modified = True
     
     # C등급: 라이선스 (제안만, 24시간 뒤 재확인 필요)
     if tid in LICENSE_TARGETS:
@@ -256,7 +302,10 @@ def process_tool(f):
         with open(f, "w") as fp:
             json.dump(t, fp, ensure_ascii=False, indent=2)
     
-    return {"tool": tid, "changes": changes, "modified": modified}
+    out = {"tool": tid, "changes": changes, "modified": modified}
+    if mirror_status:
+        out["mirror"] = mirror_status
+    return out
 
 def recheck_passed(sid, target, new_val):
     """24시간 전 C등급 제안(같은 값)이 있었는지 changes 기록으로 확인."""
@@ -492,6 +541,11 @@ def main():
     print(f"Run ID: {RUN}")
     print(f"Total changes: {total_changes} (A-grade: {a_grade}, C-grade: {c_grade})")
     print(f"Tools modified: {sum(1 for r in all_results if r.get('modified'))} / Skills modified: {sum(1 for r in skill_results if r.get('modified'))} / Axis pages modified: {sum(1 for r in axis_results if r.get('modified'))}")
+    skipped = [r["tool"] for r in all_results if r.get("mirror") == "skipped/unverified"]
+    if skipped:
+        print(f"\n공식 저장소 건너뜀(skipped/unverified) {len(skipped)}건 — 데이터 상태는 유지:")
+        for name in skipped:
+            print(f"  - {name}")
     if stale:
         print(f"\n⏰ 90일 경과 verified 팩트 {len(stale)}건 (재확인 필요):")
         for srow in stale:
@@ -521,7 +575,8 @@ def main():
             "runId": RUN,
             "timestamp": NOW,
             "summary": {"total": total_changes, "a_grade": a_grade, "c_grade": c_grade,
-                        "staleFacts": stale, "staleAxisPages": stale_axis},
+                        "staleFacts": stale, "staleAxisPages": stale_axis,
+                        "skippedMirrors": [r["tool"] for r in all_results if r.get("mirror") == "skipped/unverified"]},
             "results": combined
         }, f, ensure_ascii=False, indent=2)
     
