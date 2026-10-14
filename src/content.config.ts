@@ -158,4 +158,61 @@ const skills = defineCollection({
   ),
 });
 
-export const collections = { tools, schoolApps, changes, skills };
+// 4축 페이지 — Stage 3 데이터 모델 (edzip.kr 차용 IA: 현장사례/수업지도안/심층리뷰)
+// 회귀: Base.astro의 4 navLinks map이 깨지는 케이스(2026-10-13)와 별개. 스키마는 빌드 시 1회 평가되며 안전.
+// 원칙: 출처 필수, manual-seed는 verified 불가(tools와 동일), example=true면 "예시 데이터" 배지 강제
+const Method = z.enum(['github-api', 'release-assets', 'official-site', 'readme', 'procurement-data', 'manual-seed']);
+
+const cases = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/cases' }),
+  schema: z.object({
+    title: z.string(),
+    grade: z.string(),            // 예: "중3"
+    unit: z.string(),             // 예: "포물선 운동"
+    schoolContext: z.string(),    // 예: "중학교 1인 1PC 컴퓨터실"
+    tool: z.object({ slug: z.string(), sourceUrl: z.string().url() }),
+    summary: z.string(),
+    sourceUrl: z.string().url(),  // 사례의 1차 출처(보통 공식 저장소)
+    sourceMethod: Method,
+    fetchedAt: z.string().datetime({ offset: true }),
+    dateChecked: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'dateChecked는 YYYY-MM-DD 형식'),
+    example: z.boolean().default(true),  // true면 페이지에 "예시 데이터" 배지 강제
+    badges: z.array(z.string()).default([]),
+  }),
+});
+
+const lessons = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/lessons' }),
+  schema: z.object({
+    title: z.string(),
+    grade: z.string(),
+    unit: z.string(),
+    duration: z.string(),         // 예: "40분"
+    schoolContext: z.string(),
+    tool: z.object({ slug: z.string(), sourceUrl: z.string().url() }),
+    summary: z.string(),
+    sourceUrl: z.string().url(),
+    sourceMethod: Method,
+    fetchedAt: z.string().datetime({ offset: true }),
+    dateChecked: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'dateChecked는 YYYY-MM-DD 형식'),
+    example: z.boolean().default(true),
+    badges: z.array(z.string()).default([]),
+  }),
+});
+
+const reviews = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/reviews' }),
+  schema: z.object({
+    title: z.string(),
+    tool: z.object({ slug: z.string(), sourceUrl: z.string().url(), license: z.string() }),
+    summary: z.string(),
+    sourceUrl: z.string().url(),
+    sourceMethod: Method,
+    fetchedAt: z.string().datetime({ offset: true }),
+    dateChecked: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'dateChecked는 YYYY-MM-DD 형식'),
+    example: z.boolean().default(true),
+    badges: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { tools, schoolApps, changes, skills, cases, lessons, reviews };
