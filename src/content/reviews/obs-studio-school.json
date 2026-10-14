@@ -1,0 +1,15 @@
+{
+  "title": "OBS Studio — 학교 1인 1PC 영상 수업용 도입 검토",
+  "tool": {
+    "slug": "obs-studio",
+    "sourceUrl": "https://obsproject.com",
+    "license": "GPL-2.0"
+  },
+  "summary": "무료 오픈소스 영상 녹화/스트리밍 도구 OBS Studio의 학교 도입 관점 핵심 정보를 정리합니다. 라이선스·플랫폼·설치·운영·대안 비교.",
+  "sourceUrl": "https://obsproject.com",
+  "sourceMethod": "official-site",
+  "fetchedAt": "2026-10-14T00:00:00+09:00",
+  "dateChecked": "2026-10-14",
+  "example": true,
+  "badges": ["예시 데이터", "출처: 공식 사이트"]
+}

@@ -1,0 +1,17 @@
+{
+  "title": "PhysicsOS로 '공이 어디에 떨어질까?' 10분 데모",
+  "grade": "중3",
+  "unit": "포물선 운동",
+  "schoolContext": "중학교 1인 1PC 컴퓨터실",
+  "tool": {
+    "slug": "122-syf-wcy-PhysicsOS",
+    "sourceUrl": "https://github.com/122-syf-wcy/PhysicsOS"
+  },
+  "summary": "수업 도입 10분, 공식(v²·sin2θ⁄g)으로 예측 → 스킬 지침대로 만든 시뮬레이션으로 검증. 학생들이 직접 속도·각도를 바꿔 보며 공식이 실제 운동과 어떻게 맞물리는지 경험합니다.",
+  "sourceUrl": "https://github.com/122-syf-wcy/PhysicsOS",
+  "sourceMethod": "readme",
+  "fetchedAt": "2026-10-14T00:00:00+09:00",
+  "dateChecked": "2026-10-14",
+  "example": true,
+  "badges": ["예시 데이터", "출처: 공식 README"]
+}

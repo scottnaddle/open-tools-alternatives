@@ -1,0 +1,18 @@
+{
+  "title": "7-Zip으로 '내 파일, 안전하게 정리하기' 1차시",
+  "grade": "초5",
+  "unit": "디지털 시민성",
+  "duration": "40분",
+  "schoolContext": "초등학교 컴퓨터실 또는 학생 개인 기기",
+  "tool": {
+    "slug": "7-zip",
+    "sourceUrl": "https://www.7-zip.org"
+  },
+  "summary": "학생들이 개인 폴더의 자료·사진·과제 파일을 압축·분류하는 활동을 통해, 정보 정리·저작권·개인 정보 보호의 기초 개념을 함께 다룹니다.",
+  "sourceUrl": "https://www.7-zip.org",
+  "sourceMethod": "official-site",
+  "fetchedAt": "2026-10-14T00:00:00+09:00",
+  "dateChecked": "2026-10-14",
+  "example": true,
+  "badges": ["예시 데이터", "출처: 공식 사이트"]
+}

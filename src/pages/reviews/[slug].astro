@@ -1,45 +1,49 @@
 ---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
 
 export async function getStaticPaths() {
-  return [{ params: { slug: 'obs-studio-school' } }];
+  const entries = await getCollection('reviews');
+  const paths: { params: { slug: string }; props: { entry: any } }[] = [];
+  for (const e of entries) {
+    paths.push({ params: { slug: e.id }, props: { entry: e } });
+  }
+  return paths;
 }
-import Base from '../../layouts/Base.astro';
+const { entry } = Astro.props as { entry: CollectionEntry<'reviews'> };
 const base = import.meta.env.BASE_URL;
 ---
-<Base title="OBS Studio 도입 검토 — 심층리뷰">
+<Base title={`${entry.data.title} — 심층리뷰`}>
   <article class="review-detail">
     <a class="back" href={`${base}reviews/`}>← 심층리뷰 목록</a>
-    <span class="cat">심층리뷰 · 영상/녹화</span>
-    <h1>OBS Studio — 학교 1인 1PC 영상 수업용 도입 검토</h1>
-    <p class="meta">(예시) 작성: AI 에이전트 · 출처: <a href="https://obsproject.com" target="_blank" rel="noopener">공식 사이트</a> · <a href="https://github.com/obsproject/obs-studio" target="_blank" rel="noopener">GitHub 저장소</a> (GPL-2.0)</p>
+    <span class="cat">심층리뷰 · 도입 검토</span>
+    <h1>{entry.data.title}</h1>
+    <p class="meta">(예시) 작성: AI 에이전트 · 라이선스: {entry.data.tool.license} · 출처: <a href={entry.data.sourceUrl} target="_blank" rel="noopener">{entry.data.sourceUrl}</a></p>
 
     <div class="callout warn">
       <b>도입 검토용 정리입니다.</b> 학교 적합성·법적 준수 여부는 판정하지 않습니다. 도입 결정은 <strong>정보부장·교무·행정</strong>의 학교 절차에 따라 진행하세요.
     </div>
 
     <h2>한 줄 결론</h2>
-    <p>무료 오픈소스(라이선스 GPL-2.0, 무료 배포·수정 가능)이며 Windows/macOS/Linux 모두 지원, 설치 난이도 '쉬움'. 단, <strong>실시간 수업 녹화·다중 소스 전환</strong> 같은 영상 제작 기능은 카메라·마이크·그래픽카드 성능에 영향을 받는다.</p>
+    <p>무료 오픈소스(라이선스 <strong>{entry.data.tool.license}</strong>)이며 Windows/macOS/Linux 모두 지원, 설치 난이도 '쉬움'. 단, <strong>실시간 녹화·다중 소스 전환</strong>은 PC 사양에 영향을 받는다.</p>
 
     <h2>핵심 정보</h2>
     <table class="rev">
-      <tr><th>라이선스</th><td>GPL-2.0 — 무료 사용·수정·배포 가능. 상업적 사용 가능. 단, GPL이므로 2차 배포 시 동일 라이선스 유지 의무가 발생할 수 있음.</td></tr>
+      <tr><th>라이선스</th><td>{entry.data.tool.license} — 무료 사용·수정·배포 가능. 상업 사용 가능.</td></tr>
       <tr><th>플랫폼</th><td>Windows 10+ / macOS 11+ / Linux(공식)</td></tr>
-      <tr><th>설치</th><td>공식 인스톨러(.exe) 또는 ZIP 포터블. 관리자 권한 필요(인스톨러). 포터블은 USB/개인 폴더에서 실행 가능.</td></tr>
-      <tr><th>관리자 권한</th><td>설치 시 필요. 실행은 일반 사용자 권한으로 가능.</td></tr>
-      <tr><th>네트워크</th><td>오프라인 동작(스트리밍 미사용). 라이브 방송 기능만 외부 서버.</td></tr>
-      <tr><th>계정</th><td>없음(계정 없이 설치·실행 가능).</td></tr>
-      <tr><th>학생 데이터</th><td>없음(외부 전송 없음, 오프라인 사용 시).</td></tr>
-      <tr><th>한국어 UI</th><td>지원(ko-KR).</td></tr>
-      <tr><th>일괄 배포</th><td>Silent 설치 옵션 / winget / msi 변형 등 — 정보부장과 사전 협의.</td></tr>
+      <tr><th>설치</th><td>인스톨러 또는 ZIP 포터블. 관리자 권한 필요(인스톨러). 포터블은 USB/개인 폴더에서 실행.</td></tr>
+      <tr><th>계정</th><td>없음</td></tr>
+      <tr><th>네트워크</th><td>오프라인 동작(스트리밍 미사용). 라이브 방송만 외부 서버.</td></tr>
+      <tr><th>학생 데이터</th><td>없음(외부 전송 없음)</td></tr>
+      <tr><th>한국어 UI</th><td>지원(ko-KR)</td></tr>
     </table>
 
     <h2>도입 시 고려할 점</h2>
     <ul>
-      <li><strong>컴퓨터 사양</strong>: H.264 하드웨어 인코딩이 없는 구형 PC는 녹화 시 CPU 점유가 높아질 수 있다. <code>설정 → 출력 → 녹화 품질</code>에서 인코더를 <code>x264</code>(CPU) / <code>NVENC</code>(NVIDIA) / <code>QuickSync</code>(Intel) 중 선택.</li>
-      <li><strong>마이크/웹캠</strong>: 학교 USB 마이크·웹캠이 있으면 그대로 사용 가능. 없으면 내장 마이크/카메라로도 시작 가능.</li>
-      <li><strong>녹화 파일 크기</strong>: 1시간 1080p H.264 기준 약 1.5~3 GB. 학생 PC의 디스크 용량 확인.</li>
-      <li><strong>저작권</strong>: 학교 수업 녹화는 수업용 저작물에 해당 — 학교 정책·학부모 안내에 따라 별도 동의가 필요할 수 있다.</li>
-      <li><strong>실시간 방송(스트리밍) 기능</strong>: 기본은 사용 안 함. 쓸 경우 유튜브 등 외부 서버 인증키가 필요하며 학교 인터넷 정책 검토.</li>
+      <li><strong>컴퓨터 사양</strong>: H.264 하드웨어 인코딩이 없는 구형 PC는 녹화 시 CPU 점유가 높아진다.</li>
+      <li><strong>마이크/웹캠</strong>: 학교 USB 마이크·웹캠이 있으면 그대로 사용 가능.</li>
+      <li><strong>녹화 파일 크기</strong>: 1시간 1080p H.264 기준 약 1.5~3 GB.</li>
+      <li><strong>저작권</strong>: 학교 수업 녹화는 저작물에 해당 — 학교 정책·학부모 안내에 따라 별도 동의 필요할 수 있다.</li>
     </ul>
 
     <h2>대안 비교</h2>
@@ -54,23 +58,22 @@ const base = import.meta.env.BASE_URL;
     <h2>운영 체크리스트 (정보부장용)</h2>
     <ol class="steps">
       <li>실습 PC 1대에 시범 설치(관리자 권한), 5분 녹화 테스트.</li>
-      <li>녹화 파일을 학교 공유 폴더에 올려 다른 PC에서 재생되는지 확인.</li>
-      <li>학교 네트워크에서 라이브 방송 기능이 막혀 있는 정책인지 확인(막혀 있으면 안전, 그대로 사용).</li>
+      <li>녹화 파일을 학교 공유 폴더에서 재생되는지 확인.</li>
+      <li>학교 네트워크에서 라이브 방송 기능이 막혀 있는지 정책 확인.</li>
       <li>학생 녹화 안내문이 필요한지 교무와 상의.</li>
       <li>winget 또는 인스톨러 명령줄 옵션으로 일괄 배포 스크립트 만들기.</li>
     </ol>
 
     <h2>솔직한 한계</h2>
     <ul>
-      <li>녹화 품질은 PC 사양에 비례 — 구형 PC에서는 화면만 녹화하거나 720p 권장.</li>
-      <li>OBS는 <strong>녹화/방송</strong> 도구로, <strong>편집</strong>은 별도 도구(Shotcut, CapCut 등)가 필요하다.</li>
+      <li>녹화 품질은 PC 사양에 비례 — 구형 PC는 720p 권장.</li>
+      <li>OBS는 <strong>녹화/방송</strong> 도구로, <strong>편집</strong>은 별도 도구(Shotcut, CapCut 등)가 필요.</li>
       <li>초기 설정(소스 추가, 인코더 선택)이 처음에 어려울 수 있다 — 교사 사전 학습 30분 권장.</li>
     </ul>
 
     <h2>관련 자료</h2>
     <ul>
-      <li><a href="https://obsproject.com/kb" target="_blank" rel="noopener">공식 지식 베이스</a></li>
-      <li><a href="https://github.com/obsproject/obs-studio" target="_blank" rel="noopener">공식 GitHub</a></li>
+      <li><a href={entry.data.sourceUrl} target="_blank" rel="noopener">공식 사이트</a></li>
       <li><a href={`${base}apps/bandicam-ocam/`}>열린도구 — 반디캠·오캠 대신</a></li>
     </ul>
 
@@ -100,5 +103,4 @@ const base = import.meta.env.BASE_URL;
 .review-detail table.rev { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 13.5px; }
 .review-detail table.rev th, .review-detail table.rev td { border: 1px solid var(--line, #e5e9ef); padding: 8px 10px; text-align: left; vertical-align: top; }
 .review-detail table.rev th { background: #f2f5f8; font-weight: 700; width: 130px; }
-.review-detail table.rev tr:nth-child(th) { width: 130px; }
 </style>
