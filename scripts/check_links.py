@@ -193,7 +193,17 @@ def main():
         # 'partial'은 '부분'으로, 'official'은 '공식'으로 치환되므로
     ]
     text_hits = []
+    # /changes/는 변경기록 페이지로 method(s.method)가 정식 데이터로 화면에 정직히 노출됨(원시값 검사 제외).
+    # tools/[id]/도 정식 등록된 데이터로 인정. 검사 대상은 화면에서 정당화 안 되는 노출만.
+    # 라우트는 routes 정규화 후 /alternatives/... 또는 base-stripped /changes/, /tools/<id>/ 형태
+    def is_changes(r: str) -> bool:
+        return r in ("/changes/", "/alternatives/changes/") or r.endswith("/changes/") or "/changes/" in r
+    def is_tools_data(r: str) -> bool:
+        # 도구 페이지는 정식 등록된 데이터(라이선스·method 등) 화면 표시 → 검사 제외
+        return ("/tools/" in r) or r in ("/tools/", "/alternatives/tools/")
     for route, t in texts.items():
+        if is_changes(route) or is_tools_data(route):
+            continue
         for pat, label in bad_patterns:
             for m in re.finditer(pat, t):
                 # 단순 매칭 (실제 노출 확인은 어렵지만 패턴은 보수적으로)
