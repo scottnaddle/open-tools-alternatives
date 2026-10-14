@@ -20,6 +20,7 @@ from collections import defaultdict
 BASE = os.environ.get("SITE_BASE", "https://edtechnewsroom.com/alternatives")
 INTERNAL_PREFIX = "/alternatives/"
 DIST = Path(sys.argv[1] if len(sys.argv) > 1 else "dist")
+ASSET_RE = re.compile(r"\.(css|js|map|woff2?|png|jpe?g|gif|svg|ico|webmanifest|mp4|webm|txt|xml)(\?|#|$)")
 
 
 class LinkExtractor(HTMLParser):
@@ -145,24 +146,27 @@ def main():
         h = normalize(h)
         if h.startswith(INTERNAL_PREFIX):
             internal_targets.add(h)
-    missing = sorted(t for t in internal_targets if t not in routes and not t.startswith(INTERNAL_PREFIX + "_astro/") and not t.startswith(INTERNAL_PREFIX + "pagefind/"))
-    # _astro, pagefind, skills-assets, skills-outputs, style.css 등 자산은 라우트 검사 제외
     excluded_prefixes = ("_astro/", "pagefind/", "skills-assets/", "skills-outputs/")
-    missing_real = [m for m in missing if not any(m.startswith(INTERNAL_PREFIX + p) for p in excluded_prefixes)]
-    print(f"\n[1] 404 내부 링크 검사: {len(links)}개 링크 중 라우트 누락 {len(missing_real)}개")
-    for m in missing_real[:10]:
+    missing = sorted(
+        t for t in internal_targets
+        if t not in routes
+        and not any(t.startswith(INTERNAL_PREFIX + p) for p in excluded_prefixes)
+        and not ASSET_RE.search(t)
+    )
+    print(f"\n[1] 404 내부 링크 검사: {len(links)}개 링크 중 라우트 누락 {len(missing)}개")
+    for m in missing[:10]:
         print(f"    - {m}")
-    if len(missing_real) > 10:
-        print(f"    ... {len(missing_real) - 10}개 더")
+    if len(missing) > 10:
+        print(f"    ... {len(missing) - 10}개 더")
 
     # 2) 고아 페이지 검사: for/* 외 — 모든 라우트 중 외부에서 링크된 라우트 집합에 없는 것
     linked_routes = set()
     for _src, h in links:
         h = normalize(h)
         if h.startswith(INTERNAL_PREFIX):
-            # 자산 제외
-            if not any(h.startswith(INTERNAL_PREFIX + p) for p in excluded_prefixes):
-                linked_routes.add(h)
+            if any(h.startswith(INTERNAL_PREFIX + p) for p in excluded_prefixes) or ASSET_RE.search(h):
+                continue
+            linked_routes.add(h)
     # 홈(/)은 모든 페이지에서 링크되지만 prefix /alternatives/를 가정. 홈의 표준 라우트.
     orphans = sorted(r for r in routes if r not in linked_routes and r not in ("/", "/alternatives/"))
     # for/* 디렉토리는 고아 허용
