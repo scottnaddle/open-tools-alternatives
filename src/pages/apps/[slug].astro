@@ -135,28 +135,32 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
     <section class="cmp">
       <div class="cmph">
         <h2>기능 비교: {app.data.name === 'CapCut' ? '모둠 발표 영상 만들기' : '주요 기능'}</h2>
-        <p class="hint">공식 문서로 확인한 칸부터 채웁니다. 기능 목록은 <span class="st st-ex">{EXAMPLE_LABEL}</span></p>
+        <p class="hint">공식 문서로 확인한 칸부터 채웁니다.</p>
       </div>
-      <div class="tscroll">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">기능</th>
-              <th scope="col">{app.data.name}</th>
-              {alts.slice(0, 2).map(({ t }) => <th scope="col">{t.data.name}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {['주요 기능 1', '주요 기능 2', '주요 기능 3'].map((feat) => (
+      {app.data.featureMatrix ? (
+        <div class="tscroll">
+          <table>
+            <thead>
               <tr>
-                <th scope="row">{feat}</th>
-                <td><span class="v null">확인 중</span></td>
-                {alts.slice(0, 2).map(() => <td><span class="v null">확인 중</span></td>)}
+                <th scope="col">기능</th>
+                <th scope="col">{app.data.name}</th>
+                {alts.slice(0, 2).map(({ t }) => <th scope="col">{t.data.name}</th>)}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {app.data.featureMatrix.map((feat) => (
+                <tr>
+                  <th scope="row">{feat.name}</th>
+                  <td>{feat.sourceUrl ? <a href={feat.sourceUrl}>확인됨</a> : <span class="v null">확인 중</span>}</td>
+                  {alts.slice(0, 2).map(() => <td><span class="v null">확인 중</span></td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p class="hint" style="padding:16px 0">기능 비교는 확인되는 대로 채웁니다.</p>
+      )}
     </section>
 
     <section class="notify">
