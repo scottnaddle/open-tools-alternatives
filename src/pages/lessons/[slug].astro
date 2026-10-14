@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import Changelog from '../../components/Changelog.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('lessons');
@@ -67,6 +68,7 @@ const base = import.meta.env.BASE_URL;
     </ul>
 
     <p class="back-to"><a href={`${base}lessons/`}>← 수업지도안 목록으로</a></p>
+    <Changelog targetPrefix={`lessons/${entry.id}`} limit={5} />
   </article>
 </Base>
 

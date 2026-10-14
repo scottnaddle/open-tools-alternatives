@@ -1,0 +1,72 @@
+name: Weekly Audit (6번 에이전트)
+
+on:
+  schedule:
+    # 매주 일요일 22:00 UTC (Asia/Tashkent 03:00 월요일)
+    - cron: '0 22 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Freeze guard
+        run: |
+          if [ -f ops/FREEZE ]; then
+            echo "::warning::ops/FREEZE 존재 — 주간 검증 중단"
+            cat ops/FREEZE || true
+            exit 0
+          fi
+
+      - name: Run weekly audit
+        run: python3 scripts/weekly_audit.py
+
+      - name: Upload summary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-audit-summary
+          path: ops/weekly-audit-summary.json
+          retention-days: 90
+
+      - name: Commit summary if changed
+        run: |
+          if [ ! -f ops/weekly-audit-summary.json ]; then
+            echo "summary 파일 없음 — 스킵"
+            exit 0
+          fi
+          git config user.name "Weekly Audit Bot"
+          git config user.email "bot@yeollin-dogu.dev"
+          git add ops/weekly-audit-summary.json
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 스킵"
+            exit 0
+          fi
+          TODAY=$(date -u +%Y-%m-%d)
+          BRANCH="weekly-audit/${TODAY}"
+          git checkout -b "$BRANCH"
+          git commit -m "chore: weekly-audit summary ${TODAY}"
+          git push origin "$BRANCH"
+          # 사람이 검토 후 수동 merge (PR 자동 발행 안 함 — AGENTS.md §7)
+          echo "branch=${BRANCH} — PR은 사람이 생성"
+
+      - name: Report
+        if: always()
+        run: |
+          if [ -f ops/weekly-audit-summary.json ]; then
+            python3 -c "
+import json
+s = json.load(open('ops/weekly-audit-summary.json'))
+print(f\"stale: {len(s.get('stale', []))} / HEAD failures: {len(s.get('headFailures', []))} / license issues: {len(s.get('licenseIssues', []))}\")
+"
+          fi
