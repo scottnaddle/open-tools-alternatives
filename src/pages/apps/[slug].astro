@@ -99,7 +99,7 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
                 <Mono name={t.data.name} size={56} />
               </span>
               <div>
-                <h2>{t.data.name}</h2>
+                <h2><a href={`${base}tools/${t.id}/`}>{t.data.name}</a></h2>
                 <p>{summary}</p>
               </div>
             </div>

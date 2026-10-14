@@ -109,7 +109,7 @@ const swapExamples = [
                   {t.data.name.replace(/[^A-Za-z0-9]/g, '').slice(0, 2) || t.data.name.slice(0, 2)}
                 </span>
                 <span class="mid">
-                  <b>{t.data.name}</b>
+                  <b><a href={`${base}tools/${t.id}/`}>{t.data.name}</a></b>
                   <span>{description}</span>
                 </span>
                 <span class="date">{t.data.github.lastPush}</span>
