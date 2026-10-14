@@ -72,3 +72,14 @@ ssh root@"$GHOST_SERVER_HOST" 'rm -rf /var/www/alternatives && cp -a /var/www/al
 
 - 배포 자동화는 **수동 트리거만** 허용된다 (사용자 승인 설계). push 자동 배포는 켜지 않는다.
 - 서버가 Docker로 Ghost를 돌리고 nginx가 앞단인 구조다. Ghost 컨테이너(`ghost-production`)와는 무관하게 `/var/www/alternatives/`만 교체한다.
+
+## 8. Actions가 pull request를 만들게 허용
+
+daily-verifier(매일 22:00 UTC)는 검증 결과를 **main에 직접 커밋하지 않고** draft PR로 올린다. 이 PR을 만들려면 저장소 소유자가 아래 설정을 켜 두어야 한다.
+
+**Settings > Actions > General > Workflow permissions > Allow GitHub Actions to create and approve pull requests**
+
+- 워크플로 파일의 `permissions: contents: write`, `pull-requests: write`만으로는 부족하다. 위 체크가 꺼져 있으면 `gh pr create`가 `GitHub Actions is not permitted to create or approve pull requests`로 실패한다.
+- 같은 날 브랜치(`daily-verifier/YYYYMMDD`)에 열린 PR이 있으면 그 브랜치를 갱신하고, 브랜치만 있고 열린 PR이 없으면 `daily-verifier/YYYYMMDD-HHMMSS`로 새로 만든다.
+- 주간 검증(`weekly-audit.yml`)은 PR을 만들지 않는다. summary 브랜치만 push하므로 위 체크와는 별개로 `contents: write`가 필요하다.
+- 발굴 슬롯(`discover.yml`)과 주간 검증은 **schedule과 workflow_dispatch만** 사용한다. push 트리거를 넣지 않는다.
