@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import IxCard from '../../components/IxCard.astro';
+---
+<Base title="심층리뷰 — 도입 검토용 상세 정리">
+  <section class="hero">
+    <h1>심층리뷰</h1>
+    <p class="lead">도구 도입을 검토하는 교사·정보부장·행정 담당자를 위한 <strong>상세 정리</strong>입니다. 라이선스·플랫폼·설치 난이도·제한·대안을 표로 모아, 학교 도입 결정에 필요한 사실만 모읍니다.</p>
+    <p class="meta">모든 리뷰는 공식 저장소·공식 문서를 출처로 하며, <strong>에이전트가 작성</strong>했습니다. 학교 적합성·법적 준수 여부는 판정하지 않습니다.</p>
+  </section>
+
+  <section class="list">
+    <!-- 예시 1건: OBS Studio 도입 검토. map 회피(4 navLinks 회귀 우회 원칙) -->
+    <IxCard
+      href={`${import.meta.env.BASE_URL}reviews/obs-studio-school/`}
+      category="심층리뷰 · 영상/녹화"
+      title="OBS Studio — 학교 1인 1PC 영상 수업용 도입 검토"
+      meta="(예시) 작성: AI 에이전트 · 출처: 공식 사이트·GitHub · 검토: 정보부장"
+      description="무료 오픈소스 영상 녹화/스트리밍 도구 OBS Studio의 학교 도입 관점 핵심 정보를 정리합니다. 라이선스·플랫폼·설치·운영·대안 비교."
+    >
+      <span slot="badges" class="ix-badge">예시 데이터</span>
+      <span slot="badges" class="ix-badge">출처: 공식 README</span>
+    </IxCard>
+  </section>
+
+  <section class="note">
+    <p>도입 검토가 필요한 다른 도구를 제안하고 싶으시면 <a href={`${import.meta.env.BASE_URL}suggest/`}>대안·정정 제안</a>으로 알려 주세요.</p>
+  </section>
+</Base>
