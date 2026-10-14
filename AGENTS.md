@@ -126,3 +126,9 @@
 - main에 직접 커밋하지 않는다 — PR + CI 필수
 - 사용자가 읽는 문구를 영어로 쓰지 않는다 (현장 대상 한국어 유지)
 - 4 navLinks 회귀(2026-10-13 회귀) 재발 방지: 푸터·카드·헤더의 매핑은 4개 항목 이상일 때 직접 명시(getStaticPaths는 `for` 루프 + 타입 명시) — 자세한 패턴은 코드 코멘트 참고
+
+## Cursor Cloud specific instructions
+
+- 개발 서버는 `npm run dev -- --host 0.0.0.0 --port 4321`. `astro.config.mjs`의 base 기본값이 `/alternatives`라서 로컬 주소는 `http://127.0.0.1:4321/alternatives/` 이다. `/` 는 404다.
+- 의존성은 `npm ci`(lockfile). Node.js 22 이상이 `/usr/local/bin`에 있어야 한다. Python 게이트(`check_usagescope.py`, `check_skills.py`, `check_axis_pages.py`, `check_links.py`)는 표준 라이브러리만 쓴다. `check_links.py`는 `npm run build` 이후 `dist/`를 본다.
+- `scripts/verify.py`와 `scripts/daily_verifier.py`는 GitHub API를 호출하고 콘텐츠 JSON을 고칠 수 있다. 환경이 뜨는지 확인할 때는 실행하지 않는다.
