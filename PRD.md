@@ -334,7 +334,9 @@ ops/
 ### 12.1 절대 원칙 (AGENTS.md §1과 동일 — 참조)
 AGENTS.md §1 참조.
 
-### 12.2 라벨 체계 (GitHub에 10개 생성됨)
+### 12.2 라벨 체계
+
+기준 목록과 색은 `ops/LABELS.md`. discover·weekly-audit은 `scripts/ensure_labels.sh`로 이슈에 붙이기 전에 만든다. 아래 10종에 더해 발굴 종류 `software`, `skill`이 있다.
 
 | 라벨 | 색상 | 용도 |
 |---|---|---|

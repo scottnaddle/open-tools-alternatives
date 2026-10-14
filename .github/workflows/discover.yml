@@ -59,9 +59,17 @@ jobs:
           echo "kind=$KIND" >> "$GITHUB_OUTPUT"
           echo "note=$NOTE" >> "$GITHUB_OUTPUT"
 
+      # run 38580319310: 'software' 라벨이 없어 gh issue create --label 이 실패했다.
+      - name: Ensure issue labels
+        id: labels
+        if: steps.freeze.outputs.frozen != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash scripts/ensure_labels.sh
+
       - name: Create discovery issue
         id: create
-        if: steps.freeze.outputs.frozen != 'true'
+        if: steps.freeze.outputs.frozen != 'true' && steps.labels.outcome == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           KIND: ${{ steps.kind.outputs.kind }}
