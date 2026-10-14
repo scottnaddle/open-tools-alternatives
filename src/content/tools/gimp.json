@@ -65,21 +65,15 @@
     ]
   },
   "license": {
-    "value": "NOASSERTION",
-    "status": "unverified",
-    "lastVerified": null,
+    "value": "GPL-3.0",
+    "status": "verified",
+    "lastVerified": "2026-10-14T14:21:17+00:00",
     "sources": [
       {
         "url": "https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING",
-        "fetchedAt": "2026-10-12T22:39:11+00:00",
-        "method": "official-site",
-        "excerpt": "GNU GENERAL PUBLIC LICENSE / Version 3, 29 June 2007 / Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> / Everyone is permitted to copy and distribute verbatim copies / of this license document, but changing it is not allowed. / Preamble / The GNU General Public License is a free … [sha256 e79e9c8a0c85]"
-      },
-      {
-        "url": "https://github.com/GNOME/gimp",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "GitHub 검색 API 조회값",
-        "method": "manual-seed"
+        "fetchedAt": "2026-10-14T14:21:17+00:00",
+        "excerpt": "GNU GENERAL PUBLIC LICENSE / Version 3, 29 June 2007 / Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> / Everyone is permitted to copy and distribute verbatim copies / of this license document, but changing it is not allowed. / Preamble / The GNU General Public License is a free … [sha256 e79e9c8a0c85]",
+        "method": "official-site"
       }
     ]
   },
@@ -98,15 +92,15 @@
   },
   "github": {
     "repo": "GNOME/gimp",
-    "stars": 6508,
-    "lastPush": "2026-10-12",
+    "stars": 6512,
+    "lastPush": "2026-10-14",
     "archived": false,
     "latestRelease": {
       "tag": "GIMP_3_2_6",
       "date": "2026-09-10",
       "url": "https://gitlab.gnome.org/GNOME/gimp/-/releases/GIMP_3_2_6"
     },
-    "fetchedAt": "2026-10-12",
+    "fetchedAt": "2026-10-14",
     "official": {
       "host": "https://gitlab.gnome.org/GNOME/gimp",
       "lastActivity": "2026-10-12",
@@ -121,31 +115,10 @@
   },
   "health": "active",
   "verification": {
-    "runId": "verify-20261013033534",
-    "at": "2026-10-12T22:35:34+00:00",
-    "unresolved": [
-      "라이선스 C등급 대기: 제안 GPL-3.0 (24시간 뒤 재확인)"
-    ],
-    "notes": [
-      "GitHub 저장소는 미러로 보임(설명: 'Read-only mirror of https://gitlab.gnome.org/GNOME/gimp')",
-      "공식 저장소 https://gitlab.gnome.org/GNOME/gimp 활동 2026-10-12, 최신 {'tag': 'GIMP_3_2_6', 'date': '2026-09-10', 'url': 'https://gitlab.gnome.org/GNOME/gimp/-/releases/GIMP_3_2_6'}",
-      "공식 저장소 라이선스 키: gpl-3.0+ (SPDX 표기 확인 후 반영 — C등급)",
-      "GitHub homepage 필드: https://gitlab.gnome.org/GNOME/gimp (공식 사이트 후보, 미반영 — B등급·공식 사이트 확인 필요)"
-    ]
-  },
-  "pendingLicense": {
-    "value": "GPL-3.0",
-    "note": "COPYING은 GPL v3 전문. 'or later' 근거 없음 → 사용자 결정(10-13)으로 GPL-3.0 유지",
-    "proposedAt": "2026-10-12T22:39:11+00:00",
-    "earliestApply": "2026-10-13T22:39:11+00:00",
-    "sources": [
-      {
-        "url": "https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING",
-        "fetchedAt": "2026-10-12T22:39:11+00:00",
-        "method": "official-site",
-        "excerpt": "GNU GENERAL PUBLIC LICENSE / Version 3, 29 June 2007 / Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> / Everyone is permitted to copy and distribute verbatim copies / of this license document, but changing it is not allowed. / Preamble / The GNU General Public License is a free … [sha256 e79e9c8a0c85]"
-      }
-    ]
+    "runId": "daily-20261014-142117",
+    "at": "2026-10-14T14:21:17+00:00",
+    "unresolved": [],
+    "notes": []
   },
   "koreanUI": {
     "value": "yes",

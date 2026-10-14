@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-14T14:21:17+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261014-142117",
+  "target": "tools/flameshot.github.stars",
+  "before": 31166,
+  "after": 31188,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/flameshot-org/flameshot",
+      "fetchedAt": "2026-10-14T14:21:17+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

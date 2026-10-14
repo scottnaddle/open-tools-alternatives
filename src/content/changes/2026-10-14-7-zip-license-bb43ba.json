@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-14T14:21:17+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261014-142117",
+  "target": "tools/7-zip.license",
+  "before": null,
+  "after": "LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND LicenseRef-unRAR-restriction",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/ip7z/7zip/main/DOC/License.txt",
+      "fetchedAt": "2026-10-14T14:21:17+00:00",
+      "excerpt": "7-Zip source code / ~~~~~~~~~~~~~~~~~ / License for use and distribution / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ / 7-Zip Copyright (C) 1999-2026 Igor Pavlov. / The licenses for files are: / - CPP/7zip/Compress/Rar* files: the \"GNU LGPL\" with \"unRAR license restriction\" / - CPP/7zip/Compress/LzfseDecoder. … [sha256 dac8389b6bc3]",
+      "method": "readme"
+    },
+    {
+      "url": "https://www.7-zip.org/license.txt",
+      "fetchedAt": "2026-10-14T14:21:17+00:00",
+      "excerpt": "7-Zip / ~~~~~ / License for use and distribution / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ / 7-Zip Copyright (C) 1999-2025 Igor Pavlov. / The licenses for files are: / - 7z.dll: / - The \"GNU LGPL\" as main license for most of the code / - The \"GNU LGPL\" with \"unRAR license restriction\" for some code / - The … [sha256 3a184aa13dc8]",
+      "method": "official-site"
+    }
+  ],
+  "tier": "C",
+  "gates": [
+    "license-text",
+    "recheck-24h"
+  ],
+  "commit": "pending"
+}
