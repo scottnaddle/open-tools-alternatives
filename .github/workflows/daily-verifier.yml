@@ -83,7 +83,7 @@ jobs:
           
           # 브랜치 생성 및 커밋
           git checkout -b "$BRANCH"
-          git add src/content/tools/ src/content/skills/ src/content/changes/
+          git add src/content/tools/ src/content/skills/ src/content/cases/ src/content/lessons/ src/content/reviews/ src/content/changes/
           git commit -m "chore: daily verification update ${DATE}
 
           A-grade changes (stars, releases, health) are ready to merge.

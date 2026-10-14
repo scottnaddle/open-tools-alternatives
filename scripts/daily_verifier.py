@@ -341,6 +341,122 @@ def stale_facts(max_age_days=90):
                     out.append({"tool": tid, "field": k, "ageDays": age})
     return out
 
+
+def head_check(url, timeout=15):
+    """1차 sourceUrl의 HEAD 검사. (status, final_url) — 200/3xx=OK, 4xx/5xx/에러=fail."""
+    try:
+        req = urllib.request.Request(url, method="HEAD", headers={
+            "User-Agent": "yeollin-dogu-daily-verifier/1.0",
+            "Accept": "*/*",
+        })
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return (r.status, r.geturl())
+    except urllib.error.HTTPError as e:
+        return (e.code, url)
+    except Exception as e:
+        return (-1, url)
+
+
+def process_axis_page(path, kind, stale_days=90):
+    """4축(cases/lessons/reviews) entry 하나 처리:
+    1) 1차 sourceUrl HEAD 검사 — 실패 시 C등급 change record(24h 재확인 후 alert)
+    2) dateChecked 자동 갱신(HEAD 성공 시)
+    3) stale(>stale_days) 표시(데이터만, 변경 X)
+    Returns: {"entry", "status", "changes", "modified", "stale"}.
+    """
+    eid = os.path.basename(path)[:-5]
+    with open(path) as fp:
+        d = json.load(fp)
+    src_url = d.get("sourceUrl")
+    if not src_url:
+        return {"entry": eid, "kind": kind, "error": "sourceUrl 없음", "changes": []}
+    code, final = head_check(src_url)
+    ok = (200 <= code < 400)
+    changes = []
+    modified = False
+    stale_flag = False
+    today = datetime.date.today()
+
+    if ok:
+        # dateChecked 자동 갱신
+        try:
+            prev = d.get("dateChecked")
+            if prev != today.isoformat():
+                d["dateChecked"] = today.isoformat()
+                modified = True
+        except Exception:
+            pass
+    else:
+        # C등급 change record — 24h 재확인
+        rid = record(eid, f"sourceUrlStatus", "200", str(code),
+                     [src(src_url, f"HEAD {code}", "official-site")], "C", prefix=kind)
+        if recheck_axis_passed(eid, kind, str(code)):
+            # 24h 일치 → alert: 변경은 데이터에 적용하지 않고 alert만
+            changes.append({"field": "sourceUrlStatus", "before": "200", "after": str(code),
+                            "tier": "C", "record": rid, "status": "alert (수동 조사 필요)"})
+            with open(f"{CHG}/{rid}.json") as fp:
+                rec = json.load(fp)
+            rec["gates"] = ["pending-recheck", "recheck-24h", "alert"]
+            with open(f"{CHG}/{rid}.json", "w") as fp:
+                json.dump(rec, fp, ensure_ascii=False, indent=2)
+        else:
+            changes.append({"field": "sourceUrlStatus", "before": "200", "after": str(code),
+                            "tier": "C", "record": rid, "status": "pending-24h"})
+
+    # stale 판단(데이터 변경 X, 보고용)
+    try:
+        prev_d = d.get("dateChecked")
+        if prev_d:
+            age = (today - datetime.date.fromisoformat(prev_d[:10])).days
+            stale_flag = age > stale_days
+    except Exception:
+        pass
+
+    if modified:
+        with open(path, "w") as fp:
+            json.dump(d, fp, ensure_ascii=False, indent=2)
+    return {"entry": eid, "kind": kind, "status": code, "ok": ok, "changes": changes,
+            "modified": modified, "stale": stale_flag}
+
+
+def recheck_axis_passed(eid, kind, new_val):
+    """4축용 24h 재확인 — 같은 kind/eid/sourceUrlStatus에 대해 24h 이상 지난 같은 값 change record가 있는지."""
+    cutoff = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=24)).isoformat()
+    for f in glob.glob(f"{CHG}/*.json"):
+        try:
+            with open(f) as fp:
+                rec = json.load(fp)
+        except Exception:
+            continue
+        if (rec.get("target") == f"{kind}/{eid}.sourceUrlStatus"
+                and rec.get("after") == new_val and rec.get("tier") == "C"
+                and "pending-recheck" in rec.get("gates", [])
+                and rec.get("at", "") <= cutoff):
+            return True
+    return False
+
+
+def stale_axis_pages(max_age_days=90):
+    """4축 entry 중 dateChecked가 max_age_days 초과인 목록."""
+    out = []
+    today = datetime.date.today()
+    for kind in ("cases", "lessons", "reviews"):
+        for path in sorted(glob.glob(f"src/content/{kind}/*.json")):
+            try:
+                d = json.loads(path.read_text())
+            except Exception:
+                continue
+            dc = d.get("dateChecked")
+            if not dc:
+                continue
+            try:
+                age = (today - datetime.date.fromisoformat(dc[:10])).days
+            except ValueError:
+                continue
+            if age > max_age_days:
+                out.append({"kind": kind, "entry": path.split("/")[-1][:-5], "ageDays": age})
+    return out
+
 def main():
     if os.path.exists("ops/FREEZE"):
         reason = open("ops/FREEZE").read().strip()[:200]
@@ -357,23 +473,34 @@ def main():
     for f in sorted(glob.glob("src/content/skills/*.json")):
         skill_results.append(process_skill(f))
         time.sleep(0.3)  # rate limit
+
+    axis_results = []
+    for kind in ("cases", "lessons", "reviews"):
+        for f in sorted(glob.glob(f"src/content/{kind}/*.json")):
+            axis_results.append(process_axis_page(f, kind))
+            time.sleep(0.5)  # 외부 HEAD 호출 rate-limit 보호
     
     # 요약
-    combined = all_results + skill_results
+    combined = all_results + skill_results + axis_results
     total_changes = sum(len(r["changes"]) for r in combined)
     a_grade = sum(1 for r in combined for c in r["changes"] if c["tier"] == "A")
     c_grade = sum(1 for r in combined for c in r["changes"] if c["tier"] == "C")
     stale = stale_facts()
+    stale_axis = stale_axis_pages()
 
     print(f"\n=== Daily Verifier Summary ===")
     print(f"Run ID: {RUN}")
     print(f"Total changes: {total_changes} (A-grade: {a_grade}, C-grade: {c_grade})")
-    print(f"Tools modified: {sum(1 for r in all_results if r.get('modified'))} / Skills modified: {sum(1 for r in skill_results if r.get('modified'))}")
+    print(f"Tools modified: {sum(1 for r in all_results if r.get('modified'))} / Skills modified: {sum(1 for r in skill_results if r.get('modified'))} / Axis pages modified: {sum(1 for r in axis_results if r.get('modified'))}")
     if stale:
         print(f"\n⏰ 90일 경과 verified 팩트 {len(stale)}건 (재확인 필요):")
         for srow in stale:
             print(f"  - {srow['tool']}.{srow['field']} ({srow['ageDays']}일 경과)")
-    
+    if stale_axis:
+        print(f"\n⏰ 4축 페이지 90일 경과 {len(stale_axis)}건 (재확인 필요):")
+        for srow in stale_axis:
+            print(f"  - {srow['kind']}/{srow['entry']} ({srow['ageDays']}일 경과)")
+
     # 변경 세부사항
     for r in all_results:
         if r["changes"]:
@@ -381,14 +508,20 @@ def main():
             for c in r["changes"]:
                 status = f" [{c.get('status', 'immediate')}]" if c["tier"] == "C" else ""
                 print(f"  - {c['field']}: {c['before']} → {c['after']} ({c['tier']}{status})")
-    
+    for r in axis_results:
+        if r.get("changes"):
+            print(f"\n[r={r['kind']}/{r['entry']}] (HEAD: {r.get('status')})")
+            for c in r["changes"]:
+                status = f" [{c.get('status', 'immediate')}]"
+                print(f"  - {c['field']}: {c['before']} → {c['after']} ({c['tier']}{status})")
+
     # 결과 저장
     with open("/tmp/daily_verifier_summary.json", "w") as f:
         json.dump({
             "runId": RUN,
             "timestamp": NOW,
             "summary": {"total": total_changes, "a_grade": a_grade, "c_grade": c_grade,
-                        "staleFacts": stale},
+                        "staleFacts": stale, "staleAxisPages": stale_axis},
             "results": combined
         }, f, ensure_ascii=False, indent=2)
     
