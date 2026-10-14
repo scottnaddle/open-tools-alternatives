@@ -1,5 +1,11 @@
 ---
+import styleCss from '../../public/style.css?raw';
 const { title } = Astro.props;
+// public/style.css 는 해시 없는 고정 주소라 Cloudflare(4시간 캐시)가 배포 뒤에도 예전 파일을 내보낸다(2026-10-14 v2 배포 사고).
+// 내용 해시(FNV-1a)를 쿼리로 붙여, CSS가 바뀌면 주소도 바뀌게 한다(Node 타입 없이 빌드되도록 ?raw 로 읽음).
+let h = 0x811c9dc5;
+for (let i = 0; i < styleCss.length; i++) h = Math.imul(h ^ styleCss.charCodeAt(i), 0x01000193);
+const cssVer = (h >>> 0).toString(16).padStart(8, '0');
 const base = import.meta.env.BASE_URL;
 const path = Astro.url.pathname;
 const navLinks = [
@@ -12,7 +18,7 @@ const navLinks = [
 <title>{title} — 열린도구</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href={`${base}style.css`}></head>
+<link rel="stylesheet" href={`${base}style.css?v=${cssVer}`}></head>
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 <header class="top ux">

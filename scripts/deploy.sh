@@ -73,7 +73,8 @@ done
 # 4-1) HTML이 실제로 참조하는 CSS·JS가 로드되는지 + 하위경로 누락 감지 (2026-10-13 사고 재발 방지)
 echo "▶ 에셋 참조 검사 (홈 HTML 기준)"
 HTML=$(curl -s --max-time 20 "https://edtechnewsroom.com/alternatives/")
-echo "$HTML" | grep -oE '(href|src)="/[^"]+\.(css|js)"' | sed -E 's/^(href|src)="//; s/"$//' | sort -u | head -8 > /tmp/live-assets.txt
+# 캐시 무효화용 쿼리(?v=...)가 붙은 주소도 잡는다
+echo "$HTML" | grep -oE '(href|src)="/[^"]+\.(css|js)(\?[^"]*)?"' | sed -E 's/^(href|src)="//; s/"$//' | sort -u | head -8 > /tmp/live-assets.txt
 if [ ! -s /tmp/live-assets.txt ]; then
   echo "✗ 홈 HTML에서 에셋 참조를 찾지 못함"; FAIL=1
 fi
@@ -82,6 +83,15 @@ while IFS= read -r a; do
   echo "  ${CODE}  ${a}"
   [ "$CODE" = "200" ] || FAIL=1
 done < /tmp/live-assets.txt
+# 4-2) CDN이 예전 style.css 를 내보내는지 검사 (2026-10-14 사고: 새 HTML + 캐시된 예전 CSS로 화면 깨짐)
+LIVE_CSS=$(echo "$HTML" | grep -oE 'href="/alternatives/style\.css[^"]*"' | head -1 | sed -E 's/^href="//; s/"$//')
+if [ -z "$LIVE_CSS" ]; then
+  echo "✗ 홈 HTML에서 style.css 참조를 찾지 못함"; FAIL=1
+elif ! curl -s --max-time 20 "https://edtechnewsroom.com${LIVE_CSS}" | cmp -s - dist/style.css; then
+  echo "✗ 운영 ${LIVE_CSS} 내용이 이번 빌드(dist/style.css)와 다름 — CDN 캐시 의심"; FAIL=1
+else
+  echo "  ✓ ${LIVE_CSS} = dist/style.css"
+fi
 if echo "$HTML" | grep -qE 'href="/(apps|tools|skills|compare|_astro)/'; then
   echo "✗ 하위경로(/alternatives) 누락 빌드로 보임 — 루트 절대 링크 발견"; FAIL=1
 fi
