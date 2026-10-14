@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-14T01:03:02+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261014-010302",
+  "target": "tools/inkscape.health",
+  "before": "active",
+  "after": "stale",
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/inkscape/inkscape",
+      "fetchedAt": "2026-10-14T01:03:02+00:00",
+      "excerpt": "기준일 2022-03-03",
+      "method": "github-api"
+    }
+  ],
+  "tier": "C",
+  "gates": [
+    "pending-recheck"
+  ],
+  "commit": "pending"
+}

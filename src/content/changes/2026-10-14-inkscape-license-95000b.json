@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-14T01:03:02+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261014-010302",
+  "target": "tools/inkscape.license",
+  "before": null,
+  "after": "GPL-3.0-or-later",
+  "sources": [
+    {
+      "url": "https://gitlab.com/inkscape/inkscape/-/raw/master/COPYING",
+      "fetchedAt": "2026-10-14T01:03:02+00:00",
+      "excerpt": "Inkscape license / ================ / Most Inkscape source code is available under the GNU General Public License, version 2 or later. / Notable exceptions are: / - all javascript polyfill libraries are CC0 / Public Domain / - some libraries in src/3rdparty (mostly GNU Lesser General Public License  … [sha256 6dade9d083eb]",
+      "method": "official-site"
+    }
+  ],
+  "tier": "C",
+  "gates": [
+    "license-text",
+    "recheck-24h"
+  ],
+  "commit": "pending"
+}

@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-14T01:03:02+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261014-010302",
+  "target": "tools/nanazip.license",
+  "before": "NOASSERTION",
+  "after": "MIT AND LicenseRef-7-Zip",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/M2Team/NanaZip/main/License.md",
+      "fetchedAt": "2026-10-14T01:03:02+00:00",
+      "excerpt": "﻿# NanaZip License / For giving the maximum respect for the upstream projects and following the / philosophy about open-source software from Kenji Mouri (MouriNaruto), the one / of the M2-Team founders. / The source code of NanaZip (not including the source code from third-party / libraries, 7-Zip o … [sha256 97a7e4a93532]",
+      "method": "readme"
+    }
+  ],
+  "tier": "C",
+  "gates": [
+    "license-text",
+    "recheck-24h"
+  ],
+  "commit": "pending"
+}
