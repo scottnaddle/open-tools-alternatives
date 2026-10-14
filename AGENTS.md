@@ -19,7 +19,7 @@
 8. **외부 발송(메일·메시지·알림)은 반드시 초안 → 사용자 승인 순서.** 승인 없이 보내지 않는다.
 9. **비밀값은 절대 출력·커밋하지 않는다.** 서버 비밀번호 등은 GitHub 시크릿 또는 셸 환경변수로만 다룬다. 서버 IP·접속정보가 적힌 문서를 저장소에 커밋하지 않는다.
 10. **"CI 통과"는 반드시 `gh pr checks <번호>`로 직접 확인한다.** 과거에 확인 없이 "통과"라고 보고했다가 실제로는 실패였던 사례가 있다. 실패한 PR을 병합한 실제 사고도 있었다(2026-10-13, PR #10).
-    - 참고: 저장소가 비공개 무료 플랜이라 브랜치 보호(필수 상태 검사)를 걸 수 없다. 공개 전환 또는 GitHub Pro 구독 시 즉시 `build-and-check` 필수 검사를 설정할 것. 그 전까지는 위 확인 절차가 유일한 방어선이다.
+    - 참고: 필수 검사 `build-and-check` 는 소유자가 Rulesets에서 설정한다 (`ops/BRANCH_PROTECTION.md`). 에이전트 토큰으로는 걸 수 없다. 저장소가 공개이면 무료 플랜에서 설정할 수 있다. 설정 전까지는 위 확인 절차가 방어선이고, 일일 검증 자동 병합은 이 검사가 필수일 때만 요청한다.
 
 ## 2. 6개 에이전트 (사이트 운영 단위)
 
@@ -31,7 +31,7 @@
 | 2 | **연구(Research)** | 이슈 큐 `queue/research` | 1의 리포트(공식 저장소·문서) | 코멘트로 출처·라이선스·학교 활용 시나리오·적합 컬렉션 결정 | 라이선스 허용목록 통과 → `agent/research` → 3으로 |
 | 3 | **제조(Build)** | 라벨 `agent/research` → `agent/build` | 2의 검증 결과 | 데이터 JSON + (필요시) 자유구성 페이지 + `changes/` 변경기록 | 로컬 게이트(`check_*.py`) → PR → `agent/build` → 4로 |
 | 4 | **검수(Verify)** | PR 생성·라벨 `agent/build` | 3의 PR | 검수 결과(승인/반려) | CI 실제 통과(`gh pr checks`) + 운영 원칙 점검 → 승인 시 `agent/verify` → 5로 / 반려 시 3으로 |
-| 5 | **게시(Publish)** | 라벨 `agent/verify` 승인 | 4의 승인된 PR | main 반영 + 배포 | PR merge + `deploy.yml` 수동 실행 → 이슈 close + `agent/published` |
+| 5 | **게시(Publish)** | 라벨 `agent/verify` 승인 | 4의 승인된 PR | main 반영 + 배포 | 사람이 merge → `deploy.yml`(경로 필터 푸시). 일일 검증만 자동 병합. 이슈 close + `agent/published` |
 | 6 | **주간 검증(Weekly Audit)** | 매주 일요일 22:00 UTC | 기존 모든 항목의 1차 sourceUrl + GitHub release | 변경 감지 시 `changes/` 기록 + **페이지 아카이빙 표시 업데이트** | 라벨 `priority/urgent` 자동 — **운영 사이트 장애 / 유료 전환 공식 발표 / 데이터 손상** |
 
 **흐름 다이어그램**:
@@ -71,7 +71,7 @@
 | 일일 자동 슬롯 | 매일 22:00 UTC — `.github/workflows/discover.yml` (cron) | **1번 에이전트의 "오늘의 후보 1건" 이슈 자동 발행** — 사람은 본문만 채움. 동시에 `daily-verifier.yml`은 tools/skills/4축 팩트 재확인. | 워크플로 (자동) |
 | 주간 검증 | 매주 일요일 22:00 UTC — `.github/workflows/weekly-audit.yml` (cron) | **6번 에이전트가 기존 모든 항목의 1차 sourceUrl HEAD + GitHub releases를 재검사** → 변경 시 `changes/` 기록 + 각 페이지의 변경 이력 표시 갱신 | 워크플로 (자동) + 사람의 PR 검토 |
 | 긴급 정지 | `ops/FREEZE` 파일 존재 | 모든 워크플로·검증이 즉시 중단 | (수동) |
-| 배포 | `deploy.yml` 수동 실행 | `ops/RUNBOOK.md` 절차. main 병합 후 사용자가 결정 | 사람 (인식님) |
+| 배포 | `deploy.yml` — main 푸시(경로 필터) · 일일 검증 병합 후 호출 · 수동 | `ops/RUNBOOK.md`. `DEPLOY_SSH_KEY` 가 없으면 건너뜀. 키 설정은 `ops/DEPLOY_KEY_SETUP.md` | 워크플로 (키 설정 후) |
 
 ## 4. 작업 큐 = GitHub Issues + 라벨
 
@@ -90,6 +90,7 @@
 - `agent/build` — 3번 에이전트(제조) 처리 중
 - `agent/verify` — 4번 에이전트(검수) 처리 중
 - `agent/published` — 5번 에이전트(게시) 완료
+- `agent/verifier` — 일일 검증 PR 전용. `daily-verifier/` 브랜치와 함께 있을 때만 CI 통과 후 자동 스쿼시 병합
 
 **발굴 슬롯 종류** (`discover.yml`이 `--label`로 붙임): `software`, `skill`.
 전체 이름·색·설명은 `ops/LABELS.md`. 워크플로는 붙이기 전에 `scripts/ensure_labels.sh`로 라벨을 만든다 (`issues: write` 필요).
@@ -112,7 +113,7 @@
 4. **로컬 게이트**: `python3 scripts/verify.py && python3 scripts/check_usagescope.py && python3 scripts/check_skills.py && python3 scripts/check_axis_pages.py`
 5. **빌드**: `npm run build`
 6. **PR** → **`gh pr checks`로 CI 실제 통과 확인** → **병합** (4번 검수가 함께 수행)
-7. **게시** — `gh workflow run deploy.yml --ref main` (사용자/인식님 결정)
+7. **게시** — 콘텐츠·디자인·발굴 PR은 사람이 병합한다. main에 사이트 파일이 들어가면 `deploy.yml`이 배포한다(SSH 키가 있을 때). 일일 검증 PR만 자동 병합되며, 그 병합은 `deploy-after-verifier.yml`이 배포를 호출한다. 절차는 `ops/RUNBOOK.md`.
 8. **STATUS.md** 갱신 (콘텐츠 수·검증 현황·다음 할 일)
 
 ## 6. 긴급 정지 (FREEZE)

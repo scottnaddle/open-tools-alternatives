@@ -102,7 +102,7 @@
 | 2 | **연구(Research)** | 이슈 큐 `queue/research` | 1의 리포트(공식 저장소·문서) | 코멘트(출처·라이선스·컬렉션 결정) | 라이선스 1차 재확인 + 학교 관점 시나리오 |
 | 3 | **제조(Build)** | 라벨 `agent/research` | 2의 검증 결과 | 데이터 JSON + (선택) 자유구성 페이지 + PR | 로컬 게이트 4종 |
 | 4 | **검수(Verify)** | PR 생성·라벨 `agent/build` | 3의 PR | `gh pr checks` + 운영 원칙 점검 | CI 실제 통과 + 원칙 10개 |
-| 5 | **게시(Publish)** | 라벨 `agent/verify` | 승인된 PR | merge + deploy + 이슈 close + `agent/published` | `deploy.yml` 수동 실행 |
+| 5 | **게시(Publish)** | 라벨 `agent/verify` | 승인된 PR | merge + deploy + 이슈 close + `agent/published` | 사람이 merge 하면 `deploy.yml` (SSH 키 필요). 일일 검증만 자동 병합 |
 | 6 | **주간 검증(Weekly Audit)** | 매주 일요일 22:00 UTC (예정) | 기존 모든 항목의 1차 sourceUrl + GitHub release | 변경 시 `changes/` 기록 + 페이지 변경 이력 갱신 | A등급 즉시 / C등급 24h 재확인 |
 
 ### 6.2 발견(Discovery) 자동화 — `.github/workflows/discover.yml`
@@ -135,15 +135,15 @@ reviews: { title, tool{slug, sourceUrl, license}, summary, sourceUrl, sourceMeth
 fact<T>(v: T) => { value, sources: Source[], status: 'verified'|'unverified'|'conflict'|'stale', lastVerified }
 ```
 - `status === 'verified'`이면 `sources`에 `manual-seed` 외 1개 이상 필수(Zod refine, [content.config.ts](repo/src/content.config.ts) L18-21)
-- `daily_verifier`가 매일 stars/latestRelease/lastPush/license 재확인 → 변경 시 `src/content/changes/` JSON 기록 + draft PR
+- `daily_verifier`가 매일 stars/latestRelease/lastPush/license 재확인 → 변경 시 `src/content/changes/` JSON 기록 + PR (`agent/verifier`, CI 후 자동 스쿼시)
 - C등급(license·archived·health)은 `pending-24h` → 24h 후 재확인 일치 시 `approved` → 적용
 
 ### 6.6 배포 ([ops/RUNBOOK.md](repo/ops/RUNBOOK.md))
 
-- **수동 트리거**: `gh workflow run deploy.yml --ref main` (사용자 결정)
+- **트리거**: `main` 푸시(경로 필터) · 일일 검증 병합 후 `workflow_call` · `gh workflow run deploy.yml --ref main`
 - **절차**: 산출물 검사(index.html ≥ 60, pagefind 존재) → 서버 백업 → 원자적 교체(임시 폴더 → mv) → 헬스체크 5종(홈/skills/about/pagefind/뉴스룸) → 실패 시 자동 롤백
 - **강화된 헬스체크**: 홈 HTML이 참조하는 CSS/JS의 실제 200 확인 + 루트 절대링크 감지(2026-10-13 CSS 404 사고 방지)
-- **시크릿**: `GHOST_SERVER_ROOT_PASSWORD`, `GHOST_SERVER_HOST` (GitHub Secrets 1회 설정)
+- **시크릿**: `DEPLOY_SSH_KEY`, `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_KNOWN_HOSTS`. 비-root 사용자 `deploy`. root 비밀번호는 쓰지 않는다. 설정은 `ops/DEPLOY_KEY_SETUP.md`. 키가 없으면 배포는 안내 후 건너뛴다.
 - **금지**: nginx·Ghost·Cloudflare·DNS 설정 변경 금지 (정적 파일 교체만)
 
 ### 6.7 GitHub Issues + 라벨

@@ -1,7 +1,7 @@
 # STATUS.md — 현재 상태 스냅샷
 
 > **에이전트 필독**: 이 파일은 프로젝트의 살아있는 상태입니다. 작업을 마칠 때마다 갱신하세요.
-> 마지막 갱신: 2026-10-14 19:50 (Asia/Tashkent) — 오픈스킬 상세를 공통 템플릿으로 맞춤. 소개 글이 없는 스킬도 빈 그림 칸 없이 같은 구성
+> 마지막 갱신: 2026-10-14 20:15 (Asia/Tashkent) — main(#34 자동 병합·SSH 배포)을 스킬 템플릿 브랜치에 병합. 상세 템플릿은 유지하고, 배포 키·필수 검사 전에는 자동 병합 요청과 배포를 건너뜀
 
 ## 한 줄 요약
 
@@ -26,7 +26,7 @@
 - 운영: https://edtechnewsroom.com/alternatives/ (뉴스룸 VPS 정적 호스팅)
 - **2026-10-14 14:08 (Asia/Tashkent): main 8337fe1 배포 완료** — 디자인 개선안 v2(PR #24) + CSS 캐시 무효화(PR #25). deploy.yml 수동 실행(run 38539994031), 헬스체크에 "운영 style.css = dist/style.css" 통과, 서버 백업 `alternatives.bak-20261014-090744`
 - 2026-10-13 22:31 (Asia/Tashkent): main 기준 배포 완료 — deploy.yml 수동 실행(run 38439208024), 헬스체크 5종 200, 서버 백업 `alternatives.bak-20261013-173103`
-- 시크릿 설정 완료: `GHOST_SERVER_HOST`, `GHOST_SERVER_ROOT_PASSWORD` → 이제 `gh workflow run deploy.yml --ref main` 한 줄로 배포 가능
+- 배포 접속은 root 비밀번호를 쓰지 않는다. `DEPLOY_SSH_KEY` 가 없으면 자동 배포는 안내만 남기고 건너뛴다. 소유자 절차는 `ops/DEPLOY_KEY_SETUP.md`. 자동 병합 조건은 `ops/BRANCH_PROTECTION.md` (필수 검사 `build-and-check`). 예전 `GHOST_SERVER_ROOT_PASSWORD` 는 코드에서 제거했고, 키 배포가 성공한 뒤 시크릿을 지우면 된다.
 - 배포 후 외부 확인됨: 이달의 도구 문구 교정·장면 카드 힌트 수정이 운영에 반영
 - checkout 경고였던 `lucian-uxui` gitlink는 빈 디렉터리이고 `.gitmodules`도 없어 인덱스에서 제거함. 사이트 코드는 이 경로를 쓰지 않았음
 - **사고 기록(2026-10-13)**: 첫 자동화 배포(22:31)가 ASTRO_BASE 누락으로 루트 절대경로 빌드 → CSS 전면 404, UI 붕괴. PR #8으로 base 기본값 '/alternatives' 반전 + 헬스체크에 "HTML 참조 CSS 실제 로드"·"루트 절대링크 감지" 추가, 22:39 재배포로 완치. 교훈: URL 200만 있는 헬스체크는 콘텐츠 깨짐을 못 잡는다
@@ -45,6 +45,7 @@
 - [x] **워크플로 YAML·P0 공개 화면 (2026-10-14)** — discover/weekly-audit 파싱 복구(schedule+수동만), daily-verifier는 같은 날 브랜치 충돌을 처리하고 PR 생성 실패 시 설정 안내와 함께 실패. 도구·비교·변경 이력의 원시값(active, github-api 등)을 교사 문구로. 확인된 칸이 없는 기능표는 한 줄. 제안 폼은 GitHub 이슈, 뉴스레터는 준비 중. example 현장사례는 공개 빌드에 없음. **소유자가 Settings > Actions > General > Workflow permissions > Allow GitHub Actions to create and approve pull requests 를 켜야 daily-verifier PR이 만들어진다.**
 - [x] **daily-verifier 외부 호스트 403 (2026-10-14)** — GitHub API 한도만 실행을 중단한다. invent.kde.org 같은 비-GitHub 403/429는 짧게 재시도한 뒤 `skipped/unverified`로 남기고 도구 상태는 바꾸지 않는다. 실패한 실행: actions/runs/38572904587
 - [x] **발굴 라벨 (2026-10-14)** — Discover run 38580319310이 `software` 라벨 없음으로 실패. discover·weekly-audit이 `scripts/ensure_labels.sh`로 AGENTS.md 라벨과 `software`/`skill`을 먼저 만든다. `issues: write` 필요.
+- [ ] **배포 키·브랜치 보호 (소유자)** — `ops/DEPLOY_KEY_SETUP.md` 의 deploy 사용자·시크릿 4개, `ops/BRANCH_PROTECTION.md` 의 Allow auto-merge 와 필수 검사 `build-and-check`. 끝나기 전에는 일일 검증 자동 병합이 경고만 남기고, 배포는 건너뛴다.
 - [ ] `.github/workflows/weekly-audit.yml` (6번 에이전트 자동) + 페이지 변경 이력 아카이빙 표시 — 워크플로 파일은 파싱되게 고쳤고, summary 브랜치 push는 `contents: write`가 필요. 페이지 아카이빙 표시는 도구 페이지 하단에 이미 있음
 - [ ] 오픈스킬 자유구성 페이지 22개(나머지) + 4축 사례/지도안/리뷰 백필
 - [x] **디자인 개선안 v2 (2026-10-14, PR #24)** — 홈 표형 목록(기기별 가능 여부 열), 학교 앱 상세 재구성, 색 토큰 통일(강조색 `#17694A`), 메뉴 "학습SW" → "대안 찾기", 대안 `can`/`cannot` 스키마(CapCut만 미검증 조사값). 화면 캡처 `design/v2-*.png`

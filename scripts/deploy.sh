@@ -1,21 +1,52 @@
 #!/usr/bin/env bash
 # 열린도구 Alternatives 배포 — 정적 파일 교체만 (nginx·Ghost·Cloudflare·DNS 불문).
-# 절차 근거: ops/RUNBOOK.md. 필요한 환경변수:
-#   GHOST_SERVER_ROOT_PASSWORD  (필수 — 값 절대 출력 금지)
-#   GHOST_SERVER_HOST           (필수 — 서버 주소)
-#   SKIP_BUILD=1                (이미 빌드했으면 생략 — CI 워크플로용)
+# SSH 키로 비-root 사용자 deploy 에 접속한다. 비밀번호·root 는 쓰지 않는다.
+# 필요한 환경변수 (ops/DEPLOY_KEY_SETUP.md):
+#   DEPLOY_HOST            서버 주소. 값은 저장소에 적지 않는다.
+#   DEPLOY_USER            기본 deploy
+#   DEPLOY_SSH_KEY         개인키 본문. 또는 DEPLOY_SSH_KEY_FILE 경로
+#   DEPLOY_KNOWN_HOSTS     ssh-keyscan 한 줄. StrictHostKeyChecking=yes
+#   SKIP_BUILD=1           이미 빌드했으면 생략
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
 [ -f ops/FREEZE ] && { echo "⛔ ops/FREEZE 존재 — 배포 중단:"; cat ops/FREEZE; exit 1; }
-: "${GHOST_SERVER_ROOT_PASSWORD:?GHOST_SERVER_ROOT_PASSWORD 환경변수 필요}"
-: "${GHOST_SERVER_HOST:?GHOST_SERVER_HOST 환경변수 필요}"
-command -v sshpass >/dev/null || { echo "sshpass 필요 (brew install hudochenkov/sshpass/sshpass 또는 apt-get install sshpass)"; exit 1; }
+: "${DEPLOY_HOST:?DEPLOY_HOST 환경변수 필요. ops/DEPLOY_KEY_SETUP.md}"
+DEPLOY_USER="${DEPLOY_USER:-deploy}"
+: "${DEPLOY_KNOWN_HOSTS:?DEPLOY_KNOWN_HOSTS 환경변수 필요. ops/DEPLOY_KEY_SETUP.md}"
+if [ -z "${DEPLOY_SSH_KEY:-}" ] && [ -z "${DEPLOY_SSH_KEY_FILE:-}" ]; then
+  echo "DEPLOY_SSH_KEY 가 없습니다. 비밀번호로 대체하지 않습니다. ops/DEPLOY_KEY_SETUP.md" >&2
+  exit 1
+fi
 
-REMOTE="root@${GHOST_SERVER_HOST}"
-export SSHPASS="${GHOST_SERVER_ROOT_PASSWORD}"
-SSH() { sshpass -e ssh -o StrictHostKeyChecking=accept-new "$REMOTE" "$@"; }
+KEY_TMP=""
+if [ -n "${DEPLOY_SSH_KEY_FILE:-}" ]; then
+  KEY_PATH="$DEPLOY_SSH_KEY_FILE"
+else
+  KEY_TMP=$(mktemp)
+  printf '%s\n' "$DEPLOY_SSH_KEY" > "$KEY_TMP"
+  chmod 600 "$KEY_TMP"
+  KEY_PATH="$KEY_TMP"
+fi
+KNOWN_TMP=$(mktemp)
+printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$KNOWN_TMP"
+chmod 600 "$KNOWN_TMP"
+cleanup_ssh() {
+  [ -n "$KEY_TMP" ] && rm -f "$KEY_TMP"
+  rm -f "$KNOWN_TMP"
+}
+trap cleanup_ssh EXIT
+
+REMOTE="${DEPLOY_USER}@${DEPLOY_HOST}"
+SSH() {
+  ssh -i "$KEY_PATH" \
+    -o IdentitiesOnly=yes \
+    -o BatchMode=yes \
+    -o StrictHostKeyChecking=yes \
+    -o UserKnownHostsFile="$KNOWN_TMP" \
+    "$REMOTE" "$@"
+}
 
 # 1) 빌드
 if [ "${SKIP_BUILD:-0}" != "1" ]; then
@@ -38,7 +69,6 @@ SSH "set -e
   cp -a /var/www/alternatives /var/www/alternatives.bak-${TS}
   find /tmp/alternatives-new -type d -exec chmod 755 {} +
   find /tmp/alternatives-new -type f -exec chmod 644 {} +
-  chown -R www-data:www-data /tmp/alternatives-new
   rm -rf /var/www/alternatives.new
   mv /tmp/alternatives-new /var/www/alternatives.new"
 
@@ -48,7 +78,8 @@ rollback() {
     rm -rf /var/www/alternatives.new
     rm -rf /var/www/alternatives
     cp -a /var/www/alternatives.bak-${TS} /var/www/alternatives
-    chown -R www-data:www-data /var/www/alternatives" || echo "⚠️ 자동 복원 실패 — ops/RUNBOOK.md 3절 수동 복원 필요"
+    find /var/www/alternatives -type d -exec chmod 755 {} +
+    find /var/www/alternatives -type f -exec chmod 644 {} +" || echo "⚠️ 자동 복원 실패 — ops/RUNBOOK.md 3절 수동 복원 필요"
 }
 trap rollback ERR
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# daily-verifier가 워킹트리에 남긴 콘텐츠 변경을 브랜치로 푸시하고 draft PR을 연다.
+# daily-verifier가 워킹트리에 남긴 콘텐츠 변경을 브랜치로 푸시하고 PR을 연다.
+# draft 가 아니어야 gh pr merge --auto 가 동작한다.
 # 같은 날짜 브랜치에 열린 PR이 있으면 그 브랜치를 갱신하고, 없으면 시각 접미사를 붙인다.
 # PR 생성에 실패하면 저장소 설정 안내와 함께 종료 코드 1로 끝난다.
 set -euo pipefail
@@ -60,6 +61,7 @@ if [ "$BRANCH" = "$BASE_BRANCH" ]; then
   EXISTING=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url // empty')
   if [ -n "$EXISTING" ]; then
     echo "기존 PR을 갱신했습니다: $EXISTING"
+    bash scripts/verifier_enable_automerge.sh "$EXISTING" "$BRANCH"
     exit 0
   fi
 fi
@@ -70,7 +72,7 @@ gh pr create \
   --body-file .github/workflows/templates/daily-verifier-pr.md \
   --base main \
   --head "$BRANCH" \
-  --draft > /tmp/pr-url.txt 2> /tmp/pr-err.txt
+  --label "agent/verifier" > /tmp/pr-url.txt 2> /tmp/pr-err.txt
 CODE=$?
 set -e
 if [ "$CODE" -ne 0 ]; then
@@ -82,3 +84,4 @@ if [ "$CODE" -ne 0 ]; then
   exit 1
 fi
 echo "PR 생성: $(cat /tmp/pr-url.txt)"
+bash scripts/verifier_enable_automerge.sh "$(cat /tmp/pr-url.txt)" "$BRANCH"

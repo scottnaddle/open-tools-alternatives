@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# 네트워크 없이 자동 병합 대상 판별만 확인한다.
+set -euo pipefail
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+# shellcheck source=verifier_merge_policy.sh
+. "$ROOT/scripts/verifier_merge_policy.sh"
+
+verifier_branch_ok "daily-verifier/20261014"
+verifier_branch_ok "daily-verifier/20261014-142209"
+if verifier_branch_ok "daily-verifier"; then echo "접두사만 있는 이름은 거부해야 함"; exit 1; fi
+if verifier_branch_ok "cursor/skill-detail-template-c12f"; then echo "콘텐츠 브랜치는 거부해야 함"; exit 1; fi
+if verifier_branch_ok "main"; then echo "main 은 거부해야 함"; exit 1; fi
+
+verifier_label_ok $'queue/research\nagent/verifier'
+if verifier_label_ok "agent/verify"; then echo "agent/verify 는 자동 병합 라벨이 아님"; exit 1; fi
+if verifier_label_ok "agent/discovery"; then echo "발굴 라벨은 거부해야 함"; exit 1; fi
+
+if grep -q sshpass "$ROOT/scripts/deploy.sh"; then echo "deploy.sh 에 sshpass 가 남아 있음"; exit 1; fi
+if grep -q GHOST_SERVER_ROOT_PASSWORD "$ROOT/scripts/deploy.sh"; then echo "deploy.sh 에 root 비밀번호가 남아 있음"; exit 1; fi
+if grep -q sshpass "$ROOT/.github/workflows/deploy.yml"; then echo "deploy.yml 에 sshpass 가 남아 있음"; exit 1; fi
+if grep -q GHOST_SERVER "$ROOT/.github/workflows/deploy.yml"; then echo "deploy.yml 이 예전 서버 시크릿을 읽음"; exit 1; fi
+
+if verifier_rules_require_ci '[]'; then echo "빈 규칙은 거부해야 함"; exit 1; fi
+if verifier_rules_require_ci '[{"type":"required_status_checks","parameters":{"required_status_checks":[{"context":"other"}]}}]'; then
+  echo "다른 검사 이름은 거부해야 함"; exit 1
+fi
+verifier_rules_require_ci '[{"type":"required_status_checks","parameters":{"required_status_checks":[{"context":"build-and-check"}]}}]'
+
+echo "✓ verifier merge policy"
