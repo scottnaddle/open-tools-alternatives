@@ -1,14 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import FloatingInput from '../components/FloatingInput.astro';
-import Toast from '../components/Toast.astro';
 const base = import.meta.env.BASE_URL;
+const repo = 'https://github.com/scottnaddle/open-tools-alternatives';
 ---
 <Base title="대안 요청하기">
   <div class="detail wide">
     <a class="back" href={base}>← 홈으로</a>
     <h1 class="ph">대안 요청하기</h1>
-    <p class="lead">대신 쓸 오픈소스를 알려 주세요. 원 출처를 확인한 뒤 반영 여부를 변경 이력에 남겨요.</p>
+    <p class="lead">대신 쓸 오픈소스를 알려 주세요. 아래 내용은 GitHub 이슈로 전달됩니다. 반영 결과는 변경 이력에서 확인할 수 있어요.</p>
 
     <div class="panel" style="background:var(--server-tint);color:var(--server-ink);margin:20px 0">
       <h2>제안 전에 확인하세요</h2>
@@ -32,11 +32,12 @@ const base = import.meta.env.BASE_URL;
         <strong>개인정보 보호:</strong> 이름·학교명·연락처 등 개인정보는 적지 마세요. 제안 내용은 원 출처 확인 계기로만 사용됩니다.
       </div>
 
-      <button class="btn primary" type="submit">제안 보내기</button>
+      <button class="btn primary" type="submit">GitHub 이슈로 보내기</button>
+      <p class="hint">GitHub 계정이 필요합니다. 이 버튼은 이슈 작성 화면을 엽니다.</p>
     </form>
 
     <h2 id="report" style="margin-top:48px">정보가 틀렸나요?</h2>
-    <p class="lead">사이트에 있는 정보가 틀렸다면 알려 주세요. 원 출처를 다시 확인해요.</p>
+    <p class="lead">사이트에 있는 정보가 틀렸다면 알려 주세요. 이 양식도 GitHub 이슈로 전달됩니다. 반영 결과는 변경 이력에서 확인할 수 있어요.</p>
     
     <form class="report-form" id="report-form">
       <p id="report-target" hidden style="margin:0 0 14px;padding:10px 14px;background:var(--brand-tint);border-radius:10px;font-size:15px"></p>
@@ -59,35 +60,75 @@ const base = import.meta.env.BASE_URL;
         <textarea id="desc" rows="3" style="width:100%;padding:12px;border:1.5px solid var(--ux-line-2);border-radius:16px;font:inherit;font-size:16px" placeholder="어떤 부분이 틀렸는지 간단히 적어 주세요"></textarea>
       </div>
       
-      <button class="btn primary" type="submit">확인 요청 보내기</button>
+      <button class="btn primary" type="submit">GitHub 이슈로 보내기</button>
+      <p class="hint">GitHub 계정이 필요합니다. 도구 페이지에서 오면 대상과 항목이 미리 채워집니다.</p>
     </form>
   </div>
   
-  <Toast />
-  
-  <script is:inline>
-    document.getElementById('suggest-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      window.showToast('제안 감사합니다', '조사해서 반영되면 변경 이력에 남깁니다');
-      e.target.reset();
-      // Trigger lift reset on all fields
-      document.querySelectorAll('.u025-f').forEach(function(f) {
-        var input = f.querySelector('.u025-in');
-        var lab = f.querySelector('.u025-lab');
-        f.classList.remove('is-up', 'is-focus');
-        f.querySelector('.u025-line').style.setProperty('--gap', '0px');
-      });
-    });
-    
+  <script is:inline define:vars={{ repo }}>
     (function () {
-      var q = new URLSearchParams(location.search), tool = q.get('tool'), app = q.get('app');
+      var q = new URLSearchParams(location.search);
+      var tool = q.get('tool') || '';
+      var app = q.get('app') || '';
+      var field = q.get('field') || '';
+      var fieldLabel = {
+        platforms: '기기 지원',
+        level: '대체 정도',
+        can: '할 수 있어요 / 아직 안 돼요',
+        cannot: '할 수 있어요 / 아직 안 돼요',
+        install: '설치 난이도·설치 방법',
+        installDifficulty: '설치 난이도·설치 방법',
+        license: '라이선스',
+        lastPush: '최근 개발일',
+        health: '최근 개발일',
+        name: '도구 이름'
+      }[field] || '';
       var box = document.getElementById('report-target');
-      if (tool && box) { box.hidden = false; box.textContent = '대상: ' + tool + (app ? ' (' + app + ' 대신)' : ''); }
+      if ((tool || app || fieldLabel) && box) {
+        box.hidden = false;
+        box.textContent = '대상: ' + (tool || '(도구 미지정)') + (app ? ' (' + app + ' 대신)' : '') + (fieldLabel ? ' · 항목: ' + fieldLabel : '');
+      }
+      var item = document.getElementById('item');
+      if (item && fieldLabel) {
+        Array.prototype.forEach.call(item.options, function (opt) {
+          if (opt.textContent === fieldLabel) opt.selected = true;
+        });
+      }
+      var appInput = document.getElementById('app');
+      var toolInput = document.getElementById('tool');
+      if (appInput && app) appInput.value = app;
+      if (toolInput && tool) toolInput.value = tool;
+      function issueUrl(template, title, fields) {
+        var params = new URLSearchParams();
+        params.set('template', template);
+        params.set('title', title);
+        Object.keys(fields).forEach(function (key) {
+          if (fields[key]) params.set(key, fields[key]);
+        });
+        return repo + '/issues/new?' + params.toString();
+      }
+      document.getElementById('suggest-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var appName = document.getElementById('app').value.trim();
+        var candidate = document.getElementById('tool').value.trim();
+        var why = document.getElementById('why').value.trim();
+        location.href = issueUrl('app-alternative-request.yml', '[대안 요청] ' + appName, {
+          app: appName,
+          candidate: candidate,
+          usage: why || '수업·업무에서 쓰는 방법을 이슈에 적어 주세요.'
+        });
+      });
+      document.getElementById('report-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var picked = document.getElementById('item').value;
+        var desc = document.getElementById('desc').value.trim();
+        var page = location.origin + (tool ? ('/alternatives/tools/' + tool + '/') : '/alternatives/');
+        var wrong = (tool ? ('도구: ' + tool + '\n') : '') + (app ? ('학교 앱: ' + app + '\n') : '') + '항목: ' + picked + (desc ? ('\n' + desc) : '');
+        location.href = issueUrl('fact-correction.yml', '[정보 정정] ' + (tool || picked), {
+          page: page,
+          wrong: wrong
+        });
+      });
     })();
-    document.getElementById('report-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      window.showToast('확인 요청을 받았어요', '원 출처를 다시 확인한 뒤 반영 여부를 변경 이력에 남깁니다');
-      e.target.reset();
-    });
   </script>
 </Base>
