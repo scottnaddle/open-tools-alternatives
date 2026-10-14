@@ -45,8 +45,7 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
   <div class="detail" style={tone(app.data.category)}>
     <a class="back" href={base}>홈으로</a>
     <p class="kick">{app.data.category}, {app.data.procurementNote?.value || '현장에서 많이 쓰는 앱'} 
-    {app.data.procurementNote && <><Status fact={app.data.procurementNote} />
-    {app.data.procurementNote.sources && <details class="src"><summary>출처 {app.data.procurementNote.sources.length}</summary><ul>{app.data.procurementNote.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}</>}
+    {app.data.procurementNote && <><Status fact={app.data.procurementNote} /></>}
     </p>
     <div class="dhead">
       <span class="tile" aria-hidden="true"><Icon icon={app.data.icon} /></span>
@@ -70,9 +69,7 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
 
     {app.data.gap && <div class="gap">
       <strong>미리 알아두세요.</strong>
-      <span>{app.data.gap.value} <Status fact={app.data.gap} />
-      {app.data.gap.sources && <details class="src"><summary>출처 {app.data.gap.sources.length}</summary><ul>{app.data.gap.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}
-      </span>
+      <span>{app.data.gap.value} <Status fact={app.data.gap} /></span>
     </div>}
 
     <div class="toolbar">
@@ -106,7 +103,6 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
             <div class="badges">
               <span class={`badge lv-${level.value === '거의 대체' ? '거의' : '부분'}`}>{level.value}</span>
               <Status fact={level} />
-              {level.sources && <details class="src"><summary>출처 {level.sources.length}</summary><ul>{level.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}
               <span class={`badge df-${installDifficulty.split(' ')[0]}`}>설치 {installDifficulty}</span>
             </div>
           </div>
@@ -114,14 +110,13 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
             <span>쓸 수 있는 곳</span>
             {PLAT.map(([k, n, f]) => <span class={`plat ${f(p) ? 'on' : 'off'}`}>{n}</span>)}
             <Status fact={t.data.platforms} />
-            {t.data.platforms.sources && <details class="src"><summary>출처 {t.data.platforms.sources.length}</summary><ul>{t.data.platforms.sources.map((s) => <li><a href={s.url}>{s.url}</a><br/><small>{s.method}, {s.fetchedAt.slice(0, 10)}</small></li>)}</ul></details>}
+            <Status fact={t.data.platforms} />
           </div>
           <div class="meta-row">
             <span class="tagh">개발 {t.data.health}, 최근 개발 {t.data.github.lastPush}</span>
             <span class="tagh">라이선스 {lic} <Status fact={t.data.license} /></span>
           </div>
-          <ScopeChips scopes={sc} isExample={true} />
-          {sc.includes('student-use-check') && <p class="warnbox">학생이 직접 쓰면 학생 정보가 처리될 수 있어요. 학교 절차를 확인하세요. <a href={MOE_URL}>교육부 학습지원 소프트웨어 선정 기준 안내</a></p>}
+          <ScopeChips scopes={sc} />
           <div class="actions">
             {(() => {
               const myId = t.id;
