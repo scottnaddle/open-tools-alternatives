@@ -1,0 +1,130 @@
+name: "소프트웨어(도구) 발굴 리포트"
+description: "발굴 에이전트가 학교에서 쓸 만한 오픈소스 도구 후보를 보고합니다 (제조 에이전트의 원료)"
+labels: ["queue/research"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: 도구 이름
+    validations:
+      required: true
+  - type: input
+    id: repo
+    attributes:
+      label: 원본 저장소 또는 공식 사이트 URL
+      description: "GitHub 저장소(있으면) 또는 공식 사이트(상용이면)"
+    validations:
+      required: true
+  - type: dropdown
+    id: license
+    attributes:
+      label: 라이선스
+      description: "허용목록 통과 여부 — 없음·AGPL·NOASSERTION·비OSI는 반려됩니다"
+      options:
+        - "MIT"
+        - "Apache-2.0"
+        - "BSD (2/3-Clause)"
+        - "GPL/LGPL 계열"
+        - "MPL-2.0"
+        - "ISC / Unlicense / CC0"
+        - "기타 OSI 계열 (설명 필수)"
+        - "확인 실패 / 없음 / AGPL — 반려 대상"
+        - "상용(무료 플랜/유료 플랜) — 학교 도입 시 검토 필요"
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: 학교 사용 분야
+      options:
+        - "영상·오디오"
+        - "이미지·디자인"
+        - "문서·오피스"
+        - "압축·유틸리티"
+        - "화면 캡처"
+        - "다이어그램"
+        - "파일 전송"
+        - "기타"
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: 설치 난이도(예상)
+      options:
+        - "쉬움(학생도 가능)"
+        - "쉬움(교사)"
+        - "보통(정보부장 협업)"
+        - "어려움(서버 필요)"
+    validations:
+      required: true
+  - type: textarea
+    id: school
+    attributes:
+      label: 학교 현장 적용 시나리오 후보
+      description: "수업용(학생 직접)인지 교사 제작용인지, 어떤 학년/단원에 어울리는지"
+    validations:
+      required: true
+  - type: textarea
+    id: devices
+    attributes:
+      label: 기기/플랫폼(아는 범위에서)"
+      description: "예: Windows 10+, macOS 11+, Linux, Chromebook, Android, iOS, 브라우저"
+  - type: dropdown
+    id: koreanUI
+    attributes:
+      label: 한국어 UI
+      options:
+        - "지원(공식)"
+        - "지원(커뮤니티)"
+        - "지원 안 함"
+        - "확인 필요"
+  - type: dropdown
+    id: admin
+    attributes:
+      label: 관리자 권한 필요
+      options:
+        - "불필요(포터블 가능)"
+        - "설치 시 필요(실행은 일반 사용자)"
+        - "항상 필요"
+        - "확인 필요"
+  - type: dropdown
+    id: studentData
+    attributes:
+      label: 학생 데이터 처리
+      options:
+        - "없음(완전 로컬)"
+        - "로컬(기기 안에서만)"
+        - "외부 서버 전송(가명화 포함)"
+        - "확인 필요"
+  - type: dropdown
+    id: altFor
+    attributes:
+      label: 학교에서 이미 쓰이는(잠재적) 유료/상용 앱
+      description: "있다면 — alternatives 카드와 연결됩니다. apps 컬렉션의 school-apps/*.json slug 입력"
+  - type: dropdown
+    id: demo
+    attributes:
+      label: 데모 자산 가능 여부
+      description: "데모 > 영상 > 이미지 > 링크 순으로 활용합니다"
+      options:
+        - "① 라이브 데모 제작 가능"
+        - "② 공식 예시·스크린샷 있음"
+        - "③ 영상 녹화 가능"
+        - "④ 이미지/외부 링크만 가능"
+        - "⑤ 해당 없음(데모 불필요)"
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: 위험·한계
+      description: "유료 전환 소지, 운영 종료 소지, 학생 데이터, CSAP/개인정보보호, 학생 직접 사용 안전성 등"
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ 제조 에이전트는 이 리포트를 **그대로 믿지 않고** 공식 출처에서 재확인합니다.
+        학교 적합성·법적 준수 여부는 판정하지 않으며, 정보부장·교무의 학교 절차에 따릅니다.
+        반영 결과는 이 이슈와 사이트 페이지로 안내됩니다.

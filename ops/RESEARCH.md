@@ -1,88 +1,179 @@
-# ops/RESEARCH.md — 지속 검색(리서치) 루프 설계
+# ops/RESEARCH.md — 지속 검색(리서치) 루프 + 6에이전트 명세 보강
 
-이 사이트는 에이전트가 **끊임없이 조사하고, 검증된 것만 게시**하는 방식으로 유지된다.
-이 문서는 "무엇을, 어디서 찾고, 어떤 순서로 게시까지 가는지"를 정의한다. 원칙은 `AGENTS.md`.
+이 문서는 **6에이전트 운영 흐름의 작업 단계별 절차**를 상세히 풀어쓴다. 에이전트 정의·라벨·자동 스케줄은 `AGENTS.md`를, 배포 절차는 `ops/RUNBOOK.md`를, 보안·FREEZE는 같은 이름의 파일을 참고한다.
 
-## 1. 루프 전체 그림
+## 1. 흐름 (1줄)
 
 ```
-[입력원]                [에이전트 조사]         [검증 게이트]              [게시]
-GitHub Issues  ─┐
-조달 데이터      ─┼→  후보 발굴/재확인  →  스키마+check 스크립트  →  PR → CI(실제 확인) → 병합
-공식 저장소 변화 ─┤   (매일 자동 + 주간)   (출처 없으면 게시 불가)      → STATUS.md 갱신 → 배포
-사용자 요청      ─┘                                                    (수동 트리거)
+[1 발견]  → 이슈 1건
+   ↓
+[2 연구]  → 코멘트 + 라벨 agent/research
+   ↓
+[3 제조]  → PR + 라벨 agent/build
+   ↓
+[4 검수]  → gh pr checks 확인 → 라벨 agent/verify
+   ↓
+[5 게시]  → merge + deploy + 이슈 close + 라벨 agent/published
+   ↓
+[6 주간]  → changes + 페이지 아카이빙 갱신
 ```
 
-## 2. 입력원 (무엇을 보고 있나)
+상세 표·다이어그램은 `AGENTS.md §2`. 본 문서는 각 단계의 **작업 절차와 결과물 명세**를 다룬다.
 
-| 입력원 | 주기 | 방법 |
-|---|---|---|
-| GitHub/GitLab 공식 저장소 | 매일 자동 | `daily-verifier.yml` — stars·릴리스·아카이브·라이선스 원문 |
-| GitHub Issues (제안·정정) | 수시 | 이슈 템플릿 3종으로 접수 → 라벨 `queue/research`·`queue/verify` |
-| 공공 조달 데이터(school-edtech.kr) | 분기 | 구매 학교 수 변화 → 카드 문구 갱신 (출처·확인시각 필수) |
-| 오픈스킬 커뮤니티(소셜 등) | 주간 | 신규 스킬 후보 발굴. 라이선스 허용목록 통과분만 |
-| 팩트 나이 리포트 | 주간 | `python3 scripts/fact_age.py` — 90일 경과 verified 팩트 재확인 |
-| 서비스 종료·유료 전환 소식 | 상시 | 공식 발표만. 확인되면 즉시 이슈 `priority/urgent` → 홈 "개발 중단·종료 알림" 반영 |
+## 2. 에이전트 1 — 발굴(Discovery)
 
-보류 중인 입력원: **Threads 좋아요 수집** (사용자 로그인 필요 — `status/blocked-human` 라벨 이슈로 관리).
+**트리거**: 매일 22:00 UTC 자동 슬롯(`.github/workflows/discover.yml`이 빈 본문 이슈 발행) + 수동(이슈 템플릿 직접 사용).
 
-## 3. 새 오픈소스 대안 추가 절차
+**산출물**: GitHub Issue 1건 + 결론(선정 / 보류).
 
-1. 이슈에서 후보 확보 (앱 이름 + 교육 현장 용도)
-2. 후보 오픈소스 조사: 공식 사이트·저장소·라이선스 원문·플랫폼 지원·한국어 UI·오프라인 동작
-3. `src/content/tools/<id>.json` 작성 — 모든 fact에 `sources` 필수. 모르면 `status: "unverified"` + `manual-seed` (스키마가 verified를 막음)
-4. 해당 앱의 `school-apps` JSON에 `alternatives` 연결 (없으면 학교 앱 신규 생성 — 큰 작업이므로 계획 승인 먼저)
-5. 로컬 게이트 → PR → CI 실제 확인 → 병합 → `STATUS.md` 갱신
+**리포트(채워야 할 본문)**는 두 가지 템플릿 중 하나를 사용:
+- **소프트웨어(도구) 후보** → `.github/ISSUE_TEMPLATE/software-discovery-report.yml` (라이선스 / 분야 / 설치 난이도 / 학교 시나리오 / 기기·플랫폼 / 한국어 UI / 관리자 권한 / 학생 데이터 / 데모 자산 / 위험)
+- **AI 스킬 후보** → `.github/ISSUE_TEMPLATE/skill-discovery-report.yml` (라이선스 / 입출력 예시 2개 이상 / 학교 시나리오 / 데모 자산 / 위험)
 
-## 4. 새 오픈스킬 추가 절차 — 발굴 → 재구성 2단계 (2026-10-13 개편)
+**선정 기준 (모두 충족)**:
+1. 라이선스가 `src/content.config.ts`의 허용목록에 있다 (스킬: `ALLOWED_SKILL_LICENSES` 28종, 도구: 동일). **없음 / AGPL / NOASSERTION / 비OSI는 보류.**
+2. 학교에서 실제로 도입 가능 — GitHub 공개 저장소 또는 공식 사이트가 있고, 한국어/영어 가이드·문서·이슈 트래커가 활성.
+3. 학교 활용 시나리오가 1개 이상 분명함 (수업용이면 usageScope, 교사 제작용이면 tools).
+4. 1차 출처(공식 README/문서)에 위 내용이 명시되어 있음 — 2번 에이전트가 재확인할 사실이지만, 1번에서도 1차 출처를 **링크**해 둔다.
 
-사용자 원칙: **소개 방식은 스킬마다 자유롭게. 특징이 드러나게. 데모 우선, 어려우면 영상·이미지 대체.**
+**보류 기준 (1건에 해당하면 보류, 이슈 닫고 `agent/discovery` 제거)**:
+- 라이선스 불가
+- 학교 활용 시나리오가 불분명(단순 트레이딩 점수용 등)
+- 도입 위험 큼(학생 데이터, 유료 전환 소지, 운영 종료)
+- 같은 주제·유사 도구가 이미 등록되어 있음(이슈에 "이미 등록됨" 코멘트)
 
-### 4-1. 발굴 에이전트 (매일)
+**핸드오프**:
+- 보류 시 → 이슈 닫기. `agent/discovery` 제거.
+- 선정 시 → `agent/discovery` 라벨은 유지, `queue/research` 라벨 **추가**로 붙여서 2번 에이전트에게 인수인계.
 
-- 소셜·GitHub 트렌드·커뮤니티에서 교육 활용 가능한 에이전트 스킬 후보를 발굴
-- **발굴 리포트**를 이슈로 등록 (템플릿: `.github/ISSUE_TEMPLATE/skill-discovery-report.yml`, 라벨 `queue/research`)
-- 리포트 필수 항목(재구성 에이전트의 원료):
-  1. 스킬 한 줄 정의와 원본 저장소 URL
-  2. 라이선스(허용목록 통과 여부 — 없음·AGPL·비OSI면 그대로 반려)
-  3. 무엇을 입력받고 무엇을 출력하는가 (구체적 예시 2개 이상)
-  4. 학교 현장 적용 시나리오 후보 (수업용? 교사 제작용?)
-  5. 데모 자산 가능 여부 — ①직접 실행 산출물 제작 가능 ②공식 예시·스크린샷 있음 ③영상 가능 ④이미지/링크만 가능
-  6. 위험·한계 (언어, 유료 전환 소지, 학생 데이터, 운영 종료 소지)
+## 3. 에이전트 2 — 연구(Research)
 
-### 4-2. 재구성 에이전트 (리포트 도착 시)
+**트리거**: `queue/research` 라벨 이슈.
 
-1. 리포트의 주장을 **공식 출처에서 직접 재확인** (리포트를 믿고 게시하지 않는다 — AGENTS.md 원칙 1)
-2. `src/content/skills/<slug>.json` 등록 — 라이선스·usageScope·dateChecked 게이트 통과 (이후 daily-verifier가 stars·아카이브·라이선스 변화를 매일 추적, C등급은 24시간 재확인)
-3. **자유구성 소개 페이지** 작성: `src/content/skill-pages/<slug>.html` (이 파일이 있으면 그 스킬의 소개는 이것이 전부)
-   - 형식 우선순위: **라이브 데모(iframe) > 영상(자체 호스팅 webm/mp4) > 이미지 > 링크**
-   - 영상은 학교망 대비 **자체 호스팅** 원칙. 공식 데모 화면 녹화: `node scripts/record-demo.mjs <대상html> <출력webm> [초]`
-   - 미디어(iframe·img·video·source·audio)마다 **`data-source`(원 출처 URL) 필수** — check_skills.py가 빌드 실패 처리. 직접 제작물도 원본 스킬 저장소 URL을 data-source로 쓰고 data-credit에 "직접 생성" 명시
-   - 내부 자산 경로는 반드시 `/alternatives/` 절대경로. 파일은 `public/skills-assets/<스킬>/` 아래
-   - 구성은 자유. 단 편집 키트(`.show-*` 클래스)를 우선 사용해 사이트 톤 유지. 신원 프레임(스킬 기본 정보)은 페이지가 자동으로 붙이므로 본문에 중복 작성하지 않는다
-   - **솔직한 한계** 섹션 필수: 언어 장벽, 교사 제작용인지 학생용인지, 원본 실행과 우리 데모의 차이
-4. 이전 형식의 미리보기(`previewPath`)는 레거시로 유지 — 파편이 있으면 파편이 우선 렌더링됨
-5. PR → CI 실제 확인 → 병합 → 배포
+**산출물**: 이슈 본문 + 코멘트로 (1) 출처 재확인 결과 (2) 라이선스 통과 (3) 학교 활용 시나리오 확정 (4) 적합 컬렉션·라우트 결정.
 
-### 4-3. 학교 정보 재구성 관점 (리포트 → 페이지)
+**절차**:
+1. 리포트의 출처를 **공식 저장소/문서에서 직접 재확인** — AGENTS.md 원칙 1(리포트를 그대로 믿지 않음)
+2. 라이선스 파일 원문(`LICENSE`/`License.md`)을 GitHub에서 raw로 받아 확인. AGPL·NOASSERTION·상용 등 금지 항목은 **즉시 보류**(이슈에 사유 코멘트 + `queue/research` 제거 + `status/blocked-human` 또는 `priority/urgent` 라벨로)
+3. 학교에서 도입 시 운영에 필요한 사실만 추려 **학교 관점 시나리오 1개 이상** 작성
+4. 적합 컬렉션 결정:
+   - 일반 도구(영상/압축/오피스 등) → `src/content/tools/<id>.json` + `src/content/school-apps/<slug>.json`(기존 학교 앱의 대안일 때)
+   - AI 에이전트 스킬 → `src/content/skills/<owner>-<repo>.json` + (선택) `src/content/skill-pages/<slug>.html`
+   - 학교 활용 사례·수업 지도안·도입 리뷰 → `src/content/{cases,lessons,reviews}/<id>.json` + 자유구성 페이지
+5. 게이트 결과(`python3 scripts/check_*.py`) 미리 시뮬레이션 — 라이선스·필수 필드·sourceUrl 형태가 통과 가능한지
 
-리포트의 나열을 복붙하지 않는다. 다음 질문에 답하는 페이지로 재구성한다:
-- 이 스킬이 **학교의 어떤 귀찮은 일**을 없애주나? (구체적 교실 장면으로 시작)
-- 교사가 **첫 10분**에 무엇을 해보면 하나? (단계로 제시)
-- **어디까지 되고 어디서 막히나** — 언어, 설치, 계정, 비용
-- 우리가 만든 데모·예시는 **원본과 무엇이 다른가** (직접 생성 표시 유지)
+**핸드오프**: 이슈에 "연구 완료, 제조 시작" 코멘트 + 라벨 `agent/research` → `agent/build`.
 
-## 5. 주간 리서치 체크리스트 (에이전트용)
+## 4. 에이전트 3 — 제조(Build)
 
-- [ ] 열린 이슈 목록 → 라벨별 정리, 오래된 `queue/research`부터 처리
-- [ ] `fact_age.py` 실행 → 90일 경과 팩트 재확인 (출처 재수집 → lastVerified 갱신)
-- [ ] 오픈스킬 "준비 중" 카드 중 1개 이상 미리보기 채우기
-- [ ] 홈 "이달에 소개하는 도구" — `src/data/featured.json`이 이번 달 항목을 가졌는지 확인 (없으면 선정 근거와 출처를 만들어 추가; 근거 없으면 예시 표시 유지)
-- [ ] 조달 수치 유효기간 확인 (표기: "2026년 1~10월, 확인 중")
-- [ ] 처리 결과를 이슈 코멘트로 남기고 닫기 (외부 발송은 초안 → 승인)
+**트리거**: 라벨 `agent/build`.
 
-## 6. 게시 금지·주의
+**산출물**:
+- 데이터 JSON 1개(또는 사례/지도안/리뷰 + 자유구성 페이지)
+- PR 1개(병합 전 상태)
+- `src/content/changes/` 변경기록(아래 §7 참고)
+
+**절차**:
+1. 2번의 컬렉션 결정에 따라 JSON 작성 — 스키마: `src/content.config.ts`의 Zod. **모든 fact에 sources·status·lastVerified** — 수동 입력은 `status: "unverified"` + `method: "manual-seed"`
+2. 스킬은 `previewMethod`(직접 생성 / 공식 예시) 표기, `dateChecked` ISO 날짜
+3. 4축(cases/lessons/reviews)은 `example: true`면 `badges`에 **"예시 데이터"** 필수 — `check_axis_pages.py`가 강제
+4. 자유구성 페이지가 필요하면 `src/content/skill-pages/<slug>.html` 또는 4축 상세 페이지. 모든 미디어(iframe·img·video·source·audio)에 **`data-source`** 필수 — `check_skills.py`가 빌드 실패 처리
+5. **로컬 게이트**:
+   - `python3 scripts/verify.py && python3 scripts/check_usagescope.py && python3 scripts/check_skills.py && python3 scripts/check_axis_pages.py`
+6. `npm run build` — 0 errors
+7. **PR 생성**:
+   - 브랜치 `site/<content-kind>-<slug>`(예: `site/tool-foo`, `site/skill-bar`, `site/case-gr3-physics`)
+   - 본문에 이슈 링크 + 체크리스트 + 솔직한 한계
+   - `git add` 대상: 새 데이터 + (필요시) 페이지 + 자유구성 페이지. **`src/content/changes/`는 절대 직접 추가하지 않는다** — daily-verifier/weekly-audit가 자동 생성
+8. PR 라벨 `agent/build` + 이슈 코멘트 "PR 링크"
+
+**핸드오프**: PR URL + 라벨 `agent/build`로 4번에게.
+
+**기존 회피 원칙 재확인 (4 navLinks 회귀)**:
+- 푸터·카드·헤더의 매핑은 4개 이상일 때 직접 명시
+- `getStaticPaths`는 `entries.map(...)` 대신 `for` 루프 + `paths: {params, props}[]` 타입 명시
+- 새 페이지 작성 시에도 4개 이상 map을 회피 — 컴포넌트 내부 1회 map만 허용
+
+## 5. 에이전트 4 — 검수(Verify)
+
+**트리거**: PR 라벨 `agent/build`.
+
+**산출물**: 라벨 `agent/verify` (승인) 또는 라벨 되돌림(반려).
+
+**절차**:
+1. **CI 실제 통과 확인** — `gh pr checks <num>` 직접 확인(AGENTS.md 원칙 10). `build-and-check`가 green이어야 함
+2. **운영 원칙 점검**:
+   - 모든 fact에 출처가 있는가
+   - `예시 데이터` / `확인 중` 표기가 정확한 위치에 있는가
+   - 출처 URL은 1차(공식)인가
+   - 솔직한 한계 섹션이 있는가(스킬·4축)
+   - 학교 적합성·법적 준수 **판정** 문구가 없는가(원칙 3)
+   - 회사명(유비온) 노출이 없는가(원칙 5)
+3. **기존 검증 규칙 약화 여부** — Zod refine·check 스크립트 임의 변경이 없는가
+4. **데이터 정합성** — tools와 school-apps의 alternative 연결, skill의 sourceUrl ↔ github.repo 일치, 4축의 tool.sourceUrl ↔ sourceUrl 일치
+
+**승인**: 라벨 `agent/verify` 부여. 코멘트 "검수 통과, 게시 가능".
+**반려**: 라벨 `agent/build`로 되돌림 + 코멘트 "검수 반려 + 사유 + 다음 단계".
+
+## 6. 에이전트 5 — 게시(Publish)
+
+**트리거**: 라벨 `agent/verify`.
+
+**산출물**: 운영 사이트 반영.
+
+**절차**:
+1. **PR merge** — `gh pr merge <num> --merge` (브랜치 보호 없으므로 merge 직전 `gh pr checks`로 CI 최종 확인 — 원칙 10)
+2. **deploy.yml 수동 실행** — `gh workflow run deploy.yml --ref main`. 이 단계는 **사용자(인식님) 결정** — 자동으로 돌리지 않음(원칙 6: 큰 작업은 계획 승인)
+3. 배포 완료 확인 — `gh run watch <run-id>`. 헬스체크(5종) 200 확인
+4. **이슈 close** + 라벨 `agent/published` 추가 + 코멘트 "게시 완료, 라이브 URL"
+5. `STATUS.md` 갱신 — 콘텐츠 수·검증 현황·다음 할 일
+
+**핸드오프**: 다음 콘텐츠의 1번 에이전트 슬롯이 받아서 처리.
+
+## 7. 에이전트 6 — 주간 검증(Weekly Audit)
+
+**트리거**: 매주 일요일 22:00 UTC(`.github/workflows/weekly-audit.yml` cron). + 일일 검증(daily-verifier)이 매일 부분 수행.
+
+**산출물**:
+- `src/content/changes/YYYY-MM-DD-{kind}-{id}-{field}-{hash}.json` 변경기록(누적)
+- 각 페이지의 **변경 이력 표시 갱신** (페이지 하단 "변경 이력" 섹션 — 자세한 컴포넌트·표시는 후속 PR)
+
+**대상**:
+- `src/content/tools/*.json` — GitHub API로 stars/latestRelease/lastPush/license/health 재확인 (기존 `process_tool`)
+- `src/content/skills/*.json` — 동일 (기존 `process_skill`)
+- `src/content/{cases,lessons,reviews}/*.json` — 1차 sourceUrl HEAD + dateChecked 갱신 (기존 `process_axis_page`)
+
+**게이트**:
+- A등급(stars·latestRelease·lastPush·dateChecked) — 자동 적용
+- C등급(license·archived·health) — `pending-24h` 변경기록, 24h 후 재확인 일치 시 `approved` 적용
+- 4축의 sourceUrl HEAD 실패 — C등급 alert (수동 조사 필요)
+
+**체인지로그**: 모든 변경은 PR로 사람 검토 → merge → 운영 반영. **자동 병합 안 함**(AGENTS.md §7).
+
+## 8. 콘텐츠 추가·수정 절차 (게이트 순서 요약)
+
+1. **발굴** — 이슈 발행 + 리포트
+2. **연구** — 공식 저장소·라이선스·문서 재확인
+3. **제조** — 데이터 JSON 작성, 게이트 로컬 통과, PR
+4. **PR** → **CI 실제 통과 확인** → **병합** (4번 검수와 함께)
+5. **게시** — `deploy.yml` 수동 실행
+6. **STATUS.md** 갱신
+
+자세한 절차는 각 에이전트 섹션(§2~§7) 참고.
+
+## 9. 게시 금지·주의
 
 - 사용자 접수(제안·정정)는 **출처 재확인 없이는 반영하지 않는다.** 재확인 결과를 이슈에 남긴다.
-- "학교에 적합", "안전함" 같은 판정 문구 금지 — 사실과 출처만.
-- 유료 전환·종료 소식은 공식 출처(공식 블로그·릴리스·저장소)로만 확인한다. 루머는 게시하지 않는다.
+- 출처가 명확하지 않은 사실은 **"확인 중"**으로 표시 — verified로 게시하지 않는다.
+- 학교 적합성·법적 준수 **판정** 문구 금지 — 정보 제공이 목적이지 보증이 아님.
+- 학생 데이터 처리가 있는 도구는 **usageScope = "수업용" 표시 금지** — 학교 AI 도입 절차 안내 후 사용(원칙 4).
+
+## 10. (구) 주간 리서치 체크리스트 — 6번 에이전트로 통합
+
+기존 §5의 체크리스트는 6번 에이전트의 작업으로 흡수:
+- [ ] 열린 이슈 목록 → 라벨별 정리, 오래된 `queue/research`부터 처리 (§3)
+- [ ] `fact_age.py` 실행 → 90일 경과 팩트 재확인 (§7)
+- [ ] 오픈스킬 "준비 중" 카드 중 1개 이상 미리보기 채우기 (§4, 자유구성 페이지)
+- [ ] 홈 "이달에 소개하는 도구" — `src/data/featured.json`이 이번 달 항목을 가졌는지 확인
+- [ ] 조달 수치 유효기간 확인 (표기: "2026년 1~10월, 확인 중")
+- [ ] 처리 결과를 이슈 코멘트로 남기고 닫기 (외부 발송은 초안 → 승인)
