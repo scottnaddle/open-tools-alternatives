@@ -1,5 +1,11 @@
 ---
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { join } from 'node:path';
 const { title } = Astro.props;
+// public/style.css 는 해시 없는 고정 주소라 Cloudflare(4시간 캐시)가 배포 뒤에도 예전 파일을 내보낸다(2026-10-14 v2 배포 사고).
+// 내용 해시를 쿼리로 붙여, CSS가 바뀌면 주소도 바뀌게 한다. 빌드는 저장소 루트에서 실행된다.
+const cssVer = createHash('sha256').update(readFileSync(join(process.cwd(), 'public', 'style.css'))).digest('hex').slice(0, 10);
 const base = import.meta.env.BASE_URL;
 const path = Astro.url.pathname;
 const navLinks = [
@@ -12,7 +18,7 @@ const navLinks = [
 <title>{title} — 열린도구</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href={`${base}style.css`}></head>
+<link rel="stylesheet" href={`${base}style.css?v=${cssVer}`}></head>
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 <header class="top ux">
