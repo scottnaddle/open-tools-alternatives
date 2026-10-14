@@ -168,7 +168,9 @@ def main():
                 continue
             linked_routes.add(h)
     # 홈(/)은 모든 페이지에서 링크되지만 prefix /alternatives/를 가정. 홈의 표준 라우트.
-    orphans = sorted(r for r in routes if r not in linked_routes and r not in ("/", "/alternatives/"))
+    # 검색 라우트(/search/)는 입력해야 도달하는 정상 라우트 + for/* 디렉토리는 의도적 보류
+    orphan_excluded = ("/", "/alternatives/", "/alternatives/search/", "/alternatives/for/")
+    orphans = sorted(r for r in routes if r not in linked_routes and r not in orphan_excluded)
     # for/* 디렉토리는 고아 허용
     orphans = [o for o in orphans if not o.startswith("/alternatives/for/")]
     print(f"\n[2] 고아 페이지 검사 (for/* 제외): {len(orphans)}개")
