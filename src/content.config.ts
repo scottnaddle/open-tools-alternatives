@@ -169,6 +169,8 @@ const skills = defineCollection({
 // 4축 페이지 — Stage 3 데이터 모델 (edzip.kr 차용 IA: 현장사례/수업지도안/심층리뷰)
 // 회귀: Base.astro의 4 navLinks map이 깨지는 케이스(2026-10-13)와 별개. 스키마는 빌드 시 1회 평가되며 안전.
 // 원칙: 출처 필수, manual-seed는 verified 불가(tools와 동일), example=true면 "예시 데이터" 배지 강제
+// 공개 빌드: example이 true인 cases/lessons/reviews는 페이지로 만들지 않는다.
+// 비예시 항목이 생기기 전에는 /cases 등 메뉴 링크도 두지 않는다. dist 노출은 scripts/check_links.py가 실패시킨다.
 const Method = z.enum(['github-api', 'release-assets', 'official-site', 'readme', 'procurement-data', 'manual-seed']);
 
 const cases = defineCollection({
