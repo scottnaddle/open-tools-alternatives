@@ -2,8 +2,19 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import SearchAutocomplete from '../../components/SearchAutocomplete.astro';
-import QuickChips from '../../components/QuickChips.astro';
-import { CAT } from '../../lib/facts';
+import Mono from '../../components/Mono.astro';
+import { tone } from '../../lib/facts';
+
+// 스킬 분야를 사이트의 기존 색 묶음에 대응한다. 카드마다 다른 미리보기 칸을 두지 않는다.
+const SKILL_TONE: Record<string, string> = {
+  '수업자료·발표': '수업 도구',
+  '그림·도해': '이미지·디자인',
+  '영상·미디어': '영상·오디오',
+  '데이터·차트': '문서·오피스',
+  '교사 업무·글쓰기': '문서·오피스',
+  '웹·앱 만들기': 'AI',
+  '기타': '유틸리티',
+};
 
 const base = import.meta.env.BASE_URL;
 const skills = await getCollection('skills');
@@ -22,7 +33,7 @@ const categories = [
 const categoryData = categories.map(cat => ({
   name: cat,
   count: skills.filter(s => s.data.category === cat).length,
-  skills: skills.filter(s => s.data.category === cat)
+  skills: skills.filter(s => s.data.category === cat).sort((a, b) => a.data.name.localeCompare(b.data.name, 'en')),
 })).filter(c => c.count > 0);
 
 // Search index for autocomplete
@@ -36,9 +47,7 @@ const skillsIndex = skills.map(s => ({
 
 // '많이 찾는 대체' 블록은 P0-1(보고서 4.6, 4.10)에서 제거됨. 스킬은 '대신'하는 게 아니라 '더하는' 것.
 
-// Stats
 const totalSkills = skills.length;
-const withPreview = skills.filter(s => s.data.previewPath).length;
 ---
 <Base title="오픈스킬 — AI 에이전트 스킬">
   <section class="hero-land">
@@ -66,36 +75,17 @@ const withPreview = skills.filter(s => s.data.previewPath).length;
         <div class="lgrid">
           {cat.skills.map(skill => {
             const { data } = skill;
-            const hasPreview = data.previewType && data.previewType !== 'none' && data.previewPath;
-            
             return (
-              <a class="lcard skill-card" href={`${base}skills/${data.slug}/`} style={`--cat:${CAT['기타']?.[1] || '#6B2C80'}`}>
+              <a class="lcard skill-card" href={`${base}skills/${data.slug}/`} style={tone(SKILL_TONE[data.category] || '유틸리티')}>
                 <span class="top">
-                  <span class="ic skill-preview-mini" aria-hidden="true">
-                    {hasPreview ? (
-                      data.previewType === 'iframe' && data.previewPath ? (
-                        <iframe 
-                          src={`${base}${data.previewPath.replace(/^\//, '')}`} 
-                          title={`${data.name} preview`}
-                          loading="lazy"
-                          style="transform: scale(0.15); transform-origin: 0 0; width: 667%; height: 667%; border: 0; pointer-events: none;"
-                        ></iframe>
-                      ) : data.previewPath ? (
-                        <img src={`${base}${data.previewPath.replace(/^\//, '')}`} alt={data.name} style="width: 100%; height: 100%; object-fit: cover;" />
-                      ) : null
-                    ) : (
-                      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="6" y="8" width="20" height="16" rx="2" />
-                        <path d="M6 12h20M12 8v-4M20 8v-4" />
-                      </svg>
-                    )}
-                  </span>
-                  <span>
-                    <b>{data.name}</b><br/>
-                    <span class="n">{data.usageScope} · ⭐ {data.github.stars.toLocaleString('ko-KR')}</span>
+                  <Mono name={data.name} size={44} />
+                  <span class="skill-name">
+                    <b>{data.name}</b>
+                    <span class="n">{data.usageScope} · {data.license}</span>
                   </span>
                 </span>
                 <span class="alts">{data.description}</span>
+                <span class="skill-foot">⭐ {data.github.stars.toLocaleString('ko-KR')}</span>
               </a>
             );
           })}
@@ -143,21 +133,20 @@ const withPreview = skills.filter(s => s.data.previewPath).length;
 </Base>
 
 <style>
-.skill-card .ic.skill-preview-mini {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
+.skill-card { min-height: 168px; }
+.skill-card .top { align-items: flex-start; }
+.skill-card .skill-name { min-width: 0; }
+.skill-card .skill-name b,
+.skill-card .skill-name .n { display: block; }
+.skill-card .skill-name b { overflow-wrap: anywhere; }
+.skill-card .alts {
+  color: var(--ink-2);
+  font-weight: 400;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  background: var(--ground);
-  border: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-
-.skill-card .ic.skill-preview-mini svg {
-  width: 24px;
-  height: 24px;
-  opacity: 0.5;
-}
+.skill-card .skill-foot { margin-top: auto; font-size: 12px; color: var(--muted); }
 </style>

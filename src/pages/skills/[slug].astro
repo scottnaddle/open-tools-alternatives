@@ -17,145 +17,142 @@ const { skill } = Astro.props;
 const { data } = skill;
 const base = import.meta.env.BASE_URL;
 
-// 자유구성 쇼케이스 본문 — src/content/skill-pages/<slug>.html (ops/RESEARCH.md 발굴→재구성 루프의 산출물)
+// 자유구성 쇼케이스 — src/content/skill-pages/<slug>.html 은 템플릿의 "무엇을 하나요" 안에 들어간다.
 const fragments = import.meta.glob('/src/content/skill-pages/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 const fragment: string | undefined = fragments[`/src/content/skill-pages/${data.slug}.html`];
 
-const hasPreview = data.previewType && data.previewType !== 'none' && data.previewPath;
+const hasPreview = !!(data.previewType && data.previewType !== 'none' && data.previewPath);
 const previewHref = hasPreview && data.previewPath ? `${base}${data.previewPath.replace(/^\//, '')}` : null;
+// 소개 글이 이미 데모를 포함하면 레거시 미리보기를 한 번 더 넣지 않는다.
+const showPreview = hasPreview && !fragment;
+const installLine = data.installNeeded
+  ? '설치가 필요합니다. 절차는 저장소 안내를 따릅니다.'
+  : '이 기록에는 별도 설치가 필요하지 않다고 되어 있습니다.';
+const apiLine = data.apiKeyNeeded
+  ? 'API 키가 필요합니다. 키를 받는 방법은 저장소 안내를 따릅니다.'
+  : '이 기록에는 API 키가 필요하지 않다고 되어 있습니다.';
 ---
 <Base title={`${data.name} — 오픈스킬`}>
   <div class="detail">
     <a class="back" href={`${base}skills/`}>← 스킬 목록</a>
-    <p class="kick">{data.category}, {data.usageScope}</p>
 
-    <div class="dhead">
-      <span class="tile" aria-hidden="true" style={`background:${col(data.name)}`}>
-        <Mono name={data.name} size={56} />
-      </span>
-      <h1>{data.name}</h1>
-    </div>
+    <header class="skill-hero">
+      <p class="kick">{data.category}</p>
+      <div class="dhead">
+        <span class="tile" aria-hidden="true" style={`background:${col(data.name)}`}>
+          <Mono name={data.name} size={56} />
+        </span>
+        <div>
+          <h1>{data.name}</h1>
+          <p class="skill-badges">
+            <span class="badge">{data.usageScope}</span>
+            <span class="badge">⭐ {data.github.stars.toLocaleString('ko-KR')}</span>
+            <span class="badge">{data.license}</span>
+          </p>
+        </div>
+      </div>
+      <p class="lead">{data.description}</p>
+    </header>
 
-    <p class="lead">{data.description}</p>
+    <div class="skill-sheet">
+      <section aria-labelledby="skill-what">
+        <h2 id="skill-what">무엇을 하나요</h2>
+        {fragment ? (
+          <article class="show-body">
+            <Fragment set:html={fragment} />
+          </article>
+        ) : (
+          <div class="show-callout">
+            <b>소개 글은 아직 없습니다.</b>
+            지금 확인된 내용은 위 한 줄 설명입니다. 수업에서 어떻게 쓰는지, 결과 화면은 저장소를 보고 차례로 채웁니다.
+          </div>
+        )}
+      </section>
 
-    {fragment ? (
-      <article class="show-body">
-        <Fragment set:html={fragment} />
-      </article>
-    ) : (
-      <>
-        {hasPreview && (
-          <div class="skill-preview-detail">
+      <section aria-labelledby="skill-try">
+        <h2 id="skill-try">써 보려면</h2>
+        {showPreview && previewHref && (
+          <div class="show-demo">
             <div class="preview-meta">
               {data.previewMethod === 'self-made' && <span class="pm-badge self">직접 생성 — 에이전트 제작</span>}
               {data.previewMethod === 'official-example' && <span class="pm-badge official">공식 예시 — 출처 프로젝트 제공</span>}
-              <a class="pm-open" href={previewHref} target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a>
+              <a class="pm-open" href={previewHref} target="_blank" rel="noopener">새 창에서 크게 보기</a>
             </div>
-            {data.previewNote && <p class="preview-note">{data.previewNote}</p>}
-            {data.previewType === 'iframe' && data.previewPath && (
-              <iframe
-                src={previewHref}
-                title={`${data.name} 미리보기`}
-                loading="lazy"
-              ></iframe>
+            {data.previewType === 'iframe' && (
+              <iframe src={previewHref} title={`${data.name} 미리보기`} loading="lazy"></iframe>
             )}
-            {data.previewType === 'image' && data.previewPath && (
-              <img
-                src={previewHref}
-                alt={`${data.name} 미리보기`}
-              />
+            {data.previewType === 'image' && (
+              <img src={previewHref} alt={`${data.name} 미리보기`} />
             )}
           </div>
         )}
-
-        {!hasPreview && (
-          <div class="skill-placeholder">
-            <svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="10" y="15" width="100" height="50" rx="4" />
-              <path d="M10 25h100M30 15v-8M50 15v-8M70 15v-8M90 15v-8" />
-              <circle cx="30" cy="40" r="8" />
-              <path d="M50 35l15 10l15-15" />
-            </svg>
-            <p>소개 페이지가 준비 중입니다 — 발굴·재구성 루프(ops/RESEARCH.md)에서 순차 제작됩니다</p>
+        {showPreview && data.previewNote && <p class="show-cap">{data.previewNote}</p>}
+        {!showPreview && !fragment && (
+          <div class="show-callout">
+            <b>화면 예시는 아직 없습니다.</b>
+            빈 그림 칸 대신, 아래 순서대로 저장소에서 확인하면 됩니다.
           </div>
         )}
+        <ol class="show-steps">
+          <li>저장소 <a href={data.sourceUrl} target="_blank" rel="noopener noreferrer">{data.github.repo}</a>를 엽니다.</li>
+          <li>{installLine}</li>
+          <li>{apiLine}</li>
+        </ol>
+        <div class="show-actions">
+          <a class="primary" href={data.sourceUrl} target="_blank" rel="noopener noreferrer">저장소 열기</a>
+          <a class="ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
+        </div>
+      </section>
 
-        <article class="alt">
-          <div class="ahead">
-            <div class="amain">
-              <div>
-                <h2>스킬 정보</h2>
-              </div>
-            </div>
-            <div class="badges">
-              <span class="badge">{data.usageScope}</span>
-              <span class="badge">⭐ {data.github.stars.toLocaleString('ko-KR')}</span>
-            </div>
-          </div>
+      <section aria-labelledby="skill-source">
+        <h2 id="skill-source">출처</h2>
+        <div class="show-stats">
+          <div class="st"><small>저장소</small><b><a href={data.sourceUrl} target="_blank" rel="noopener noreferrer">{data.github.repo}</a></b></div>
+          <div class="st"><small>확인일</small><b>{data.dateChecked}</b></div>
+          <div class="st"><small>용도 구분</small><b>{data.usageScope}</b></div>
+          <div class="st"><small>GitHub 스타</small><b>{data.github.stars.toLocaleString('ko-KR')}</b></div>
+        </div>
+        <p class="show-cap">스타 수와 라이선스는 공식 저장소 기준이며, 일일 검증이 다시 확인합니다. {fragment ? '소개 글과 화면 예시는 발굴·재구성 과정에서 작성했습니다.' : '소개 글은 아직 없고, 이 칸의 값만 확인된 사실입니다.'} <a href={`${base}suggest/#report`}>정보 정정 요청</a></p>
+      </section>
 
-          <div class="meta-row">
-            <span class="tagh">설치 필요 {data.installNeeded ? '예' : '아니오'}</span>
-            <span class="tagh">API 키 필요 {data.apiKeyNeeded ? '예' : '아니오'}</span>
-          </div>
+      <section aria-labelledby="skill-license">
+        <h2 id="skill-license">라이선스</h2>
+        <div class="show-stats">
+          <div class="st"><small>라이선스</small><b>{data.license}</b></div>
+          <div class="st"><small>설치</small><b>{data.installNeeded ? '필요' : '이 기록에는 불필요'}</b></div>
+          <div class="st"><small>API 키</small><b>{data.apiKeyNeeded ? '필요' : '이 기록에는 불필요'}</b></div>
+        </div>
+      </section>
+    </div>
 
-          <div class="meta-row">
-            <span class="tagh">라이선스 {data.license || '확인 중'}</span>
-            <span class="tagh">확인일 {data.dateChecked}</span>
-          </div>
-
-          <div class="skill-explainer">
-            <h3>사용 방법</h3>
-            <p>이 스킬은 AI 에이전트가 {data.description} 수행할 수 있도록 돕습니다. 자세한 사용법은 GitHub 저장소를 참고하세요.</p>
-          </div>
-
-          <div class="actions">
-            <a class="btn primary" href={data.sourceUrl} target="_blank" rel="noopener noreferrer">GitHub에서 보기 →</a>
-            <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
-          </div>
-        </article>
-      </>
-    )}
-
-    {/* 신원 프레임 — 어떤 자유구성 페이지에서도 동일한 위치·형식으로 신뢰성 유지 (AGENTS.md 원칙 1·4) */}
-    <aside class="skill-facts" aria-label="스킬 기본 정보">
-      <h2>스킬 기본 정보</h2>
-      <dl>
-        <div><dt>용도 구분</dt><dd>{data.usageScope}</dd></div>
-        <div><dt>라이선스</dt><dd>{data.license || '확인 중'}</dd></div>
-        <div><dt>저장소</dt><dd><a href={data.sourceUrl} target="_blank" rel="noopener noreferrer">{data.github.repo} ↗</a></dd></div>
-        <div><dt>GitHub 스타</dt><dd>⭐ {data.github.stars.toLocaleString('ko-KR')}</dd></div>
-        <div><dt>설치 / API 키</dt><dd>{data.installNeeded ? '설치 필요' : '설치 불필요'} · {data.apiKeyNeeded ? 'API 키 필요' : 'API 키 불필요'}</dd></div>
-        <div><dt>정보 확인일</dt><dd>{data.dateChecked}</dd></div>
-      </dl>
-      <p class="facts-note">위 값은 공식 저장소 기준 사실이며 daily-verifier가 매일 다시 확인합니다. 이 페이지의 소개·데모 구성은 발굴·재구성 에이전트가 작성했습니다(<a href={`${base}suggest/#report`}>정보 정정 요청</a>).</p>
-    </aside>
     <Changelog targetPrefix={`skills/${data.slug}`} limit={5} />
   </div>
 </Base>
 
 <style>
-  .skill-facts {
-    margin: 36px 0 8px;
-    background: var(--surface, #fff);
-    border: 1px solid var(--line, #e5e9ef);
-    border-radius: 12px;
-    padding: 18px 20px;
+  .skill-hero { margin-bottom: 8px; }
+  .skill-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; }
+  .skill-badges .badge { background: var(--brand-tint); color: var(--brand-ink); }
+  .skill-sheet { margin-top: 8px; }
+  .skill-sheet > section { margin: 28px 0 0; }
+  .skill-sheet > section > h2 {
+    font-size: 21px;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
   }
-  .skill-facts h2 { font-size: 15px; margin: 0 0 12px; color: #5a6a7a; font-weight: 700; }
-  .skill-facts dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 18px; margin: 0; }
-  .skill-facts dl > div { display: flex; gap: 8px; align-items: baseline; }
-  .skill-facts dt { font-size: 12px; color: #7a8898; flex-shrink: 0; }
-  .skill-facts dd { margin: 0; font-size: 13.5px; font-weight: 600; }
-  .skill-facts dd a { color: #1F4E8C; }
-  .facts-note { font-size: 12px; color: #8a97a5; margin: 12px 0 0; line-height: 1.6; }
-  .facts-note a { color: #1F4E8C; }
+  .preview-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-bottom: 1px solid #dfe6ee; background: #fff; }
+  .pm-badge { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 999px; }
+  .pm-badge.self { background: #E4EFE8; color: #1E6A47; }
+  .pm-badge.official { background: #E3ECF8; color: #1F4E8C; }
+  .pm-open { margin-left: auto; font-size: 13px; font-weight: 700; }
+  .show-demo img { width: 100%; height: auto; display: block; }
 </style>
 
 <style is:global>
-  /* ── 에디토리얼 키트: 자유구성 본문(set:html)에서 쓰는 클래스 (ops/RESEARCH.md 발굴·재구성 규칙) ── */
-  .show-body { margin: 30px 0 0; line-height: 1.75; font-size: 15px; }
+  /* 에디토리얼 키트: 자유구성 본문(set:html)과 공통 템플릿이 같이 쓴다. */
+  .show-body { margin: 8px 0 0; line-height: 1.75; font-size: 15px; }
   .show-body h2 { font-size: 21px; margin: 42px 0 12px; letter-spacing: -0.01em; }
-  .show-body h2:first-child { margin-top: 0; }
+  .show-body h2:first-child { margin-top: 8px; }
   .show-body h3 { font-size: 16.5px; margin: 28px 0 10px; }
   .show-body p { margin: 0 0 14px; }
   .show-body ul, .show-body ol { margin: 0 0 14px; padding-left: 22px; }
@@ -165,12 +162,12 @@ const previewHref = hasPreview && data.previewPath ? `${base}${data.previewPath.
 
   .show-lead { font-size: 16.5px; color: #33424f; border-left: 3px solid #1E6A47; padding: 2px 0 2px 14px; margin-bottom: 26px; }
 
-  .show-demo { margin: 22px 0 8px; border: 1px solid #dfe6ee; border-radius: 14px; overflow: hidden; background: #fbfcfd; }
-  .show-demo iframe { width: 100%; height: 640px; border: 0; display: block; }
-  .show-cap { font-size: 12px; color: #7a8898; margin: 8px 0 20px; }
+  .show-demo { margin: 8px 0 8px; border: 1px solid #dfe6ee; border-radius: 14px; overflow: hidden; background: #fbfcfd; }
+  .show-demo iframe { width: 100%; height: 640px; border: 0; display: block; background: #fff; }
+  .show-cap { font-size: 12px; color: #7a8898; margin: 8px 0 20px; line-height: 1.6; }
   .show-cap a { color: #1F4E8C; }
 
-  .show-callout { border: 1px solid #C4DCCD; background: #E4EFE8; border-radius: 12px; padding: 14px 16px; margin: 20px 0; font-size: 14px; }
+  .show-callout { border: 1px solid #C4DCCD; background: #E4EFE8; border-radius: 12px; padding: 14px 16px; margin: 0 0 16px; font-size: 14px; line-height: 1.65; }
   .show-callout.warn { border-color: #F2E3C2; background: #FFF9EF; }
   .show-callout b:first-child { display: inline-block; margin-right: 6px; }
 
@@ -179,10 +176,11 @@ const previewHref = hasPreview && data.previewPath ? `${base}${data.previewPath.
   .show-grid img { width: 100%; height: auto; display: block; }
   .show-grid figcaption { font-size: 12px; color: #7a8898; padding: 8px 12px; line-height: 1.5; }
 
-  .show-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 18px 0; }
+  .show-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 0 0 8px; }
   .show-stats .st { border: 1px solid #dfe6ee; border-radius: 10px; padding: 10px 12px; background: #fbfcfd; }
   .show-stats .st small { display: block; color: #7a8898; font-size: 11.5px; margin-bottom: 2px; }
-  .show-stats .st b { font-size: 15px; }
+  .show-stats .st b { font-size: 15px; word-break: break-word; }
+  .show-stats .st a { color: #1F4E8C; }
 
   .show-compare { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 13.5px; }
   .show-compare th, .show-compare td { border: 1px solid #dfe6ee; padding: 8px 10px; text-align: left; }
@@ -195,7 +193,7 @@ const previewHref = hasPreview && data.previewPath ? `${base}${data.previewPath.
   .show-video { margin: 20px 0 8px; }
   .show-video video { width: 100%; height: auto; display: block; border: 1px solid #dfe6ee; border-radius: 14px; background: #000; }
 
-  .show-actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 26px 0 6px; }
+  .show-actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 8px 0 6px; }
   .show-actions a { display: inline-block; padding: 9px 16px; border-radius: 9px; font-size: 13.5px; font-weight: 700; text-decoration: none; }
   .show-actions a.primary { background: #1E6A47; color: #fff; }
   .show-actions a.ghost { border: 1px solid #dfe6ee; color: #33424f; background: #fff; }
