@@ -4,11 +4,12 @@
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 
-// compare/[pair]와 동일한 페어 생성(학교앱 자신 + alternatives)
+// compare/[pair]와 동일한 페어 생성(alternatives만 — 학교앱 자신은 tools collection에 없어 compare/[pair] 라우트 생성 불가)
+// 4개 고아(apps alternatives 교차 없음)는 인덱스에서도 제외되며, P1(앱 카드 비교 매트릭스 확장)에서 다룬다.
 const seen = new Set<string>();
 const pairList: { pair: string }[] = [];
 for (const a of await getCollection('schoolApps')) {
-  const ids = [a.id, ...a.data.alternatives.map((x) => x.tool.id)];
+  const ids = a.data.alternatives.map((x) => x.tool.id);
   const unique = Array.from(new Set(ids)).sort();
   for (let i = 0; i < unique.length; i++) for (let j = i + 1; j < unique.length; j++) {
     const k = `${unique[i]}-vs-${unique[j]}`;

@@ -10,8 +10,8 @@ export async function getStaticPaths() {
   const seen = new Set<string>();
   const out: Array<{ params: { pair: string }; props: { a: string; b: string; app: string; appId: string } }> = [];
   for (const a of await getCollection('schoolApps')) {
-    // 학교앱 자신 + alternatives 전체로 페어 생성(앱 ↔ 대안 + 대안 ↔ 대안).
-    const ids = [a.id, ...a.data.alternatives.map((x) => x.tool.id)];
+    // 학교앱의 alternatives 전체(앱 자신 제외 — tools collection에 없음)로 페어 생성
+    const ids = a.data.alternatives.map((x) => x.tool.id);
     const unique = Array.from(new Set(ids)).sort();
     for (let i = 0; i < unique.length; i++) for (let j = i + 1; j < unique.length; j++) {
       const k = `${unique[i]}-vs-${unique[j]}`;

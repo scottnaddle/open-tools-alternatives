@@ -146,13 +146,6 @@ const sceneData: { device: string; alts: string[]; hint?: string }[] = scenesDat
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">{app.data.name}</th>
-              {alts.map(({ t: ot }) => {
-                const [a, b] = [app.id, ot.id].sort();
-                return <td><a href={`${base}compare/${a}-vs-${b}/`}>vs {ot.data.name}</a></td>;
-              })}
-            </tr>
             {alts.map(({ t: otA }) => (
               <tr>
                 <th scope="row">{otA.data.name}</th>
