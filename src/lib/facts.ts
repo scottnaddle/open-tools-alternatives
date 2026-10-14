@@ -68,6 +68,22 @@ export const CAT_ORDER = ['영상·오디오', '이미지·디자인', '문서·
 export function tone(c: string) { const t = CAT[c] || CAT['유틸리티']; return `--tint:${t[0]};--tink:${t[1]};--tbd:${t[2]}`; }
 export const RANK: Record<string, number> = { '쉬움': 0, '보통': 1, '어려움': 2, '서버 구축': 3 };
 export const HEALTH: Record<string, string> = { active: '개발 활발', slowing: '개발 느려짐', stale: '개발 멈춤', archived: '개발 중단' };
+export const FIELD_KO: Record<string, string> = {
+  health: '개발 상태', stars: '별 수', lastPush: '최근 개발', latestRelease: '최신 릴리스',
+  license: '라이선스', platforms: '기기 지원', schoolUse: '학교 활용', officialSite: '공식 사이트',
+};
+// 화면에는 enum 원시값(active, yes, github-api 등)을 그대로 두지 않는다.
+export function displayRaw(v: unknown): string {
+  if (v == null) return '(없음)';
+  if (typeof v === 'number') return v.toLocaleString('ko-KR');
+  if (typeof v === 'boolean') return v ? '예' : '아니오';
+  if (typeof v === 'string') return HEALTH[v] ?? METHOD_NAME[v] ?? KO[v] ?? v;
+  if (Array.isArray(v)) return v.map((item) => displayRaw(item)).join(', ');
+  if (typeof v === 'object') {
+    return Object.entries(v as Record<string, unknown>).map(([k, val]) => `${FIELD_KO[k] ?? k}=${displayRaw(val)}`).join(', ');
+  }
+  return String(v);
+}
 export const dfClass = (d: string) => 'df-' + d.split(' ')[0];
 // 시안의 "학교 사용 편의 점수" 공개 공식. 입력이 전부 확인 전(씨앗) 값이므로 결과는 예시로만 표시.
 // 학교 조건(15)은 아직 확인된 값이 없어 0으로 계산.

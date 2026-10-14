@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
+import { displayRaw, METHOD_NAME } from '../lib/facts';
 
 const changes = await getCollection('changes');
 const sortedChanges = changes.sort((a, b) => b.data.at.localeCompare(a.data.at));
@@ -35,7 +36,7 @@ const sortedChanges = changes.sort((a, b) => b.data.at.localeCompare(a.data.at))
               </div>
               <strong>{toolId}</strong> › {field}
               <br/>
-              <code>{JSON.stringify(c.data.before)}</code> → <code>{JSON.stringify(c.data.after)}</code>
+              <code>{displayRaw(c.data.before)}</code> → <code>{displayRaw(c.data.after)}</code>
               <br/>
               <details class="src">
                 <summary>출처 {c.data.sources.length}</summary>
@@ -44,7 +45,7 @@ const sortedChanges = changes.sort((a, b) => b.data.at.localeCompare(a.data.at))
                     <li>
                       <a href={s.url}>{s.url}</a>
                       <br/>
-                      <small>{s.method}, {s.fetchedAt}</small>
+                      <small>{METHOD_NAME[s.method] ?? s.method}, {s.fetchedAt.slice(0, 10)}</small>
                       {s.excerpt && <><br/><small>{s.excerpt}</small></>}
                     </li>
                   ))}
