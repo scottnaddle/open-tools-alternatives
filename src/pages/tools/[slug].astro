@@ -2,11 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import Status from '../../components/Status.astro';
 import Mono from '../../components/Mono.astro';
-import ScopeChips from '../../components/ScopeChips.astro';
 import Changelog from '../../components/Changelog.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { PLAT, HEALTH, exampleFor, deriveScope, MOE_URL } from '../../lib/facts';
+import { PLAT, HEALTH } from '../../lib/facts';
 import { TOOL_SYNONYMS, CATEGORY_TASKS } from '../../lib/search-synonyms';
 const base = import.meta.env.BASE_URL;
 
@@ -20,8 +19,6 @@ interface Props {
 
 const { tool } = Astro.props;
 const t = tool.data;
-const ex = exampleFor(tool.id);
-const sc = deriveScope(ex);
 const lic = t.license.value || (t.pendingLicense ? `${t.pendingLicense.value} (C등급 대기)` : '확인 필요');
 const synonyms = TOOL_SYNONYMS[tool.id] || [];
 const categoryTasks = CATEGORY_TASKS[t.category] || [];
@@ -98,21 +95,6 @@ const categoryTasks = CATEGORY_TASKS[t.category] || [];
       </table>
     </div>
 
-    <div class="panel" style="margin:24px 0">
-      <h2>쓸 수 있는 범위</h2>
-      <ScopeChips scopes={sc} isExample={true} />
-      {sc.includes('student-use-check') && (
-        <p class="warnbox">
-          학생이 직접 쓰면 학생 정보가 처리될 수 있어요. 학교 절차를 확인하세요. 
-          <a href={MOE_URL}>교육부 학습지원 소프트웨어 선정 기준 안내</a>
-        </p>
-      )}
-      <p class="hint" style="margin-top:12px">
-        쓰임 범위는 공개 규칙으로 계산한 값입니다. 원 사실(학생 정보 처리, 계정 필요, 네트워크)은
-        <a href={`${base}changes/`}>변경 이력</a>에서 확인하세요.
-      </p>
-    </div>
-
     {t.notes && t.notes.length > 0 && (
       <div class="panel" style="background:var(--warn-tint);color:#4A3000">
         <h2>참고 사항</h2>
@@ -131,7 +113,7 @@ const categoryTasks = CATEGORY_TASKS[t.category] || [];
     <div class="actions" style="margin-top:32px">
       <a class="btn primary" href={`https://github.com/${t.github.repo}`}>GitHub 저장소 →</a>
       {t.officialSite.value && <a class="btn" href={t.officialSite.value}>공식 사이트 →</a>}
-      <a class="btn ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
+      <a class="btn ghost" href={`${base}suggest/?tool=${tool.id}#report`}>정보가 틀렸나요?</a>
     </div>
     <Changelog targetPrefix={`tools/${tool.id}`} limit={5} />
   </div>

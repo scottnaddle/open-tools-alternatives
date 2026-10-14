@@ -1,5 +1,7 @@
 name: Discover (1번 에이전트 자동 슬롯)
 
+# push로 돌리지 않는다. 저장소에 YAML 오류가 있으면 GitHub가 push마다
+# 이 파일을 파싱하다가 실패로 표시하므로, 본문 heredoc은 파일로 분리한다.
 on:
   schedule:
     # 매일 22:00 UTC (Asia/Tashkent 03:00) — 1번 에이전트의 "오늘의 후보 1건" 슬롯 발행
@@ -26,16 +28,23 @@ jobs:
   emit-slot:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Check FREEZE
+        id: freeze
         run: |
           if [ -f ops/FREEZE ]; then
             echo "::warning::ops/FREEZE 존재 — 자동 슬롯 발행 중단"
             cat ops/FREEZE || true
-            exit 0
+            echo "frozen=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "frozen=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Compute kind
         id: kind
+        if: steps.freeze.outputs.frozen != 'true'
         run: |
           # 수동 트리거(workflow_dispatch) 또는 cron. cron은 홀수=software, 짝수=skill 번갈아.
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -52,6 +61,7 @@ jobs:
 
       - name: Create discovery issue
         id: create
+        if: steps.freeze.outputs.frozen != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           KIND: ${{ steps.kind.outputs.kind }}
@@ -67,19 +77,8 @@ jobs:
 
           TODAY=$(date -u +%Y-%m-%d)
           TITLE="[발굴 슬롯] ${TODAY} — ${KIND} 후보 1건"
-          BODY=$(cat <<EOF
-## 발굴(1번) 에이전트 — 오늘의 후보 1건
-
-이 슬롯은 매일 22:00 UTC 자동 발행됩니다. 본문은 비어 있습니다.
-
-**다음 단계**
-1. 위의 템플릿에 맞춰 본문 채우기: \`${TEMPLATE}\`
-2. **보류** 시 이슈를 닫고 \`agent/discovery\` 라벨 제거
-3. **선정** 시 \`queue/research\` 라벨을 추가하고 그대로 두기 (2번 에이전트가 인수인계)
-
-**메모**: ${NOTE}
-EOF
-)
+          export TEMPLATE NOTE
+          BODY=$(python3 -c 'import os, pathlib; t = pathlib.Path(".github/workflows/templates/discover-slot.md").read_text(); print(t.replace("__TEMPLATE__", os.environ["TEMPLATE"]).replace("__NOTE__", os.environ.get("NOTE", "")))')
 
           ISSUE_URL=$(gh issue create \
             --title "$TITLE" \
@@ -89,7 +88,7 @@ EOF
           echo "생성됨: ${ISSUE_URL}"
 
       - name: Search candidates and comment
-        if: success()
+        if: steps.freeze.outputs.frozen != 'true' && steps.create.outcome == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           KIND: ${{ steps.kind.outputs.kind }}
@@ -111,27 +110,12 @@ EOF
             "https://api.github.com/search/repositories?q=${ENC_Q}&sort=${SORT}&order=desc&per_page=5")
           if [ -z "$RESP" ]; then echo "Search API 빈 응답 — 코멘트 생략"; exit 0; fi
 
-          CANDIDATES=$(echo "$RESP" | python3 -c "
-import json, sys
-try:
-    d = json.load(sys.stdin)
-    items = d.get('items', [])
-    if not items:
-        print('검색 결과 0건 — 참고 후보 없음')
-        sys.exit(0)
-    out = ['### 참고 후보 (GitHub Search — 검토용)\n']
-    for r in items[:5]:
-        out.append(f\"- **{r['full_name']}** ⭐ {r['stargazers_count']} — {r.get('description') or '(설명 없음)'} — {r['html_url']}\")
-    print('\n'.join(out))
-except Exception as e:
-    print(f'검색 응답 파싱 실패: {e}')
-")
+          CANDIDATES=$(printf '%s' "$RESP" | python3 scripts/discover_candidates.py)
           if [ -z "$CANDIDATES" ]; then exit 0; fi
           if echo "$CANDIDATES" | grep -q "참고 후보 없음\|파싱 실패"; then
             echo "참고 후보 코멘트 생략: $CANDIDATES"
             exit 0
           fi
-          # 이슈 번호 추출
           ISSUE_NUM=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
           if [ -z "$ISSUE_NUM" ]; then exit 0; fi
           {
