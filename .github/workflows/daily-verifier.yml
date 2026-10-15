@@ -8,12 +8,14 @@ on:
 
 # contents: write — 검증 브랜치 push
 # pull-requests: write — PR 생성과 자동 병합 요청
+# actions: write — ci.yml workflow_dispatch (GITHUB_TOKEN 의 push/pull_request 는 CI를 시작하지 않음)
 # 저장소 설정에서 'Allow GitHub Actions to create and approve pull requests'도 켜야 한다.
 # (Settings > Actions > General > Workflow permissions) 꺼져 있으면 PR 단계가 실패한다.
 permissions:
   contents: write
   pull-requests: write
   issues: write
+  actions: write
 
 jobs:
   verify:

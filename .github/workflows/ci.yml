@@ -5,10 +5,17 @@ on:
     branches: ['**']
   pull_request:
     branches: [main]
+  # GITHUB_TOKEN 의 push/pull_request 는 이 워크플로를 시작하지 않는다.
+  # 일일 검증은 gh workflow run 으로 이 이벤트를 부른다. 검사 이름은 job 이름 build-and-check.
+  workflow_dispatch:
 
 jobs:
   build-and-check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # 일일 검증 브랜치에서만 deploy-after-verifier 를 workflow_dispatch 한다.
+      actions: write
     
     steps:
       - name: Checkout
@@ -69,3 +76,16 @@ jobs:
             echo "::error::내부 링크 404, 고아 페이지(for/* 외), 원시값, 출처 중복, 자리표시 또는 예시 공개가 발견됨"
             exit $EXIT
           fi
+
+      # 검사가 끝나야 자동 병합이 된다. 병합 대기는 이 잡 밖에서 한다.
+      # PR #36 처럼 토큰이 연 pull_request CI 는 workflow_run 배포를 시작하지 않았다.
+      - name: Queue deploy after verifier auto-merge
+        if: success() && github.event_name == 'workflow_dispatch' && startsWith(github.ref_name, 'daily-verifier/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_BRANCH: ${{ github.ref_name }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          gh workflow run deploy-after-verifier.yml --ref main \
+            -f "head_branch=${HEAD_BRANCH}" \
+            -f "head_sha=${HEAD_SHA}"

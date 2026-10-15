@@ -3,7 +3,8 @@
 # 라벨 agent/verifier 가 있고 병합이 끝나면 deploy.yml 을 workflow_call 할 수 있도록
 # 병합 커밋 SHA 를 출력한다. 대상이 아니면 merged=false.
 #
-# 사용: bash scripts/deploy_verifier_followup.sh <head-branch> <head-sha>
+# 사용: bash scripts/deploy_verifier_followup.sh <head-branch> <head-sha> [event]
+# event: pull_request | workflow_dispatch. 그 외는 배포하지 않는다.
 # 출력(GITHUB_OUTPUT 가 있으면 거기에, 아니면 stdout):
 #   merged=true|false
 #   sha=<merge commit>
@@ -16,6 +17,29 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 HEAD="${1:?head branch}"
 # head sha 는 로그용. 병합 커밋은 PR에서 읽는다.
 HEAD_SHA="${2:-}"
+EVENT="${3:-pull_request}"
+
+# 같은 병합 커밋으로 workflow_run 과 CI의 직접 호출이 겹치면 배포는 한 번만.
+claim_deploy_lock() {
+  local sha="$1"
+  local err
+  err=$(mktemp)
+  if gh api "repos/{owner}/{repo}/git/refs" \
+      -f ref="refs/verifier-deploy/${sha}" \
+      -f sha="$sha" >"$err" 2>&1; then
+    rm -f "$err"
+    return 0
+  fi
+  if grep -qi 'Reference already exists' "$err"; then
+    echo "이 병합 커밋의 배포는 이미 잡혀 있습니다: $sha"
+    rm -f "$err"
+    return 1
+  fi
+  echo "::warning::배포 잠금 ref 를 만들지 못했습니다. 배포는 계속합니다."
+  cat "$err"
+  rm -f "$err"
+  return 0
+}
 
 emit() {
   if [ -n "${GITHUB_OUTPUT:-}" ]; then
@@ -32,8 +56,8 @@ finish_skip() {
   exit 0
 }
 
-if ! verifier_branch_ok "$HEAD"; then
-  finish_skip "자동 배포 대상 아님 (브랜치): $HEAD"
+if ! verifier_ci_followup_ok "$EVENT" "$HEAD"; then
+  finish_skip "자동 배포 대상 아님 (이벤트 ${EVENT}, 브랜치 ${HEAD})"
 fi
 
 NUM=$(gh pr list --head "$HEAD" --state open --json number --jq '.[0].number // empty')
@@ -62,7 +86,10 @@ for _ in $(seq 1 30); do
       sleep 20
       continue
     fi
-    echo "병합됨 #$NUM ${SHA} (head ${HEAD_SHA:-unknown})"
+    echo "병합됨 #$NUM ${SHA} (head ${HEAD_SHA:-unknown}, event ${EVENT})"
+    if ! claim_deploy_lock "$SHA"; then
+      finish_skip "배포 잠금이 이미 있습니다: #$NUM ${SHA}"
+    fi
     emit "merged=true"
     emit "sha=$SHA"
     exit 0

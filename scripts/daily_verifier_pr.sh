@@ -20,6 +20,24 @@ PATHS=(
 git config user.name "Daily Verifier Bot"
 git config user.email "bot@yeollin-dogu.dev"
 
+# GITHUB_TOKEN 으로 푸시·PR을 만들면 pull_request/push CI가 돌지 않거나 승인 대기만 된다.
+# workflow_dispatch 는 토큰으로도 실행된다. 검사 이름은 ci.yml 의 job 인 build-and-check.
+queue_verifier_ci() {
+  local branch="$1"
+  local attempt
+  echo "CI 디스패치: $branch"
+  for attempt in 1 2 3 4 5; do
+    if gh workflow run ci.yml --ref "$branch"; then
+      echo "ci.yml 을 ${branch} 에서 시작했습니다. 검사 이름은 build-and-check 입니다."
+      return 0
+    fi
+    echo "디스패치 재시도 ${attempt}"
+    sleep $((attempt * 2))
+  done
+  echo "::error::ci.yml workflow_dispatch 에 실패했습니다. 기본 브랜치와 ${branch} 의 ci.yml 에 workflow_dispatch 가 있어야 합니다."
+  return 1
+}
+
 if ! git stash push -u -m "daily-verifier ${DATE}" -- "${PATHS[@]}"; then
   echo "스태시할 변경이 없습니다 — PR 생략"
   exit 0
@@ -62,6 +80,7 @@ if [ "$BRANCH" = "$BASE_BRANCH" ]; then
   if [ -n "$EXISTING" ]; then
     echo "기존 PR을 갱신했습니다: $EXISTING"
     bash scripts/verifier_enable_automerge.sh "$EXISTING" "$BRANCH"
+    queue_verifier_ci "$BRANCH"
     exit 0
   fi
 fi
@@ -85,3 +104,4 @@ if [ "$CODE" -ne 0 ]; then
 fi
 echo "PR 생성: $(cat /tmp/pr-url.txt)"
 bash scripts/verifier_enable_automerge.sh "$(cat /tmp/pr-url.txt)" "$BRANCH"
+queue_verifier_ci "$BRANCH"
