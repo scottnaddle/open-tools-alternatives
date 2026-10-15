@@ -83,9 +83,9 @@ const summary = (d: any) => {
   border: 1px solid var(--line, #e5e9ef);
   border-radius: 14px;
 }
-.ix-changelog h3 { font-size: 15px; margin: 0 0 6px; color: var(--ink, #1B2420); font-weight: 700; }
-.ix-changelog-note { font-size: 12.5px; color: var(--muted, #5A635E); margin: 0 0 12px; line-height: 1.6; }
-.ix-changelog-note code { background: rgba(0, 0, 0, 0.04); padding: 1px 5px; border-radius: 4px; font-size: 11.5px; }
+.ix-changelog h3 { font-size: var(--fs-body); margin: 0 0 6px; color: var(--ink, #1B2420); font-weight: 700; }
+.ix-changelog-note { font-size: var(--fs-sm); color: var(--muted, #5A635E); margin: 0 0 12px; line-height: 1.6; }
+.ix-changelog-note code { background: rgba(0, 0, 0, 0.04); padding: 1px 5px; border-radius: 4px; font-size: var(--fs-sm); }
 .ix-changelog-list { list-style: none; padding: 0; margin: 0; }
 .ix-changelog-item {
   display: grid;
@@ -94,14 +94,14 @@ const summary = (d: any) => {
   align-items: baseline;
   padding: 8px 0;
   border-top: 1px solid var(--line, #e5e9ef);
-  font-size: 13px;
+  font-size: var(--fs-sm);
 }
 .ix-changelog-item:first-child { border-top: 0; }
-.ix-changelog-date { color: var(--muted, #5A635E); font-family: ui-monospace, SFMono-Regular, monospace; font-size: 12px; }
+.ix-changelog-date { color: var(--muted, #5A635E); font-family: ui-monospace, SFMono-Regular, monospace; font-size: var(--fs-sm); }
 .ix-changelog-field { font-weight: 600; }
 .ix-changelog-tier {
   display: inline-block;
-  font-size: 10.5px;
+  font-size: var(--fs-sm);
   padding: 1px 6px;
   border-radius: 4px;
   background: #FFF9EF;
@@ -111,9 +111,9 @@ const summary = (d: any) => {
   vertical-align: middle;
 }
 .ix-changelog-summary { color: var(--ink, #1B2420); }
-.ix-changelog-commit { font-size: 11.5px; color: var(--muted, #5A635E); font-family: ui-monospace, SFMono-Regular, monospace; }
+.ix-changelog-commit { font-size: var(--fs-sm); color: var(--muted, #5A635E); font-family: ui-monospace, SFMono-Regular, monospace; }
 @media (max-width: 600px) {
   .ix-changelog-item { grid-template-columns: 1fr; gap: 4px; }
-  .ix-changelog-date { font-size: 11px; }
+  .ix-changelog-date { font-size: var(--fs-sm); }
 }
 </style>

@@ -46,7 +46,7 @@ const flagged = [...tools.values()].filter((t) => t.data.github.archived || t.da
   imageAlt="학교에서 쓰는 앱, 무료 오픈소스로"
   jsonLd={websiteLd(absUrl(base, '', Astro.site ?? 'https://edtechnewsroom.com'), absUrl(base, 'search/', Astro.site ?? 'https://edtechnewsroom.com'))}
 >
-  <section class="v2h-hero">
+  <section class="v2h-hero" id="search">
     <div class="v2h-wrap">
       <p class="v2h-eyebrow">학교 앱 {apps.length}개 · 오픈소스 대안 {nAlt}건 · 매일 다시 확인</p>
       <h1>학교에서 쓰는 앱, 무료 오픈소스로 바꿔 쓸 수 있을까요?</h1>
@@ -103,16 +103,12 @@ const flagged = [...tools.values()].filter((t) => t.data.github.archived || t.da
         <ul class="v2h-list">{recent.map((t) => <li><a href={`${base}tools/${t.id}/`}>{t.data.name}</a><span>{md(t.data.github.lastPush)}</span></li>)}</ul>
         <p class="v2h-small">GitHub 마지막 개발일{fetched && ` · ${fetched} 확인`}</p>
       </section>
-      <section>
-        <h2>개발 중단·종료 알림</h2>
-        {flagged.length ? <ul class="v2h-list">{flagged.map((t) => <li><a href={`${base}tools/${t.id}/`}>{t.data.name}</a><span>개발 중단</span></li>)}</ul>
-          : <p>지금 소개 중인 도구에는 알림이 없어요. 공식 발표로 확인되면 대안과 함께 이곳에 올립니다.</p>}
-      </section>
-      <section id="news">
-        <h2>바뀐 정보를 메일로</h2>
-        <p>새 대안과 선생님께 영향 있는 업데이트를 주 1회 보내 드릴 예정이에요. 그 전까지는 <a href={`${base}changes/`}>변경 이력</a>과 <a href={`${base}skills/`}>오픈스킬</a>에서 확인할 수 있어요.</p>
-        <span class="v2h-soon">준비 중이에요</span>
-      </section>
+      {flagged.length > 0 && (
+        <section>
+          <h2>개발 중단·종료 알림</h2>
+          <ul class="v2h-list">{flagged.map((t) => <li><a href={`${base}tools/${t.id}/`}>{t.data.name}</a><span>개발 중단</span></li>)}</ul>
+        </section>
+      )}
     </div>
   </div>
 

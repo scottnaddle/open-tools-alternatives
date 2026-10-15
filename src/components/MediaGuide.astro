@@ -46,7 +46,7 @@ const show = reviewList.length + tutorialList.length > 0;
 
 <style>
   .media-guide { margin: 24px 0; }
-  .media-guide h2 { font-size: 20px; }
+  .media-guide h2 { font-size: var(--fs-title); }
   .media-list { list-style: none; margin: 12px 0 0; padding: 0; }
   .media-list li {
     display: flex;
@@ -55,7 +55,7 @@ const show = reviewList.length + tutorialList.length > 0;
     align-items: baseline;
     padding: 8px 0;
     border-top: 1px solid var(--line-2, #e6eeea);
-    font-size: 14px;
+    font-size: var(--fs-body);
     line-height: 1.55;
   }
   .media-list a { font-weight: 700; }
