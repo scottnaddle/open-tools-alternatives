@@ -1,0 +1,23 @@
+{
+  "slug": "microsoft-flint-chart",
+  "title": "중2 과학 — 우리 지역 월별 평균 기온 선 그래프 만들기",
+  "method": "self-made",
+  "madeWith": "opencode (DeepSeek) + 이 스킬 (flint-chart-author)",
+  "input": {
+    "scenario": "중학교 2학년 과학 '기권과 날씨' 단원. 계절에 따라 기온이 어떻게 달라지는지 학생들이 그래프로 읽게 하려고, 교사가 수업 화면에 띄울 월별 평균 기온 선 그래프를 준비하는 상황이다.",
+    "prompt": "중학교 2학년 과학 '기권과 날씨' 수업에 쓸 자료예요. 우리 지역의 1월부터 12월까지 월별 평균 기온(℃)을 '올해'와 '평년' 두 줄로 비교하는 선 그래프로 만들어 주세요. 값은 수업용으로 꾸민 예시 값이라고 표시해 주세요. 그래프 제목과 가로·세로축 이름도 한국어로 넣어 주세요."
+  },
+  "output": {
+    "type": "image",
+    "path": "/skill-demos/microsoft-flint-chart/result.webp",
+    "alt": "스킬이 낸 차트 스펙을 실제로 렌더링한 화면. 위쪽 '꾸민 수업 예시 · Flint Chart 예시 체험' 배지와 '중학교 2학년 과학 · 기권과 날씨' 표시, 제목 '우리 지역 월별 평균 기온 선 그래프' 아래에 선 그래프가 있다. 가로축은 1~12월, 세로축은 평균 기온(℃)이고, 파란 '평년' 선과 주황 '올해' 선이 8월에 가장 높게 솟는 모양으로 겹쳐 있으며 오른쪽에 범례가 있다. 그래프 밑에 제목 '우리 지역 기온은 8월에 가장 높다'와 부제 '월별 평균 기온(수업용 예시 값), ℃'가 있다. 아래 카드에는 스킬이 낸 Flint 입력 스펙(JSON)이 검은 배경에 보인다.",
+    "excerpt": "semantic_types — month: Month, series: Category, temp: Temperature\nchart_spec — \"Line Chart\" · x=month(월) · y=temp(평균 기온(℃)) · color=series(구분) · theme_spec=\"nature\"\ntitle: 우리 지역 기온은 8월에 가장 높다 / subtitle: 월별 평균 기온(수업용 예시 값), ℃"
+  },
+  "steps": [
+    "opencode 같은 AI 에이전트에 저장소 안내대로 이 스킬(flint-chart-author)을 설치한다. 스펙만 받을 때는 설치 없이도 된다.",
+    "학년·단원·그래프 종류·축에 넣을 항목·강조할 점을 적은 문장을 붙여 넣는다. 위 문장을 바꿔 써도 된다.",
+    "나온 차트 스펙(semantic_types·chart_spec)을 flint-chart 라이브러리나 MCP로 컴파일해 차트를 확인하고, 제목·축 이름·숫자를 우리 수업 자료에 맞게 고친다."
+  ],
+  "dateChecked": "2026-10-16",
+  "note": "이 스킬의 결과물은 완성된 그림이 아니라 차트 스펙(ChartAssemblyInput의 semantic_types·chart_spec)이다. 그림은 스킬이 낸 그 스펙을 실제 flint-chart 라이브러리(assembleVegaLite)로 컴파일하고 vega-embed로 브라우저에서 렌더링해 캡처한 것이며, 스펙을 손으로 고치지 않았다. 스킬이 안내하는 MCP 서버(create_chart_view)는 쓰지 않고 라이브러리를 직접 호출했다. 테마는 내장 'nature' 프리셋이다. 화면 속 기온 값(예: 8월 28℃)과 '올해·평년' 두 줄은 수업용 예시 값이며 실제로 측정한 값이 아니다. 실제 수업에 쓰려면 공식 기상 자료의 실제 값으로 바꾸고, 값·단위(℃)·축 이름·성취기준을 확인해야 한다. month를 Month 의미 유형으로 넣어 가로축이 1~12 정수 눈금으로 나왔으니, 날짜 축으로 보이게 하려면 데이터를 날짜 형식으로 바꿔 넣어야 한다."
+}
