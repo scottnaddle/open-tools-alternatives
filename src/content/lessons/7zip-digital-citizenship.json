@@ -12,7 +12,10 @@
   "sourceUrl": "https://www.7-zip.org",
   "sourceMethod": "official-site",
   "fetchedAt": "2026-10-14T00:00:00+09:00",
-  "dateChecked": "2026-10-14",
+  "dateChecked": "2026-10-15",
   "example": true,
-  "badges": ["예시 데이터", "출처: 공식 사이트"]
+  "badges": [
+    "예시 데이터",
+    "출처: 공식 사이트"
+  ]
 }
