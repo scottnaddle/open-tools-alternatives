@@ -20,6 +20,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          # 피드 new 항목의 날짜는 콘텐츠 파일을 처음 넣은 커밋 시각이다.
+          fetch-depth: 0
       
       - name: Setup Node.js
         uses: actions/setup-node@v5
@@ -34,6 +37,11 @@ jobs:
         run: npm run check
       
       - name: Build
+        env:
+          ASTRO_BASE: /alternatives
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+          PUBLIC_NAVER_SITE_VERIFICATION: ${{ vars.PUBLIC_NAVER_SITE_VERIFICATION }}
+          PUBLIC_DAUM_SITE_VERIFICATION: ${{ vars.PUBLIC_DAUM_SITE_VERIFICATION }}
         run: npm run build
       
       - name: Daily verifier non-GitHub 403 skip test

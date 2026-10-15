@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 const base = import.meta.env.BASE_URL;
 const tools = await getCollection('tools');
 ---
-<Base title="정보부장·전산 담당">
+<Base title="정보부장·전산 담당" description="컴퓨터실 일괄 설치와 관리자 권한, 오프라인 환경 정보를 모으는 페이지입니다. 보안 프로그램 우회 방법은 안내하지 않습니다." image="for-it.png" imageAlt="정보부장·전산 담당">
   <h1>정보부장·전산 담당 선생님용</h1>
   <p class="lead">컴퓨터실 일괄 설치, 관리자 권한, 오프라인 환경 정보를 모았어요. 학교 PC 보안 프로그램·복원 솔루션 우회 방법은 안내하지 않습니다.</p>
   <p><a class="btn ghost" href={`${base}apps/alzip/?f=pc,noadmin`}>PC실 + 관리자 권한 없이 설치 (알집 대안) →</a></p>

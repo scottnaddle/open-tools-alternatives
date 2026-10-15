@@ -7,6 +7,7 @@ import { getCollection, getEntry } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { mono, HEALTH, SYNONYMS } from '../../lib/facts';
 import { APP_TOOL_MAP } from '../../lib/search-synonyms';
+import { absUrl, appSeoDescription, appSeoTitle, breadcrumbLd, itemListLd } from '../../lib/seo';
 const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
@@ -49,8 +50,16 @@ const matrix = app.data.featureMatrix ?? [];
 // 확인된 칸(sourceUrl이 있는 행)이 없으면 표를 그리지 않는다. can/cannot을 만들어 채우지 않는다.
 const hasVerifiedCell = matrix.some((feat) => Boolean(feat.sourceUrl));
 const procText = app.data.procurementNote?.value?.replace('2026년 1~10월 학교 구매 ', '2026년 1~10월 학교 구매 ');
+const site = Astro.site ?? 'https://edtechnewsroom.com';
+const toolNames = alts.map(({ t }) => t.data.name);
+const seoTitle = appSeoTitle(app.data.name, toolNames);
+const seoDesc = appSeoDescription(app.data.name, toolNames, alts[0]?.summary ?? '');
+const pageUrl = absUrl(base, `apps/${app.id}/`, site);
 ---
-<Base title={`${app.data.name} 대신 쓸 수 있는 오픈소스`}>
+<Base title={seoTitle} description={seoDesc} image={`app-${app.id}.png`} imageAlt={seoTitle} jsonLd={[
+  breadcrumbLd([{ name: '홈', url: absUrl(base, '', site) }, { name: app.data.name, url: pageUrl }]),
+  itemListLd(seoTitle, alts.map(({ t }) => ({ name: t.data.name, url: absUrl(base, `tools/${t.id}/`, site) }))),
+]}>
   <div data-pagefind-meta="app_synonyms" style="display:none">{synonyms.join(', ')}</div>
   <div data-pagefind-meta="alternative_tools" style="display:none">{alternativeTools.join(', ')}</div>
   <div data-pagefind-meta="app_name" style="display:none">{app.data.name}</div>

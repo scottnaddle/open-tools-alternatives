@@ -5,6 +5,7 @@ import Icon from '../components/Icon.astro';
 import SearchAutocomplete from '../components/SearchAutocomplete.astro';
 import { getCollection } from 'astro:content';
 import { SYNONYMS } from '../lib/facts';
+import { absUrl, websiteLd } from '../lib/seo';
 const base = import.meta.env.BASE_URL;
 const apps = (await getCollection('schoolApps')).sort((a, b) => a.data.bundle - b.data.bundle);
 const tools = new Map((await getCollection('tools')).map((t) => [t.id, t]));
@@ -38,7 +39,13 @@ const quick = [['capcut', 'opencut'], ['alzip', '7-zip'], ['hancom-office', 'lib
   .map(([aid, tid]) => ({ a: apps.find((x) => x.id === aid), t: tools.get(tid) })).filter((x) => x.a && x.t);
 const flagged = [...tools.values()].filter((t) => t.data.github.archived || t.data.health === 'archived');
 ---
-<Base title="학교에서 쓰는 앱, 무료 오픈소스로 바꿔 쓸 수 있을까?">
+<Base
+  title="학교에서 쓰는 앱, 무료 오픈소스로"
+  description="학교에서 쓰는 유료 앱 대신 쓸 무료 오픈소스와, 수업·업무에 쓰는 AI 스킬을 한국어로 정리합니다."
+  image="home.png"
+  imageAlt="학교에서 쓰는 앱, 무료 오픈소스로"
+  jsonLd={websiteLd(absUrl(base, '', Astro.site ?? 'https://edtechnewsroom.com'), absUrl(base, 'search/', Astro.site ?? 'https://edtechnewsroom.com'))}
+>
   <section class="v2h-hero">
     <div class="v2h-wrap">
       <p class="v2h-eyebrow">학교 앱 {apps.length}개 · 오픈소스 대안 {nAlt}건 · 매일 다시 확인</p>
@@ -103,7 +110,7 @@ const flagged = [...tools.values()].filter((t) => t.data.github.archived || t.da
       </section>
       <section id="news">
         <h2>바뀐 정보를 메일로</h2>
-        <p>새 대안과 선생님께 영향 있는 업데이트를 주 1회 보내 드릴 예정이에요.</p>
+        <p>새 대안과 선생님께 영향 있는 업데이트를 주 1회 보내 드릴 예정이에요. 그 전까지는 <a href={`${base}changes/`}>변경 이력</a>과 <a href={`${base}skills/`}>오픈스킬</a>에서 확인할 수 있어요.</p>
         <span class="v2h-soon">준비 중이에요</span>
       </section>
     </div>
