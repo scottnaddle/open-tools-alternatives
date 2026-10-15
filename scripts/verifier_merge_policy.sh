@@ -14,6 +14,20 @@ verifier_label_ok() {
   printf '%s\n' "$1" | grep -qx 'agent/verifier'
 }
 
+# CI가 끝난 뒤 배포 대기를 시작해도 되는지.
+# pull_request: 사람이 연 검사. workflow_run 이 이 이벤트를 본다.
+# workflow_dispatch: 봇이 gh workflow run 으로 돌린 검사. 검사 이름은 build-and-check.
+# push 는 넣지 않는다. 토큰 push 는 CI를 시작하지 않고, 사람 push 와 겹치면 배포가 두 번이다.
+verifier_ci_followup_ok() {
+  event="$1"
+  branch="$2"
+  verifier_branch_ok "$branch" || return 1
+  case "$event" in
+    pull_request|workflow_dispatch) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 # 인자: GitHub rules API JSON (브랜치에 적용 중인 규칙 배열).
 # required_status_checks 안에 context build-and-check 가 있으면 0.
 verifier_rules_require_ci() {

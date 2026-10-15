@@ -1,7 +1,7 @@
 ## Daily Verification Results
 
 GitHub/GitLab API로 다시 확인한 사실 갱신입니다. main에 직접 커밋하지 않습니다.
-이 PR은 브랜치 `daily-verifier/` 와 라벨 `agent/verifier` 가 있을 때만, CI `build-and-check` 통과 후 스쿼시로 자동 병합됩니다. 콘텐츠·디자인·발굴 PR은 자동 병합하지 않습니다.
+이 PR은 브랜치 `daily-verifier/` 와 라벨 `agent/verifier` 가 있을 때만, CI `build-and-check` 통과 후 스쿼시로 자동 병합됩니다. 콘텐츠·디자인·발굴 PR은 자동 병합하지 않습니다. 봇 토큰은 `pull_request` CI를 시작하지 않으므로, 같은 검사를 `workflow_dispatch` 로 붙입니다.
 
 ### 변경 등급
 

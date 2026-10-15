@@ -14,7 +14,7 @@
 ## 1. 배포가 도는 때
 
 1. `main` 에 사이트 파일이 푸시될 때 (`src/`, `public/`, `astro.config.mjs`, `package.json`, `package-lock.json`, `tsconfig.json`, `scripts/deploy.sh`). 문서만 바뀌면 배포하지 않는다.
-2. 일일 검증 PR이 CI 후 자동 병합되면 `deploy-after-verifier.yml` 이 병합 커밋으로 `deploy.yml` 을 호출한다. `GITHUB_TOKEN` 병합은 push 워크플로를 시작하지 않기 때문이다.
+2. 일일 검증 PR이 CI 후 자동 병합되면 `deploy-after-verifier.yml` 이 병합 커밋으로 `deploy.yml` 을 호출한다. `GITHUB_TOKEN` 병합은 push 워크플로를 시작하지 않기 때문이다. 봇은 `ci.yml` 을 `workflow_dispatch` 로 돌리고, 그 성공이 배포 대기를 부른다. 검사가 0건이면 `ops/BRANCH_PROTECTION.md` 5절.
 3. 수동: `gh workflow run deploy.yml --ref main`
 
 같은 시각에 두 번 들어와도 `production-deploy` 동시성 그룹이 겹치지 않게 순서대로 실행한다.
@@ -90,4 +90,4 @@ daily-verifier(매일 22:00 UTC)는 검증 결과를 **main에 직접 커밋하�
 - 주간 검증(`weekly-audit.yml`)은 PR을 만들지 않는다. summary 브랜치만 push하므로 위 체크와는 별개로 `contents: write`가 필요하다.
 - 발굴 슬롯(`discover.yml`)과 주간 검증은 **schedule과 workflow_dispatch만** 사용한다. push 트리거를 넣지 않는다.
 - 두 워크플로는 이슈를 만들기 전에 `scripts/ensure_labels.sh`로 라벨을 만든다. `issues: write`가 필요하다. 목록은 `ops/LABELS.md`.
-- 일일 검증 PR만 라벨 `agent/verifier` 와 브랜치 `daily-verifier/` 로 자동 스쿼시 병합을 요청한다. 설정은 `ops/BRANCH_PROTECTION.md`.
+- 일일 검증 PR만 라벨 `agent/verifier` 와 브랜치 `daily-verifier/` 로 자동 스쿼시 병합을 요청한다. 설정은 `ops/BRANCH_PROTECTION.md`. `actions: write` 로 `ci.yml` 을 `workflow_dispatch` 한다. 토큰의 `pull_request` 는 검사를 시작하지 않는다.
