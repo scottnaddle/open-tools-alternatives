@@ -90,7 +90,7 @@
   },
   "github": {
     "repo": "obsproject/obs-studio",
-    "stars": 77513,
+    "stars": 77529,
     "lastPush": "2026-10-14",
     "archived": false,
     "latestRelease": {
@@ -98,12 +98,12 @@
       "date": "2026-08-14",
       "url": "https://github.com/obsproject/obs-studio/releases/tag/32.2.2"
     },
-    "fetchedAt": "2026-10-14"
+    "fetchedAt": "2026-10-15"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261014-142117",
-    "at": "2026-10-14T14:21:17+00:00",
+    "runId": "daily-20261015-002314",
+    "at": "2026-10-15T00:23:14+00:00",
     "unresolved": [],
     "notes": []
   },

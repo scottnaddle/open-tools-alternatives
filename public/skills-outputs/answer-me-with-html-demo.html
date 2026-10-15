@@ -1,12 +1,13 @@
+<!-- 주석과 언어 이름만 한국어로 옮겼습니다. 프로젝트 이름과 MIT 출처는 원본입니다. https://github.com/QingYunA/answer-me-with-html -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <title>Answer me with HTML — demo</title>
 <!--
-  演示视频的逐帧动画页，1920×1080。window.render(t) 按时间 t（秒）确定性地摆放所有元素，
-  make-demo.mjs 的截图脚本以 30 fps 调用它并截图。需要与渲染好的 tcp.html（examples/tcp.en.md）
-  以及 ../images/plain-vs-skill.png 一起通过 HTTP 提供。数字来自 bench/results/results.json。
+  시연 영상의 프레임 페이지, 1920×1080. window.render(t)는 시간 t(초)에 맞춰 요소를 놓습니다.
+  make-demo.mjs 가 30fps로 이 함수를 불러 화면을 찍습니다. 렌더된 tcp.html(examples/tcp.en.md)과
+  ../images/plain-vs-skill.png 를 HTTP로 함께 제공합니다. 숫자는 bench/results/results.json 입니다.
 -->
 <style>
   html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0b0d12; }
@@ -273,7 +274,7 @@
     <h1 class="a" id="e-h">Answer me with <span class="accent">HTML</span></h1>
     <div class="cmd a" id="e-cmd"><span>$</span> <span id="e-typed" style="color:#e8ebf0"></span><span class="cursor" id="e-cursor" style="height:42px"></span></div>
     <div class="url a" id="e-url">github.com/QingYunA/answer-me-with-html</div>
-    <div class="langs a" id="e-langs"><span>中文</span><span>English</span><span>日本語</span></div>
+    <div class="langs a" id="e-langs"><span>중국어</span><span>English</span><span>일본어</span></div>
   </div>
 </section>
 <div id="black"></div>
@@ -284,7 +285,7 @@
     n: q.get('n') || 3, r: q.get('r') || 3, model: q.get('model') || 'Claude Sonnet 5.5' };
   const $ = (id) => document.getElementById(id);
 
-  // ── 缓动与时间工具 ──
+  // ── 속도와 시간 도구 ──
   const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
   const prog = (t, a, b) => clamp((t - a) / (b - a));
   const eo = (x) => 1 - (1 - x) ** 3;
@@ -293,13 +294,13 @@
   const lerp = (a, b, x) => a + (b - a) * x;
   const fmt = (v) => Math.round(v).toLocaleString('en-US');
 
-  // 元素上浮出现
+  // 요소가 떠오르며 나타남
   const rise = (el, t, start, dur = 0.55, dy = 36) => {
     const x = eo(prog(t, start, start + dur));
     el.style.opacity = x;
     el.style.transform = `translateY(${(1 - x) * dy}px)`;
   };
-  // 场景在 [a, b) 内可见，进出各 0.25 s 淡入淡出
+  // 장면은 [a, b) 동안 보이고, 들고 날 때 0.25초씩 흐려짐
   const scene = (el, t, a, b, fade = 0.25) => {
     const v = t < a || t >= b ? 0 : Math.min(prog(t, a, a + fade), 1 - prog(t, b - fade, b));
     el.style.opacity = v;
@@ -311,7 +312,7 @@
   document.querySelectorAll('[data-r="tok"]').forEach((el) => { el.textContent = `${(D.pt / D.st).toFixed(1)}×`; });
   document.querySelectorAll('[data-r="time"]').forEach((el) => { el.textContent = `${(D.ps / D.ss).toFixed(1)}×`; });
 
-  // ── 页面镜头：等 iframe 加载后量出各面板的位置 ──
+  // ── 페이지 카메라: iframe이 로드된 뒤 칸 위치를 잼 ──
   let rects = {};
   let pageH = 1600;
   let titleH = 1600;
@@ -326,7 +327,7 @@
       iframe.style.height = `${h}px`;
       if (iframe.id === 'f-title') titleH = h;
       if (iframe.id === 'f-blue') pageH = h;
-      // 镜头推拉以 blueprint 版面为准（两套主题的边距不同）
+      // 카메라 밀고 당기기는 blueprint 판을 기준으로 함 (테마마다 여백이 다름)
       if (iframe.id === 'f-blue') {
         for (const id of ['panel-A', 'panel-B', 'panel-C', 'panel-D']) {
           const r = doc.getElementById(id)?.getBoundingClientRect();
@@ -344,7 +345,7 @@
     prep($('f-patch'), 'blueprint', 'light'),
   ]).then(() => document.fonts.ready);
 
-  // 镜头：让矩形 r（页面坐标）居中并占满视口的 fill 比例
+  // 카메라: 사각형 r(페이지 좌표)을 가운데 두고 화면의 fill 비율만큼 채움
   const VW = 1760, VH = 934;
   const shot = (r, fill = 0.88) => {
     const s = Math.min((VW * fill) / r.w, (VH * fill) / r.h);
@@ -352,9 +353,9 @@
   };
   const mix = (a, b, x) => ({ s: lerp(a.s, b.s, x), x: lerp(a.x, b.x, x), y: lerp(a.y, b.y, x) });
 
-  // ── 主渲染：t 秒时刻的完整画面 ──
+  // ── 본 그리기: t초의 전체 화면 ──
   window.render = (t) => {
-    // 1. 标题 0–4
+    // 1. 제목 0–4
     if (scene($('s-title'), t, 0, 4) > 0) {
       rise($('t-logo'), t, 0.05);
       rise($('t-h1'), t, 0.2, 0.6, 50);
@@ -371,12 +372,12 @@
       const w = eo(prog(t, 1.0, 1.8));
       $('t-win').style.opacity = w;
       $('t-win').style.transform = `translateX(${(1 - w) * 160}px) rotateY(${lerp(-22, -9, w) + prog(t, 1.8, 4) * 3}deg) rotateX(${lerp(6, 3, w)}deg)`;
-      // 窗口视口高 654px，页面缩放 0.7；最多滚到可滚动距离的 80%，避免露出页面底部的空白
+      // 창 높이 654px, 페이지 배율 0.7. 스크롤은 최대 80%까지만, 아래 빈칸이 보이지 않게
       const maxScroll = Math.max(0, titleH - 654 / 0.7) * 0.8;
       $('t-cam').style.transform = `scale(0.7) translateY(${-eio(prog(t, 1.9, 4)) * maxScroll}px)`;
     }
 
-    // 2. 实测对比 4–8
+    // 2. 측정 비교 4–8
     if (scene($('s-compare'), t, 4, 8) > 0) {
       $('c-wrap').style.transform = `scale(${lerp(1, 1.035, prog(t, 4, 8))})`;
       rise($('c-h'), t, 4.05);
@@ -398,7 +399,7 @@
       }
     }
 
-    // 3. 终端 8–13
+    // 3. 터미널 8–13
     if (scene($('s-term'), t, 8, 13) > 0) {
       const enter = eo(prog(t, 8, 8.4));
       const push = eio(prog(t, 12.45, 13));
@@ -419,7 +420,7 @@
       $('m-path').style.backgroundSize = `${eo(prog(t, 12.15, 12.5)) * 100}% 100%`;
     }
 
-    // 4. 页面 13–19：推近时序图 → 平移到流程图 → 拉远；主题淡入淡出
+    // 4. 페이지 13–19: 순서도를 가까이 → 흐름도로 이동 → 멀리. 테마가 서서히 바뀜
     if (scene($('s-page'), t, 13, 19) > 0 && rects['panel-A']) {
       const enter = eo(prog(t, 13, 13.45));
       $('p-win').style.transform = `scale(${lerp(0.97, 1, enter)})`;
@@ -443,7 +444,7 @@
       $('f-dark').style.opacity = dark;
     }
 
-    // 5. 并排 19–22
+    // 5. 나란히 19–22
     if (scene($('s-sbs'), t, 19, 22) > 0) {
       rise($('s-h'), t, 19.05);
       for (const [id, s, dx] of [['s-l', 19.2, -90], ['s-r', 19.35, 90]]) {
@@ -461,14 +462,14 @@
       $('s-ten').style.transform = `scale(${lerp(1, 1.25, Math.sin(pop * Math.PI))})`;
     }
 
-    // 6. 解释视频 22–28：手绘播放器，逐步画出时序图，镜头推近 Server，字幕逐句出现
+    // 6. 설명 영상 22–28: 손그림 재생기. 순서도를 그리고, 카메라를 Server로, 자막이 한 줄씩
     if (scene($('s-video'), t, 22, 28) > 0) {
       rise($('v-h'), t, 22.05);
       rise($('v-sub'), t, 22.25);
       const w = eo(prog(t, 22.2, 22.8));
       $('v-win').style.opacity = w;
       $('v-win').style.transform = `translateY(${(1 - w) * 60}px) scale(${lerp(0.96, 1, w) * lerp(1, 1.02, prog(t, 22.8, 28))})`;
-      // 参与者先出现，三条消息依次一笔画出（每条 0.6 s）
+      // 참여자가 먼저 나오고, 메시지 세 줄이 한 획씩 (각 0.6초)
       $('v-actors').style.opacity = eo(prog(t, 22.7, 23.1));
       const steps = [[1, 23.2], [2, 24.3], [3, 25.4]];
       for (const [i, s0] of steps) {
@@ -480,29 +481,29 @@
         path.setAttribute('marker-end', p > 0.97 ? 'url(#v-arr)' : '');
         $(`v-m${i}`).style.opacity = clamp((t - s0) / 0.2);
       }
-      // 第二句时镜头推近 Server 并高亮，第三句拉回
+      // 둘째 문장에서 카메라를 Server로 당기고 강조, 셋째에서 되돌림
       const push = eio(prog(t, 24.2, 24.8)) * (1 - eio(prog(t, 25.3, 25.9)));
       const s1 = lerp(1, 1.18, push);
-      const fx = 844, fy = 236; // Server 附近在舞台上的坐标（viewBox 裁切放大后）
+      const fx = 844, fy = 236; // Server 근처의 무대 좌표 (viewBox로 자른 뒤)
       $('v-cam').style.transform = `translate(${(690 - fx * s1) * push}px, ${(290 - fy * s1) * push}px) scale(${s1})`;
       const hl = push > 0.05;
       $('v-server').setAttribute('stroke', hl ? '#f7d96f' : '#58c4dd');
       $('v-server').setAttribute('fill', hl ? 'rgba(247,217,111,0.12)' : '#141922');
       $('v-server-t').setAttribute('fill', hl ? '#f7d96f' : '#eceff4');
-      // 字幕
+      // 자막
       const caps = [[23.2, 'The client sends a <b>SYN</b> to ask for a connection.'], [24.3, 'The <b>Server</b> answers with a SYN-ACK.'], [25.4, 'One more ACK, and the line is open.']];
       const cur = caps.filter(([s0]) => t >= s0).pop();
       $('v-cap').innerHTML = cur ? cur[1] : '';
       $('v-cap').style.opacity = cur ? clamp((t - cur[0]) / 0.2) : 0;
       $('v-cap').style.display = cur ? 'inline-block' : 'none';
-      // 进度条、时间与声波
+      // 진행 막대, 시간, 소리 파동
       const vt = lerp(5.2, 16.8, prog(t, 22.8, 28));
       $('v-fill').style.width = `${(vt / 42) * 100}%`;
       $('v-time').textContent = `0:${String(Math.floor(vt)).padStart(2, '0')} / 0:42`;
       [...$('v-wave').children].forEach((bar, k) => { bar.style.height = `${8 + 16 * Math.abs(Math.sin(t * 9 + k * 1.3))}px`; });
     }
 
-    // 7. 只改一个面板 28–32
+    // 7. 칸 하나만 바꿈 28–32
     if (scene($('s-patch'), t, 28, 32) > 0 && rects['panel-C']) {
       rise($('q-h'), t, 28.05);
       rise($('q-sub'), t, 28.25);
@@ -515,10 +516,10 @@
       $('q-cursor').style.opacity = t < 29.4 ? (Math.floor(t * 2.5) % 2 ? 0.15 : 1) : 0;
       rise($('q-l1'), t, 29.45, 0.3, 16);
       rise($('q-l2'), t, 29.95, 0.3, 14);
-      // 页面缩放到窗口宽度，镜头略微推向 C
+      // 페이지를 창 너비에 맞추고, 카메라를 C 쪽으로 조금
       const VWp = 926, s0 = VWp / 1280;
       const C = rects['panel-C'];
-      // 不缩放，只把页面滚到 C 附近；滚动不超过页底，避免露出空白
+      // 배율은 그대로, 페이지만 C 근처로 스크롤. 페이지 끝을 넘기지 않아 빈칸이 안 보임
       const z = s0;
       const cy = C.y + C.h / 2;
       const ox = 0;
@@ -534,7 +535,7 @@
       Object.assign($('q-badge').style, { left: `${box.x + box.w - 250}px`, top: `${box.y - 48}px` });
     }
 
-    // 8. 收尾 32–35
+    // 8. 마무리 32–35
     if (scene($('s-end'), t, 32, 35.01, 0.25) > 0) {
       rise($('e-logo'), t, 32.05);
       rise($('e-h'), t, 32.2);

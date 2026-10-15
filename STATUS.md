@@ -1,7 +1,7 @@
 # STATUS.md — 현재 상태 스냅샷
 
 > **에이전트 필독**: 이 파일은 프로젝트의 살아있는 상태입니다. 작업을 마칠 때마다 갱신하세요.
-> 마지막 갱신: 2026-10-15 05:20 (Asia/Tashkent) — Video Shotcraft 소개를 공식 저장소 기준으로 채움. 용도는 교사 개인용
+> 마지막 갱신: 2026-10-15 — main 병합. Video Shotcraft 소개(교사 개인용)와 스킬 예시 중국어→한국어를 함께 유지.
 
 ## 한 줄 요약
 
@@ -46,6 +46,7 @@
 - [x] **워크플로 YAML·P0 공개 화면 (2026-10-14)** — discover/weekly-audit 파싱 복구(schedule+수동만), daily-verifier는 같은 날 브랜치 충돌을 처리하고 PR 생성 실패 시 설정 안내와 함께 실패. 도구·비교·변경 이력의 원시값(active, github-api 등)을 교사 문구로. 확인된 칸이 없는 기능표는 한 줄. 제안 폼은 GitHub 이슈, 뉴스레터는 준비 중. example 현장사례는 공개 빌드에 없음. **소유자가 Settings > Actions > General > Workflow permissions > Allow GitHub Actions to create and approve pull requests 를 켜야 daily-verifier PR이 만들어진다.**
 - [x] **daily-verifier 외부 호스트 403 (2026-10-14)** — GitHub API 한도만 실행을 중단한다. invent.kde.org 같은 비-GitHub 403/429는 짧게 재시도한 뒤 `skipped/unverified`로 남기고 도구 상태는 바꾸지 않는다. 실패한 실행: actions/runs/38572904587
 - [x] **발굴 라벨 (2026-10-14)** — Discover run 38580319310이 `software` 라벨 없음으로 실패. discover·weekly-audit이 `scripts/ensure_labels.sh`로 AGENTS.md 라벨과 `software`/`skill`을 먼저 만든다. `issues: write` 필요.
+- [x] **스킬 예시 중국어 (2026-10-15)** — Huashu 앱·모션 화면과 녹화, MapStage 조절 문구, Answer Me With HTML 언어 이름을 한국어로 옮김. 프로젝트 이름·출처 유지. 지도 강 이름 키와, 저장소에 없는 성 이름·손그림 참고 그림은 한자가 남을 수 있음.
 - [x] **배포 키·필수 검사 (2026-10-15, 소유자 확인)** — main 푸시 자동 배포가 SSH 키로 동작한다. main ruleset이 `build-and-check`를 요구한다.
 - [ ] `.github/workflows/weekly-audit.yml` (6번 에이전트 자동) + 페이지 변경 이력 아카이빙 표시 — 워크플로 파일은 파싱되게 고쳤고, summary 브랜치 push는 `contents: write`가 필요. 페이지 아카이빙 표시는 도구 페이지 하단에 이미 있음
 - [ ] 오픈스킬 나머지 소개 글 + 4축 사례/지도안/리뷰 백필
