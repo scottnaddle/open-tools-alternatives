@@ -27,6 +27,11 @@ jobs:
         run: npm run check
       
       - name: Build
+        env:
+          ASTRO_BASE: /alternatives
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+          PUBLIC_NAVER_SITE_VERIFICATION: ${{ vars.PUBLIC_NAVER_SITE_VERIFICATION }}
+          PUBLIC_DAUM_SITE_VERIFICATION: ${{ vars.PUBLIC_DAUM_SITE_VERIFICATION }}
         run: npm run build
       
       - name: Daily verifier non-GitHub 403 skip test

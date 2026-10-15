@@ -1,0 +1,9 @@
+# 이 파일은 사이트 하위 경로 /alternatives/robots.txt 로 배포됩니다.
+# Google·Naver·Daum은 도메인 루트 https://edtechnewsroom.com/robots.txt 만 읽습니다.
+# 루트 파일에 넣을 문장과 확인 방법은 ops/SEO.md 에 있습니다.
+# 아래 규칙은, 이 파일이 실수로 루트에 합쳐져도 /alternatives/ 수집을 막지 않도록 적었습니다.
+
+User-agent: *
+Allow: /alternatives/
+
+Sitemap: https://edtechnewsroom.com/alternatives/sitemap-index.xml

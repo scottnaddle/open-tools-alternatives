@@ -6,7 +6,7 @@ import { displayRaw, METHOD_NAME } from '../lib/facts';
 const changes = await getCollection('changes');
 const sortedChanges = changes.sort((a, b) => b.data.at.localeCompare(a.data.at));
 ---
-<Base title="변경 이력">
+<Base title="변경 이력" description="도구와 스킬의 별 수, 라이선스, 최근 개발일처럼 다시 확인해서 바뀐 값을 날짜와 출처와 함께 적습니다." image="changes.png" imageAlt="변경 이력">
   <div class="detail wide">
     <h1 class="ph">변경 이력</h1>
     <p class="lead">사이트의 모든 변경은 기록됩니다. 언제, 무엇이, 어떤 출처로 바뀌었는지 확인하세요.</p>

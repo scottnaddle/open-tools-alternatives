@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Mono from '../../components/Mono.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { displayRaw } from '../../lib/facts';
+import { absUrl, breadcrumbLd, cut } from '../../lib/seo';
 const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
@@ -40,6 +41,9 @@ if (!ta || !tb) {
 const ghStatus = (fetchedAt?: string) => (fetchedAt ? 'verified' as const : undefined);
 
 // Comparison rows. 칸마다 확인 상태를 붙인다. 확인 전 값은 확인 중.
+const site = Astro.site ?? 'https://edtechnewsroom.com';
+const seoTitle = `${ta.data.name}과 ${tb.data.name} 비교`;
+const seoDesc = cut(`${app} 대안으로 오른 ${ta.data.name}과 ${tb.data.name}의 확인된 사실과 확인 중인 값을 나란히 보여 줍니다. 순위는 없습니다.`, 150);
 const compareRows = [
   { label: '학교 활용', a: ta.data.schoolUse.value, b: tb.data.schoolUse.value, aStatus: ta.data.schoolUse.status, bStatus: tb.data.schoolUse.status },
   { label: 'Windows', a: ta.data.platforms.value.windows, b: tb.data.platforms.value.windows, aStatus: ta.data.platforms.status, bStatus: tb.data.platforms.status },
@@ -54,8 +58,13 @@ const compareRows = [
   { label: '별 수', a: ta.data.github.stars, b: tb.data.github.stars, aStatus: ghStatus(ta.data.github.fetchedAt), bStatus: ghStatus(tb.data.github.fetchedAt) },
 ];
 ---
-<Base title={`${ta.data.name}과 ${tb.data.name} 비교`}>
+<Base title={seoTitle} description={seoDesc} image={`compare-${a}-vs-${b}.png`} imageAlt={seoTitle} jsonLd={breadcrumbLd([
+  { name: '홈', url: absUrl(base, '', site) },
+  { name: '비교', url: absUrl(base, 'compare/', site) },
+  { name: seoTitle, url: absUrl(base, `compare/${a}-vs-${b}/`, site) },
+])}>
   <div class="detail wide">
+    <nav class="v2-crumb" aria-label="위치"><a href={base}>홈</a> <span aria-hidden="true">›</span> <a href={`${base}compare/`}>비교</a> <span aria-hidden="true">›</span> <span aria-current="page">{seoTitle}</span></nav>
     <a class="back" href={`${base}apps/${appId}/`}>← {app} 대안 목록</a>
     <a class="back" href={`${base}compare/`} style="margin-left:8px">모든 도구 비교</a>
     <h1 class="ph">{ta.data.name}과 {tb.data.name} 비교</h1>

@@ -18,6 +18,7 @@ on:
       - "src/**"
       - "public/**"
       - "astro.config.mjs"
+      - "integrations/**"
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
@@ -74,6 +75,9 @@ jobs:
         if: steps.gate.outputs.ready == 'true'
         env:
           ASTRO_BASE: /alternatives
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+          PUBLIC_NAVER_SITE_VERIFICATION: ${{ vars.PUBLIC_NAVER_SITE_VERIFICATION }}
+          PUBLIC_DAUM_SITE_VERIFICATION: ${{ vars.PUBLIC_DAUM_SITE_VERIFICATION }}
         run: npm run build
 
       - name: Deploy

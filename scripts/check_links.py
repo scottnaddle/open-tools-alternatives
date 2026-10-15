@@ -369,9 +369,53 @@ def main():
         print(f"    - {kind} '{title}' in {route}")
     print(f"\n[7] '예시 데이터' 라벨: {len(example_label_hits)} · 확인 사실 단정 문구: {len(false_claim_hits)} · '반영 여부를 알려': {len(promise_hits)}")
 
+    # 8) 검색 노출: 페이지마다 제목·설명·canonical·OG 이미지, 피드·사이트맵·robots.
+    seo_miss = []
+    og_missing = []
+    canon_miss = []
+    title_re = re.compile(r"<title>([^<]*)</title>")
+    desc_re = re.compile(r'<meta name="description" content="([^"]*)"')
+    canon_re = re.compile(r'<link rel="canonical" href="([^"]+)"')
+    og_re = re.compile(r'<meta property="og:image" content="([^"]+)"')
+    for p in DIST.rglob("index.html"):
+        rel = p.relative_to(DIST).as_posix()
+        if rel.startswith("pagefind/") or "/pagefind/" in rel:
+            continue
+        html = p.read_text(errors="ignore")
+        parent = p.relative_to(DIST).parent.as_posix()
+        route = INTERNAL_PREFIX if parent == "." else INTERNAL_PREFIX + parent + "/"
+        title = title_re.search(html)
+        desc = desc_re.search(html)
+        canon = canon_re.search(html)
+        og = og_re.search(html)
+        if not title or not title.group(1).strip() or not desc or not desc.group(1).strip() or not canon or not og:
+            seo_miss.append(route)
+            continue
+        if canon.group(1) != BASE.rstrip("/") + route and canon.group(1) != BASE + route.removeprefix(INTERNAL_PREFIX):
+            # BASE 는 https://edtechnewsroom.com/alternatives (끝 슬래시 없음일 수 있음)
+            expected = "https://edtechnewsroom.com" + route
+            if canon.group(1) != expected:
+                canon_miss.append((route, canon.group(1), expected))
+        og_path = og.group(1).split("?")[0]
+        if og_path.startswith("https://edtechnewsroom.com/alternatives/"):
+            rel_file = og_path.removeprefix("https://edtechnewsroom.com/alternatives/")
+            if not (DIST / rel_file).is_file():
+                og_missing.append(rel_file)
+    feed_ok = (DIST / "feed.xml").is_file()
+    sitemap_ok = (DIST / "sitemap-index.xml").is_file()
+    robots_ok = (DIST / "robots.txt").is_file()
+    print(f"\n[8] SEO: 메타 빠짐 {len(seo_miss)} · canonical {len(canon_miss)} · OG 파일 {len(og_missing)} · feed {feed_ok} · sitemap {sitemap_ok} · robots {robots_ok}")
+    for r in seo_miss[:8]:
+        print(f"    - meta {r}")
+    for r, got, exp in canon_miss[:8]:
+        print(f"    - canonical {r}: {got} != {exp}")
+    for r in og_missing[:8]:
+        print(f"    - og {r}")
+
     fail = bool(missing) or bool(orphans) or bool(text_hits) or bool(src_duplicate) or bool(placeholder_hits)
     fail = fail or bool(leaked_titles) or bool(empty_axis_links) or bool(built_empty_axis)
     fail = fail or bool(example_label_hits) or bool(false_claim_hits) or bool(promise_hits)
+    fail = fail or bool(seo_miss) or bool(canon_miss) or bool(og_missing) or not feed_ok or not sitemap_ok or not robots_ok
     print(f"\n=== 요약 ===")
     print(f"  404 링크: {len(missing)}")
     print(f"  고아 페이지(for/* 제외): {len(orphans)}")
@@ -380,6 +424,7 @@ def main():
     print(f"  자리표시: {len(placeholder_hits)}")
     print(f"  예시 4축 노출: {len(leaked_titles) + len(empty_axis_links) + len(built_empty_axis)}")
     print(f"  예시 데이터 라벨: {len(example_label_hits)}")
+    print(f"  SEO 메타/canonical/OG: {len(seo_miss) + len(canon_miss) + len(og_missing)}")
     return 1 if fail else 0
 
 

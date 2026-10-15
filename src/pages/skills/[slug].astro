@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Mono from '../../components/Mono.astro';
 import Changelog from '../../components/Changelog.astro';
 import { col } from '../../lib/facts';
+import { absUrl, breadcrumbLd, cut } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const skills = await getCollection('skills');
@@ -31,9 +32,21 @@ const installLine = data.installNeeded
 const apiLine = data.apiKeyNeeded
   ? 'API 키가 필요합니다. 키를 받는 방법은 저장소 안내를 따릅니다.'
   : '이 기록에는 API 키가 필요하지 않다고 되어 있습니다.';
+const site = Astro.site ?? 'https://edtechnewsroom.com';
+const pageUrl = absUrl(base, `skills/${data.slug}/`, site);
+const related = (await getCollection('skills'))
+  .filter((s) => s.data.category === data.category && s.data.slug !== data.slug)
+  .slice(0, 4);
+const seoTitle = `${data.name} – ${data.usageScope} 오픈스킬`;
+const seoDesc = cut(data.description, 150);
 ---
-<Base title={`${data.name} — 오픈스킬`}>
+<Base title={seoTitle} description={seoDesc} image={`skill-${data.slug}.png`} imageAlt={seoTitle} jsonLd={breadcrumbLd([
+  { name: '홈', url: absUrl(base, '', site) },
+  { name: '오픈스킬', url: absUrl(base, 'skills/', site) },
+  { name: data.name, url: pageUrl },
+])}>
   <div class="detail">
+    <nav class="v2-crumb" aria-label="위치"><a href={base}>홈</a> <span aria-hidden="true">›</span> <a href={`${base}skills/`}>오픈스킬</a> <span aria-hidden="true">›</span> <span aria-current="page">{data.name}</span></nav>
     <a class="back" href={`${base}skills/`}>← 스킬 목록</a>
 
     <header class="skill-hero">
@@ -124,6 +137,15 @@ const apiLine = data.apiKeyNeeded
         </div>
       </section>
     </div>
+
+    {related.length > 0 && (
+      <section aria-labelledby="skill-related">
+        <h2 id="skill-related">같은 분야의 스킬</h2>
+        <ul>
+          {related.map((s) => <li><a href={`${base}skills/${s.data.slug}/`}>{s.data.name}</a></li>)}
+        </ul>
+      </section>
+    )}
 
     <Changelog targetPrefix={`skills/${data.slug}`} limit={5} />
   </div>
