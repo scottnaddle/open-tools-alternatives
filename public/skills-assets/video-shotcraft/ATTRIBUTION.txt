@@ -1,0 +1,16 @@
+Images in this folder are copied unchanged from
+https://github.com/Vincentwei1021/video-shotcraft (branch main, fetched 2026-10-15).
+
+Copyright 2026 Wei Yihao
+Licensed under the Apache License, Version 2.0
+http://www.apache.org/licenses/LICENSE-2.0
+
+cover.webp          assets/readme/cover.webp
+workflow.gif        assets/readme/workflow.gif
+opening.webp        assets/readme/examples/opening.webp
+ui-entrance.webp    assets/readme/examples/ui-entrance.webp
+data.webp           assets/readme/examples/data.webp
+workbench-overview.png  workbench/docs/overview.png
+
+Audio files from that repository are not included. Their licenses are separate
+and listed in assets/audio/ATTRIBUTION.md upstream.
