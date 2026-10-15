@@ -561,8 +561,16 @@ def check_feed():
         if abs(published.timestamp() - added.timestamp()) > 2:
             problems.append(f"new 날짜가 추가 커밋과 다름 {guid}")
 
+    # 피드는 빌드 때 커밋된 변경만 넣는다. verify.py 는 그 다음 CI 단계에서
+    # 라이선스 차이 같은 새 변경 기록을 작업 트리에 쓴다. 그 파일은 피드에 없으므로 실패로 보지 않는다.
+    tracked = subprocess.check_output(
+        ["git", "ls-files", "--", "src/content/changes"],
+        cwd=ROOT,
+        text=True,
+    )
+    change_files = [ROOT / line.strip() for line in tracked.splitlines() if line.strip().endswith(".json")]
     records = []
-    for file in (ROOT / "src" / "content" / "changes").glob("*.json"):
+    for file in change_files:
         data = json.loads(file.read_text())
         target = data.get("target", "")
         slash = target.find("/")
