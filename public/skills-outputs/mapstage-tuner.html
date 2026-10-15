@@ -1,5 +1,6 @@
+<!-- 화면 문구는 한국어로 옮겼습니다. 프로젝트 이름 MapStage, Mapterhorn 과 MIT 출처는 원본입니다. 강 이름 키는 원본 지리 데이터와 맞추려고 한자로 남아 있고, 지도에 그릴 때는 한국어로 바꿉니다. https://github.com/hopechen067/MapStage -->
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -50,7 +51,7 @@
       --panel-w: 280px;
       --cy: #57c8c8;
       --cy-dim: rgba(87, 200, 200, 0.55);
-      --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+      --font: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", "WenQuanYi Micro Hei", "Segoe UI", sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -70,7 +71,7 @@
       position: relative;
     }
 
-    /* ========== 地图区 ========== */
+    /* ========== 지도 영역 ========== */
     #map-wrap {
       position: absolute;
       inset: 0;
@@ -85,7 +86,7 @@
       height: 100%;
     }
 
-    /* CSS 古卷滤镜作用在地图画布容器上 */
+    /* CSS 옛 종이 필터는 지도 그림 칸에 적용 */
     #map-canvas-filter {
       position: absolute;
       inset: 0;
@@ -99,7 +100,7 @@
       height: 100%;
     }
 
-    /* 暖色 soft-light 叠层 */
+    /* 따뜻한 색 soft-light 겹침 */
     #warm-tint {
       position: absolute;
       inset: 0;
@@ -109,7 +110,7 @@
       background: rgba(168, 128, 72, 0.14);
     }
 
-    /* 暗角 vignette */
+    /* 가장자리 어둡기 vignette */
     #vignette {
       position: absolute;
       inset: 0;
@@ -123,7 +124,7 @@
       );
     }
 
-    /* 参考图对比 */
+    /* 참고 그림 비교 */
     #ref-compare {
       position: absolute;
       z-index: 10;
@@ -175,7 +176,7 @@
       letter-spacing: 0.04em;
     }
 
-    /* 顶部状态条 — 地球页风格：不占顶栏 */
+    /* 위 상태 줄 — 지구 화면처럼 위 칸을 차지하지 않음 */
     #status-bar {
       display: none;
       position: absolute;
@@ -241,7 +242,7 @@
       font-size: 12px;
     }
 
-    /* 河流名称：无底无框，字号略小于城池，不抢视线 */
+    /* 강 이름: 배경·테두리 없음. 성 이름보다 조금 작게, 시선을 빼앗지 않음 */
     .river-label {
       font: 500 11px/1.15 "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
       color: #9ec4d0;
@@ -253,7 +254,7 @@
       white-space: nowrap;
       pointer-events: none;
       letter-spacing: 0.04em;
-      /* 浅晕保证可读，避免黑底块 */
+      /* 옅은 빛으로 읽히게 하고, 검은 상자는 피함 */
       text-shadow:
         0 0 3px rgba(232, 214, 176, 0.85),
         0 0 6px rgba(232, 214, 176, 0.45),
@@ -272,7 +273,7 @@
       opacity: 0.8;
     }
 
-    /* 主湖名称：同样无底，略偏水色 */
+    /* 주요 호수 이름: 배경 없음, 물색에 가깝게 */
     .lake-label {
       font: 500 11px/1.15 "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
       color: #8ebfd0;
@@ -297,7 +298,7 @@
       color: #8ebfd0;
     }
     .lake-label.tier-side {
-      display: none; /* 仅主湖 */
+      display: none; /* 주요 호수만 */
     }
 
     .maplibregl-ctrl-attrib {
@@ -407,7 +408,7 @@
       padding: 10px 12px 4px; border-top: 1px solid rgba(201, 160, 106, 0.16);
     }
 
-    /* ========== 控制面板（叠在地图上，地球页风格） ========== */
+    /* ========== 조절 패널 (지도 위에 겹침, 지구 화면 스타일) ========== */
     #panel {
       position: absolute;
       top: 16px;
@@ -482,7 +483,7 @@
       border-radius: 3px;
     }
 
-    /* 折叠分组 */
+    /* 접히는 묶음 */
     details.group {
       border-bottom: 1px solid rgba(74, 58, 40, 0.5);
     }
@@ -525,7 +526,7 @@
       gap: 10px;
     }
 
-    /* 控件行 */
+    /* 조절 줄 */
     .ctrl {
       display: flex;
       flex-direction: column;
@@ -662,7 +663,7 @@
       white-space: nowrap;
     }
 
-    /* 按钮 */
+    /* 버튼 */
     button.btn {
       font-family: var(--font);
       font-size: 11px;
@@ -823,137 +824,137 @@
       <div id="vignette"></div>
 
       <div id="demo-banner" role="note">
-        在线预览 · Online demo（底图/山影需联网）·
+        온라인 미리보기 · Online demo (밑 지도와 산 그림자는 인터넷이 필요합니다) ·
         <a href="https://github.com/hopechen067/MapStage" target="_blank" rel="noopener">GitHub</a>
-        <button type="button" id="demo-banner-close" title="关闭提示">✕</button>
+        <button type="button" id="demo-banner-close" title="안내 닫기">✕</button>
       </div>
 
       <div id="ref-compare" class="pip">
-        <span class="ref-label" id="ref-label">参考图 · 手绘古地图</span>
-        <img id="ref-img" src="_ref_handdrawn_preview.jpg" alt="手绘古地图参考" onerror="this.style.display='none';var b=this.closest('#ref-compare');if(b)b.style.display='none';" />
+        <span class="ref-label" id="ref-label">참고 그림 · 손으로 그린 옛 지도</span>
+        <img id="ref-img" src="_ref_handdrawn_preview.jpg" alt="손으로 그린 옛 지도 참고" onerror="this.style.display='none';var b=this.closest('#ref-compare');if(b)b.style.display='none';" />
       </div>
 
       <div id="status-bar">
-        <div><strong>预设</strong> <span id="st-preset">antique-default</span></div>
+        <div><strong>미리 정한 값</strong> <span id="st-preset">antique-default</span></div>
         <div><strong>CSS</strong> <code id="st-css">—</code></div>
         <div id="water-warn"></div>
       </div>
 
-      <div id="attribution-note">底图：按 map-tiles.config 配置 · 地形 DEM：Mapterhorn</div>
-      <button id="panel-toggle" type="button" title="收起/展开面板" aria-label="收起或展开右侧参数面板">›</button>
+      <div id="attribution-note">밑 지도: map-tiles.config 설정 · 지형 DEM: Mapterhorn</div>
+      <button id="panel-toggle" type="button" title="패널 접기/펴기" aria-label="오른쪽 조절 패널을 접거나 폅니다">›</button>
     </div>
 
     <aside id="panel">
       <div id="panel-header">
-        <h1>古地图色调调参器</h1>
-        <p>MapStage + Mapterhorn 山影 · EOX Sentinel-2 底图 · 仿手绘羊皮纸古卷<br />拖动滑杆实时预览，参数可导出 JSON。其他底图请改 map-tiles.config.local.js。</p>
+        <h1>옛 지도 색 조절</h1>
+        <p>MapStage + Mapterhorn 산 그림자 · EOX Sentinel-2 밑 지도 · 양피지처럼 그린 옛 지도<br />막대를 움직이면 바로 보입니다. 값은 JSON으로 저장할 수 있습니다. 다른 밑 지도는 map-tiles.config.local.js 를 바꿉니다.</p>
       </div>
 
       <div id="viewmode-wrap">
-        <div class="group-label">投影</div>
-        <div class="seg" id="viewmode-seg" role="group" aria-label="投影">
-          <button type="button" data-mode="map" class="active">地图</button>
-          <button type="button" data-mode="globe">地球</button>
+        <div class="group-label">투영</div>
+        <div class="seg" id="viewmode-seg" role="group" aria-label="투영">
+          <button type="button" data-mode="map" class="active">지도</button>
+          <button type="button" data-mode="globe">지구</button>
         </div>
       </div>
-      <div class="group-label">资源</div>
-      <div class="toggle-row">卫星图 <button type="button" class="sw on" id="sw-satellite" aria-pressed="true"></button></div>
-      <div class="toggle-row">海拔设色 <button type="button" class="sw" id="sw-relief" aria-pressed="false"></button></div>
-      <div class="group-label">地区显示</div>
-      <div class="toggle-row">地区显示 <button type="button" class="sw" id="sw-isolate" aria-label="地区显示" aria-pressed="false"></button></div>
+      <div class="group-label">자료</div>
+      <div class="toggle-row">위성 사진 <button type="button" class="sw on" id="sw-satellite" aria-pressed="true"></button></div>
+      <div class="toggle-row">높이에 색 입히기 <button type="button" class="sw" id="sw-relief" aria-pressed="false"></button></div>
+      <div class="group-label">지역만 보기</div>
+      <div class="toggle-row">지역만 보기 <button type="button" class="sw" id="sw-isolate" aria-label="지역만 보기" aria-pressed="false"></button></div>
       <div id="vl-isolate-picker" class="isolate-picker">
         <div id="vl-isolate-region-search-wrap">
-          <input type="search" id="vl-isolate-region-search" placeholder="搜索省 / 市…" autocomplete="off" spellcheck="false" aria-label="搜索地区" aria-autocomplete="list" aria-controls="vl-isolate-region-list" aria-expanded="false" />
-          <button type="button" id="vl-isolate-region-caret" aria-label="打开地区列表" tabindex="-1">▾</button>
+          <input type="search" id="vl-isolate-region-search" placeholder="시·도를 찾습니다" autocomplete="off" spellcheck="false" aria-label="지역 찾기" aria-autocomplete="list" aria-controls="vl-isolate-region-list" aria-expanded="false" />
+          <button type="button" id="vl-isolate-region-caret" aria-label="지역 목록 열기" tabindex="-1">▾</button>
         </div>
-        <div id="vl-isolate-region-list" role="listbox" aria-label="地区列表" hidden></div>
+        <div id="vl-isolate-region-list" role="listbox" aria-label="지역 목록" hidden></div>
         <select id="vl-isolate-region" aria-hidden="true" tabindex="-1" hidden></select>
       </div>
 
       <div id="panel-actions">
-        <button class="btn primary" id="btn-reset" title="重置为 antique-default">重置预设</button>
-        <button class="btn" id="btn-copy">复制 JSON</button>
-        <button class="btn" id="btn-download">下载 JSON</button>
-        <button class="btn" id="btn-paste">粘贴 JSON</button>
-        <button class="btn" id="btn-ref">参考图</button>
-        <button class="btn" id="btn-cities">城池点位</button>
-        <button class="btn" id="btn-china">全国视角</button>
+        <button class="btn primary" id="btn-reset" title="antique-default 로 되돌리기">처음 값으로</button>
+        <button class="btn" id="btn-copy">JSON 복사</button>
+        <button class="btn" id="btn-download">JSON 받기</button>
+        <button class="btn" id="btn-paste">JSON 붙여넣기</button>
+        <button class="btn" id="btn-ref">참고 그림</button>
+        <button class="btn" id="btn-cities">성 위치</button>
+        <button class="btn" id="btn-china">전국 보기</button>
       </div>
 
       <div id="panel-body">
-        <!-- 1. 预设 / 对比 -->
+        <!-- 1. 미리 정한 값 / 비교 -->
         <details class="group" open>
-          <summary>预设 / 对比</summary>
+          <summary>미리 정한 값 / 비교</summary>
           <div class="group-body">
-            <p class="hint">默认加载 <code>antique-default</code>（<code>preset-antique-default.json</code>）。修改后自动写入 localStorage（key: mapstage-tuner-v1）。</p>
+            <p class="hint">처음에는 <code>antique-default</code>(<code>preset-antique-default.json</code>)를 불러옵니다. 바꾸면 브라우저에 저장됩니다(key: mapstage-tuner-v1).</p>
             <div class="btn-row">
-              <button class="btn" id="btn-ref-mode" data-mode="pip">对比模式：画中画</button>
-              <button class="btn" id="btn-clear-storage">清除本地缓存</button>
+              <button class="btn" id="btn-ref-mode" data-mode="pip">비교: 작은 창</button>
+              <button class="btn" id="btn-clear-storage">브라우저 저장 지우기</button>
             </div>
             <div class="summary-box" id="paint-summary">—</div>
           </div>
         </details>
 
-        <!-- 2. 卫星层 -->
+        <!-- 2. 위성 층 -->
         <details class="group" open>
-          <summary>卫星层</summary>
+          <summary>위성 층</summary>
           <div class="group-body">
             <div class="ctrl" data-key="satellite.opacity">
-              <div class="ctrl-row"><label>不透明度 opacity</label><span class="val">0.42</span></div>
+              <div class="ctrl-row"><label>불투명도 opacity</label><span class="val">0.42</span></div>
               <input type="range" min="0" max="1" step="0.01" />
             </div>
             <div class="ctrl" data-key="satellite.saturation">
-              <div class="ctrl-row"><label>饱和度 saturation</label><span class="val">-0.55</span></div>
+              <div class="ctrl-row"><label>색의 진함 saturation</label><span class="val">-0.55</span></div>
               <input type="range" min="-1" max="1" step="0.01" />
             </div>
             <div class="ctrl" data-key="satellite.contrast">
-              <div class="ctrl-row"><label>对比度 contrast</label><span class="val">-0.08</span></div>
+              <div class="ctrl-row"><label>대비 contrast</label><span class="val">-0.08</span></div>
               <input type="range" min="-1" max="1" step="0.01" />
             </div>
             <div class="ctrl" data-key="satellite.brightnessMin">
-              <div class="ctrl-row"><label>亮度下限 brightness-min</label><span class="val">0.14</span></div>
+              <div class="ctrl-row"><label>밝기 하한 brightness-min</label><span class="val">0.14</span></div>
               <input type="range" min="0" max="1" step="0.01" />
             </div>
             <div class="ctrl" data-key="satellite.brightnessMax">
-              <div class="ctrl-row"><label>亮度上限 brightness-max</label><span class="val">0.82</span></div>
+              <div class="ctrl-row"><label>밝기 상한 brightness-max</label><span class="val">0.82</span></div>
               <input type="range" min="0" max="1" step="0.01" />
             </div>
             <div class="ctrl" data-key="satellite.hueRotate">
-              <div class="ctrl-row"><label>色相旋转 hue-rotate (°)</label><span class="val">18</span></div>
+              <div class="ctrl-row"><label>색 돌리기 hue-rotate (°)</label><span class="val">18</span></div>
               <input type="range" min="0" max="360" step="1" />
             </div>
           </div>
         </details>
 
-        <!-- 3. 山影 -->
+        <!-- 3. 산 그림자 -->
         <details class="group" open>
-          <summary>山影 hillshade</summary>
+          <summary>산 그림자 hillshade</summary>
           <div class="group-body">
             <div class="ctrl" data-key="hillshade.exaggeration">
-              <div class="ctrl-row"><label>山影强度 exaggeration</label><span class="val">0.48</span></div>
+              <div class="ctrl-row"><label>산 그림자 세기 exaggeration</label><span class="val">0.48</span></div>
               <input type="range" min="0" max="1" step="0.01" />
             </div>
             <div class="ctrl" data-key="hillshade.illuminationDirection">
-              <div class="ctrl-row"><label>光照方向 (°)</label><span class="val">315</span></div>
+              <div class="ctrl-row"><label>빛 방향 (°)</label><span class="val">315</span></div>
               <input type="range" min="0" max="359" step="1" />
             </div>
             <div class="ctrl" data-key="hillshade.shadowColor" data-type="color">
               <div class="ctrl-row">
-                <label>阴影色 shadow</label>
+                <label>그림자 색 shadow</label>
                 <input type="color" />
                 <input type="text" class="hex" maxlength="7" />
               </div>
             </div>
             <div class="ctrl" data-key="hillshade.highlightColor" data-type="color">
               <div class="ctrl-row">
-                <label>高光色 highlight</label>
+                <label>밝은 색 highlight</label>
                 <input type="color" />
                 <input type="text" class="hex" maxlength="7" />
               </div>
             </div>
             <div class="ctrl" data-key="hillshade.accentColor" data-type="color">
               <div class="ctrl-row">
-                <label>强调色 accent</label>
+                <label>강조 색 accent</label>
                 <input type="color" />
                 <input type="text" class="hex" maxlength="7" />
               </div>
@@ -961,29 +962,29 @@
           </div>
         </details>
 
-        <!-- 4. 底色 / 地形 -->
+        <!-- 4. 바탕색 / 지형 -->
         <details class="group" open>
-          <summary>底色 / 地形</summary>
+          <summary>바탕색 / 지형</summary>
           <div class="group-body">
             <div class="ctrl" data-key="backgroundColor" data-type="color">
               <div class="ctrl-row">
-                <label>背景色 background</label>
+                <label>바탕색 background</label>
                 <input type="color" />
                 <input type="text" class="hex" maxlength="7" />
               </div>
             </div>
             <div class="ctrl terrain-ex" data-key="terrainExaggeration">
-              <div class="ctrl-row"><label>山高 · 真实海拔=1.0</label><span class="val">1.00</span></div>
+              <div class="ctrl-row"><label>산 높이 · 실제 고도=1.0</label><span class="val">1.00</span></div>
               <input type="range" min="0" max="3" step="0.05" />
             </div>
           </div>
         </details>
 
-        <!-- 6. CSS 古卷滤镜 -->
+        <!-- 6. CSS 옛 종이 필터 -->
         <details class="group" open>
-          <summary>CSS 古卷滤镜</summary>
+          <summary>CSS 옛 종이 필터</summary>
           <div class="group-body">
-            <div class="toggle-row">启用滤镜 <button type="button" class="sw on" id="sw-css-filter-panel" aria-pressed="true"></button></div>
+            <div class="toggle-row">필터 켜기 <button type="button" class="sw on" id="sw-css-filter-panel" aria-pressed="true"></button></div>
             <div class="ctrl" data-key="css.sepia">
               <div class="ctrl-row"><label>sepia</label><span class="val">0.42</span></div>
               <input type="range" min="0" max="1" step="0.01" />
@@ -1006,56 +1007,56 @@
             </div>
             <div class="ctrl" data-key="css.warmTintColor" data-type="color">
               <div class="ctrl-row">
-                <label>暖色叠层色</label>
+                <label>따뜻한 색 덧칠</label>
                 <input type="color" />
                 <input type="text" class="hex" maxlength="7" />
               </div>
             </div>
             <div class="ctrl" data-key="css.warmTintAlpha">
-              <div class="ctrl-row"><label>暖色叠层 α</label><span class="val">0.14</span></div>
+              <div class="ctrl-row"><label>따뜻한 색 세기 α</label><span class="val">0.14</span></div>
               <input type="range" min="0" max="0.5" step="0.01" />
             </div>
             <div class="ctrl" data-key="css.vignetteStrength">
-              <div class="ctrl-row"><label>暗角强度 vignette</label><span class="val">0.22</span></div>
+              <div class="ctrl-row"><label>가장자리 어둡기 vignette</label><span class="val">0.22</span></div>
               <input type="range" min="0" max="0.8" step="0.01" />
             </div>
-            <p class="hint">滤镜作用在地图容器；暖色 soft-light + 暗角 multiply 为绝对定位叠层。</p>
+            <p class="hint">필터는 지도 칸에 적용됩니다. 따뜻한 색(soft-light)과 가장자리 어둡기(multiply)는 지도 위에 겹칩니다.</p>
             <div class="summary-box" id="css-summary">—</div>
           </div>
         </details>
 
-        <!-- 7. 相机 -->
+        <!-- 7. 카메라 -->
         <details class="group" open>
-          <summary>相机</summary>
+          <summary>카메라</summary>
           <div class="group-body">
             <div class="ctrl" data-key="camera.centerLng">
-              <div class="ctrl-row"><label>经度 lng</label><span class="val">100.2</span></div>
+              <div class="ctrl-row"><label>경도 lng</label><span class="val">100.2</span></div>
               <input type="range" min="70" max="140" step="0.1" />
             </div>
             <div class="ctrl" data-key="camera.centerLat">
-              <div class="ctrl-row"><label>纬度 lat</label><span class="val">38.5</span></div>
+              <div class="ctrl-row"><label>위도 lat</label><span class="val">38.5</span></div>
               <input type="range" min="15" max="55" step="0.1" />
             </div>
             <div class="ctrl" data-key="camera.zoom">
-              <div class="ctrl-row"><label>缩放 zoom</label><span class="val">5.2</span></div>
+              <div class="ctrl-row"><label>확대 zoom</label><span class="val">5.2</span></div>
               <input type="range" min="2" max="14" step="0.1" />
             </div>
             <div class="ctrl" data-key="camera.pitch">
-              <div class="ctrl-row"><label>俯仰 pitch</label><span class="val">28</span></div>
+              <div class="ctrl-row"><label>기울기 pitch</label><span class="val">28</span></div>
               <input type="range" min="0" max="60" step="1" />
             </div>
             <div class="ctrl" data-key="camera.bearing">
-              <div class="ctrl-row"><label>方位 bearing</label><span class="val">-8</span></div>
+              <div class="ctrl-row"><label>방향 bearing</label><span class="val">-8</span></div>
               <input type="range" min="-180" max="180" step="1" />
             </div>
-            <p class="hint">地图交互拖动也会同步更新相机读数；点「全国视角」快速跳转。</p>
+            <p class="hint">지도를 끌어도 카메라 숫자가 같이 바뀝니다. 「전국 보기」를 누르면 한 번에 이동합니다.</p>
           </div>
         </details>
       </div>
     </aside>
   </div>
 
-  <div id="toast"></div>
+    <div id="toast"></div>
 
   <script src="assets/map-fx.js?v=20260911-skysoft"></script>
   <script src="assets/region-isolate.js?v=20260911-maritime"></script>
@@ -1066,15 +1067,15 @@
     'use strict';
 
     // ============================================================
-    // 默认预设 antique-default
+    // 기본으로 정해 둔 값 antique-default
     // ============================================================
     const PRESET_ID = 'antique-default';
     const STORAGE_KEY = 'mapstage-tuner-v1';
 
-    // 默认 = 用户手调 antique-default（保留三级河 / 高亮水系字段）
+    // 기본값 = 사람이 맞춘 antique-default (3급 하천 / 강조 물길 칸은 유지)
     const DEFAULT_PARAMS = {
       id: PRESET_ID,
-      label: '手绘古地图 · MapStage + Mapterhorn 山影',
+      label: '손그림 옛 지도 · MapStage + Mapterhorn 산 그림자',
       version: 3,
       camera: {
         center: [104.0, 35.5],
@@ -1147,7 +1148,7 @@
       season: null, // null | spring | summer | autumn | winter
     };
 
-    /** 主河名（短名）；其余支流为次级 */
+    /** 주요 강 이름(짧은 이름). 나머지는 지류 */
     const RIVER_LABEL_MAIN = {
       黄河: true,
       石羊河: true,
@@ -1157,8 +1158,8 @@
       党河: true,
     };
     /**
-     * 支流河名最低缩放。
-     * 中纬度≈38.5°、比例尺控件 maxWidth=120 时，zoom≈9.5 对应刻度约 20 km。
+     * 지류 이름이 보이기 시작하는 확대.
+     * 위도 약 38.5°, 축척 칸 maxWidth=120 이면 zoom 약 9.5는 눈금 약 20km.
      */
     const RIVER_LABEL_SIDE_MIN_ZOOM = 9.5;
     const RIVER_LABEL_MAIN_MIN_ZOOM = 3.8;
@@ -1166,28 +1167,28 @@
     const LAKE_LABEL_SIDE_MIN_ZOOM = 6.0;
 
     /**
-     * 重要湖泊（源 chinaLakes.name 为空，按 WGS84 锚点匹配面心）。
-     * 示例：青海湖、哈拉湖、居延海（黑河尾闾）、黄河源两湖。
+     * 주요 호수 (원본 chinaLakes.name 이 비어 있어, WGS84 기준점으로 면의 중심에 맞춤).
+     * 예: 칭하이호, 하라호, 거연해(흑하가 끝나는 곳), 황하 발원지의 두 호수.
      */
-    /** 仅主湖；次级湖不标注 */
+    /** 주요 호수만 적음. 작은 호수는 이름을 안 적음 */
     const IMPORTANT_LAKES = [
-      { name: '青海湖', lng: 100.17, lat: 36.88, tier: 'main', maxDist: 0.45 },
-      { name: '哈拉湖', lng: 97.61, lat: 38.29, tier: 'main', maxDist: 0.4 },
-      { name: '居延海', lng: 100.74, lat: 42.4, tier: 'main', maxDist: 0.4 },
-      { name: '鄂陵湖', lng: 97.73, lat: 34.9, tier: 'main', maxDist: 0.4 },
-      { name: '扎陵湖', lng: 97.3, lat: 34.94, tier: 'main', maxDist: 0.4 },
+      { name: '칭하이호', lng: 100.17, lat: 36.88, tier: 'main', maxDist: 0.45 },
+      { name: '하라호', lng: 97.61, lat: 38.29, tier: 'main', maxDist: 0.4 },
+      { name: '거연해', lng: 100.74, lat: 42.4, tier: 'main', maxDist: 0.4 },
+      { name: '어링호', lng: 97.73, lat: 34.9, tier: 'main', maxDist: 0.4 },
+      { name: '자링호', lng: 97.3, lat: 34.94, tier: 'main', maxDist: 0.4 },
     ];
 
-    // 视角快捷
+    // 보기 바로가기
     const VIEW_CHINA = { center: [104.0, 35.5], zoom: 4.2, pitch: 28, bearing: 0 };
 
     const BASELINE_REF = {
       src: '_ref_handdrawn_preview.jpg',
-      label: '参考图 · 手绘古地图',
+      label: '참고 그림 · 손그림 옛 지도',
     };
 
     // ============================================================
-    // 工具函数
+    // 도구 함수
     // ============================================================
     function deepClone(o) {
       return JSON.parse(JSON.stringify(o));
@@ -1202,7 +1203,7 @@
       return Math.round(v * p) / p;
     }
 
-    /** 解析 rgba()/#hex → { hex, a } */
+    /** rgba()/#hex 를 { hex, a } 로 읽음 */
     function parseColor(str) {
       if (!str) return { hex: '#000000', a: 1 };
       str = String(str).trim();
@@ -1242,9 +1243,9 @@
       };
     }
 
-    /** 路径读写 params 对象 */
+    /** params 객체의 경로를 읽고 씀 */
     function getByPath(obj, path) {
-      // 特殊：相机中心拆成 centerLng / centerLat
+      // 특별: 카메라 중심을 centerLng / centerLat 로 나눔
       if (path === 'camera.centerLng') return obj.camera.center[0];
       if (path === 'camera.centerLat') return obj.camera.center[1];
       if (path === 'camera.zoom') return obj.camera.zoom;
@@ -1310,20 +1311,20 @@
     }
 
     // ============================================================
-    // 状态
+    // 상태
     // ============================================================
     let params = deepClone(DEFAULT_PARAMS);
     let map = null;
     let mapReady = false;
     let waterAvailable = false;
-    let syncingFromMap = false; // 防止相机回写时循环
-    let hanCityLayer = null; // MapStage custom layer 实例（含 setVisible）
+    let syncingFromMap = false; // 카메라 값이 되돌아가며 반복되지 않게
+    let hanCityLayer = null; // MapStage custom layer 실체 (setVisible 포함)
     let riverLabelMarkers = []; // maplibregl.Marker[]
     let riverLabelCatalog = []; // { name, lng, lat, tier, minZoom }[]
     let lakeLabelMarkers = []; // maplibregl.Marker[]
     let lakeLabelCatalog = []; // { name, lng, lat, tier, minZoom }[]
 
-    // 尝试从 localStorage 恢复
+    // 브라우저 저장에서 불러오기
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
@@ -1331,7 +1332,7 @@
         params = mergeParams(DEFAULT_PARAMS, saved);
       }
     } catch (e) {
-      console.warn('localStorage 读取失败', e);
+      console.warn('localStorage 읽기 실패', e);
     }
 
     function mergeParams(base, override) {
@@ -1354,7 +1355,7 @@
         if (m.satellite) Object.assign(out.mapstage.satellite, m.satellite);
         if (m.hillshade) {
           Object.assign(out.mapstage.hillshade, m.hillshade);
-          // MapStage hillshade-exaggeration 上限为 1；超限会导致 style 无法加载
+          // MapStage hillshade-exaggeration 상한은 1. 넘으면 스타일이 안 열림
           if (out.mapstage.hillshade.exaggeration != null) {
             out.mapstage.hillshade.exaggeration = Math.min(1, Math.max(0, +out.mapstage.hillshade.exaggeration));
           }
@@ -1604,7 +1605,7 @@
         const data = exportParams();
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       } catch (e) {
-        console.warn('localStorage 写入失败', e);
+        console.warn('localStorage 쓰기 실패', e);
       }
     }
 
@@ -1630,7 +1631,7 @@
     });
 
     // ============================================================
-    // CSS 滤镜 & 叠层
+    // CSS 필터와 겹침
     // ============================================================
     function buildCssFilter() {
       const c = params.css;
@@ -1681,7 +1682,7 @@
     }
 
     // ============================================================
-    // MapStage 图层更新
+    // MapStage 층 갱신
     // ============================================================
     function safeSetPaint(layerId, prop, value) {
       if (!mapReady || !map.getLayer(layerId)) return;
@@ -1701,7 +1702,7 @@
 
       safeSetPaint('background', 'background-color', m.backgroundColor);
 
-      // 地形夸张
+      // 지형 과장
       try {
         const tcfg = window.__tunerTileConfig;
         if (tcfg && tcfg.terrain && tcfg.terrain.enabled) {
@@ -1712,7 +1713,7 @@
         }
       } catch (e) { /* ignore */ }
 
-      // 卫星
+      // 위성
       safeSetPaint('satellite', 'raster-opacity', s.opacity);
       safeSetPaint('satellite', 'raster-saturation', s.saturation);
       safeSetPaint('satellite', 'raster-contrast', s.contrast);
@@ -1720,14 +1721,14 @@
       safeSetPaint('satellite', 'raster-brightness-max', s.brightnessMax);
       safeSetPaint('satellite', 'raster-hue-rotate', s.hueRotate);
 
-      // 山影
+      // 산 그림자
       safeSetPaint('hillshade', 'hillshade-exaggeration', Math.min(1, Math.max(0, +h.exaggeration || 0)));
       safeSetPaint('hillshade', 'hillshade-illumination-direction', h.illuminationDirection);
       safeSetPaint('hillshade', 'hillshade-shadow-color', h.shadowColor);
       safeSetPaint('hillshade', 'hillshade-highlight-color', h.highlightColor);
       safeSetPaint('hillshade', 'hillshade-accent-color', h.accentColor);
 
-      // 水系
+      // 물길
       safeSetPaint('lakes-fill', 'fill-color', w.lakeFill);
       safeSetPaint('lakes-outline', 'line-color', w.lakeOutline);
       safeSetPaint('river-l3', 'line-color', w.riverLevel3);
@@ -1735,7 +1736,7 @@
       safeSetPaint('river-l1', 'line-color', w.riverLevel1);
       safeSetPaint('river-highlight', 'line-color', w.highlightRiver);
 
-      // 线宽（随缩放插值，base 为中等 zoom 的基准）
+      // 선 굵기 (확대에 따라 보간, base 는 중간 zoom 기준)
       if (map.getLayer('river-l3')) {
         map.setPaintProperty('river-l3', 'line-width', [
           'interpolate', ['linear'], ['zoom'],
@@ -1779,7 +1780,7 @@
       ['lakes-fill', 'lakes-outline', 'river-l3', 'river-l2', 'river-l1'].forEach(function (id) {
         if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', vis);
       });
-      // 高亮水系可独立开关；关闭总水系时一并隐藏
+      // 강조 물길은 따로 켜고 끌 수 있음. 물길 전체를 끄면 같이 숨김
       const qVis = params.ui.showWater && params.ui.showHighlight ? 'visible' : 'none';
       if (map.getLayer('river-highlight')) map.setLayoutProperty('river-highlight', 'visibility', qVis);
       var btnWaterVis = document.getElementById('btn-water');
@@ -1793,17 +1794,36 @@
       updateCitiesVisibility();
     }
 
-    /** 去掉括号别名：黑河(弱水、东河、西河) → 黑河 */
+    /** 괄호 안 다른 이름을 뺌: 흑하(약수, 동하, 서하) → 흑하 */
     function shortRiverName(name) {
       if (!name) return '';
       return String(name).replace(/[（(].*$/, '').trim();
+    }
+
+    // 원본 지리 데이터의 한자 이름을 화면용 한국어로. 없는 이름은 원문 그대로.
+    function placeKo(name) {
+      var short = shortRiverName(name);
+      var ko = {
+        '黄河': '황하',
+        '石羊河': '석양하',
+        '黑河': '흑하',
+        '弱水': '약수',
+        '疏勒河': '소륵하',
+        '党河': '당하',
+        '青海湖': '칭하이호',
+        '哈拉湖': '하라호',
+        '居延海': '거연해',
+        '鄂陵湖': '어링호',
+        '扎陵湖': '자링호'
+      };
+      return ko[short] || short;
     }
 
     function flattenLineCoords(geom) {
       if (!geom || !geom.coordinates) return null;
       if (geom.type === 'LineString') return geom.coordinates;
       if (geom.type === 'MultiLineString') {
-        // 取最长一段，避免拼接断裂
+        // 가장 긴 구간을 씀. 이어 붙이면 끊김
         let best = null;
         let bestLen = -1;
         for (let i = 0; i < geom.coordinates.length; i++) {
@@ -1830,7 +1850,7 @@
       return t;
     }
 
-    /** 按弧长中点取标注锚点 */
+    /** 곡선 길이의 한가운데를 이름 위치로 */
     function lineStringMidpoint(coords) {
       if (!coords || !coords.length) return null;
       if (coords.length === 1) return [coords[0][0], coords[0][1]];
@@ -1855,14 +1875,14 @@
     }
 
     /**
-     * 从水系 GeoJSON 汇总河名标注点：
-     * - 高亮水系（区域高亮水系子集）优先
-     * - 另补一级河中的「黄河」（主参照）
-     * - 同名多段合并，取最长段中点；区域框外杂支剔除
+     * 물길 GeoJSON 에서 강 이름 위치를 모음:
+     * - 강조 물길(이 지역의 강조 물길)을 먼저
+     * - 1급 하천 가운데 「황하」를 더함 (기준)
+     * - 같은 이름은 합치고 가장 긴 구간의 가운데. 구역 밖 잔가지 제거
      */
     function buildRiverLabelCatalog(data) {
       const REGION = { minLng: 93, maxLng: 105.5, minLat: 35.5, maxLat: 42.5 };
-      // 主带：标注优先落在这里，避免黑河名被拖到居延北端
+      // 주요 구간: 이름은 여기에 두어, 흑하 이름이 거연 북쪽 끝으로 끌리지 않게
       const CORRIDOR = { minLng: 94.5, maxLng: 104.2, minLat: 37.2, maxLat: 40.6 };
       const byName = new Map();
 
@@ -1871,7 +1891,7 @@
       }
 
       function segmentScore(L, mid) {
-        // 主带内段权重大，同权时更长者优先
+        // 주요 구간 안 조각의 가중치가 큼. 같으면 더 긴 쪽
         const corridorBoost = mid && inBox(mid[0], mid[1], CORRIDOR) ? 4 : 1;
         return L * corridorBoost;
       }
@@ -1905,7 +1925,7 @@
       }
 
       if (data.highlightWaterSystems) ingest(data.highlightWaterSystems, false);
-      // 一级河只取黄河，避免全国河名铺满
+      // 1급 하천은 황하만. 전국 강 이름이 깔리지 않게
       if (data.riverLevel1) {
         const onlyHuang = {
           type: 'FeatureCollection',
@@ -1914,7 +1934,7 @@
             return n === '黄河';
           }),
         };
-        // 优先选落在区域视野内的黄河段
+        // 이 구역 안에 있는 황하 구간을 먼저
         let best = null;
         onlyHuang.features.forEach(function (f) {
           const coords = flattenLineCoords(f.geometry);
@@ -1946,7 +1966,7 @@
           item.lng <= REGION.maxLng &&
           item.lat >= REGION.minLat &&
           item.lat <= REGION.maxLat;
-        // 泥河等误匹配到外省的段丢掉；黄河 forceMain 保留
+        // 니허처럼 다른 지역에 잘못 붙은 구간은 버림. 황하 forceMain 은 남김
         if (!inRegion && !item.forceMain) return;
         const isMain = item.forceMain || !!RIVER_LABEL_MAIN[item.name];
         out.push({
@@ -1958,10 +1978,10 @@
         });
       });
 
-      // 主河优先，同 tier 按长度近似（名字稳定排序）
+      // 주요 강을 먼저. 같은 등급은 길이 순 (이름은 정렬이 흔들리지 않게)
       out.sort(function (a, b) {
         if (a.tier !== b.tier) return a.tier === 'main' ? -1 : 1;
-        return a.name.localeCompare(b.name, 'zh');
+        return a.name.localeCompare(b.name, 'ko');
       });
       return out;
     }
@@ -2004,13 +2024,13 @@
       for (let i = 0; i < riverLabelCatalog.length; i++) {
         const item = riverLabelCatalog[i];
         if (z < item.minZoom) continue;
-        // 关闭高亮水系时，仅保留黄河等主参照，支流名先藏
+        // 강조 물길을 끄면 황하 같은 기준만 남기고, 지류 이름은 먼저 숨김
         if (item.tier === 'side' && !params.ui.showHighlight) continue;
         const el = document.createElement('div');
         el.className =
           'river-label ' + (item.tier === 'main' ? 'tier-main' : 'tier-side');
-        el.textContent = item.name;
-        el.title = item.name;
+        el.textContent = placeKo(item.name);
+        el.title = placeKo(item.name);
         riverLabelMarkers.push(
           new maplibregl.Marker({ element: el, anchor: 'center' })
             .setLngLat([item.lng, item.lat])
@@ -2058,7 +2078,7 @@
     }
 
     /**
-     * 重要湖泊标注：源数据 name 为空，按 IMPORTANT_LAKES 锚点匹配面心。
+     * 주요 호수 이름: 원본 name 이 비어 있어 IMPORTANT_LAKES 기준점으로 면의 중심에 맞춤.
      */
     function buildLakeLabelCatalog(data) {
       const fc = data && data.chinaLakes;
@@ -2074,7 +2094,7 @@
       const out = [];
       for (let k = 0; k < IMPORTANT_LAKES.length; k++) {
         const def = IMPORTANT_LAKES[k];
-        // 只保留主湖
+        // 주요 호수만 남김
         if (def.tier === 'side') continue;
         const maxDist = def.maxDist != null ? def.maxDist : 0.4;
         let best = null;
@@ -2087,7 +2107,7 @@
               (c.lat - def.lat) * (c.lat - def.lat)
           );
           if (d > maxDist) continue;
-          // 近且面积大优先
+          // 가깝고 면적이 큰 쪽을 먼저
           const score = c.area / (d + 0.05);
           if (!best || score > best.score) {
             best = {
@@ -2119,7 +2139,7 @@
 
       out.sort(function (a, b) {
         if (a.tier !== b.tier) return a.tier === 'main' ? -1 : 1;
-        return a.name.localeCompare(b.name, 'zh');
+        return a.name.localeCompare(b.name, 'ko');
       });
       return out;
     }
@@ -2127,7 +2147,7 @@
     function updateLakeLabelMarkers() {
       if (!mapReady || !map) return;
       clearLakeLabelMarkers();
-      // 湖名与河名共用「河名」开关；水系关闭时一并隐藏
+      // 호수 이름과 강 이름은 「강 이름」 스위치를 같이 씀. 물길을 끄면 같이 숨김
       const show =
         params.ui.showWater &&
         params.ui.showRiverLabels !== false &&
@@ -2140,8 +2160,8 @@
         const el = document.createElement('div');
         el.className =
           'lake-label ' + (item.tier === 'main' ? 'tier-main' : 'tier-side');
-        el.textContent = item.name;
-        el.title = item.name;
+        el.textContent = placeKo(item.name);
+        el.title = placeKo(item.name);
         lakeLabelMarkers.push(
           new maplibregl.Marker({ element: el, anchor: 'center' })
             .setLngLat([item.lng, item.lat])
@@ -2158,7 +2178,7 @@
         try {
           map.setLayoutProperty('han-city-3d', 'visibility', show ? 'visible' : 'none');
         } catch (e) {
-          /* custom layer 可能无 layout */
+          /* custom layer 에는 layout 이 없을 수 있음 */
         }
       }
       const btn = document.getElementById('btn-cities');
@@ -2211,7 +2231,7 @@
     }
 
     // ============================================================
-    // UI 绑定：控件 ↔ params
+    // 화면 연결: 조절 ↔ params
     // ============================================================
     function refreshAllControls() {
       document.querySelectorAll('.ctrl').forEach(function (el) {
@@ -2335,35 +2355,35 @@
     }
 
     function onParamChange(key) {
-      // CSS 相关
+      // CSS 관련
       if (key && key.indexOf('css.') === 0) {
         applyCssOverlays();
       }
 
-      // 相机
+      // 카메라
       if (key && key.indexOf('camera.') === 0) {
         applyCamera(false);
       } else {
         applyMapStyles();
       }
 
-      // CSS 叠层始终同步
+      // CSS 겹침은 항상 맞춤
       if (!key || key.indexOf('css.') !== 0) {
-        // map 样式也可能影响 summary
+        // map 스타일도 summary 에 영향을 줄 수 있음
       }
 
       persist();
     }
 
     // ============================================================
-    // 参考图对比
+    // 참고 그림 비교
     // ============================================================
     function updateRefImage() {
       const img = document.getElementById('ref-img');
       const label = document.getElementById('ref-label');
       if (!img || !label) return;
       img.src = BASELINE_REF.src;
-      img.alt = '手绘古地图参考';
+      img.alt = '손그림 옛 지도 참고';
       label.textContent = BASELINE_REF.label;
       img.onerror = function () {
         img.style.display = 'none';
@@ -2392,7 +2412,7 @@
       updatePresetStatus();
       updateRefCompare();
       persist(true);
-      toast('已回到 antique-default 基线');
+      toast('antique-default 처음 값으로 돌아왔습니다');
     }
 
     function updateRefCompare() {
@@ -2402,13 +2422,13 @@
       box.classList.remove('pip', 'split');
       box.classList.add(params.ui.refMode === 'split' ? 'split' : 'pip');
       modeBtn.textContent =
-        '对比模式：' + (params.ui.refMode === 'split' ? '左右分屏' : '画中画');
+        '비교: ' + (params.ui.refMode === 'split' ? '좌우로 나누기' : '작은 창');
       document.getElementById('btn-ref').classList.toggle('active', !!params.ui.showRef);
       updateRefImage();
     }
 
     // ============================================================
-    // 按钮
+    // 버튼
     // ============================================================
     function bindButtons() {
       var cssFilterBtn = document.getElementById('sw-css-filter-panel');
@@ -2429,7 +2449,7 @@
         const json = JSON.stringify(packForShare(exportParams()), null, 2);
         try {
           await navigator.clipboard.writeText(json);
-          toast('已复制 JSON 到剪贴板');
+          toast('JSON을 복사했습니다');
         } catch (e) {
           // fallback
           const ta = document.createElement('textarea');
@@ -2438,7 +2458,7 @@
           ta.select();
           document.execCommand('copy');
           document.body.removeChild(ta);
-          toast('已复制 JSON');
+          toast('JSON을 복사했습니다');
         }
       });
 
@@ -2451,7 +2471,7 @@
         a.download = 'map-antique-params-' + Date.now() + '.json';
         a.click();
         URL.revokeObjectURL(url);
-        toast('已下载 JSON');
+        toast('JSON을 받았습니다');
       });
 
       document.getElementById('btn-paste').addEventListener('click', async function () {
@@ -2474,9 +2494,9 @@
           updatePresetStatus();
           updateRefCompare();
           persist(true);
-          toast('已从剪贴板应用参数');
+          toast('붙여넣은 값을 적용했습니다');
         } catch (e) {
-          toast('粘贴失败：剪贴板非有效 JSON');
+          toast('붙여넣기 실패: 클립보드가 JSON이 아닙니다');
           console.warn(e);
         }
       });
@@ -2507,7 +2527,7 @@
         if (params.ui.showHighlight && !params.ui.showWater) params.ui.showWater = true;
         updateWaterVisibility();
         persist();
-        toast(params.ui.showHighlight ? '高亮水系开' : '高亮水系关');
+        toast(params.ui.showHighlight ? '강조 물길 켜짐' : '강조 물길 꺼짐');
       });
 
       var btnRiverLabels = document.getElementById('btn-river-labels');
@@ -2521,14 +2541,14 @@
           updateLakeLabelMarkers();
         }
         persist();
-        toast(params.ui.showRiverLabels !== false ? '河名/湖名开' : '河名/湖名关');
+        toast(params.ui.showRiverLabels !== false ? '강·호수 이름 켜짐' : '강·호수 이름 꺼짐');
       });
 
       document.getElementById('btn-cities').addEventListener('click', function () {
         params.ui.showCities = !(params.ui.showCities !== false);
         updateCitiesVisibility();
         persist();
-        toast(params.ui.showCities !== false ? '城池点位开' : '城池点位关');
+        toast(params.ui.showCities !== false ? '성 위치 켜짐' : '성 위치 꺼짐');
       });
 
       document.getElementById('btn-china').addEventListener('click', function () {
@@ -2541,22 +2561,22 @@
         refreshCameraControlsOnly();
         applyCamera(true);
         persist();
-        toast('全国视角');
+        toast('전국 보기');
       });
 
       document.getElementById('btn-clear-storage').addEventListener('click', function () {
         localStorage.removeItem(STORAGE_KEY);
-        toast('已清除本地缓存（当前参数仍保留在界面）');
+        toast('브라우저 저장을 지웠습니다. 지금 화면의 값은 남아 있습니다');
       });
 
-      // 面板折叠
+      // 패널 접기
       const panel = document.getElementById('panel');
       const toggle = document.getElementById('panel-toggle');
       toggle.addEventListener('click', function () {
         const collapsed = panel.classList.toggle('collapsed');
         toggle.classList.toggle('collapsed', collapsed);
         toggle.textContent = collapsed ? '‹' : '›';
-        // 等待 CSS transition 后 resize
+        // CSS transition 이 끝난 뒤 resize
         setTimeout(function () {
           if (map) map.resize();
         }, 220);
@@ -2589,7 +2609,7 @@
     })();
 
     // ============================================================
-    // 地图初始化（瓦片端点来自 map-tiles.config*.js，默认无商业卫星热链）
+    // 지도 시작 (타일 주소는 map-tiles.config*.js, 기본은 상업 위성 연결 없음)
     // ============================================================
     function resolveTileConfig() {
       const cfg = window.MAP_TILE_CONFIG || {};
@@ -2631,8 +2651,8 @@
         uiAttribution:
           cfg.uiAttribution ||
           (satEnabled
-            ? '底图：已配置栅格 · 地形 DEM：Mapterhorn'
-            : '底图：未配置卫星 · 地形 DEM：Mapterhorn'),
+            ? '밑 지도: 격자 있음 · 지형 DEM: Mapterhorn'
+            : '밑 지도: 위성 없음 · 지형 DEM: Mapterhorn'),
       };
     }
 
@@ -2690,7 +2710,7 @@
         });
       }
 
-      // 卫星/栅格底图叠在山影之上（半透明），仅当用户配置了合规 tiles
+      // 위성/격자 밑 지도는 산 그림자 위(반투명). 사용자가 허용된 tiles 를 넣었을 때만
       if (tileCfg.satellite.enabled) {
         sources[tileCfg.satellite.sourceId] = {
           type: 'raster',
@@ -3086,17 +3106,17 @@
             });
           }
         } catch (e) {
-          console.warn('setTerrain 失败（其余图层仍可用）', e);
+          console.warn('setTerrain 실패 (다른 층은 그대로 쓸 수 있음)', e);
         }
         try {
           addHanCityLayer();
         } catch (e) {
-          console.warn('城池层添加失败', e);
+          console.warn('성 층 추가 실패', e);
         }
         try {
           setupGlobeAndIsolate();
         } catch (e) {
-          console.warn('地球/地区显示初始化失败', e);
+          console.warn('지구/지역 보기 시작 실패', e);
         }
         applyCssOverlays();
         applyMapStyles();
@@ -3106,11 +3126,11 @@
         updatePresetStatus();
       }
 
-      // style.load 先于 load：不因 DEM 瓦片失败而一直卡在未就绪
+      // style.load 가 load 보다 먼저: DEM 타일이 실패해도 준비 안 됨에 머물지 않음
       map.once('style.load', onMapReady);
       map.on('load', onMapReady);
 
-      // 用户交互同步相机到面板
+      // 사용자가 움직이면 카메라 값을 패널에 맞춤
       map.on('moveend', function () {
         if (syncingFromMap) return;
         const c = map.getCenter();
@@ -3119,13 +3139,13 @@
         params.camera.pitch = round(map.getPitch(), 1);
         params.camera.bearing = round(map.getBearing(), 1);
         refreshCameraControlsOnly();
-        // 支流河名 / 次级湖名随 zoom 显隐
+        // 지류 이름 / 작은 호수 이름은 zoom 에 따라 보이고 숨음
         updateRiverLabelMarkers();
         updateLakeLabelMarkers();
         persist();
       });
 
-      // 缩放过程中也刷新，避免等到松手才出现支流名
+      // 확대하는 중에도 갱신. 손을 뗄 때까지 지류 이름이 안 나오지 않게
       map.on('zoomend', function () {
         updateRiverLabelMarkers();
         updateLakeLabelMarkers();
@@ -3158,20 +3178,20 @@
       const lakeMainN = lakeLabelCatalog.filter(function (x) { return x.tier === 'main'; }).length;
       const lakeSideN = lakeLabelCatalog.filter(function (x) { return x.tier === 'side'; }).length;
       el.textContent =
-        '一级河 ' + n(d.riverLevel1) +
-        ' · 二级河 ' + n(d.riverLevel2) +
-        ' · 三级河 ' + n(d.riverLevel3) +
-        ' · 湖 ' + n(d.chinaLakes) +
-        '\n高亮水系 ' + n(q) +
-        '（石羊 ' + (by.shiyang || 0) +
-        ' · 黑河 ' + (by.heihe || 0) +
-        ' · 疏勒 ' + (by.shule || 0) +
-        ' · 南坡 ' + (by['qilian' + '_south'] || by.south || 0) + '）' +
-        '\n区域高亮水系子集（北坡内流 + 南坡支流）' +
-        '\n河名标注 ' + riverLabelCatalog.length +
-        '（主 ' + mainN + ' · 支 ' + sideN + '）' +
-        '\n湖名标注 ' + lakeLabelCatalog.length +
-        '（主 ' + lakeMainN + ' · 次 ' + lakeSideN + '）';
+        '1급 하천 ' + n(d.riverLevel1) +
+        ' · 2급 하천 ' + n(d.riverLevel2) +
+        ' · 3급 하천 ' + n(d.riverLevel3) +
+        ' · 호수 ' + n(d.chinaLakes) +
+        '\n강조 물길 ' + n(q) +
+        ' (석양 ' + (by.shiyang || 0) +
+        ' · 흑하 ' + (by.heihe || 0) +
+        ' · 소륵 ' + (by.shule || 0) +
+        ' · 남쪽 비탈 ' + (by['qilian' + '_south'] || by.south || 0) + ')' +
+        '\n이 지역에서 강조한 물길 (북쪽 내륙 + 남쪽 지류)' +
+        '\n강 이름 ' + riverLabelCatalog.length +
+        ' (주요 ' + mainN + ' · 지류 ' + sideN + ')' +
+        '\n호수 이름 ' + lakeLabelCatalog.length +
+        ' (주요 ' + lakeMainN + ' · 그다음 ' + lakeSideN + ')';
     }
 
     function addWaterLayers() {
@@ -3180,7 +3200,7 @@
       const vis = params.ui.showWater ? 'visible' : 'none';
       const qVis = params.ui.showWater && params.ui.showHighlight ? 'visible' : 'none';
 
-      // 1. 湖泊
+      // 1. 호수
       if (data.chinaLakes) {
         map.addSource('lakes', {
           type: 'geojson',
@@ -3209,7 +3229,7 @@
         });
       }
 
-      // 2. 三级河（资料四级 River4，最细底网）
+      // 2. 3급 하천 (자료의 4단계 River4, 가장 가는 그물)
       if (data.riverLevel3) {
         map.addSource('river-l3-src', {
           type: 'geojson',
@@ -3237,7 +3257,7 @@
         });
       }
 
-      // 3. 二级河
+      // 3. 2급 하천
       if (data.riverLevel2) {
         map.addSource('river-l2-src', {
           type: 'geojson',
@@ -3265,7 +3285,7 @@
         });
       }
 
-      // 4. 一级河
+      // 4. 1급 하천
       if (data.riverLevel1) {
         map.addSource('river-l1-src', {
           type: 'geojson',
@@ -3293,7 +3313,7 @@
         });
       }
 
-      // 5. 高亮水系（最上）
+      // 5. 강조 물길 (맨 위)
       if (data.highlightWaterSystems) {
         map.addSource('river-highlight-src', {
           type: 'geojson',
@@ -3321,7 +3341,7 @@
         });
       }
 
-      // 6. 河流 / 湖泊名称（HTML Marker；无 glyphs 也能显示中文）
+      // 6. 강 / 호수 이름 (HTML Marker. 글꼴 없이도 이름을 표시)
       riverLabelCatalog = buildRiverLabelCatalog(data);
       lakeLabelCatalog = buildLakeLabelCatalog(data);
       updateRiverLabelMarkers();
@@ -3352,13 +3372,13 @@
     }
 
     /**
-     * 多级城池点位（大/中/小城 + 关卡 + 驿站 + 牙帐）
-     * 仅加载 params.cities.dataFile（默认 assets/sample-sites.json）；失败回退内置
+     * 성 위치 여러 단계 (큰 성/중간 성/작은 성 + 관문 + 역참 + 막사)
+     * params.cities.dataFile 만 불러옴 (기본 assets/sample-sites.json). 실패하면 안에 둔 값
      */
     async function addHanCityLayer() {
       if (!map) return;
       if (typeof window.HanCity3D === 'undefined') {
-        console.warn('[han-city-3d] HanCity3D 未加载，跳过城池层');
+        console.warn('[han-city-3d] HanCity3D 를 못 불러 성 층을 건너뜀');
         return;
       }
       if (map.getLayer('han-city-extrude-plinth') || map.getLayer('han-city-3d')) return;
@@ -3399,11 +3419,11 @@
                 : null;
           if (list && list.length) {
             cities = list.map(normalizeSite);
-            console.info('[han-city-3d] 加载 ' + sitesUrl + ' · ' + cities.length + ' 点');
+            console.info('[han-city-3d] 불러옴 ' + sitesUrl + ' · ' + cities.length + '곳');
           }
         }
       } catch (e) {
-        console.info('[han-city-3d] ' + sitesUrl + ' 不可用，使用内置示例');
+        console.info('[han-city-3d] ' + sitesUrl + ' 를 쓸 수 없어, 안에 둔 예시를 씀');
       }
 
       try {
@@ -3414,15 +3434,15 @@
         });
 
         async function tryThreeFallback(reason) {
-          if (reason) console.warn('[han-city-3d] extrusion 不可用，尝试 Three.js', reason);
+          if (reason) console.warn('[han-city-3d] extrusion 을 쓸 수 없어 Three.js 를 시도', reason);
           try {
             await loadThreeJs();
           } catch (e3) {
-            console.warn('[han-city-3d] Three.js 加载失败', e3);
+            console.warn('[han-city-3d] Three.js 불러오기 실패', e3);
             return false;
           }
           if (typeof window.THREE === 'undefined' || typeof window.HanCity3D.createCustomLayer !== 'function') {
-            console.warn('[han-city-3d] 无 extrusion 也无 THREE，跳过');
+            console.warn('[han-city-3d] extrusion 도 THREE 도 없어 건너뜀');
             return false;
           }
           hanCityLayer = window.HanCity3D.createCustomLayer(maplibregl, window.THREE, {
@@ -3461,16 +3481,16 @@
           map.triggerRepaint();
         });
       } catch (err) {
-        console.warn('[han-city-3d] 添加城池层失败', err);
+        console.warn('[han-city-3d] 성 층 추가 실패', err);
         hanCityLayer = null;
       }
     }
 
     // ============================================================
-    // 启动：优先尝试加载外部 preset JSON，再初始化
+    // 시작: 바깥 preset JSON 을 먼저 시도한 뒤 초기화
     // ============================================================
     async function boot() {
-      // 若 localStorage 无数据，尝试 fetch 默认 preset 文件
+      // localStorage 에 값이 없으면 기본 preset 파일을 불러 봄
       const hasLocal = !!localStorage.getItem(STORAGE_KEY);
       if (!hasLocal) {
         try {
@@ -3481,8 +3501,8 @@
             params.season = null;
           }
         } catch (e) {
-          // file:// 或离线时忽略，使用内嵌 DEFAULT_PARAMS
-          console.info('未加载外部 preset 文件，使用内嵌默认值');
+          // file:// 이거나 오프라인이면 무시하고, 안에 둔 DEFAULT_PARAMS 를 씀
+          console.info('바깥 preset 파일을 못 불러, 안에 둔 기본값을 씀');
         }
       }
 
