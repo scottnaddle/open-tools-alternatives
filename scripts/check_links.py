@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIST = Path(sys.argv[1] if len(sys.argv) > 1 else "dist")
 # src/pages/feed.xml.ts 의 NOISE 판정과 같게 유지한다.
 NOISE_FIELDS = {"stars", "lastPush", "latestRelease", "fetchedAt", "dateChecked", "createdAt"}
-ASSET_RE = re.compile(r"\.(css|js|map|woff2?|png|jpe?g|gif|svg|ico|webmanifest|mp4|webm|txt|xml)(\?|#|$)")
+ASSET_RE = re.compile(r"\.(css|js|map|woff2?|png|jpe?g|webp|gif|svg|ico|webmanifest|mp4|webm|txt|xml)(\?|#|$)")
 
 
 class LinkExtractor(HTMLParser):
