@@ -1,8 +1,9 @@
+<!-- 화면 문구만 한국어로 옮겼습니다. 프로젝트 이름 huashu-design 과 MIT 출처는 원본입니다. https://github.com/alchaincyf/huashu-design -->
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="ko">
 <head>
 <meta charset="utf-8" />
-<title>huashu-design · c3 motion design（中文版）</title>
+<title>huashu-design · c3 motion design (한국어)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -19,9 +20,9 @@
   --accent: #D97757;
   --accent-deep: #B85D3D;
   --accent-dim: rgba(217,119,87,0.25);
-  --serif-cn: "Noto Serif SC", "Songti SC", "STSong", serif;
+  --serif-cn: "Noto Serif KR", "Source Serif 4", "Malgun Gothic", "Apple SD Gothic Neo", "WenQuanYi Micro Hei", serif;
   --serif-en: "Source Serif 4", "Tiempos Headline", Georgia, serif;
-  --sans: "Inter", -apple-system, "PingFang SC", "HarmonyOS Sans SC", system-ui, sans-serif;
+  --sans: "Inter", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", "WenQuanYi Micro Hei", system-ui, sans-serif;
   --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
 }
 
@@ -495,7 +496,7 @@ html, body {
   letter-spacing: 0.3em;
 }
 
-/* ============ Scene 2: Brand reveal (米色面板标准动作) ============ */
+/* ============ Scene 2: Brand reveal (미색 판의 기본 움직임) ============ */
 .scene-brand {
   background: transparent;
   pointer-events: none;
@@ -572,7 +573,7 @@ html, body {
 
   <!-- ============ Scene 0: Intro (0 → 1.6s) ============ -->
   <div class="scene scene-intro" id="scene-intro">
-    <div class="title" id="introTitle">时间轴 <span class="accent">=</span> 代码</div>
+    <div class="title" id="introTitle">시간축 <span class="accent">=</span> 코드</div>
     <div class="sub" id="introSub">TIMELINE · MOTION · ENGINE</div>
   </div>
 
@@ -728,7 +729,7 @@ html, body {
     </div>
   </div>
 
-  <!-- ============ Scene 2: Brand reveal (米色面板, 8.0 → 10s) ============ -->
+  <!-- ============ Scene 2: Brand reveal (미색 판, 8.0 → 10s) ============ -->
   <div class="scene scene-brand" id="scene-brand">
     <div class="brand-panel" id="brandPanel"></div>
     <div class="brand-wordmark" id="wordmark">huashu<span class="accent">-</span>design</div>
@@ -770,7 +771,7 @@ html, body {
     Easing:      [4.8, 5.4, 6.2],   // capsule @ ~58%
     useSprite:   [6.2, 6.9, 7.9],   // capsule @ ~80%
 
-    // Scene 2: Brand reveal (米色面板 standard, last 2s of T=10)
+    // Scene 2: Brand reveal (미색 판 standard, last 2s of T=10)
     // [T-2.0 → T-1.7]: main fade 1→0 (already handled by main_out 8.0-8.4)
     // [T-1.7 → T-1.3]: beige panel translateY 100%→0, expoOut
     // [T-1.3 → T-0.7]: wordmark weight 100→500 + y:20→0 + opacity 0→1, expoOut
@@ -1020,7 +1021,7 @@ html, body {
       showScene(scenes.main, 0);
     }
 
-    // ============ Scene 2: Brand reveal (米色面板标准动作) ============
+    // ============ Scene 2: Brand reveal (미색 판의 기본 움직임) ============
     if (t >= T.brand_panel[0] - 0.1) {
       showScene(scenes.brand, 1);
 
