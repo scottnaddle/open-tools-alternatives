@@ -69,19 +69,14 @@ const seoDesc = cut(data.description, 150);
     </header>
 
     <div class="skill-sheet">
-      <section aria-labelledby="skill-what">
-        <h2 id="skill-what">무엇을 하나요</h2>
-        {fragment ? (
+      {fragment && (
+        <section aria-labelledby="skill-what">
+          <h2 id="skill-what">무엇을 하나요</h2>
           <article class="show-body">
             <Fragment set:html={fragment} />
           </article>
-        ) : (
-          <div class="show-callout">
-            <b>소개 글은 아직 없습니다.</b>
-            지금 확인된 내용은 위 한 줄 설명입니다. 수업에서 어떻게 쓰는지, 결과 화면은 저장소를 보고 차례로 채웁니다.
-          </div>
-        )}
-      </section>
+        </section>
+      )}
 
       <section aria-labelledby="skill-try">
         <h2 id="skill-try">써 보려면</h2>
@@ -101,12 +96,6 @@ const seoDesc = cut(data.description, 150);
           </div>
         )}
         {showPreview && data.previewNote && <p class="show-cap">{data.previewNote}</p>}
-        {!showPreview && !fragment && (
-          <div class="show-callout">
-            <b>화면 예시는 아직 없습니다.</b>
-            빈 그림 칸 대신, 아래 순서대로 저장소에서 확인하면 됩니다.
-          </div>
-        )}
         <ol class="show-steps">
           <li>저장소 <a href={data.sourceUrl} target="_blank" rel="noopener noreferrer">{data.github.repo}</a>를 엽니다.</li>
           <li>{installLine}</li>
@@ -128,7 +117,7 @@ const seoDesc = cut(data.description, 150);
           <div class="st"><small>용도 구분</small><b>{data.usageScope}</b></div>
           <div class="st"><small>GitHub 스타</small><b>{data.github.stars.toLocaleString('ko-KR')}</b></div>
         </div>
-        <p class="show-cap">스타 수와 라이선스는 공식 저장소 기준이며, 일일 검증이 다시 확인합니다. {fragment ? '소개 글과 화면 예시는 발굴·재구성 과정에서 작성했습니다.' : '소개 글은 아직 없고, 이 칸의 값만 확인된 사실입니다.'} <a href={`${base}suggest/#report`}>정보 정정 요청</a></p>
+        <p class="show-cap">스타 수와 라이선스는 공식 저장소 기준이며, 일일 검증이 다시 확인합니다. {fragment && '소개 글과 화면 예시는 발굴·재구성 과정에서 작성했습니다.'} <a href={`${base}suggest/#report`}>정보 정정 요청</a></p>
       </section>
 
       <section aria-labelledby="skill-license">
@@ -161,65 +150,65 @@ const seoDesc = cut(data.description, 150);
   .skill-sheet { margin-top: 8px; }
   .skill-sheet > section { margin: 28px 0 0; }
   .skill-sheet > section > h2 {
-    font-size: 21px;
+    font-size: var(--fs-title);
     margin: 0 0 12px;
     letter-spacing: -0.01em;
   }
   .preview-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-bottom: 1px solid #dfe6ee; background: #fff; }
-  .pm-badge { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 999px; }
+  .pm-badge { font-size: var(--fs-sm); font-weight: 700; padding: 3px 8px; border-radius: 999px; }
   .pm-badge.self { background: #E4EFE8; color: #1E6A47; }
   .pm-badge.official { background: #E3ECF8; color: #1F4E8C; }
-  .pm-open { margin-left: auto; font-size: 13px; font-weight: 700; }
+  .pm-open { margin-left: auto; font-size: var(--fs-sm); font-weight: 700; }
   .show-demo img { width: 100%; height: auto; display: block; }
 </style>
 
 <style is:global>
   /* 에디토리얼 키트: 자유구성 본문(set:html)과 공통 템플릿이 같이 쓴다. */
-  .show-body { margin: 8px 0 0; line-height: 1.75; font-size: 15px; }
-  .show-body h2 { font-size: 21px; margin: 42px 0 12px; letter-spacing: -0.01em; }
+  .show-body { margin: 8px 0 0; line-height: 1.75; font-size: var(--fs-body); }
+  .show-body h2 { font-size: var(--fs-title); margin: 42px 0 12px; letter-spacing: -0.01em; }
   .show-body h2:first-child { margin-top: 8px; }
-  .show-body h3 { font-size: 16.5px; margin: 28px 0 10px; }
+  .show-body h3 { font-size: var(--fs-body); margin: 28px 0 10px; }
   .show-body p { margin: 0 0 14px; }
   .show-body ul, .show-body ol { margin: 0 0 14px; padding-left: 22px; }
   .show-body li { margin-bottom: 6px; }
   .show-body a { color: #1F4E8C; }
   .show-body strong { background: linear-gradient(transparent 62%, #E4EFE8 62%); }
 
-  .show-lead { font-size: 16.5px; color: #33424f; border-left: 3px solid #1E6A47; padding: 2px 0 2px 14px; margin-bottom: 26px; }
+  .show-lead { font-size: var(--fs-body); color: #33424f; border-left: 3px solid #1E6A47; padding: 2px 0 2px 14px; margin-bottom: 26px; }
 
   .show-demo { margin: 8px 0 8px; border: 1px solid #dfe6ee; border-radius: 14px; overflow: hidden; background: #fbfcfd; }
   .show-demo iframe { width: 100%; height: 640px; border: 0; display: block; background: #fff; }
-  .show-cap { font-size: 12px; color: #7a8898; margin: 8px 0 20px; line-height: 1.6; }
+  .show-cap { font-size: var(--fs-sm); color: #7a8898; margin: 8px 0 20px; line-height: 1.6; }
   .show-cap a { color: #1F4E8C; }
 
-  .show-callout { border: 1px solid #C4DCCD; background: #E4EFE8; border-radius: 12px; padding: 14px 16px; margin: 0 0 16px; font-size: 14px; line-height: 1.65; }
+  .show-callout { border: 1px solid #C4DCCD; background: #E4EFE8; border-radius: 12px; padding: 14px 16px; margin: 0 0 16px; font-size: var(--fs-body); line-height: 1.65; }
   .show-callout.warn { border-color: #F2E3C2; background: #FFF9EF; }
   .show-callout b:first-child { display: inline-block; margin-right: 6px; }
 
   .show-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 18px 0 6px; }
   .show-grid figure { margin: 0; border: 1px solid #dfe6ee; border-radius: 12px; overflow: hidden; background: #fff; }
   .show-grid img { width: 100%; height: auto; display: block; }
-  .show-grid figcaption { font-size: 12px; color: #7a8898; padding: 8px 12px; line-height: 1.5; }
+  .show-grid figcaption { font-size: var(--fs-sm); color: #7a8898; padding: 8px 12px; line-height: 1.5; }
 
   .show-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 0 0 8px; }
   .show-stats .st { border: 1px solid #dfe6ee; border-radius: 10px; padding: 10px 12px; background: #fbfcfd; }
-  .show-stats .st small { display: block; color: #7a8898; font-size: 11.5px; margin-bottom: 2px; }
-  .show-stats .st b { font-size: 15px; word-break: break-word; }
+  .show-stats .st small { display: block; color: #7a8898; font-size: var(--fs-sm); margin-bottom: 2px; }
+  .show-stats .st b { font-size: var(--fs-body); word-break: break-word; }
   .show-stats .st a { color: #1F4E8C; }
 
-  .show-compare { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 13.5px; }
+  .show-compare { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: var(--fs-body); }
   .show-compare th, .show-compare td { border: 1px solid #dfe6ee; padding: 8px 10px; text-align: left; }
   .show-compare th { background: #f2f5f8; }
 
   .show-steps { counter-reset: showstep; list-style: none; padding: 0; margin: 14px 0 18px; }
   .show-steps li { counter-increment: showstep; position: relative; padding-left: 34px; margin-bottom: 10px; }
-  .show-steps li::before { content: counter(showstep); position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 999px; background: #1E6A47; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .show-steps li::before { content: counter(showstep); position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 999px; background: #1E6A47; color: #fff; font-size: var(--fs-sm); font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
   .show-video { margin: 20px 0 8px; }
   .show-video video { width: 100%; height: auto; display: block; border: 1px solid #dfe6ee; border-radius: 14px; background: #000; }
 
   .show-actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 8px 0 6px; }
-  .show-actions a { display: inline-block; padding: 9px 16px; border-radius: 9px; font-size: 13.5px; font-weight: 700; text-decoration: none; }
+  .show-actions a { display: inline-block; padding: 9px 16px; border-radius: 9px; font-size: var(--fs-body); font-weight: 700; text-decoration: none; }
   .show-actions a.primary { background: #1E6A47; color: #fff; }
   .show-actions a.ghost { border: 1px solid #dfe6ee; color: #33424f; background: #fff; }
 </style>
