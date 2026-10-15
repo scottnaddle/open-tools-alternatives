@@ -1,0 +1,19 @@
+{
+  "name": "Draw.io Skill",
+  "slug": "Agents365-ai-drawio-skill",
+  "category": "그림·도해",
+  "description": "자연어 설명을 편집 가능한 draw.io 도식(순서도, 개념 구조도 등)으로 만들어 주는 스킬입니다. 결과물을 열린도구의 draw.io(학습SW)로 바로 열어 수정할 수 있습니다.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/Agents365-ai/drawio-skill",
+  "dateChecked": "2026-10-15",
+  "previewType": "none",
+  "github": {
+    "repo": "Agents365-ai/drawio-skill",
+    "stars": 10167,
+    "createdAt": "2026-03-03T16:54:59Z",
+    "license": "MIT"
+  }
+}

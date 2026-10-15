@@ -1,0 +1,25 @@
+{
+  "name": "K-Skill (한국인을 위한 스킬 모음)",
+  "slug": "NomaDamas-k-skill",
+  "category": "교사 업무·글쓰기",
+  "description": "한국 생활·행정 맥락(공공데이터, 한국어 맞춤법·표현 등)에 맞춘 한국어 에이전트 스킬 모음입니다. 영어권 스킬을 한국 학교 업무 맥락으로 옮길 때 기반이 됩니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/NomaDamas/k-skill",
+  "dateChecked": "2026-10-15",
+  "previewType": "none",
+  "github": {
+    "repo": "NomaDamas/k-skill",
+    "stars": 7930,
+    "createdAt": "2026-03-24T16:39:30Z",
+    "license": "MIT"
+  },
+  "koreanReviews": [
+    {
+      "url": "https://know.ai.kr/skill/k-skill",
+      "summary": "'마스터키의 AI 연구소' 스킬 디렉터리에 k-skill 묶음으로 등재(본문 요약은 추출 실패)"
+    }
+  ]
+}

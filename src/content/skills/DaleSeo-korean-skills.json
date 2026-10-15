@@ -1,0 +1,25 @@
+{
+  "name": "Korean Skills",
+  "slug": "DaleSeo-korean-skills",
+  "category": "교사 업무·글쓰기",
+  "description": "AI가 쓴 어색한 한국어 문장을 자연스럽게 다듬는(humanizer) 등 한국어 글쓰기 스킬입니다. 가정통신문·안내문 문장 다듬기에 유용합니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/DaleSeo/korean-skills",
+  "dateChecked": "2026-10-15",
+  "previewType": "none",
+  "github": {
+    "repo": "DaleSeo/korean-skills",
+    "stars": 226,
+    "createdAt": "2026-01-27T04:06:54Z",
+    "license": "MIT"
+  },
+  "koreanReviews": [
+    {
+      "url": "https://worlddrop.app/k/korean-skills.html",
+      "summary": "humanizer(AI 글투 40가지 패턴 제거)와 맞춤법 검사 등 3종 소개. 설치 명령과 '바로 됨' 난이도 표기(2026-10-13 수정)"
+    }
+  ]
+}

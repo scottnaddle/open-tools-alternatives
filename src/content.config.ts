@@ -24,6 +24,16 @@ const Difficulty = z.enum(['쉬움', '보통', '어려움', '서버 구축']);
 const Level = z.enum(['거의 대체', '부분 대체']);
 const Support = z.enum(['yes', 'partial', 'no']);
 const UsageScope = z.enum(['personal', 'demo', 'offline-install', 'student-use-check']);
+// 한국어 후기·사용법 영상. 비어 있으면 상세 페이지에서 섹션을 그리지 않는다.
+const KoreanReview = z.object({
+  url: z.string().url(),
+  summary: z.string().min(1),
+});
+const Tutorial = z.object({
+  title: z.string().min(1),
+  channel: z.string().min(1),
+  url: z.string().url(),
+});
 
 const tools = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/tools' }),
@@ -68,6 +78,8 @@ const tools = defineCollection({
     csap: fact(z.enum(['yes', 'no', 'n/a', 'unknown'])).optional(),
     privacyPolicyUrl: fact(z.string().url().nullable()).optional(),
     usageScope: z.array(UsageScope).default(['personal']), // 파생값, 빌드 시 계산
+    koreanReviews: z.array(KoreanReview).optional(),
+    tutorials: z.array(Tutorial).optional(),
   }).refine(
     (tool) => {
       // usageScope 규칙 검증 (PLAN 7.4): student-use-check가 있으면 필수 필드가 verified여야 함
@@ -157,6 +169,8 @@ const skills = defineCollection({
       createdAt: z.string(),
       license: z.string().nullable(),
     }),
+    koreanReviews: z.array(KoreanReview).optional(),
+    tutorials: z.array(Tutorial).optional(),
   }).refine(
     (s) => !s.previewType || s.previewType === 'none' || !!s.previewPath,
     { message: 'previewType이 iframe/image면 previewPath가 필요함' },

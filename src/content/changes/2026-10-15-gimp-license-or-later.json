@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-15T15:45:00+00:00",
+  "agent": "build",
+  "runId": "catalog-20261015-hwp",
+  "target": "tools/gimp.license",
+  "before": "GPL-3.0",
+  "after": "GPL-3.0-or-later",
+  "sources": [
+    {
+      "url": "https://gitlab.gnome.org/GNOME/gimp/-/raw/master/app/app.c",
+      "fetchedAt": "2026-10-15T15:45:00+00:00",
+      "excerpt": "either version 3 of the License, or (at your option) any later version.",
+      "method": "official-site"
+    }
+  ],
+  "tier": "C",
+  "gates": ["license-text"],
+  "commit": "pending"
+}

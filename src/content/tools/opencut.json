@@ -2,6 +2,7 @@
   "name": "OpenCut",
   "category": "영상·오디오",
   "notes": [
+    "웹 얼리 베타",
     "데스크톱·모바일판은 준비 중",
     "재작성 진행 중"
   ],
@@ -93,7 +94,7 @@
   },
   "github": {
     "repo": "OpenCut-app/OpenCut",
-    "stars": 94450,
+    "stars": 94652,
     "lastPush": "2026-09-24",
     "archived": false,
     "latestRelease": {
@@ -105,9 +106,78 @@
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261015-002314",
-    "at": "2026-10-15T00:23:14+00:00",
-    "unresolved": [],
-    "notes": []
+    "runId": "verify-20261015154735",
+    "at": "2026-10-15T15:47:35+00:00",
+    "unresolved": [
+      "koreanUI"
+    ],
+    "notes": [
+      "별 94652(repos API, 2026-10-15T15:47:35Z). 조사 보고 초깃값 94645. 릴리스 v0.3.0(2026-04-15), lastPush 2026-09-24. 홈의 Try early beta 문구를 유지. 계정·파일 위치는 privacy 페이지. 한국어 화면은 미확인."
+    ]
+  },
+  "koreanUI": {
+    "value": "no",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://opencut.app",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "홈 HTML lang=en. 보이는 문장에서 한국어 화면 안내를 찾지 못함.",
+        "method": "official-site"
+      }
+    ]
+  },
+  "network": {
+    "value": "online",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://opencut.app",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "A simple but powerful video editor that gets the job done. In your browser. 버튼 문구는 Try early beta.",
+        "method": "official-site"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://opencut.app/privacy",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "OpenCut does not currently offer user accounts, login, or Google sign-in. No account is required to use OpenCut today.",
+        "method": "official-site"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "local-only",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://opencut.app/privacy",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "All editing and processing happens locally on your device. We never upload, store, or have access to your video or audio files. Projects are stored locally in the browser using IndexedDB.",
+        "method": "official-site"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "no",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://opencut.app",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "브라우저에서 쓰는 얼리 베타. 설치 프로그램이 필요하다고 적혀 있지 않음.",
+        "method": "official-site"
+      }
+    ]
   }
 }

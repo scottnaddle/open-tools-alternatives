@@ -150,5 +150,86 @@ class NonGithubRateLimitTests(unittest.TestCase):
         self.assertEqual(saved["license"]["status"], "verified")
 
 
+class MirrorHealthTests(unittest.TestCase):
+    def test_official_activity_beats_frozen_github_push(self):
+        g = {
+            "repo": "inkscape/inkscape",
+            "lastPush": "2022-03-03",
+            "official": {"lastActivity": "2026-10-15"},
+        }
+        self.assertEqual(dv.activity_for_health(g, "skipped/unverified"), "2026-10-15")
+
+    def test_unread_mirror_does_not_fall_back_to_frozen_push(self):
+        g = {"repo": "inkscape/inkscape", "lastPush": "2022-03-03"}
+        self.assertEqual(dv.activity_for_health(g, "skipped/unverified"), "")
+
+    def test_normal_repo_uses_last_push(self):
+        g = {"repo": "golbin/hop", "lastPush": "2026-10-08"}
+        self.assertEqual(dv.activity_for_health(g, None), "2026-10-08")
+
+    def test_frozen_mirror_403_does_not_mark_stale(self):
+        doc = {
+            "license": {"value": "GPL-3.0-or-later", "status": "verified", "lastVerified": "2026-10-15T00:00:00+00:00"},
+            "github": {
+                "repo": "inkscape/inkscape",
+                "stars": 4022,
+                "lastPush": "2022-03-03",
+                "archived": False,
+                "latestRelease": {
+                    "tag": "INKSCAPE_1_4",
+                    "date": "2024-10-12",
+                    "url": "https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4",
+                },
+                "fetchedAt": "2026-10-14",
+            },
+            "health": "active",
+        }
+        raw = json.dumps(doc, ensure_ascii=False, indent=2)
+
+        def urlopen(req, timeout=20):
+            url = req.full_url
+            if "api.github.com" in url and "/releases/" in url:
+                raise http_error(url, 404)
+            if "api.github.com" in url:
+                return Resp({
+                    "stargazers_count": 4022,
+                    "pushed_at": "2022-03-03T00:00:00Z",
+                    "archived": False,
+                })
+            if "gitlab.com" in url:
+                raise http_error(url, 403)
+            raise AssertionError(url)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "inkscape.json")
+            with open(path, "w") as fp:
+                fp.write(raw)
+            with mock.patch.object(dv.urllib.request, "urlopen", urlopen), \
+                 mock.patch.object(dv.time, "sleep"):
+                result = dv.process_tool(path)
+            with open(path) as fp:
+                saved = json.load(fp)
+        self.assertEqual(result.get("mirror"), "skipped/unverified")
+        self.assertFalse(result.get("modified"))
+        self.assertEqual(saved["health"], "active")
+        self.assertEqual(saved["github"]["lastPush"], "2022-03-03")
+
+
+class LicenseKeepTests(unittest.TestCase):
+    def test_libreoffice_github_gpl_does_not_replace_mpl(self):
+        import license_keep
+        self.assertFalse(license_keep.should_apply_github_spdx("libreoffice", "MPL-2.0", "GPL-3.0"))
+        self.assertEqual(license_keep.LICENSE_KEEP["libreoffice"], "MPL-2.0")
+
+    def test_noassertion_does_not_replace(self):
+        import license_keep
+        self.assertFalse(license_keep.should_apply_github_spdx("gimp", "GPL-3.0-or-later", "NOASSERTION"))
+        self.assertFalse(license_keep.should_apply_github_spdx("sharex", "GPL-3.0", None))
+
+    def test_unpinned_difference_can_replace(self):
+        import license_keep
+        self.assertTrue(license_keep.should_apply_github_spdx("sharex", "MIT", "GPL-3.0"))
+
+
 if __name__ == "__main__":
     unittest.main()

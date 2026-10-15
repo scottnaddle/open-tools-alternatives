@@ -103,22 +103,24 @@
     "fetchedAt": "2026-10-14",
     "official": {
       "host": "https://gitlab.com/inkscape/inkscape",
-      "lastActivity": "2026-10-12",
+      "lastActivity": "2026-10-15",
       "latestRelease": {
         "tag": "INKSCAPE_1_4",
         "date": "2024-10-12",
         "url": "https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4"
       },
       "license": "other",
-      "fetchedAt": "2026-10-12"
+      "fetchedAt": "2026-10-15"
     }
   },
-  "health": "stale",
+  "health": "active",
   "verification": {
-    "runId": "daily-20261014-142117",
-    "at": "2026-10-14T14:21:17+00:00",
+    "runId": "verify-20261015154735",
+    "at": "2026-10-15T15:47:35+00:00",
     "unresolved": [],
-    "notes": []
+    "notes": [
+      "GitHub lastPush는 2022-03-03(미러). 건강도는 공식 GitLab last_activity_at 2026-10-15 기준 active. 라이선스 키 other는 SPDX로 바꾸지 않고 GPL-3.0-or-later 유지."
+    ]
   },
   "koreanUI": {
     "value": "yes",

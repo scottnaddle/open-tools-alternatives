@@ -1,0 +1,62 @@
+---
+interface Review {
+  url: string;
+  summary: string;
+}
+interface Tutorial {
+  title: string;
+  channel: string;
+  url: string;
+}
+interface Props {
+  reviews?: Review[] | null;
+  tutorials?: Tutorial[] | null;
+}
+const { reviews, tutorials } = Astro.props;
+const reviewList = reviews ?? [];
+const tutorialList = tutorials ?? [];
+const show = reviewList.length + tutorialList.length > 0;
+---
+{show && (
+  <section class="panel media-guide" aria-labelledby="media-guide">
+    <h2 id="media-guide">후기·사용법 영상</h2>
+    <p class="hint">한국어로 된 사용 후기와 영상입니다. 프로젝트 공식 문서와는 따로 모아 두었어요.</p>
+    {reviewList.length > 0 && (
+      <ul class="media-list">
+        {reviewList.map((review) => (
+          <li>
+            <span>{review.summary}</span>
+            <a href={review.url} target="_blank" rel="noopener noreferrer">글 보기</a>
+          </li>
+        ))}
+      </ul>
+    )}
+    {tutorialList.length > 0 && (
+      <ul class="media-list">
+        {tutorialList.map((item) => (
+          <li>
+            <a href={item.url} target="_blank" rel="noopener noreferrer">{item.title}</a>
+            <span class="hint">{item.channel}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+)}
+
+<style>
+  .media-guide { margin: 24px 0; }
+  .media-guide h2 { font-size: 20px; }
+  .media-list { list-style: none; margin: 12px 0 0; padding: 0; }
+  .media-list li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-top: 1px solid var(--line-2, #e6eeea);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .media-list a { font-weight: 700; }
+</style>

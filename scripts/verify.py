@@ -3,6 +3,7 @@
 - github.* 변경 = A등급, license 변경 = C등급(POLICY 1장: 24시간 대기 후 재검증 필요).
 - GITHUB_TOKEN 환경 변수가 있으면 사용."""
 import json, os, glob, re, time, datetime, urllib.request, urllib.parse, urllib.error, uuid, subprocess
+from license_keep import LICENSE_KEEP, should_apply_github_spdx
 
 NOW = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat()
 RUN = "verify-" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -95,24 +96,41 @@ for f in sorted(glob.glob("src/content/tools/*.json")):
                     if gl.get("license"):
                         notes.append(f"공식 저장소 라이선스 키: {gl['license']} (SPDX 표기 확인 후 반영 — C등급)")
             else: unresolved.append("미러인데 공식 저장소 위치 미등록")
-        # 라이선스 (C등급)
+        # 라이선스 (C등급). 고정 목록은 GitHub SPDX로 덮지 않는다.
         spdx = (r.get("license") or {}).get("spdx_id")
         lic = t["license"]
-        if spdx and spdx != "NOASSERTION":
-            if lic["value"] != spdx:
-                record(tid, "license", lic["value"], spdx, [src(api + "/license", "license.spdx_id")], "C")
-                notes.append("라이선스 변경은 C등급: 24시간 뒤 재검증 일치해야 게시")
+        if tid in LICENSE_KEEP:
+            pinned = LICENSE_KEEP[tid]
+            if lic["value"] != pinned:
+                notes.append(f"라이선스 고정값 {pinned} 과 카탈로그 값 {lic['value']} 이 다름 — 자동으로 바꾸지 않음")
+            elif spdx and spdx not in (pinned, "NOASSERTION"):
+                notes.append(f"GitHub API spdx={spdx} 는 고정값 {pinned} 과 다름 — 공식·원문 값을 유지")
+        elif should_apply_github_spdx(tid, lic["value"], spdx):
+            record(tid, "license", lic["value"], spdx, [src(api + "/license", "license.spdx_id")], "C")
+            notes.append("라이선스 변경은 C등급: 24시간 뒤 재검증 일치해야 게시")
+            t["license"] = {"value": spdx, "status": "verified", "lastVerified": NOW,
+                            "sources": [src(api + "/license", f"spdx_id={spdx}")]}
+        elif spdx and spdx != "NOASSERTION" and lic["value"] == spdx:
             t["license"] = {"value": spdx, "status": "verified", "lastVerified": NOW,
                             "sources": [src(api + "/license", f"spdx_id={spdx}")]}
         else:
             unresolved.append(f"라이선스 자동 판별 불가(spdx={spdx}) — 라이선스 파일 원문 확인 필요")
-            t["license"]["sources"] = [src(api + "/license", f"spdx_id={spdx}")] + [s for s in lic["sources"] if s["method"] == "manual-seed"]
-        # 활동 상태 (POLICY 4장 규칙). 미러면 공식 저장소 활동 기준
-        ref = (g.get("official") or {}).get("lastActivity") or g["lastPush"]
-        d = (datetime.date.today() - datetime.date.fromisoformat(ref[:10])).days
-        h = "archived" if g["archived"] else "stale" if d > 180 else "slowing" if d > 90 else "active"
-        if t["health"] != h:
-            record(tid, "health", t["health"], h, [src(api, f"기준일 {ref[:10]}")], "C" if h in ("stale", "archived") else "A"); t["health"] = h
+            if tid not in LICENSE_KEEP:
+                t["license"]["sources"] = [src(api + "/license", f"spdx_id={spdx}")] + [s for s in lic["sources"] if s["method"] == "manual-seed"]
+        # 활동 상태 (POLICY 4장 규칙).
+        # 알려진 GitHub 미러는 공식 저장소 활동일만 쓴다. 미러 lastPush가 얼어 있으면
+        # 그 날짜로 stale을 만들지 않는다.
+        if repo in OFFICIAL_HOMES:
+            ref = str((g.get("official") or {}).get("lastActivity") or "")[:10]
+            if not ref:
+                notes.append("공식 저장소 활동일을 못 얻어 GitHub 미러 lastPush로 건강도를 바꾸지 않음")
+        else:
+            ref = str(g.get("lastPush") or "")[:10]
+        if ref:
+            d = (datetime.date.today() - datetime.date.fromisoformat(ref[:10])).days
+            h = "archived" if g["archived"] else "stale" if d > 180 else "slowing" if d > 90 else "active"
+            if t["health"] != h:
+                record(tid, "health", t["health"], h, [src(api, f"기준일 {ref[:10]}")], "C" if h in ("stale", "archived") else "A"); t["health"] = h
         if home and not t["officialSite"]["value"]:
             notes.append(f"GitHub homepage 필드: {home} (공식 사이트 후보, 미반영 — B등급·공식 사이트 확인 필요)")
     t["verification"] = {"runId": RUN, "at": NOW, "unresolved": unresolved, "notes": notes}

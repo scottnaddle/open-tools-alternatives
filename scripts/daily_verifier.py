@@ -4,6 +4,7 @@ C등급은 24시간 뒤 재확인 일치해야 게시(commit 'pending-recheck' �
 --apply 없이 실행하면 PR만 생성하고 main에 직접 커밋하지 않음."""
 
 import json, os, sys, glob, datetime, urllib.request, urllib.parse, urllib.error, uuid, subprocess, time, hashlib
+from license_keep import LICENSE_KEEP
 
 # 비-GitHub 호스트의 403/429는 짧게 재시도한 뒤 건너뛴다.
 # GitHub API 한도만 전체 실행을 중단한다(SystemExit).
@@ -29,9 +30,12 @@ LICENSE_TARGETS = {
         "spdx": "LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND LicenseRef-unRAR-restriction",
     },
     "gimp": {
-        "urls": ["https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING"],
-        "must": ["GNU GENERAL PUBLIC LICENSE", "Version 3, 29 June 2007"],
-        "spdx": "GPL-3.0",
+        "urls": [
+            "https://gitlab.gnome.org/GNOME/gimp/-/raw/master/app/app.c",
+            "https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING",
+        ],
+        "must": ["either version 3 of the License, or (at your option) any later version"],
+        "spdx": "GPL-3.0-or-later",
     },
     "inkscape": {
         "urls": ["https://gitlab.com/inkscape/inkscape/-/raw/master/COPYING"],
@@ -161,7 +165,40 @@ def apply_official_mirror(tid, g, changes):
             rid = record(tid, "github.latestRelease", g.get("latestRelease"), gl["release"], [src(gl["release"]["url"], "공식 저장소 releases API", "release-assets")], "A")
             g["latestRelease"] = gl["release"]
             changes.append({"field": "github.latestRelease", "before": g.get("latestRelease"), "after": gl["release"], "tier": "A", "record": rid})
+    # 건강도는 GitHub 미러의 lastPush가 아니라 이 활동일로 계산한다.
+    activity = str(gl.get("lastActivity") or "")[:10]
+    official = dict(g.get("official") or {})
+    changed = False
+    if gl.get("web") and official.get("host") != gl["web"]:
+        official["host"] = gl["web"]
+        changed = True
+    if activity and official.get("lastActivity") != activity:
+        official["lastActivity"] = activity
+        changed = True
+    if gl.get("license") and official.get("license") != gl.get("license"):
+        official["license"] = gl.get("license")
+        changed = True
+    if changed:
+        official["fetchedAt"] = NOW[:10]
+        g["official"] = official
     return None
+
+
+def activity_for_health(g, mirror_status):
+    """건강도 기준일.
+
+    알려진 GitHub 미러는 공식 저장소 활동일을 쓴다.
+    공식 저장소를 못 보고 예전에 받아 둔 활동일도 없으면, 얼어 있는
+    GitHub lastPush로 stale을 만들지 않는다.
+    """
+    repo = g.get("repo") or ""
+    if repo in OFFICIAL_HOMES:
+        official = (g.get("official") or {}).get("lastActivity")
+        if official:
+            return str(official)[:10]
+        if mirror_status == "skipped/unverified":
+            return ""
+    return str(g.get("lastPush") or "")[:10]
 
 def check_license_text(tid, cfg):
     """라이선스 원문 확인 (C등급)"""
@@ -232,12 +269,16 @@ def process_tool(f):
     
     # 미러 체크 — 외부 호스트 실패는 skipped/unverified 로만 남기고 값은 유지
     n_before = len(changes)
+    before_activity = (g.get("official") or {}).get("lastActivity")
     mirror_status = apply_official_mirror(tid, g, changes)
-    if len(changes) != n_before:
+    if len(changes) != n_before or (g.get("official") or {}).get("lastActivity") != before_activity:
         modified = True
     
     # C등급: 라이선스 (제안만, 24시간 뒤 재확인 필요)
-    if tid in LICENSE_TARGETS:
+    # LICENSE_KEEP에 있는 값은 GitHub SPDX나 다른 표기로 되돌리지 않는다.
+    pinned = LICENSE_KEEP.get(tid)
+    targets_disagree = pinned and tid in LICENSE_TARGETS and LICENSE_TARGETS[tid]["spdx"] != pinned
+    if tid in LICENSE_TARGETS and not targets_disagree:
         cfg = LICENSE_TARGETS[tid]
         try:
             new_spdx, srcs = check_license_text(tid, cfg)
@@ -285,15 +326,16 @@ def process_tool(f):
         except Exception as e:
             pass  # 라이선스 원문 확인 실패해도 계속
     
-    # health 상태 계산
-    ref = g.get("lastPush", "")
+    # health 상태 계산. 미러는 공식 저장소 활동일(없으면 기존 건강도 유지).
+    ref = activity_for_health(g, mirror_status)
     if ref:
         d = (datetime.date.today() - datetime.date.fromisoformat(ref[:10])).days
         h = "archived" if g["archived"] else "stale" if d > 180 else "slowing" if d > 90 else "active"
         if t["health"] != h:
-            rid = record(tid, "health", t["health"], h, [src(api, f"기준일 {ref[:10]}")], "C" if h in ("stale", "archived") else "A")
+            before_h = t["health"]
+            rid = record(tid, "health", before_h, h, [src(api, f"기준일 {ref[:10]}")], "C" if h in ("stale", "archived") else "A")
             t["health"] = h
-            changes.append({"field": "health", "before": t["health"], "after": h, "tier": "C" if h in ("stale", "archived") else "A", "record": rid})
+            changes.append({"field": "health", "before": before_h, "after": h, "tier": "C" if h in ("stale", "archived") else "A", "record": rid})
             modified = True
     
     t["verification"] = {"runId": RUN, "at": NOW, "unresolved": [], "notes": []}

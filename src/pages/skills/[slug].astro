@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Mono from '../../components/Mono.astro';
 import Changelog from '../../components/Changelog.astro';
+import MediaGuide from '../../components/MediaGuide.astro';
 import { col } from '../../lib/facts';
 import { absUrl, breadcrumbLd, cut } from '../../lib/seo';
 
@@ -116,6 +117,8 @@ const seoDesc = cut(data.description, 150);
           <a class="ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
         </div>
       </section>
+
+      <MediaGuide reviews={data.koreanReviews} tutorials={data.tutorials} />
 
       <section aria-labelledby="skill-source">
         <h2 id="skill-source">출처</h2>

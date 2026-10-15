@@ -27,6 +27,9 @@ export const TOOL_SYNONYMS: Record<string, string[]> = {
   
   // 문서 (Documents)
   'h2orestart': ['한글 필터', 'HWP', '한글', '한컴오피스', '한컴 대신', '문서 편집'],
+  'libreoffice': ['리브레오피스', '오피스', '한글', 'HWP', '한컴 대신', '문서 편집'],
+  'hop': ['홉', 'HOP', 'HWP', 'HWPX', '한글', '한컴 대신', '한컴오피스'],
+  'rhwp': ['rhwp', 'HWP', 'HWPX', '한글', '한컴 대신', '웹 한글'],
 };
 
 // App to tool mapping for search
@@ -39,7 +42,7 @@ export const APP_TOOL_MAP: Record<string, string[]> = {
   'bandicam-ocam': ['obs-studio'],
   'visio-almind': ['draw-io'],
   'file-transfer': ['localsend'],
-  'hancom-office': ['h2orestart'],
+  'hancom-office': ['hop', 'rhwp', 'h2orestart', 'libreoffice'],
 };
 
 // Category to task terms

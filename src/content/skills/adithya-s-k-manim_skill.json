@@ -1,0 +1,19 @@
+{
+  "name": "Manim Skill",
+  "slug": "adithya-s-k-manim_skill",
+  "category": "영상·미디어",
+  "description": "3Blue1Brown 스타일 수학·과학 개념 애니메이션(Manim)을 에이전트가 만들도록 돕는 스킬입니다. 함수, 기하, 물리 개념 설명 영상 제작에 쓸 수 있습니다.",
+  "usageScope": "수업용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/adithya-s-k/manim_skill",
+  "dateChecked": "2026-10-15",
+  "previewType": "none",
+  "github": {
+    "repo": "adithya-s-k/manim_skill",
+    "stars": 1173,
+    "createdAt": "2026-01-22T08:18:47Z",
+    "license": "MIT"
+  }
+}

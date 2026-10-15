@@ -10,10 +10,12 @@ TARGETS = {
             "spdx": "LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND LicenseRef-unRAR-restriction",
             "note": "대부분 GNU LGPL 2.1 이상, Rar* 파일은 LGPL+unRAR 제한, 일부 BSD 3/2-clause, 일부 public domain",
             "plainKo": "대부분 자유롭게 쓰고 나눌 수 있는 LGPL 라이선스예요. 다만 RAR 압축 풀기 부분은 'RAR 압축 방식을 새로 만드는 데 쓰면 안 된다'는 조건(unRAR 제한)이 붙어 있어요. 학교에서 설치해 쓰는 데는 이 조건이 걸리지 않아요."},
-  "gimp": {"urls": ["https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING"],
-           "must": ["GNU GENERAL PUBLIC LICENSE", "Version 3, 29 June 2007"],
-           "spdx": "GPL-3.0",
-           "note": "COPYING은 GPL v3 전문. 'or later' 근거 없음 → 사용자 결정(10-13)으로 GPL-3.0 유지"},
+  "gimp": {"urls": ["https://gitlab.gnome.org/GNOME/gimp/-/raw/master/app/app.c",
+                    "https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING"],
+           "must": ["either version 3 of the License, or (at your option) any later version"],
+           "spdx": "GPL-3.0-or-later",
+           "note": "app.c 헤더가 GPL-3.0 or later(GPL-3.0+). GitHub API는 NOASSERTION.",
+           "plainKo": "GIMP는 GPL 3.0 또는 그 이후 버전(GPL-3.0+)으로 공개돼 있어요. GitHub는 라이선스를 비워 두지만, 소스 헤더를 기준으로 적었습니다."},
   "inkscape": {"urls": ["https://gitlab.com/inkscape/inkscape/-/raw/master/COPYING"],
                "must": ["the complete binaries of Inkscape are currently covered by the terms of GNU GPL version 3 or later",
                         "Most Inkscape source code is available under the GNU General Public License, version 2 or later"],
@@ -40,6 +42,10 @@ for tid, cfg in TARGETS.items():
     v = t["verification"]
     if not ok:
         v["unresolved"].append("라이선스 원문에서 기대 문구를 찾지 못함 — 판정 보류"); json.dump(t, open(p, "w"), ensure_ascii=False, indent=2); continue
+    # 이미 같은 SPDX로 확정돼 있으면 NOASSERTION 제안을 다시 열지 않는다.
+    if t["license"].get("value") == cfg["spdx"] and not t.get("pendingLicense"):
+        print(tid, cfg["spdx"], "kept")
+        continue
     prev = t.get("pendingLicense")
     if apply and prev and prev["value"] == cfg["spdx"] and [s["excerpt"][-20:] for s in prev["sources"]] == [s["excerpt"][-20:] for s in srcs]:
         before = t["license"]["value"]

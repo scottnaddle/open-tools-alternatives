@@ -6,22 +6,152 @@
   "bundle": 6,
   "procurementNote": null,
   "gap": {
-    "value": "HWP 파일을 열어 보는 건 되지만, 편집 후 서식이 그대로 유지되진 않아요.",
+    "value": "HOP와 rhwp로 HWP를 열고 고칠 수 있어요. H2Orestart는 LibreOffice에서 파일을 여는 쪽에 가깝고, 한컴과 서식이 똑같은지는 아직 확인 중이에요.",
     "status": "unverified",
     "lastVerified": null,
     "sources": [
       {
-        "url": "https://school-edtech.kr",
-        "fetchedAt": "2026-10-12T00:00:00+09:00",
-        "excerpt": "씨앗 데이터 조사값",
-        "method": "manual-seed"
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "HWP/HWPX 열기, HWP 저장, PDF 내보내기",
+        "method": "readme"
+      },
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "설치 없이 HWP/HWPX 뷰어/에디터. 온라인 데모가 있다.",
+        "method": "readme"
+      },
+      {
+        "url": "https://github.com/ebandal/H2Orestart#readme",
+        "fetchedAt": "2026-10-13T08:00:00+00:00",
+        "excerpt": "LibreOffice에서 HWP/HWPX를 연다. 쓰기는 실험적.",
+        "method": "readme"
       }
     ]
   },
   "alternatives": [
     {
+      "tool": "hop",
+      "summary": "PC에서 HWP·HWPX를 열고 편집한 뒤 저장하거나 PDF로 보낼 수 있어요",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "부분 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://github.com/golbin/hop#readme",
+            "fetchedAt": "2026-10-15T15:45:00+00:00",
+            "excerpt": "HWP/HWPX 데스크탑 편집 앱. 한컴오피스 전체(표 계산·발표)는 다루지 않음.",
+            "method": "readme"
+          }
+        ]
+      },
+      "can": {
+        "value": [
+          "HWP/HWPX 문서 열기",
+          "HWP 저장",
+          "PDF로 내보내기"
+        ],
+        "status": "verified",
+        "lastVerified": "2026-10-15T15:45:00+00:00",
+        "sources": [
+          {
+            "url": "https://github.com/golbin/hop#readme",
+            "fetchedAt": "2026-10-15T15:45:00+00:00",
+            "excerpt": "할 수 있는 일: HWP/HWPX 문서 열기, HWP 문서 저장, PDF로 내보내기",
+            "method": "readme"
+          }
+        ]
+      },
+      "cannot": {
+        "value": [
+          "한컴오피스의 표 계산·발표는 범위 밖",
+          "한컴과 서식이 똑같은지는 확인 전"
+        ],
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://github.com/golbin/hop#readme",
+            "fetchedAt": "2026-10-15T15:45:00+00:00",
+            "excerpt": "README는 HWP/HWPX 문서 편집만 설명한다. 서식 완전 호환은 적혀 있지 않다.",
+            "method": "readme"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "rhwp",
+      "summary": "설치 없이 브라우저에서 HWP를 보고 편집해요",
+      "installDifficulty": "쉬움",
+      "level": {
+        "value": "부분 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://github.com/edwardkim/rhwp#readme",
+            "fetchedAt": "2026-10-15T15:45:00+00:00",
+            "excerpt": "온라인 데모로 HWP/HWPX를 보고 편집. 한컴 전체 제품은 아님.",
+            "method": "readme"
+          }
+        ]
+      },
+      "can": {
+        "value": [
+          "설치 없이 브라우저에서 열기",
+          "HWP/HWPX 보기·편집·저장"
+        ],
+        "status": "verified",
+        "lastVerified": "2026-10-15T15:45:00+00:00",
+        "sources": [
+          {
+            "url": "https://github.com/edwardkim/rhwp#readme",
+            "fetchedAt": "2026-10-15T15:45:00+00:00",
+            "excerpt": "설치 없이 연다. HWP 편집 저장, HWPX 의미 보존 저장.",
+            "method": "readme"
+          }
+        ]
+      },
+      "cannot": {
+        "value": [
+          "한컴과 서식이 똑같은지는 확인 전"
+        ],
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://github.com/edwardkim/rhwp#readme",
+            "fetchedAt": "2026-10-15T15:45:00+00:00",
+            "excerpt": "뷰어/에디터라고 소개한다. 한컴 문서와 서식이 같다는 문장은 없다.",
+            "method": "readme"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "h2orestart",
+      "summary": "LibreOffice에 확장을 넣어 HWP·HWPX를 열어요. 편집 후 서식은 제한적이에요",
+      "installDifficulty": "보통",
+      "level": {
+        "value": "부분 대체",
+        "status": "unverified",
+        "lastVerified": null,
+        "sources": [
+          {
+            "url": "https://github.com/ebandal/H2Orestart#readme",
+            "fetchedAt": "2026-10-13T08:00:00+00:00",
+            "excerpt": "HWP/HWPX file import filter for LibreOffice. Write support is experimental",
+            "method": "readme"
+          }
+        ]
+      }
+    },
+    {
       "tool": "libreoffice",
-      "summary": "무료 오피스 프로그램. H2Orestart 확장으로 HWP 읽기 가능",
+      "summary": "문서·표·발표용 무료 오피스. HWP는 H2Orestart 확장이 필요해요",
       "installDifficulty": "쉬움",
       "level": {
         "value": "부분 대체",
@@ -33,24 +163,6 @@
             "fetchedAt": "2026-10-13T08:00:00+00:00",
             "excerpt": "LibreOffice with H2Orestart extension can read HWP files",
             "method": "official-site"
-          }
-        ]
-      }
-    },
-    {
-      "tool": "h2orestart",
-      "summary": "LibreOffice에 확장을 설치해 HWP·HWPX 열기. 편집 호환은 제한적",
-      "installDifficulty": "보통",
-      "level": {
-        "value": "부분 대체",
-        "status": "unverified",
-        "lastVerified": null,
-        "sources": [
-          {
-            "url": "https://school-edtech.kr",
-            "fetchedAt": "2026-10-12T00:00:00+09:00",
-            "excerpt": "씨앗 데이터 조사값",
-            "method": "manual-seed"
           }
         ]
       }

@@ -78,6 +78,10 @@
       }
     ]
   },
+  "licenseNote": {
+    "note": "NanaZip 자체 코드 MIT, 7-Zip 유래 코드는 7-Zip 라이선스. GitHub API는 NOASSERTION.",
+    "plainKo": "NanaZip이 직접 만든 코드는 MIT 라이선스로 자유롭게 쓸 수 있어요. 안에 들어 있는 7-Zip 코드는 7-Zip 라이선스(대부분 LGPL, RAR 부분은 추가 조건)를 따르고, 로고·아이콘은 바꾸지 않고 써야 해요(CC BY-ND 4.0)."
+  },
   "officialSite": {
     "value": "https://github.com/M2Team/NanaZip",
     "status": "verified",

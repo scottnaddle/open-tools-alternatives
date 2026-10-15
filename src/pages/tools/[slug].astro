@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Status from '../../components/Status.astro';
 import Mono from '../../components/Mono.astro';
 import Changelog from '../../components/Changelog.astro';
+import MediaGuide from '../../components/MediaGuide.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { PLAT, HEALTH } from '../../lib/facts';
@@ -80,6 +81,7 @@ const seoDesc = cut(t.schoolUse.value, 150);
             <td>
               {lic} <Status fact={t.license} />
               {t.pendingLicense && <><br/><small class="hint">{t.pendingLicense.note} — 확인 시각 {t.pendingLicense.proposedAt.slice(0, 10)} 이후 24시간 뒤 적용 가능</small></>}
+              {!t.pendingLicense && t.licenseNote && <><br/><small class="hint">{t.licenseNote.plainKo || t.licenseNote.note}</small></>}
             </td>
           </tr>
           <tr>
@@ -111,6 +113,8 @@ const seoDesc = cut(t.schoolUse.value, 150);
         </tbody>
       </table>
     </div>
+
+    <MediaGuide reviews={t.koreanReviews} tutorials={t.tutorials} />
 
     {t.notes && t.notes.length > 0 && (
       <div class="panel" style="background:var(--warn-tint);color:#4A3000">

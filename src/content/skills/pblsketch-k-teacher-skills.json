@@ -1,0 +1,19 @@
+{
+  "name": "K-Teacher Skills",
+  "slug": "pblsketch-k-teacher-skills",
+  "category": "수업자료·발표",
+  "description": "한국 교사를 위한 수업 설계·평가 우선 설계(백워드)·학급 운영 스킬 묶음입니다. 처음부터 한국어로 작성되어 별도 번역이 필요 없습니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "MIT",
+  "sourceUrl": "https://github.com/pblsketch/k-teacher-skills",
+  "dateChecked": "2026-10-15",
+  "previewType": "none",
+  "github": {
+    "repo": "pblsketch/k-teacher-skills",
+    "stars": 20,
+    "createdAt": "2026-05-26T03:51:58Z",
+    "license": "MIT"
+  }
+}
