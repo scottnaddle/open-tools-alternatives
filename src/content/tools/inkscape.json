@@ -103,17 +103,17 @@
     "fetchedAt": "2026-10-14",
     "official": {
       "host": "https://gitlab.com/inkscape/inkscape",
-      "lastActivity": "2026-10-12",
+      "lastActivity": "2026-10-15",
       "latestRelease": {
         "tag": "INKSCAPE_1_4",
         "date": "2024-10-12",
         "url": "https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4"
       },
       "license": "other",
-      "fetchedAt": "2026-10-12"
+      "fetchedAt": "2026-10-15"
     }
   },
-  "health": "stale",
+  "health": "active",
   "verification": {
     "runId": "daily-20261014-142117",
     "at": "2026-10-14T14:21:17+00:00",

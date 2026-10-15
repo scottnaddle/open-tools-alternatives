@@ -65,15 +65,19 @@
   "license": {
     "value": "MPL-2.0",
     "status": "verified",
-    "lastVerified": "2026-10-13T08:00:00+00:00",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
     "sources": [
       {
         "url": "https://www.libreoffice.org/about-us/licenses/",
-        "fetchedAt": "2026-10-13T08:00:00+00:00",
-        "excerpt": "LibreOffice is licensed under the Mozilla Public License v2.0",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "LibreOffice is made available subject to the terms of the Mozilla Public License v2.0",
         "method": "official-site"
       }
     ]
+  },
+  "licenseNote": {
+    "note": "GitHub API license.spdx_id는 GPL-3.0. 공식 라이선스 페이지는 MPL-2.0이라 카탈로그 값을 유지한다.",
+    "plainKo": "GitHub에는 GPL-3.0으로 보이지만, 공식 라이선스 페이지는 Mozilla Public License v2.0입니다. 여기 적힌 값은 공식 페이지를 따릅니다."
   },
   "officialSite": {
     "value": "https://www.libreoffice.org",

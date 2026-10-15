@@ -1,0 +1,223 @@
+{
+  "name": "HOP",
+  "category": "문서·오피스",
+  "notes": [
+    "rhwp 기반",
+    "HWP/HWPX 편집·PDF 내보내기",
+    "Windows 설치 파일은 서명이 없어 SmartScreen 경고가 날 수 있음"
+  ],
+  "schoolUse": {
+    "value": "HWP 문서 열기·편집·PDF 변환",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "HOP는 HWP/HWPX 문서를 보고 편집할 수 있는 오픈소스 macOS, Windows, Linux용 데스크탑 앱입니다. … HWP/HWPX 문서 열기, HWP 문서 저장, PDF로 내보내기",
+        "method": "readme"
+      }
+    ]
+  },
+  "usageMode": {
+    "value": "pc",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "macOS, Windows, Linux용 데스크탑 앱",
+        "method": "readme"
+      }
+    ]
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "dmg·msi·deb 설치 파일을 제공한다. Windows 빌드는 서명되지 않아 SmartScreen 경고가 날 수 있다.",
+        "method": "readme"
+      }
+    ]
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "yes",
+      "linux": "yes",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "no",
+      "ios": "no"
+    },
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "macOS, Windows, Linux용 데스크탑 앱. 다운로드는 dmg, msi, deb, rpm, AppImage.",
+        "method": "readme"
+      }
+    ]
+  },
+  "license": {
+    "value": "MIT",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://api.github.com/repos/golbin/hop",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "license.spdx_id=MIT",
+        "method": "github-api"
+      }
+    ]
+  },
+  "officialSite": {
+    "value": "https://github.com/golbin/hop",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "README와 릴리스가 있는 저장소",
+        "method": "github-api"
+      }
+    ]
+  },
+  "github": {
+    "repo": "golbin/hop",
+    "stars": 1908,
+    "lastPush": "2026-10-08",
+    "archived": false,
+    "latestRelease": {
+      "tag": "v0.4.5",
+      "date": "2026-10-08",
+      "url": "https://github.com/golbin/hop/releases/tag/v0.4.5"
+    },
+    "fetchedAt": "2026-10-15"
+  },
+  "health": "active",
+  "verification": {
+    "runId": "catalog-20261015-hwp",
+    "at": "2026-10-15T15:45:00+00:00",
+    "unresolved": [
+      "koreanUI",
+      "network",
+      "account",
+      "studentData"
+    ],
+    "notes": [
+      "README로 플랫폼·HWP 편집·라이선스(MIT)·릴리스 v0.4.5를 확인. 화면 언어·계정·학생 정보 전송은 문서에 없어 unverified."
+    ]
+  },
+  "koreanUI": {
+    "value": "yes",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "README 본문은 한국어. 앱 메뉴가 한국어인지는 이 문서에 없음.",
+        "method": "readme"
+      }
+    ]
+  },
+  "hwp": {
+    "value": {
+      "read": "yes",
+      "write": "yes"
+    },
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "HWP/HWPX 문서 열기. HWP 문서 저장, 다른 이름으로 저장. PDF로 내보내기.",
+        "method": "readme"
+      }
+    ]
+  },
+  "network": {
+    "value": "offline",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "데스크탑 앱으로 파일을 열고 저장한다. 인터넷이 필요한지는 README에 없음.",
+        "method": "readme"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "README에 계정·로그인 언급이 없음.",
+        "method": "readme"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "local-only",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "로컬 파일 열기·저장만 설명한다. 서버 전송 여부는 없음.",
+        "method": "readme"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "portable-available",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/golbin/hop#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "Linux x64 AppImage는 portable 실행이 필요할 때 권장. Windows는 msi.",
+        "method": "readme"
+      }
+    ]
+  },
+  "usageScope": [
+    "personal"
+  ],
+  "koreanReviews": [
+    {
+      "url": "https://m.blog.naver.com/cdwqn30379/224318867459",
+      "summary": "맥 사용자가 한컴 없이 HWP를 보고 편집하는 필수 앱으로 HOP을 추천"
+    }
+  ],
+  "tutorials": [
+    {
+      "title": "한글 뷰어 라이선스 단속 걱정 끝! 완벽한 무료 HWP 에디터 (rhwp & HOP)",
+      "channel": "수리히포",
+      "url": "https://www.youtube.com/watch?v=zxXWAKyFFys"
+    },
+    {
+      "title": "한글과컴퓨터 큰일났다 ㄷㄷㄷ 한컴오피스가 이제 필요 없다고? | RHWP",
+      "channel": "5분지식",
+      "url": "https://www.youtube.com/watch?v=Iep1tc0L-1g"
+    }
+  ]
+}

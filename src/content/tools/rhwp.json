@@ -1,0 +1,206 @@
+{
+  "name": "rhwp",
+  "category": "문서·오피스",
+  "notes": [
+    "Rust+WASM",
+    "웹 데모·VS Code 확장",
+    "설치 없이 브라우저에서 사용"
+  ],
+  "schoolUse": {
+    "value": "설치 없이 브라우저에서 HWP 보기·편집",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "HWP/HWPX 파일을 무료, 설치 없이 연다. Rust + WebAssembly 기반 HWP/HWPX 뷰어/에디터. 온라인 데모 https://edwardkim.github.io/rhwp/",
+        "method": "readme"
+      }
+    ]
+  },
+  "usageMode": {
+    "value": "web",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "온라인 데모와 웹 에디터를 제공한다. 설치 없이 사용할 수 있다고 적혀 있다.",
+        "method": "readme"
+      }
+    ]
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "무료, 설치 없이. 온라인 데모로 바로 연다.",
+        "method": "readme"
+      }
+    ]
+  },
+  "platforms": {
+    "value": {
+      "windows": "partial",
+      "macos": "partial",
+      "linux": "partial",
+      "web": "official",
+      "mobileWeb": "partial",
+      "android": "no",
+      "ios": "no"
+    },
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "온라인 데모, 브라우저 확장, VS Code 확장이 있다. 전용 데스크톱 설치 파일과 휴대폰 앱은 이 부분에서 확인하지 못했다.",
+        "method": "readme"
+      }
+    ]
+  },
+  "license": {
+    "value": "MIT",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://api.github.com/repos/edwardkim/rhwp",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "license.spdx_id=MIT",
+        "method": "github-api"
+      }
+    ]
+  },
+  "officialSite": {
+    "value": "https://github.com/edwardkim/rhwp",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "README와 릴리스가 있는 저장소. 데모는 https://edwardkim.github.io/rhwp/",
+        "method": "github-api"
+      }
+    ]
+  },
+  "github": {
+    "repo": "edwardkim/rhwp",
+    "stars": 3949,
+    "lastPush": "2026-10-15",
+    "archived": false,
+    "latestRelease": {
+      "tag": "v0.8.7",
+      "date": "2026-10-06",
+      "url": "https://github.com/edwardkim/rhwp/releases/tag/v0.8.7"
+    },
+    "fetchedAt": "2026-10-15"
+  },
+  "health": "active",
+  "verification": {
+    "runId": "catalog-20261015-hwp",
+    "at": "2026-10-15T15:45:00+00:00",
+    "unresolved": [
+      "platforms",
+      "koreanUI",
+      "network",
+      "account",
+      "studentData"
+    ],
+    "notes": [
+      "README로 웹 데모·HWP 편집·라이선스(MIT)·릴리스 v0.8.7을 확인. 별 수는 2026-10-15 GitHub API 3949(조사 보고 3948). 기기별 지원과 데이터 이동은 unverified."
+    ]
+  },
+  "koreanUI": {
+    "value": "yes",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "README는 한국어가 기본(한국어 | English). 웹 에디터 메뉴 언어는 이 문장만으로 확인하지 않음.",
+        "method": "readme"
+      }
+    ]
+  },
+  "hwp": {
+    "value": {
+      "read": "yes",
+      "write": "yes"
+    },
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "HWP/HWPX 뷰어/에디터. 저장: HWP 편집 저장, HWPX/HML 의미 보존 저장.",
+        "method": "readme"
+      }
+    ]
+  },
+  "network": {
+    "value": "online",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "온라인 데모를 안내한다. 파일을 연 뒤 오프라인으로 되는지는 없음.",
+        "method": "readme"
+      }
+    ]
+  },
+  "account": {
+    "value": "none",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "데모 안내 문단에 계정·로그인 언급이 없음.",
+        "method": "readme"
+      }
+    ]
+  },
+  "studentData": {
+    "value": "local-only",
+    "status": "unverified",
+    "lastVerified": null,
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "WASM 파서/렌더러로 설명. 문서 업로드 여부는 README 이 부분에서 확인하지 못함.",
+        "method": "readme"
+      }
+    ]
+  },
+  "adminRequired": {
+    "value": "no",
+    "status": "verified",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
+    "sources": [
+      {
+        "url": "https://github.com/edwardkim/rhwp#readme",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "무료, 설치 없이 온라인 데모를 연다.",
+        "method": "readme"
+      }
+    ]
+  },
+  "usageScope": [
+    "personal"
+  ]
+}

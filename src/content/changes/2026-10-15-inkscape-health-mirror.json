@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-15T15:45:00+00:00",
+  "agent": "build",
+  "runId": "catalog-20261015-hwp",
+  "target": "tools/inkscape.health",
+  "before": "stale",
+  "after": "active",
+  "sources": [
+    {
+      "url": "https://gitlab.com/api/v4/projects/inkscape%2Finkscape",
+      "fetchedAt": "2026-10-15T15:45:00+00:00",
+      "excerpt": "last_activity_at=2026-10-15. GitHub 미러 inkscape/inkscape 의 lastPush 2022-03-03은 건강도 기준에서 빼었다.",
+      "method": "official-site"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

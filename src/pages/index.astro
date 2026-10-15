@@ -35,7 +35,7 @@ const recent = [...tools.values()].filter((t) => t.data.github.lastPush && !t.da
   .sort((a, b) => String(b.data.github.lastPush).localeCompare(String(a.data.github.lastPush))).slice(0, 5);
 const fetched = recent[0]?.data.github.fetchedAt?.slice(0, 10);
 const md = (s: string) => { const [, m, d] = s.split('-'); return `${+m}월 ${+d}일`; };
-const quick = [['capcut', 'opencut'], ['alzip', '7-zip'], ['hancom-office', 'libreoffice'], ['photoshop', 'gimp']]
+const quick = [['capcut', 'opencut'], ['alzip', '7-zip'], ['hancom-office', 'hop'], ['photoshop', 'gimp']]
   .map(([aid, tid]) => ({ a: apps.find((x) => x.id === aid), t: tools.get(tid) })).filter((x) => x.a && x.t);
 const flagged = [...tools.values()].filter((t) => t.data.github.archived || t.data.health === 'archived');
 ---

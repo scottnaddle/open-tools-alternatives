@@ -65,17 +65,27 @@
     ]
   },
   "license": {
-    "value": "GPL-3.0",
+    "value": "GPL-3.0-or-later",
     "status": "verified",
-    "lastVerified": "2026-10-14T14:21:17+00:00",
+    "lastVerified": "2026-10-15T15:45:00+00:00",
     "sources": [
+      {
+        "url": "https://gitlab.gnome.org/GNOME/gimp/-/raw/master/app/app.c",
+        "fetchedAt": "2026-10-15T15:45:00+00:00",
+        "excerpt": "either version 3 of the License, or (at your option) any later version.",
+        "method": "official-site"
+      },
       {
         "url": "https://gitlab.gnome.org/GNOME/gimp/-/raw/master/COPYING",
         "fetchedAt": "2026-10-14T14:21:17+00:00",
-        "excerpt": "GNU GENERAL PUBLIC LICENSE / Version 3, 29 June 2007 / Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/> / Everyone is permitted to copy and distribute verbatim copies / of this license document, but changing it is not allowed. / Preamble / The GNU General Public License is a free … [sha256 e79e9c8a0c85]",
+        "excerpt": "GNU GENERAL PUBLIC LICENSE / Version 3, 29 June 2007 … [sha256 e79e9c8a0c85]",
         "method": "official-site"
       }
     ]
+  },
+  "licenseNote": {
+    "note": "GitHub API는 NOASSERTION. app.c 헤더는 GPL-3.0 or later. GitLab 라이선스 키는 gpl-3.0+.",
+    "plainKo": "GIMP는 GPL 3.0 또는 그 이후 버전(GPL-3.0+)으로 공개돼 있어요. GitHub는 라이선스를 비워 두지만, 소스 헤더를 기준으로 적었습니다."
   },
   "officialSite": {
     "value": "https://www.gimp.org",
