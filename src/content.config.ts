@@ -182,7 +182,7 @@ const skills = defineCollection({
 
 // 예시 체험 — src/content/skill-demos/<slug>.json. 스킬 상세 페이지의 "예시 체험" 칸.
 // 파일이 없으면 섹션을 그리지 않는다. 형식과 추가 절차는 ops/SKILL_DEMOS.md.
-// 원칙(AGENTS.md 1·2): 교사 상황은 꾸민 예시라 화면에 "예시 데이터" 배지를 늘 붙이고, 만든 방식을 표기한다.
+// 원칙(AGENTS.md 1·2): 교사 상황은 꾸민 예시라 화면에 "꾸민 수업 예시" 배지를 늘 붙이고, 만든 방식을 표기한다.
 // scripts/check_skills.py 가 슬러그 일치와 결과 파일 존재를 같이 확인한다.
 const skillDemos = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/skill-demos' }),
