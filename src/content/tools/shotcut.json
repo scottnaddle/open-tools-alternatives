@@ -90,20 +90,20 @@
   },
   "github": {
     "repo": "mltframework/shotcut",
-    "stars": 15419,
-    "lastPush": "2026-10-13",
+    "stars": 15422,
+    "lastPush": "2026-10-15",
     "archived": false,
     "latestRelease": {
       "tag": "v26.9.27",
       "date": "2026-09-28",
       "url": "https://github.com/mltframework/shotcut/releases/tag/v26.9.27"
     },
-    "fetchedAt": "2026-10-14"
+    "fetchedAt": "2026-10-15"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261014-142117",
-    "at": "2026-10-14T14:21:17+00:00",
+    "runId": "daily-20261015-002314",
+    "at": "2026-10-15T00:23:14+00:00",
     "unresolved": [],
     "notes": []
   },
