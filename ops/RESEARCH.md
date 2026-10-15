@@ -126,7 +126,7 @@
 2. **배포** — 콘텐츠 PR은 사람이 병합한다. main 푸시와 일일 검증 자동 병합은 `ops/RUNBOOK.md` 대로 `deploy.yml`이 처리한다. SSH 키(`ops/DEPLOY_KEY_SETUP.md`)가 없으면 건너뛴다. 수동 실행은 `gh workflow run deploy.yml --ref main`.
 3. 배포 완료 확인 — `gh run watch <run-id>`. 헬스체크(5종) 200 확인
 4. **이슈 close** + 라벨 `agent/published` 추가 + 코멘트 "게시 완료, 라이브 URL"
-5. `STATUS.md` 갱신 — 콘텐츠 수·검증 현황·다음 할 일
+5. 머리글만 갱신 — 기능 PR이 넣어 둔 `ops/status-log/` 를 보고 `python3 scripts/refresh_status_header.py` 로 `STATUS.md`의 `마지막 갱신` 한 줄만 고친다. 공유 절은 그대로 둔다. 그 한 줄은 병합 뒤 후속 커밋으로 올린다.
 
 **핸드오프**: 다음 콘텐츠의 1번 에이전트 슬롯이 받아서 처리.
 
@@ -157,7 +157,7 @@
 3. **제조** — 데이터 JSON 작성, 게이트 로컬 통과, PR
 4. **PR** → **CI 실제 통과 확인** → **병합** (4번 검수와 함께)
 5. **게시** — 사람이 병합하면 `deploy.yml` 이 경로에 맞게 배포한다. 키가 없으면 건너뛴다. 수동 실행은 `gh workflow run deploy.yml --ref main`
-6. **STATUS.md** 갱신
+6. **상태 기록** — 기능 PR은 `ops/status-log/` 만 추가한다. `마지막 갱신` 한 줄은 병합 뒤에 `scripts/refresh_status_header.py` 로 고친다.
 
 자세한 절차는 각 에이전트 섹션(§2~§7) 참고.
 
