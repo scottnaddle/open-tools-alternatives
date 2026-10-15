@@ -8,14 +8,15 @@
   "apiKeyNeeded": false,
   "license": "MIT",
   "sourceUrl": "https://github.com/QingYunA/answer-me-with-html",
-  "dateChecked": "2026-10-14",
+  "dateChecked": "2026-10-15",
   "previewType": "iframe",
   "previewPath": "/skills-outputs/answer-me-with-html-demo.html",
   "github": {
     "repo": "QingYunA/answer-me-with-html",
-    "stars": 3343,
+    "stars": 3373,
     "createdAt": "2026-10-02T09:57:40Z",
     "license": "MIT"
   },
-  "previewMethod": "official-example"
+  "previewMethod": "official-example",
+  "previewNote": "데모에 보이던 중국어 언어 이름을 「중국어」로 옮겼습니다. 프로젝트 이름과 출처는 원본입니다."
 }

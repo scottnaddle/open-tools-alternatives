@@ -1,8 +1,9 @@
+<!-- 화면 문구만 한국어로 옮겼습니다. 프로젝트 이름 huashu-design 과 MIT 출처는 원본입니다. https://github.com/alchaincyf/huashu-design -->
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="ko">
 <head>
 <meta charset="utf-8" />
-<title>huashu-design V2 · c1-ios-prototype · 中文版</title>
+<title>huashu-design V2 · c1-ios-prototype · 한국어</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,8 +24,8 @@
     --cd-green: #2D4A3A;
 
     --serif-en: "Source Serif 4", Georgia, serif;
-    --serif-cn: "Noto Serif SC", "Songti SC", serif;
-    --sans: "Inter", -apple-system, "PingFang SC", sans-serif;
+    --serif-cn: "Noto Serif KR", "Source Serif 4", "Malgun Gothic", "Apple SD Gothic Neo", "WenQuanYi Micro Hei", serif;
+    --sans: "Inter", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", "WenQuanYi Micro Hei", sans-serif;
     --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
   }
   html, body {
@@ -276,7 +277,7 @@
   .wire .g4 { height: 20px; width: 50%; }
   .wire .g5 { height: 52px; margin-top: 24px; }
 
-  /* 2. Home screen — 主屏 · pomodoro */
+  /* 2. 첫 화면 · 뽀모도로 */
   .home-screen { padding: 40px 28px; color: var(--cd-ink); }
   .home-screen .kicker {
     font-family: var(--mono);
@@ -332,7 +333,7 @@
     margin-right: 10px;
   }
 
-  /* 3. Timer · 计时 · ring */
+  /* 3. 시간 재기 · 고리 */
   .timer-screen {
     padding: 40px 28px;
     color: var(--cd-ink);
@@ -406,7 +407,7 @@
     border-color: transparent;
   }
 
-  /* 4. Stats · 统计 · bar chart */
+  /* 4. 기록 · 막대그래프 */
   .stats-screen { padding: 40px 28px; color: var(--cd-ink); }
   .stats-screen .stats-label {
     font-family: var(--mono);
@@ -464,7 +465,7 @@
     padding: 0 4px;
   }
 
-  /* 5. Settings · 设置 · list */
+  /* 5. 설정 · 목록 */
   .settings-screen { padding: 40px 28px; color: var(--cd-ink); }
   .settings-screen .title-row {
     font-family: var(--serif-cn);
@@ -642,7 +643,7 @@
       <div class="title">~/projects</div>
     </div>
     <div class="tty-body">
-      <div class="comment" id="comment" style="opacity:0">&gt; 说一句话，拿回一个能点的 App</div>
+      <div class="comment" id="comment" style="opacity:0">&gt; 한 문장을 말하면, 눌러 볼 수 있는 앱이 나옵니다</div>
       <div style="margin-top:6px">
         <span class="prompt">$</span><span class="typed" id="typed"></span><span class="cursor" id="ttyCursor"></span>
       </div>
@@ -688,18 +689,18 @@
           <!-- 2. Home -->
           <div class="screen-view" id="view-home">
             <div class="home-screen">
-              <div class="kicker">POMODORO · 专注</div>
-              <div class="title">下一件要做的事</div>
+              <div class="kicker">POMODORO · 집중</div>
+              <div class="title">다음에 할 일</div>
               <div class="time-big">25<span class="sep">:</span>00</div>
-              <div class="sub">写完这一节，休息 5 分钟</div>
-              <div class="cta">开始专注</div>
+              <div class="sub">이 부분을 쓰고, 5분 쉽니다</div>
+              <div class="cta">집중 시작</div>
             </div>
           </div>
 
           <!-- 3. Timer -->
           <div class="screen-view" id="view-timer">
             <div class="timer-screen">
-              <div class="phase">FOCUS · 第 1 轮</div>
+              <div class="phase">FOCUS · 1회</div>
               <div class="ring-wrap">
                 <svg viewBox="0 0 320 320">
                   <circle class="bg-ring" cx="160" cy="160" r="140"/>
@@ -707,12 +708,12 @@
                 </svg>
                 <div class="ring-label">
                   <div class="rl-time" id="ringTime">24:12</div>
-                  <div class="rl-tag">剩余</div>
+                  <div class="rl-tag">남은 시간</div>
                 </div>
               </div>
               <div class="actions">
-                <div class="act-btn">暂停</div>
-                <div class="act-btn primary">跳过</div>
+                <div class="act-btn">잠시 멈춤</div>
+                <div class="act-btn primary">건너뛰기</div>
               </div>
             </div>
           </div>
@@ -720,9 +721,9 @@
           <!-- 4. Stats -->
           <div class="screen-view" id="view-stats">
             <div class="stats-screen">
-              <div class="stats-label">本周 · 统计</div>
-              <div class="stats-hero">23<span class="unit">轮</span></div>
-              <div class="stats-sub">比上周多出 5 轮</div>
+              <div class="stats-label">이번 주 · 기록</div>
+              <div class="stats-hero">23<span class="unit">회</span></div>
+              <div class="stats-sub">지난주보다 5회 많습니다</div>
               <div class="chart" id="chart">
                 <div class="bar dim" style="height:30%"></div>
                 <div class="bar" style="height:52%"></div>
@@ -741,22 +742,22 @@
           <!-- 5. Settings -->
           <div class="screen-view" id="view-settings">
             <div class="settings-screen">
-              <div class="title-row">设置</div>
+              <div class="title-row">설정</div>
               <div class="list">
                 <div class="row">
-                  <span class="k">专注时长</span>
+                  <span class="k">집중 시간</span>
                   <span class="v">25 MIN</span>
                 </div>
                 <div class="row">
-                  <span class="k">白噪音</span>
+                  <span class="k">배경 소리</span>
                   <div class="toggle"></div>
                 </div>
                 <div class="row">
-                  <span class="k">提醒铃声</span>
+                  <span class="k">알림 소리</span>
                   <div class="toggle off"></div>
                 </div>
                 <div class="row">
-                  <span class="k">主题</span>
+                  <span class="k">테마</span>
                   <span class="v">CLAUDE MIST</span>
                 </div>
               </div>
@@ -801,7 +802,7 @@
   <div class="brand-wall" id="brandWall">
     <div class="brand-wordmark" id="brandWord">huashu<span class="dot">·</span>design</div>
     <div class="brand-underline" id="brandLine"></div>
-    <div class="brand-cn" id="brandCn">说一句话 · 拿回一个 App</div>
+    <div class="brand-cn" id="brandCn">한 문장으로 · 앱 하나</div>
   </div>
 
 </div>
@@ -956,7 +957,7 @@
   const schedule = [
     { t: 2.0, view: 'wire',     tabIco: null,       tap: null },
     { t: 3.1, view: 'home',     tabIco: 'home',     tap: null },                 // home materializes (no tap — it's the fill moment)
-    { t: 4.4, view: 'timer',    tabIco: 'timer',    tap: {x: 208, y: 624} },     // tap "开始专注" CTA
+    { t: 4.4, view: 'timer',    tabIco: 'timer',    tap: {x: 208, y: 624} },     // tap "집중 시작" CTA
     { t: 6.3, view: 'stats',    tabIco: 'stats',    tap: {x: 300, y: 810} },     // tap stats tab
     { t: 7.5, view: 'settings', tabIco: 'settings', tap: {x: 370, y: 810} },     // tap settings tab
   ];

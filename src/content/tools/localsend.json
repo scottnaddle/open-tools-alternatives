@@ -90,7 +90,7 @@
   },
   "github": {
     "repo": "localsend/localsend",
-    "stars": 94366,
+    "stars": 94406,
     "lastPush": "2026-10-10",
     "archived": false,
     "latestRelease": {
@@ -98,12 +98,12 @@
       "date": "2026-08-21",
       "url": "https://github.com/localsend/localsend/releases/tag/v1.18.2"
     },
-    "fetchedAt": "2026-10-14"
+    "fetchedAt": "2026-10-15"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261014-142117",
-    "at": "2026-10-14T14:21:17+00:00",
+    "runId": "daily-20261015-002314",
+    "at": "2026-10-15T00:23:14+00:00",
     "unresolved": [],
     "notes": []
   },

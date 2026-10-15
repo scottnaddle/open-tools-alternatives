@@ -1,7 +1,7 @@
 # STATUS.md — 현재 상태 스냅샷
 
 > **에이전트 필독**: 이 파일은 프로젝트의 살아있는 상태입니다. 작업을 마칠 때마다 갱신하세요.
-> 마지막 갱신: 2026-10-15 — 검색 노출: 사이트맵, canonical, 페이지별 한국어 제목·설명, OG 이미지, JSON-LD. 피드 `/alternatives/feed.xml` 은 `new`(새 도구·스킬·페이지)와 `update`(내용 변경)만. 별 수·버전·확인 시각은 제외. 루트 robots.txt와 서치콘솔 확인은 `ops/SEO.md` (소유자).
+> 마지막 갱신: 2026-10-15 — main 병합. 검색 노출(사이트맵, canonical, 페이지별 제목·설명, OG, JSON-LD, 피드 `new`/`update`)과 스킬 예시 중국어→한국어를 함께 유지. 피드는 커밋된 변경만 검사한다.
 
 ## 한 줄 요약
 
@@ -46,6 +46,7 @@
 - [x] **daily-verifier 외부 호스트 403 (2026-10-14)** — GitHub API 한도만 실행을 중단한다. invent.kde.org 같은 비-GitHub 403/429는 짧게 재시도한 뒤 `skipped/unverified`로 남기고 도구 상태는 바꾸지 않는다. 실패한 실행: actions/runs/38572904587
 - [x] **발굴 라벨 (2026-10-14)** — Discover run 38580319310이 `software` 라벨 없음으로 실패. discover·weekly-audit이 `scripts/ensure_labels.sh`로 AGENTS.md 라벨과 `software`/`skill`을 먼저 만든다. `issues: write` 필요.
 - [x] **검색 노출 (2026-10-15)** — sitemap-index, canonical, 페이지별 title/description, OG PNG, JSON-LD, RSS `feed.xml`(`new`/`update`만, 별 수·버전·확인 시각 제외). 소유자 절차는 `ops/SEO.md` (루트 robots.txt, Google·Naver·Daum 확인 변수).
+- [x] **스킬 예시 중국어 (2026-10-15)** — Huashu 앱·모션 화면과 녹화, MapStage 조절 문구, Answer Me With HTML 언어 이름을 한국어로 옮김. 프로젝트 이름·출처 유지. 지도 강 이름 키와, 저장소에 없는 성 이름·손그림 참고 그림은 한자가 남을 수 있음.
 - [ ] **배포 키·브랜치 보호 (소유자)** — `ops/DEPLOY_KEY_SETUP.md` 의 deploy 사용자·시크릿 4개, `ops/BRANCH_PROTECTION.md` 의 Allow auto-merge 와 필수 검사 `build-and-check`. 끝나기 전에는 일일 검증 자동 병합이 경고만 남기고, 배포는 건너뛴다.
 - [ ] `.github/workflows/weekly-audit.yml` (6번 에이전트 자동) + 페이지 변경 이력 아카이빙 표시 — 워크플로 파일은 파싱되게 고쳤고, summary 브랜치 push는 `contents: write`가 필요. 페이지 아카이빙 표시는 도구 페이지 하단에 이미 있음
 - [ ] 오픈스킬 자유구성 페이지 22개(나머지) + 4축 사례/지도안/리뷰 백필

@@ -8,14 +8,15 @@
   "apiKeyNeeded": false,
   "license": "MIT",
   "sourceUrl": "https://github.com/hopechen067/MapStage",
-  "dateChecked": "2026-10-14",
+  "dateChecked": "2026-10-15",
   "previewType": "iframe",
   "previewPath": "/skills-outputs/mapstage-tuner.html",
   "github": {
     "repo": "hopechen067/MapStage",
-    "stars": 473,
+    "stars": 474,
     "createdAt": "2026-08-11T07:53:51Z",
     "license": "MIT"
   },
-  "previewMethod": "official-example"
+  "previewMethod": "official-example",
+  "previewNote": "버튼과 설명은 한국어로 옮겼습니다. 지도의 강·호수 이름 중 확인한 것은 한국어로 적습니다. 원본 지리 데이터와 맞추는 이름은 코드에 한자로 남아 있습니다. 성 이름 파일과 손그림 참고 그림은 이 저장소에 없어, 원본을 열면 한자가 보일 수 있습니다."
 }
