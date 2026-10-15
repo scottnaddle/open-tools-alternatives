@@ -7,6 +7,7 @@
   4) 같은 섹션 안의 출처 접기 중복
   5) 자리표시 '주요 기능 1'
   6) example 4축·'예시 데이터'·확인 단정 문구·'반영 여부를 알려' 공개
+  7) 피드: new/update만, 별 수·버전·확인 시각 제외, guid·페이지 주소·한두 줄 요약
 
 사용법: python3 scripts/check_links.py [dist_dir] (기본 dist)
 """
@@ -14,13 +15,20 @@
 import json
 import os
 import re
+import subprocess
 import sys
+from datetime import datetime
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from html.parser import HTMLParser
+import xml.etree.ElementTree as ET
 
 BASE = os.environ.get("SITE_BASE", "https://edtechnewsroom.com/alternatives")
 INTERNAL_PREFIX = "/alternatives/"
+ROOT = Path(__file__).resolve().parents[1]
 DIST = Path(sys.argv[1] if len(sys.argv) > 1 else "dist")
+# src/pages/feed.xml.ts 의 NOISE 판정과 같게 유지한다.
+NOISE_FIELDS = {"stars", "lastPush", "latestRelease", "fetchedAt", "dateChecked", "createdAt"}
 ASSET_RE = re.compile(r"\.(css|js|map|woff2?|png|jpe?g|gif|svg|ico|webmanifest|mp4|webm|txt|xml)(\?|#|$)")
 
 
@@ -401,10 +409,13 @@ def main():
             rel_file = og_path.removeprefix("https://edtechnewsroom.com/alternatives/")
             if not (DIST / rel_file).is_file():
                 og_missing.append(rel_file)
-    feed_ok = (DIST / "feed.xml").is_file()
+    feed_problems = check_feed()
+    feed_ok = not feed_problems
     sitemap_ok = (DIST / "sitemap-index.xml").is_file()
     robots_ok = (DIST / "robots.txt").is_file()
-    print(f"\n[8] SEO: 메타 빠짐 {len(seo_miss)} · canonical {len(canon_miss)} · OG 파일 {len(og_missing)} · feed {feed_ok} · sitemap {sitemap_ok} · robots {robots_ok}")
+    print(f"\n[8] SEO: 메타 빠짐 {len(seo_miss)} · canonical {len(canon_miss)} · OG 파일 {len(og_missing)} · feed 문제 {len(feed_problems)} · sitemap {sitemap_ok} · robots {robots_ok}")
+    for problem in feed_problems[:12]:
+        print(f"    - feed {problem}")
     for r in seo_miss[:8]:
         print(f"    - meta {r}")
     for r, got, exp in canon_miss[:8]:
@@ -426,6 +437,163 @@ def main():
     print(f"  예시 데이터 라벨: {len(example_label_hits)}")
     print(f"  SEO 메타/canonical/OG: {len(seo_miss) + len(canon_miss) + len(og_missing)}")
     return 1 if fail else 0
+
+
+def _num(value):
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, (int, float)):
+        return True
+    return isinstance(value, str) and re.fullmatch(r"-?\d+(\.\d+)?", value.strip()) is not None
+
+
+def _date(value):
+    return isinstance(value, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}(T[\d:.+Z-]+)?", value.strip()) is not None
+
+
+def _release(value):
+    return isinstance(value, dict) and "tag" in value
+
+
+def _version(value):
+    return isinstance(value, str) and re.match(r"v?\d+\.\d+", value.strip()) is not None
+
+
+def change_is_noise(field, before, after):
+    last = field.split(".")[-1]
+    if last in NOISE_FIELDS:
+        return True
+    if _num(before) and _num(after):
+        return True
+    if _date(before) and _date(after):
+        return True
+    if _release(before) or _release(after):
+        return True
+    if _version(before) and _version(after):
+        return True
+    return False
+
+
+def git_added_at(rel):
+    out = subprocess.check_output(
+        ["git", "log", "--follow", "--diff-filter=A", "--format=%aI", "--", rel],
+        cwd=ROOT,
+        text=True,
+    ).strip()
+    lines = [line for line in out.splitlines() if line.strip()]
+    if not lines:
+        return None
+    return datetime.fromisoformat(lines[-1])
+
+
+def check_feed():
+    """소셜 피드 규격. 문제 문자열 목록을 반환한다."""
+    problems = []
+    path = DIST / "feed.xml"
+    if not path.is_file():
+        return ["feed.xml 없음"]
+    root = ET.parse(path).getroot()
+    channel = root.find("channel")
+    if channel is None:
+        return ["feed.xml channel 없음"]
+    items = channel.findall("item")
+    seen = {}
+    origin = "https://edtechnewsroom.com/alternatives/"
+
+    def page_file(link):
+        if not link.startswith(origin):
+            return None
+        rel = link[len(origin):]
+        if not rel.endswith("/"):
+            return None
+        return DIST / rel / "index.html"
+
+    for item in items:
+        guid = (item.findtext("guid") or "").strip()
+        title = (item.findtext("title") or "").strip()
+        link = (item.findtext("link") or "").strip()
+        desc = (item.findtext("description") or "").strip()
+        cats = [(c.text or "").strip() for c in item.findall("category")]
+        pub = (item.findtext("pubDate") or "").strip()
+        if not title or not link or not desc or not guid or not pub:
+            problems.append(f"필드 빠짐 {guid or title or link}")
+            continue
+        if cats != ["new"] and cats != ["update"]:
+            problems.append(f"category {guid}: {cats}")
+        if guid in seen:
+            problems.append(f"guid 중복 {guid}")
+        seen[guid] = pub
+        if not guid.startswith(("new:tool:", "new:skill:", "new:app:", "update:")):
+            problems.append(f"guid 형식 {guid}")
+        if (guid.startswith("new:") and cats != ["new"]) or (guid.startswith("update:") and cats != ["update"]):
+            problems.append(f"guid와 category 불일치 {guid} {cats}")
+        if "\n" in desc or len(desc) > 200:
+            problems.append(f"요약이 한두 줄을 넘음 {guid} ({len(desc)})")
+        dest = page_file(link)
+        if dest is None or not dest.is_file():
+            problems.append(f"페이지 없음 {link}")
+        try:
+            parsedate_to_datetime(pub)
+        except (TypeError, ValueError):
+            problems.append(f"날짜 해석 실패 {guid}")
+
+    expected = {}
+    for folder, kind in (("tools", "tool"), ("skills", "skill"), ("school-apps", "app")):
+        for file in (ROOT / "src" / "content" / folder).glob("*.json"):
+            data = json.loads(file.read_text())
+            if kind == "skill":
+                key = data["slug"]
+            else:
+                key = file.stem
+            expected[f"new:{kind}:{key}"] = f"src/content/{folder}/{file.name}"
+    for guid, rel in expected.items():
+        if guid not in seen:
+            problems.append(f"새 페이지 빠짐 {guid}")
+            continue
+        added = git_added_at(rel)
+        if added is None:
+            problems.append(f"추가 커밋 없음 {rel} (fetch-depth: 0)")
+            continue
+        try:
+            published = parsedate_to_datetime(seen[guid])
+        except (TypeError, ValueError):
+            continue
+        if abs(published.timestamp() - added.timestamp()) > 2:
+            problems.append(f"new 날짜가 추가 커밋과 다름 {guid}")
+
+    records = []
+    for file in (ROOT / "src" / "content" / "changes").glob("*.json"):
+        data = json.loads(file.read_text())
+        target = data.get("target", "")
+        slash = target.find("/")
+        dot = target.find(".")
+        if slash < 0 or dot < slash:
+            continue
+        kind, cid, field = target[:slash], target[slash + 1:dot], target[dot + 1:]
+        page_exists = False
+        if kind == "tools":
+            page_exists = (ROOT / "src" / "content" / "tools" / f"{cid}.json").is_file()
+        elif kind == "skills":
+            page_exists = (ROOT / "src" / "content" / "skills" / f"{cid}.json").is_file()
+        try:
+            at = datetime.fromisoformat(data["at"])
+        except (TypeError, ValueError):
+            continue
+        records.append((at, file.stem, target, field, data.get("before"), data.get("after"), page_exists))
+    records.sort(key=lambda row: (row[0], row[1]))
+    kept = set()
+    for at, stem, target, field, before, after, page_exists in records:
+        guid = f"update:{stem}"
+        noise = change_is_noise(field, before, after)
+        fingerprint = (target, json.dumps(before, sort_keys=True, ensure_ascii=False), json.dumps(after, sort_keys=True, ensure_ascii=False))
+        duplicate = fingerprint in kept
+        if not noise and page_exists and not duplicate:
+            kept.add(fingerprint)
+            if guid not in seen:
+                problems.append(f"내용 변경 빠짐 {guid} ({target})")
+        elif guid in seen:
+            problems.append(f"숫자·날짜·중복 변경이 피드에 있음 {guid} ({target})")
+    return problems
 
 
 if __name__ == "__main__":
