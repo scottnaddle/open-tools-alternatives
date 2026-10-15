@@ -9,13 +9,15 @@ import { absUrl, breadcrumbLd, cut } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const skills = await getCollection('skills');
+  // 예시 체험은 선택. 파일이 없는 스킬은 demo가 undefined라 섹션을 그리지 않는다.
+  const demos = new Map((await getCollection('skillDemos')).map((d) => [d.data.slug, d.data]));
   return skills.map((skill) => ({
     params: { slug: skill.data.slug },
-    props: { skill },
+    props: { skill, demo: demos.get(skill.data.slug) },
   }));
 }
 
-const { skill } = Astro.props;
+const { skill, demo } = Astro.props;
 const { data } = skill;
 const base = import.meta.env.BASE_URL;
 
@@ -33,6 +35,7 @@ const installLine = data.installNeeded
 const apiLine = data.apiKeyNeeded
   ? 'API 키가 필요합니다. 키를 받는 방법은 저장소 안내를 따릅니다.'
   : '이 기록에는 API 키가 필요하지 않다고 되어 있습니다.';
+const assetHref = (p: string) => `${base}${p.replace(/^\//, '')}`;
 const site = Astro.site ?? 'https://edtechnewsroom.com';
 const pageUrl = absUrl(base, `skills/${data.slug}/`, site);
 const related = (await getCollection('skills'))
@@ -82,6 +85,46 @@ const seoDesc = cut(data.description, 150);
           </div>
         )}
       </section>
+
+      {demo && (
+        <section aria-labelledby="skill-demo">
+          <h2 id="skill-demo">예시 체험</h2>
+          <p class="demo-title">{demo.title}</p>
+          <div class="show-demo">
+            <div class="preview-meta">
+              <span class="pm-badge example">예시 데이터</span>
+              {demo.method === 'self-made' && <span class="pm-badge self">직접 생성 — 에이전트 제작</span>}
+              {demo.method === 'official-example' && <span class="pm-badge official">공식 예시 — 출처 프로젝트 제공</span>}
+              <a class="pm-open" href={assetHref(demo.output.path)} target="_blank" rel="noopener">새 창에서 크게 보기</a>
+            </div>
+            <div class="demo-io">
+              <div class="demo-box">
+                <small>선생님이 입력한 내용</small>
+                <p class="demo-scenario">{demo.input.scenario}</p>
+                <blockquote>{demo.input.prompt}</blockquote>
+              </div>
+              <div class="demo-box">
+                <small>나온 결과</small>
+                {demo.output.type === 'image' ? (
+                  <img src={assetHref(demo.output.path)} alt={demo.output.alt} loading="lazy" />
+                ) : (
+                  <video src={assetHref(demo.output.path)} poster={demo.output.poster ? assetHref(demo.output.poster) : undefined} controls preload="metadata" aria-label={demo.output.alt}></video>
+                )}
+                {demo.output.excerpt && <blockquote class="demo-excerpt">{demo.output.excerpt}</blockquote>}
+              </div>
+            </div>
+          </div>
+          <h3 class="demo-sub">직접 해 보기 — 3단계</h3>
+          <ol class="show-steps">
+            {demo.steps.map((step) => <li>{step}</li>)}
+          </ol>
+          <p class="show-cap">
+            수업 상황은 이해를 돕기 위해 꾸민 예시입니다. 만든 방법: {demo.madeWith} · 확인일 {demo.dateChecked}.
+            {demo.sourceUrl && <> <a href={demo.sourceUrl} target="_blank" rel="noopener noreferrer">출처</a>.</>}
+            {demo.note && <> {demo.note}</>}
+          </p>
+        </section>
+      )}
 
       <section aria-labelledby="skill-try">
         <h2 id="skill-try">써 보려면</h2>
@@ -171,6 +214,17 @@ const seoDesc = cut(data.description, 150);
   .pm-badge.official { background: #E3ECF8; color: #1F4E8C; }
   .pm-open { margin-left: auto; font-size: 13px; font-weight: 700; }
   .show-demo img { width: 100%; height: auto; display: block; }
+  .pm-badge.example { background: #FFF9EF; color: #8A5A00; border: 1px solid #F2E3C2; }
+  .demo-title { font-weight: 700; margin: 0 0 10px; }
+  .demo-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; padding: 12px; }
+  .demo-box { border: 1px solid #dfe6ee; border-radius: 10px; padding: 10px 12px; background: #fff; font-size: 14px; line-height: 1.65; }
+  .demo-box small { display: block; color: #7a8898; font-size: 11.5px; margin-bottom: 6px; }
+  .demo-scenario { margin: 0 0 8px; color: #33424f; }
+  .demo-box blockquote { margin: 0; border-left: 3px solid #1E6A47; padding: 2px 0 2px 12px; white-space: pre-line; }
+  .demo-box img, .demo-box video { width: 100%; height: auto; display: block; border-radius: 8px; border: 1px solid #dfe6ee; }
+  .demo-box video { background: #000; }
+  .demo-box .demo-excerpt { margin-top: 10px; color: #33424f; }
+  .demo-sub { font-size: 16.5px; margin: 18px 0 0; }
 </style>
 
 <style is:global>

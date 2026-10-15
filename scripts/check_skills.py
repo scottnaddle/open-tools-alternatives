@@ -89,6 +89,48 @@ def check_fragment(path: Path, known_slugs: set[str]) -> list[str]:
     return errors
 
 
+DEMO_PATH = re.compile(r"^/(skill-demos|skills-outputs|skills-assets)/[^:]+$")
+
+
+def check_demo(path: Path, known_slugs: set[str]) -> list[str]:
+    """예시 체험(src/content/skill-demos/<slug>.json) 검증 — 형식은 ops/SKILL_DEMOS.md.
+    규칙: ① 파일 이름 = slug = skills 컬렉션 슬러그 ② 결과 파일이 public/ 에 있음 ③ 단계는 정확히 3개
+    ④ 공식 예시는 출처 URL 필수."""
+    name = f"skill-demos/{path.name}"
+    try:
+        d = json.loads(path.read_text())
+    except json.JSONDecodeError as e:
+        return [f"{name}: JSON 파싱 실패 ({e})"]
+    errors = []
+    slug = d.get("slug")
+    if slug != path.stem:
+        errors.append(f"{name}: slug '{slug}'와 파일 이름이 다름")
+    if slug not in known_slugs:
+        errors.append(f"{name}: 슬러그 '{slug}'가 skills 컬렉션에 없음")
+    if d.get("method") not in ("self-made", "official-example"):
+        errors.append(f"{name}: method(직접 생성/공식 예시) 표기 없음 — 출처 표기 원칙(AGENTS.md 1·2)")
+    if d.get("method") == "official-example" and not d.get("sourceUrl"):
+        errors.append(f"{name}: 공식 예시인데 sourceUrl 없음")
+    steps = d.get("steps")
+    if not isinstance(steps, list) or len(steps) != 3:
+        errors.append(f"{name}: steps는 정확히 3단계여야 함")
+    out = d.get("output") or {}
+    for key in ("path", "poster"):
+        p = out.get(key)
+        if key == "path" and not p:
+            errors.append(f"{name}: output.path 없음")
+            continue
+        if not p:
+            continue
+        if key == "path" and not DEMO_PATH.match(p):
+            errors.append(f"{name}: output.path '{p}'는 /skill-demos/ 등 public 아래 경로여야 함")
+        elif not (Path("public") / p.lstrip("/")).is_file():
+            errors.append(f"{name}: output.{key} 파일이 public{p}에 없음")
+    if not DATE.match(d.get("dateChecked") or ""):
+        errors.append(f"{name}: dateChecked가 YYYY-MM-DD 형식 아님: {d.get('dateChecked')}")
+    return errors
+
+
 def main() -> int:
     files = sorted(Path("src/content/skills").glob("*.json"))
     if not files:
@@ -108,6 +150,10 @@ def main() -> int:
     for fp in fragments:
         all_errors.extend(check_fragment(fp, known_slugs))
 
+    demos = sorted(Path("src/content/skill-demos").glob("*.json")) if Path("src/content/skill-demos").exists() else []
+    for dp in demos:
+        all_errors.extend(check_demo(dp, known_slugs))
+
     if all_errors:
         print("❌ 스킬 게이트 위반:")
         for e in all_errors:
@@ -115,6 +161,7 @@ def main() -> int:
         print(f"\n총 {len(all_errors)}건. 규칙: ops/RESEARCH.md 4절. 데이터 수정 후 다시 실행하세요.")
         return 1
     extra = f", 자유구성 페이지 {len(fragments)}개" if fragments else ""
+    extra += f", 예시 체험 {len(demos)}개" if demos else ""
     print(f"✓ 스킬 게이트 검증 통과 ({len(files)}개 스킬, 라이선스 허용목록 {len(ALLOWED)}종{extra})")
     return 0
 
