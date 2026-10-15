@@ -10,5 +10,6 @@
 - 스킬 5개: k-skill, drawio-skill, k-teacher-skills, manim_skill, korean-skills. 미리보기는 아직 없음.
 - 도구·스킬에 한국어 후기(koreanReviews)와 사용법 영상(tutorials) 칸을 추가. 비어 있으면 상세 페이지에 안 나온다.
 - Inkscape 건강도는 GitLab 활동일 기준. LibreOffice 라이선스는 MPL-2.0 유지. GIMP는 GPL-3.0-or-later. 7-Zip·NanaZip 원문 라이선스는 그대로 두고 검증기가 덮어쓰지 않게 했다.
-- OpenCut 별 94649, 릴리스 v0.3.0(2026-04-15), 웹 얼리 베타 문구 유지. 계정·학생 파일 위치는 privacy 페이지, 한국어 화면은 미확인.
+- OpenCut 별 94652(2026-10-15 verify.py), 릴리스 v0.3.0(2026-04-15), 웹 얼리 베타 문구 유지. 계정·학생 파일 위치는 privacy 페이지, 한국어 화면은 미확인.
+- 같은 날 verify.py를 돌렸고, LibreOffice는 MPL-2.0, GIMP·Inkscape는 GPL-3.0-or-later, Inkscape 건강도는 active로 남았다. 다른 도구의 별 수 변동은 이 기록에 넣지 않았다.
 - Stirling-PDF, Graphite, scientific-agent-skills는 넣지 않음.

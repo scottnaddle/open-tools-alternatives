@@ -94,7 +94,7 @@
   },
   "github": {
     "repo": "OpenCut-app/OpenCut",
-    "stars": 94649,
+    "stars": 94652,
     "lastPush": "2026-09-24",
     "archived": false,
     "latestRelease": {
@@ -106,13 +106,13 @@
   },
   "health": "active",
   "verification": {
-    "runId": "catalog-20261015-opencut",
-    "at": "2026-10-15T15:45:00+00:00",
+    "runId": "verify-20261015154735",
+    "at": "2026-10-15T15:47:35+00:00",
     "unresolved": [
       "koreanUI"
     ],
     "notes": [
-      "별 94649, 릴리스 v0.3.0(2026-04-15), lastPush 2026-09-24. 홈의 Try early beta 문구를 유지. 계정·파일 위치는 privacy 페이지."
+      "별 94652(repos API, 2026-10-15T15:47:35Z). 조사 보고 초깃값 94645. 릴리스 v0.3.0(2026-04-15), lastPush 2026-09-24. 홈의 Try early beta 문구를 유지. 계정·파일 위치는 privacy 페이지. 한국어 화면은 미확인."
     ]
   },
   "koreanUI": {

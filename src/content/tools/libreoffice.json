@@ -194,9 +194,13 @@
     "offline-install"
   ],
   "verification": {
-    "runId": "daily-20261014-142117",
-    "at": "2026-10-14T14:21:17+00:00",
-    "unresolved": [],
-    "notes": []
+    "runId": "verify-20261015154735",
+    "at": "2026-10-15T15:47:35+00:00",
+    "unresolved": [
+      "GitHub 릴리스 없음 — 태그 목록은 날짜순이 아니라 최신 버전으로 쓰지 않음"
+    ],
+    "notes": [
+      "GitHub API spdx=GPL-3.0 는 고정값 MPL-2.0 과 다름 — 공식·원문 값을 유지"
+    ]
   }
 }
