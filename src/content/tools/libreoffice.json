@@ -94,11 +94,11 @@
   },
   "github": {
     "repo": "LibreOffice/core",
-    "stars": 4516,
-    "lastPush": "2026-10-14",
+    "stars": 4520,
+    "lastPush": "2026-10-15",
     "archived": false,
     "latestRelease": null,
-    "fetchedAt": "2026-10-14"
+    "fetchedAt": "2026-10-16"
   },
   "health": "active",
   "koreanUI": {
@@ -194,13 +194,9 @@
     "offline-install"
   ],
   "verification": {
-    "runId": "verify-20261015154735",
-    "at": "2026-10-15T15:47:35+00:00",
-    "unresolved": [
-      "GitHub 릴리스 없음 — 태그 목록은 날짜순이 아니라 최신 버전으로 쓰지 않음"
-    ],
-    "notes": [
-      "GitHub API spdx=GPL-3.0 는 고정값 MPL-2.0 과 다름 — 공식·원문 값을 유지"
-    ]
+    "runId": "daily-20261016-001210",
+    "at": "2026-10-16T00:12:10+00:00",
+    "unresolved": [],
+    "notes": []
   }
 }
