@@ -28,6 +28,41 @@ verifier_ci_followup_ok() {
   esac
 }
 
+# workflow_dispatch 잡 검사는 ruleset 에 반영되지 않는다.
+# 성공한 workflow_dispatch CI 가 이 커밋·브랜치와 같을 때만 Checks API 결과를 남긴다.
+# stdin: gh run list JSON (event, conclusion, headSha, headBranch, url)
+# env: SHA, BRANCH. 맞으면 URL 을 출력하고 0, 아니면 1.
+verifier_dispatch_success_url() {
+  python3 -c '
+import json, os, sys
+sha = os.environ.get("SHA") or ""
+branch = os.environ.get("BRANCH") or ""
+if not sha or not branch:
+    sys.exit(1)
+try:
+    data = json.load(sys.stdin)
+except json.JSONDecodeError:
+    sys.exit(1)
+if not isinstance(data, list):
+    sys.exit(1)
+for run in data:
+    if not isinstance(run, dict):
+        continue
+    if run.get("event") != "workflow_dispatch":
+        continue
+    if run.get("conclusion") != "success":
+        continue
+    if run.get("headSha") != sha or run.get("headBranch") != branch:
+        continue
+    url = run.get("url") or ""
+    if not url:
+        sys.exit(1)
+    print(url)
+    sys.exit(0)
+sys.exit(1)
+'
+}
+
 # 인자: GitHub rules API JSON (브랜치에 적용 중인 규칙 배열).
 # required_status_checks 안에 context build-and-check 가 있으면 0.
 verifier_rules_require_ci() {

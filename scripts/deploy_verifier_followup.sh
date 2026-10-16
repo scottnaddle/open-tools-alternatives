@@ -76,6 +76,63 @@ if ! verifier_label_ok "$(labels)"; then
   finish_skip "라벨 agent/verifier 가 없습니다. 자동 병합·배포하지 않습니다: #$NUM"
 fi
 
+# workflow_dispatch 잡 검사는 ruleset 에 안 들어간다.
+# 이 커밋의 CI 성공을 확인한 뒤에만 Checks API 로 build-and-check 를 남긴다.
+publish_ruleset_check() {
+  local attempt url
+  [ "$EVENT" = "workflow_dispatch" ] || return 0
+  [ -n "$HEAD_SHA" ] || return 0
+  url=""
+  for attempt in 1 2 3 4 5 6; do
+    if url=$(gh run list --commit "$HEAD_SHA" --workflow ci.yml --limit 30 \
+      --json event,conclusion,headSha,headBranch,url \
+      | SHA="$HEAD_SHA" BRANCH="$HEAD" verifier_dispatch_success_url); then
+      break
+    fi
+    echo "workflow_dispatch CI 성공 기록을 아직 못 찾았습니다. 재시도 ${attempt}"
+    url=""
+    sleep 10
+  done
+  if [ -z "$url" ]; then
+    echo "::warning::이 커밋의 workflow_dispatch CI 성공이 없어 검사 결과를 남기지 않습니다: ${HEAD_SHA}"
+    return 0
+  fi
+  echo "ruleset용 검사 결과를 남깁니다: $url"
+  if ! bash "$ROOT/scripts/verifier_publish_check.sh" "$HEAD_SHA" "$url"; then
+    echo "::warning::Checks API 로 build-and-check 를 남기지 못했습니다: #$NUM ${HEAD_SHA}"
+  fi
+}
+
+# 자동 병합이 검사 결과를 못 보면 여기서 한 번 더 시도하고, 거절 이유를 로그에 남긴다.
+try_squash_merge() {
+  local attempt err
+  err=$(mktemp)
+  for attempt in 1 2 3 4 5 6; do
+    if gh pr merge "$NUM" --squash --match-head-commit "$HEAD_SHA" >"$err" 2>&1; then
+      echo "스쿼시 병합을 요청했습니다: #$NUM"
+      cat "$err"
+      rm -f "$err"
+      return 0
+    fi
+    echo "병합 시도 ${attempt} 이 거절되었습니다. GitHub 응답:"
+    cat "$err"
+    if grep -qi 'already merged\|Pull request is already merged' "$err"; then
+      rm -f "$err"
+      return 0
+    fi
+    sleep 10
+  done
+  echo "::warning::GitHub가 PR #${NUM} 병합을 거절했습니다. 마지막 응답은 위와 같습니다."
+  rm -f "$err"
+}
+
+if [ "$(gh pr view "$NUM" --json state --jq '.state')" = "OPEN" ]; then
+  publish_ruleset_check
+  if [ -n "$HEAD_SHA" ]; then
+    try_squash_merge
+  fi
+fi
+
 # 자동 병합은 CI가 녹색이 된 직후 반영된다. 잠시 기다린다.
 for _ in $(seq 1 30); do
   STATE=$(gh pr view "$NUM" --json state --jq '.state')

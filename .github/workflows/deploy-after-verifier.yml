@@ -44,7 +44,9 @@ jobs:
     permissions:
       actions: read
       contents: write
-      pull-requests: read
+      pull-requests: write
+      # workflow_dispatch 잡 검사 대신 ruleset 이 읽는 검사 결과를 남긴다.
+      checks: write
     outputs:
       merged: ${{ steps.poll.outputs.merged }}
       sha: ${{ steps.poll.outputs.sha }}

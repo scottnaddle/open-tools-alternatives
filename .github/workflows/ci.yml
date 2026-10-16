@@ -5,8 +5,9 @@ on:
     branches: ['**']
   pull_request:
     branches: [main]
-  # GITHUB_TOKEN 의 push/pull_request 는 이 워크플로를 시작하지 않는다.
-  # 일일 검증은 gh workflow run 으로 이 이벤트를 부른다. 검사 이름은 job 이름 build-and-check.
+  # GITHUB_TOKEN 이 연 PR의 pull_request 실행은 승인 대기라 잡이 안 뜬다.
+  # 일일 검증은 gh workflow run 으로 이 이벤트를 부른다.
+  # 이 이벤트의 잡 검사는 ruleset 에 안 들어가므로, 통과 뒤에 Checks API 로 같은 이름을 남긴다.
   workflow_dispatch:
 
 jobs:
@@ -16,6 +17,8 @@ jobs:
       contents: read
       # 일일 검증 브랜치에서만 deploy-after-verifier 를 workflow_dispatch 한다.
       actions: write
+      # ruleset 이 읽는 build-and-check 를 Checks API 로 남긴다. 잡 검사 자체는 반영되지 않는다.
+      checks: write
     
     steps:
       - name: Checkout
@@ -84,6 +87,17 @@ jobs:
             echo "::error::내부 링크 404, 고아 페이지(for/* 외), 원시값, 출처 중복, 자리표시 또는 예시 공개가 발견됨"
             exit $EXIT
           fi
+
+      # workflow_dispatch 잡 검사는 ruleset 에 안 보인다. 통과한 뒤에만 같은 이름을 남긴다.
+      - name: Publish ruleset check for daily verifier
+        if: success() && github.event_name == 'workflow_dispatch' && startsWith(github.ref_name, 'daily-verifier/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash scripts/verifier_publish_check.sh \
+            "${{ github.sha }}" \
+            "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            || echo "::warning::Checks API 로 build-and-check 를 남기지 못했습니다. 배포 대기가 다시 시도합니다."
 
       # 검사가 끝나야 자동 병합이 된다. 병합 대기는 이 잡 밖에서 한다.
       # PR #36 처럼 토큰이 연 pull_request CI 는 workflow_run 배포를 시작하지 않았다.
