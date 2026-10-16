@@ -180,6 +180,38 @@ const skills = defineCollection({
   ),
 });
 
+// 예시 체험 — src/content/skill-demos/<slug>.json. 스킬 상세 페이지의 "예시 체험" 칸.
+// 파일이 없으면 섹션을 그리지 않는다. 형식과 추가 절차는 ops/SKILL_DEMOS.md.
+// 원칙(AGENTS.md 1·2): 교사 상황은 꾸민 예시라 화면에 "꾸민 수업 예시" 배지를 늘 붙이고, 만든 방식을 표기한다.
+// scripts/check_skills.py 가 슬러그 일치와 결과 파일 존재를 같이 확인한다.
+const skillDemos = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/skill-demos' }),
+  schema: z.object({
+    slug: z.string(),                     // skills 컬렉션의 slug와 같아야 함 (파일 이름도 같게)
+    title: z.string().min(1),             // 예: "중2 과학 — 광합성 복습 퀴즈 만들기"
+    method: z.enum(['self-made', 'official-example']),
+    madeWith: z.string().min(1),          // 예: "Claude Code + 이 스킬"
+    sourceUrl: z.string().url().optional(), // official-example 이면 필수
+    input: z.object({
+      scenario: z.string().min(1),        // 어떤 수업 상황인지
+      prompt: z.string().min(1),          // 교사가 실제로 입력한 문장
+    }),
+    output: z.object({
+      type: z.enum(['image', 'video']),
+      path: z.string().regex(/^\/(skill-demos|skills-outputs|skills-assets)\/[^:]+$/, 'output.path는 public 아래 /skill-demos/ 등으로 시작하는 경로'),
+      alt: z.string().min(1),             // 화면을 못 보는 사람을 위한 설명
+      poster: z.string().regex(/^\/[^:]+$/).optional(), // 영상 첫 화면 그림
+      excerpt: z.string().optional(),     // 결과 글의 일부
+    }),
+    steps: z.array(z.string().min(1)).length(3, 'steps는 정확히 3단계'),
+    dateChecked: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'dateChecked는 YYYY-MM-DD 형식'),
+    note: z.string().optional(),
+  }).refine(
+    (d) => d.method !== 'official-example' || !!d.sourceUrl,
+    { message: 'official-example 이면 sourceUrl(출처)이 필요함' },
+  ),
+});
+
 // 4축 페이지 — Stage 3 데이터 모델 (edzip.kr 차용 IA: 현장사례/수업지도안/심층리뷰)
 // 회귀: Base.astro의 4 navLinks map이 깨지는 케이스(2026-10-13)와 별개. 스키마는 빌드 시 1회 평가되며 안전.
 // 원칙: 출처 필수, manual-seed는 verified 불가(tools와 동일), example=true면 "예시 데이터" 배지 강제
@@ -239,4 +271,4 @@ const reviews = defineCollection({
   }),
 });
 
-export const collections = { tools, schoolApps, changes, skills, cases, lessons, reviews };
+export const collections = { tools, schoolApps, changes, skills, skillDemos, cases, lessons, reviews };

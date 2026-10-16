@@ -1,0 +1,23 @@
+{
+  "slug": "vercel-labs-skills",
+  "title": "중3 국어 — 학생 글 첨삭용 맞춤법 점검 스킬 찾기",
+  "method": "self-made",
+  "madeWith": "opencode (DeepSeek) + 이 스킬 (find-skills)",
+  "input": {
+    "scenario": "중학교 3학년 국어 '주장하는 글 쓰기' 수행평가를 앞두고, 담당 교사가 학생 논증 글의 맞춤법과 어색한 표현을 빠르게 점검·첨삭할 AI 스킬을 오픈 스킬 생태계에서 찾아 설치하려는 상황이다(교사 개인 업무).",
+    "prompt": "학생 논증 글을 첨삭할 때 맞춤법과 어색한 표현을 빠르게 점검해 주는 AI 스킬을 찾아 주세요. 설치가 쉽고 널리 쓰이는 것으로 골라 설치 명령까지 알려 주세요."
+  },
+  "output": {
+    "type": "image",
+    "path": "/skill-demos/vercel-labs-skills/result.webp",
+    "alt": "find-skills 스킬을 실행한 결과 화면. 위에 스킬 이름과 '리더보드 확인 → npx skills find → 품질 확인 → 추천' 순서, '꾸민 수업 예시' 배지가 보인다. 본문에는 선생님이 넣은 문장, 스킬이 안내한 3단계, 검색 결과 표(맨 위 nomadamas/k-skill@korean-spell-check 6,998회가 원본으로 채택되고 설치 1~5회짜리 후보들은 복사본으로 제외), 설치 전 품질 확인 목록, 마지막에 설치 명령 'npx skills add nomadamas/k-skill@korean-spell-check'가 담긴 추천 카드가 있다.",
+    "excerpt": "추천: korean-spell-check (nomadamas/k-skill) — 설치 6,998회 · 라이선스 MIT\n설치: npx skills add nomadamas/k-skill@korean-spell-check\n품질 확인: 설치 수 1,000회 이상 · 저장소 별 7,931개 · 설치 1~2회짜리 복사본은 제외"
+  },
+  "steps": [
+    "opencode 같은 AI 에이전트에 저장소 안내대로 이 스킬(find-skills)을 설치한다.",
+    "찾고 싶은 기능(예: 한국어 맞춤법 점검)을 적은 문장을 붙여 넣는다. 위 문장을 바꿔 써도 된다.",
+    "결과로 나온 추천 스킬의 설치 수·출처(저장소·별 수)·설치 명령을 확인하고, 설치할지 직접 결정한다."
+  ],
+  "dateChecked": "2026-10-16",
+  "note": "이 스킬의 결과물은 그림이 아니라 글(추천 목록)이라, SKILL.md가 안내한 순서를 직접 따라가 나온 내용을 화면용 HTML로 옮겨 찍었다(추천 내용은 고치지 않았다). 이 스킬은 보통 `npx skills find` CLI를 돌리지만, 이 환경의 Node 버전이 이 CLI가 요구하는 22.20보다 낮아 CLI 본체를 실행하지 못했다. 대신 CLI가 쓰는 것과 같은 검색 API(skills.sh/api/search)를 호출해 나온 실제 결과를 담았다. 설치 수(6,998회)·저장소 별 수(7,931개)·라이선스(MIT)는 확인 시각(2026-10-16) 기준 출처가 알려 준 값이며, 우리가 측정한 수치도 수업 효과의 근거도 아니다. 추천 스킬의 실제 설치는 하지 않고 안내만 했다. 수업 상황(중3 국어 수행평가)과 선생님 요청 문장은 꾸민 수업 예시이고, 검색 결과의 설치 수는 수업 효과와 무관하다. 교사는 설치 전 skills.sh에서 추천이 여전히 유효한지, 후보 스킬의 이용 약관·개인정보 처리가 괜찮은지 직접 확인해야 한다."
+}
