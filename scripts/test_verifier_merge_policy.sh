@@ -43,4 +43,22 @@ if ! grep -q 'id: build-and-check' "$ROOT/.github/workflows/ci.yml" && ! grep -q
   echo "검사 이름이 build-and-check 가 아님"; exit 1
 fi
 
+printf '%s' '[{"event":"pull_request","conclusion":"action_required","headSha":"abc","headBranch":"daily-verifier/20261016","url":"https://example.test/pending"},{"event":"workflow_dispatch","conclusion":"success","headSha":"abc","headBranch":"daily-verifier/20261016","url":"https://example.test/ok"}]' \
+  | SHA=abc BRANCH=daily-verifier/20261016 verifier_dispatch_success_url | grep -qx 'https://example.test/ok'
+if printf '%s' '[{"event":"workflow_dispatch","conclusion":"success","headSha":"other","headBranch":"daily-verifier/20261016","url":"https://example.test/ok"}]' \
+  | SHA=abc BRANCH=daily-verifier/20261016 verifier_dispatch_success_url; then
+  echo "다른 커밋의 성공은 검사 결과로 쓰면 안 됨"; exit 1
+fi
+if printf '%s' '[{"event":"pull_request","conclusion":"success","headSha":"abc","headBranch":"daily-verifier/20261016","url":"https://example.test/pr"}]' \
+  | SHA=abc BRANCH=daily-verifier/20261016 verifier_dispatch_success_url; then
+  echo "pull_request 성공만으로 Checks API 를 부르면 안 됨"; exit 1
+fi
+
+if ! grep -q 'checks: write' "$ROOT/.github/workflows/ci.yml"; then echo "ci.yml 에 checks: write 가 없음"; exit 1; fi
+if ! grep -q 'checks: write' "$ROOT/.github/workflows/deploy-after-verifier.yml"; then echo "배포 대기에 checks: write 가 없음"; exit 1; fi
+if ! grep -q 'pull-requests: write' "$ROOT/.github/workflows/deploy-after-verifier.yml"; then echo "배포 대기가 병합 권한이 없음"; exit 1; fi
+if ! grep -q 'verifier_publish_check.sh' "$ROOT/.github/workflows/ci.yml"; then echo "CI가 ruleset 검사를 남기지 않음"; exit 1; fi
+if ! grep -q 'gh pr merge' "$ROOT/scripts/deploy_verifier_followup.sh"; then echo "병합 거절 이유를 묻지 않음"; exit 1; fi
+if ! grep -q 'name.: .build-and-check' "$ROOT/scripts/verifier_publish_check.sh"; then echo "Checks API 이름이 build-and-check 가 아님"; exit 1; fi
+
 echo "✓ verifier merge policy"
