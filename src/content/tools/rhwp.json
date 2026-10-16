@@ -94,7 +94,7 @@
   },
   "github": {
     "repo": "edwardkim/rhwp",
-    "stars": 3949,
+    "stars": 3951,
     "lastPush": "2026-10-15",
     "archived": false,
     "latestRelease": {
@@ -102,22 +102,14 @@
       "date": "2026-10-06",
       "url": "https://github.com/edwardkim/rhwp/releases/tag/v0.8.7"
     },
-    "fetchedAt": "2026-10-15"
+    "fetchedAt": "2026-10-16"
   },
   "health": "active",
   "verification": {
-    "runId": "catalog-20261015-hwp",
-    "at": "2026-10-15T15:45:00+00:00",
-    "unresolved": [
-      "platforms",
-      "koreanUI",
-      "network",
-      "account",
-      "studentData"
-    ],
-    "notes": [
-      "README로 웹 데모·HWP 편집·라이선스(MIT)·릴리스 v0.8.7을 확인. 별 수는 2026-10-15 GitHub API 3949(조사 보고 3948). 기기별 지원과 데이터 이동은 unverified."
-    ]
+    "runId": "daily-20261016-001210",
+    "at": "2026-10-16T00:12:10+00:00",
+    "unresolved": [],
+    "notes": []
   },
   "koreanUI": {
     "value": "yes",
