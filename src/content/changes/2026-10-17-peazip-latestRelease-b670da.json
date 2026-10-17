@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-17T23:54:30+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261017-235430",
+  "target": "tools/peazip.github.latestRelease",
+  "before": {
+    "tag": "11.3.0",
+    "date": "2026-09-26",
+    "url": "https://github.com/peazip/PeaZip/releases/tag/11.3.0"
+  },
+  "after": {
+    "tag": "11.4.0",
+    "date": "2026-10-17",
+    "url": "https://github.com/peazip/PeaZip/releases/tag/11.4.0"
+  },
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/peazip/PeaZip/releases/latest",
+      "fetchedAt": "2026-10-17T23:54:30+00:00",
+      "excerpt": "latest release",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

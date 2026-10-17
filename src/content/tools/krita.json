@@ -93,14 +93,14 @@
   },
   "github": {
     "repo": "KDE/krita",
-    "stars": 10564,
-    "lastPush": "2026-10-16",
+    "stars": 10574,
+    "lastPush": "2026-10-17",
     "archived": false,
     "latestRelease": null,
     "fetchedAt": "2026-10-17",
     "official": {
       "host": "https://invent.kde.org/graphics/krita",
-      "lastActivity": "2026-10-16",
+      "lastActivity": "2026-10-17",
       "latestRelease": {
         "tag": "v6.0.4.1",
         "date": "2026-09-30",
@@ -113,8 +113,8 @@
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261017-001521",
-    "at": "2026-10-17T00:15:21+00:00",
+    "runId": "daily-20261017-235430",
+    "at": "2026-10-17T23:54:30+00:00",
     "unresolved": [],
     "notes": []
   },

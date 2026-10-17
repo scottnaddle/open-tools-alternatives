@@ -94,8 +94,8 @@
   },
   "github": {
     "repo": "edwardkim/rhwp",
-    "stars": 3954,
-    "lastPush": "2026-10-16",
+    "stars": 3958,
+    "lastPush": "2026-10-17",
     "archived": false,
     "latestRelease": {
       "tag": "v0.8.7",
@@ -106,8 +106,8 @@
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261017-001521",
-    "at": "2026-10-17T00:15:21+00:00",
+    "runId": "daily-20261017-235430",
+    "at": "2026-10-17T23:54:30+00:00",
     "unresolved": [],
     "notes": []
   },

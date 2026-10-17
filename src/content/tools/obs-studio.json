@@ -90,7 +90,7 @@
   },
   "github": {
     "repo": "obsproject/obs-studio",
-    "stars": 77647,
+    "stars": 77696,
     "lastPush": "2026-10-16",
     "archived": false,
     "latestRelease": {
@@ -102,8 +102,8 @@
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261017-001521",
-    "at": "2026-10-17T00:15:21+00:00",
+    "runId": "daily-20261017-235430",
+    "at": "2026-10-17T23:54:30+00:00",
     "unresolved": [],
     "notes": []
   },
