@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-17T00:15:21+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261017-001521",
+  "target": "tools/krita.github.lastPush",
+  "before": "2026-10-14",
+  "after": "2026-10-16",
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/KDE/krita",
+      "fetchedAt": "2026-10-17T00:15:21+00:00",
+      "excerpt": "lastPush from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

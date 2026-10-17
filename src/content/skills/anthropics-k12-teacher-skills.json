@@ -8,11 +8,11 @@
   "apiKeyNeeded": false,
   "license": "Apache-2.0",
   "sourceUrl": "https://github.com/anthropics/k12-teacher-skills",
-  "dateChecked": "2026-10-15",
+  "dateChecked": "2026-10-17",
   "previewType": "none",
   "github": {
     "repo": "anthropics/k12-teacher-skills",
-    "stars": 565,
+    "stars": 568,
     "createdAt": "2026-07-10T23:00:03Z",
     "license": "Apache-2.0"
   }
