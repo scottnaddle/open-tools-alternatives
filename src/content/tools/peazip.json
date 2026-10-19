@@ -90,20 +90,20 @@
   },
   "github": {
     "repo": "peazip/PeaZip",
-    "stars": 7978,
-    "lastPush": "2026-10-17",
+    "stars": 7989,
+    "lastPush": "2026-10-18",
     "archived": false,
     "latestRelease": {
       "tag": "11.4.0",
       "date": "2026-10-17",
       "url": "https://github.com/peazip/PeaZip/releases/tag/11.4.0"
     },
-    "fetchedAt": "2026-10-17"
+    "fetchedAt": "2026-10-19"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261017-235430",
-    "at": "2026-10-17T23:54:30+00:00",
+    "runId": "daily-20261019-000403",
+    "at": "2026-10-19T00:04:03+00:00",
     "unresolved": [],
     "notes": []
   },

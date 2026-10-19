@@ -8,11 +8,11 @@
   "apiKeyNeeded": false,
   "license": "MIT",
   "sourceUrl": "https://github.com/vercel-labs/vgpu",
-  "dateChecked": "2026-10-17",
+  "dateChecked": "2026-10-19",
   "previewType": "none",
   "github": {
     "repo": "vercel-labs/vgpu",
-    "stars": 2557,
+    "stars": 2560,
     "createdAt": "2026-05-05T18:36:04Z",
     "license": "MIT"
   }
