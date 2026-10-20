@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-20T01:00:15+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261020-010015",
+  "target": "skills/vercel-labs-vgpu.stars",
+  "before": 2560,
+  "after": 2566,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/vercel-labs/vgpu",
+      "fetchedAt": "2026-10-20T01:00:15+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

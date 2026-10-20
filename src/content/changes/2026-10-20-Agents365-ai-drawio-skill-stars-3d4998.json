@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-20T01:00:15+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261020-010015",
+  "target": "skills/Agents365-ai-drawio-skill.stars",
+  "before": 10223,
+  "after": 10241,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/Agents365-ai/drawio-skill",
+      "fetchedAt": "2026-10-20T01:00:15+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}
