@@ -1,0 +1,130 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+const guides = await getCollection('guides');
+
+const nonExampleGuides = guides.filter(g => !g.data.example);
+const exampleGuides = guides.filter(g => g.data.example);
+const totalGuides = guides.length;
+---
+<Base title="가이드·사례 — 학교 활용 가이드" description="오픈소스 도구를 학교 현장에서 활용하는 구체적인 가이드와 실제 사례를 정리합니다." image="guides.png" imageAlt="가이드·사례">
+  <section class="hero-land">
+    <div class="wrap herogrid">
+      <div>
+        <h1>학교 활용 가이드·사례</h1>
+        <p class="stat">오픈소스 도구를 학교에서 실제로 활용하는 방법과 사례를 모아 정리합니다. 각 가이드는 도구 요약, 공식 링크, 라이선스, 학교 활용 시나리오, 5분 따라하기, 실제 사례, 주의점을 포함합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    {nonExampleGuides.length > 0 ? (
+      <>
+        <div class="sh">
+          <h2>검증된 가이드</h2>
+          <span class="hint">{nonExampleGuides.length}개 가이드</span>
+        </div>
+        <div class="lgrid">
+          {nonExampleGuides.map(guide => (
+            <a class="lcard" href={`${base}guides/${guide.data.slug}/`}>
+              <span class="top">
+                <b>{guide.data.title}</b>
+              </span>
+              <span class="alts">{guide.data.tool.summary}</span>
+              <span class="meta">
+                <span class="n">{guide.data.tool.license}</span>
+                <span class="n">확인일: {guide.data.dateChecked}</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </>
+    ) : (
+      <div class="sh">
+        <h2>가이드 준비 중</h2>
+        <p class="hint">검증된 가이드를 준비하고 있습니다</p>
+      </div>
+    )}
+
+    {exampleGuides.length > 0 && (
+      <>
+        <div class="sh" style="margin-top: 48px;">
+          <h2>예시 가이드</h2>
+          <span class="hint">검증 전 샘플 — {exampleGuides.length}개</span>
+        </div>
+        <div class="lgrid">
+          {exampleGuides.map(guide => (
+            <a class="lcard" href={`${base}guides/${guide.data.slug}/`} style="opacity: 0.7;">
+              <span class="top">
+                <span class="badge warn" style="margin-bottom: 8px;">예시 가이드</span>
+                <b>{guide.data.title}</b>
+              </span>
+              <span class="alts">{guide.data.tool.summary}</span>
+              <span class="meta">
+                <span class="n">{guide.data.tool.license}</span>
+                <span class="n">확인일: {guide.data.dateChecked}</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
+
+    <div class="two" style="margin-top: 48px;">
+      <section>
+        <div class="sh">
+          <h2>가이드 안내</h2>
+        </div>
+        <div class="list">
+          <div class="row">
+            <span class="mid">
+              <b>출처 표기</b>
+              <span>모든 가이드는 공식 문서와 실제 사례의 출처를 명시합니다</span>
+            </span>
+          </div>
+          <div class="row">
+            <span class="mid">
+              <b>확인 중 표시</b>
+              <span>미확인 정보는 "확인 중"으로 명시하고, 검증된 사실만 제공합니다</span>
+            </span>
+          </div>
+          <div class="row">
+            <span class="mid">
+              <b>AI 사용 표시</b>
+              <span>가이드 작성 시 AI를 사용한 경우 그 범위를 공개합니다</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="sh">
+          <h2>가이드 제안하기</h2>
+        </div>
+        <div class="list">
+          <div class="row">
+            <span class="mid">
+              <b>학교에서 쓴 사례가 있나요?</b>
+              <span>실제 학교 현장에서 오픈소스 도구를 활용한 사례를 공유해 주세요</span>
+            </span>
+          </div>
+        </div>
+        <a class="btn" href={`${base}suggest/`} style="margin-top: 12px;">사례 제안하기</a>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+.lcard .meta {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  font-size: var(--fs-sm);
+}
+.lcard .meta .n {
+  color: var(--muted);
+}
+</style>

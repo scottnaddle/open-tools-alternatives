@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-21T09:43:35+00:00",
+  "agent": "verifier",
+  "runId": "verify-20261021094335",
+  "target": "tools/nanazip.github.stars",
+  "before": 15922,
+  "after": 15927,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/M2Team/NanaZip",
+      "fetchedAt": "2026-10-21T09:43:35+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

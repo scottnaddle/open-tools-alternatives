@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-21T09:43:35+00:00",
+  "agent": "verifier",
+  "runId": "verify-20261021094335",
+  "target": "tools/peazip.github.lastPush",
+  "before": "2026-10-20",
+  "after": "2026-10-21",
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/peazip/PeaZip",
+      "fetchedAt": "2026-10-21T09:43:35+00:00",
+      "excerpt": "lastPush from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

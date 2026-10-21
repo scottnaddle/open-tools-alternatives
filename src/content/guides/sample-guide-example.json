@@ -1,0 +1,33 @@
+{
+  "title": "LibreOffice 학교 활용 가이드 (예시)",
+  "slug": "libreoffice-school-guide-example",
+  "tool": {
+    "name": "LibreOffice",
+    "summary": "오픈소스 오피스 문서 작성 소프트웨어",
+    "officialLink": "https://www.libreoffice.org/",
+    "license": "MPL-2.0"
+  },
+  "schoolScenario": "학교 컴퓨터실에서 학생들이 보고서와 발표 자료를 작성하는 환경. 네트워크 설치와 HWP 호환성이 중요한 상황",
+  "stepByStep": [
+    {
+      "step": "설치 및 한글 설정",
+      "description": "확인 중 — 실제 설치 과정과 한글 인터페이스 설정 방법은 공식 문서 확인이 필요합니다"
+    },
+    {
+      "step": "HWP 파일 읽기/쓰기",
+      "description": "확인 중 — HWP 파일 호환성과 글꼴 설정은 추가 확인이 필요합니다"
+    },
+    {
+      "step": "학생 과제 작성",
+      "description": "확인 중 — 실제 수업에서의 활용 사례는 현장 검증이 필요합니다"
+    }
+  ],
+  "realCases": [],
+  "cautions": [
+    "확인 중 — 실제 학교 현장에서의 주의사항은 검증이 필요합니다",
+    "확인 중 — 기존 HWP 문서와의 호환성 범위는 추가 확인이 필요합니다"
+  ],
+  "dateChecked": "2026-10-21",
+  "aiUsageDisclosure": "drafting",
+  "example": true
+}

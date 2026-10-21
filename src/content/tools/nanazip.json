@@ -97,7 +97,7 @@
   },
   "github": {
     "repo": "M2Team/NanaZip",
-    "stars": 15922,
+    "stars": 15927,
     "lastPush": "2026-10-17",
     "archived": false,
     "latestRelease": {
@@ -109,8 +109,8 @@
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261021-002905",
-    "at": "2026-10-21T00:29:05+00:00",
+    "runId": "verify-20261021094335",
+    "at": "2026-10-21T09:43:35+00:00",
     "unresolved": [],
     "notes": []
   },

@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-21T09:43:35+00:00",
+  "agent": "verifier",
+  "runId": "verify-20261021094335",
+  "target": "tools/7-zip.github.stars",
+  "before": 4210,
+  "after": 4213,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/ip7z/7zip",
+      "fetchedAt": "2026-10-21T09:43:35+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

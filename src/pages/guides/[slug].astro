@@ -1,0 +1,209 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { absUrl, breadcrumbLd, cut } from '../../lib/seo';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+  return guides.map((guide) => ({
+    params: { slug: guide.data.slug },
+    props: { guide },
+  }));
+}
+
+const { guide } = Astro.props;
+const { data } = guide;
+const base = import.meta.env.BASE_URL;
+const site = Astro.site ?? 'https://edtechnewsroom.com';
+const pageUrl = absUrl(base, `guides/${data.slug}/`, site);
+const seoTitle = `${data.title} — 학교 활용 가이드`;
+const seoDesc = cut(data.schoolScenario, 150);
+
+const aiDisclosureText = {
+  'none': 'AI 미사용',
+  'research': 'AI 조사 보조',
+  'drafting': 'AI 초안 작성',
+  'full': 'AI 전체 작성',
+};
+---
+<Base title={seoTitle} description={seoDesc} image="guides.png" imageAlt={seoTitle} jsonLd={breadcrumbLd([
+  { name: '홈', url: absUrl(base, '', site) },
+  { name: '가이드·사례', url: absUrl(base, 'guides/', site) },
+  { name: data.title, url: pageUrl },
+])}>
+  <div class="detail">
+    <nav class="v2-crumb" aria-label="위치"><a href={base}>홈</a> <span aria-hidden="true">›</span> <a href={`${base}guides/`}>가이드·사례</a> <span aria-hidden="true">›</span> <span aria-current="page">{data.title}</span></nav>
+    <a class="back" href={`${base}guides/`}>← 가이드 목록</a>
+
+    <header class="guide-hero">
+      {data.example && (
+        <div class="example-badge" style="margin-bottom: 16px;">
+          <span class="badge warn">예시 가이드</span>
+          <span style="font-size: var(--fs-sm); color: var(--muted);">검증 전 샘플입니다. 실제 학교 활용 사례가 아닙니다.</span>
+        </div>
+      )}
+      <h1>{data.title}</h1>
+      <div class="guide-meta">
+        <span><b>도구:</b> {data.tool.name}</span>
+        <span><b>라이선스:</b> {data.tool.license}</span>
+        <span><b>확인일:</b> {data.dateChecked}</span>
+        <span><b>AI 사용:</b> {aiDisclosureText[data.aiUsageDisclosure]}</span>
+      </div>
+    </header>
+
+    <div class="guide-sheet">
+      <section aria-labelledby="guide-tool">
+        <h2 id="guide-tool">도구 개요</h2>
+        <p class="tool-summary">{data.tool.summary}</p>
+        <p><a href={data.tool.officialLink} target="_blank" rel="noopener noreferrer">공식 사이트 보기 →</a></p>
+      </section>
+
+      <section aria-labelledby="guide-scenario">
+        <h2 id="guide-scenario">학교 장면</h2>
+        <p>{data.schoolScenario}</p>
+      </section>
+
+      <section aria-labelledby="guide-steps">
+        <h2 id="guide-steps">5분 따라하기</h2>
+        <div class="steps-list">
+          {data.stepByStep.map((item, idx) => (
+            <div class="step-item">
+              <div class="step-num">{idx + 1}</div>
+              <div class="step-content">
+                <h3>{item.step}</h3>
+                <p>{item.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {data.realCases.length > 0 && (
+        <section aria-labelledby="guide-cases">
+          <h2 id="guide-cases">실제 사례</h2>
+          <ul class="cases-list">
+            {data.realCases.map((caseItem) => (
+              <li>
+                {caseItem.description}
+                <br />
+                <small><a href={caseItem.sourceUrl} target="_blank" rel="noopener noreferrer">출처 보기 →</a></small>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {data.cautions.length > 0 && (
+        <section aria-labelledby="guide-cautions">
+          <h2 id="guide-cautions">주의점</h2>
+          <ul class="cautions-list">
+            {data.cautions.map((caution) => (
+              <li>{caution}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section class="guide-footer">
+        <p>이 가이드는 {data.dateChecked}에 확인되었습니다.</p>
+        <div class="show-actions">
+          <a class="primary" href={data.tool.officialLink} target="_blank" rel="noopener noreferrer">공식 사이트</a>
+          <a class="ghost" href={`${base}suggest/#report`}>정보가 틀렸나요?</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+.guide-hero {
+  margin-bottom: 48px;
+}
+.guide-hero h1 {
+  font-size: var(--fs-h1);
+  margin-bottom: 16px;
+}
+.guide-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+.guide-meta span b {
+  font-weight: 600;
+  color: var(--ink);
+}
+.guide-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.guide-sheet section h2 {
+  font-size: var(--fs-h2);
+  margin-bottom: 16px;
+}
+.tool-summary {
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.step-item {
+  display: flex;
+  gap: 16px;
+}
+.step-num {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: var(--fs-lg);
+}
+.step-content h3 {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.step-content p {
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.cases-list,
+.cautions-list {
+  list-style: disc;
+  padding-left: 24px;
+  line-height: 1.8;
+}
+.cases-list li,
+.cautions-list li {
+  margin-bottom: 12px;
+}
+.cautions-list {
+  color: var(--warn);
+}
+.guide-footer {
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.guide-footer p {
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.example-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+</style>

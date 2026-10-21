@@ -65,11 +65,11 @@
   "license": {
     "value": "GPL-2.0",
     "status": "verified",
-    "lastVerified": "2026-10-12T22:35:34+00:00",
+    "lastVerified": "2026-10-21T09:43:35+00:00",
     "sources": [
       {
         "url": "https://api.github.com/repos/obsproject/obs-studio/license",
-        "fetchedAt": "2026-10-12T22:35:34+00:00",
+        "fetchedAt": "2026-10-21T09:43:35+00:00",
         "excerpt": "spdx_id=GPL-2.0",
         "method": "github-api"
       }
@@ -90,7 +90,7 @@
   },
   "github": {
     "repo": "obsproject/obs-studio",
-    "stars": 77834,
+    "stars": 77865,
     "lastPush": "2026-10-20",
     "archived": false,
     "latestRelease": {
@@ -102,8 +102,8 @@
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261021-002905",
-    "at": "2026-10-21T00:29:05+00:00",
+    "runId": "verify-20261021094335",
+    "at": "2026-10-21T09:43:35+00:00",
     "unresolved": [],
     "notes": []
   },
