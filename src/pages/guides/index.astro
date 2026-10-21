@@ -52,13 +52,13 @@ const totalGuides = guides.length;
       <>
         <div class="sh" style="margin-top: 48px;">
           <h2>예시 가이드</h2>
-          <span class="hint">검증 전 예시 데이터 — {exampleGuides.length}개</span>
+          <span class="hint">검증 전 샘플 — {exampleGuides.length}개</span>
         </div>
         <div class="lgrid">
           {exampleGuides.map(guide => (
             <a class="lcard" href={`${base}guides/${guide.data.slug}/`} style="opacity: 0.7;">
               <span class="top">
-                <span class="badge warn" style="margin-bottom: 8px;">예시</span>
+                <span class="badge warn" style="margin-bottom: 8px;">예시 가이드</span>
                 <b>{guide.data.title}</b>
               </span>
               <span class="alts">{guide.data.tool.summary}</span>
