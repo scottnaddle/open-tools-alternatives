@@ -271,4 +271,32 @@ const reviews = defineCollection({
   }),
 });
 
-export const collections = { tools, schoolApps, changes, skills, skillDemos, cases, lessons, reviews };
+// 가이드 컬렉션 — 도구별 학교 활용 가이드 (tool summary, official link, license, school scenario, step-by-step, real cases with sources, cautions, dateChecked, AI usage disclosure)
+const guides = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/guides' }),
+  schema: z.object({
+    title: z.string().min(1),
+    slug: z.string().min(1),
+    tool: z.object({
+      name: z.string().min(1),
+      summary: z.string().min(1),
+      officialLink: z.string().url(),
+      license: z.string().min(1),
+    }),
+    schoolScenario: z.string().min(1),
+    stepByStep: z.array(z.object({
+      step: z.string().min(1),
+      description: z.string().min(1),
+    })).min(1),
+    realCases: z.array(z.object({
+      description: z.string().min(1),
+      sourceUrl: z.string().url(),
+    })).min(0),
+    cautions: z.array(z.string().min(1)).min(0),
+    dateChecked: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'dateChecked는 YYYY-MM-DD 형식'),
+    aiUsageDisclosure: z.enum(['none', 'research', 'drafting', 'full']),
+    example: z.boolean().default(true),
+  }),
+});
+
+export const collections = { tools, schoolApps, changes, skills, skillDemos, cases, lessons, reviews, guides };

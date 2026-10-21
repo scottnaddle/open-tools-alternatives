@@ -68,11 +68,11 @@
   "license": {
     "value": "GPL-3.0",
     "status": "verified",
-    "lastVerified": "2026-10-12T22:35:34+00:00",
+    "lastVerified": "2026-10-21T09:43:35+00:00",
     "sources": [
       {
         "url": "https://api.github.com/repos/KDE/krita/license",
-        "fetchedAt": "2026-10-12T22:35:34+00:00",
+        "fetchedAt": "2026-10-21T09:43:35+00:00",
         "excerpt": "spdx_id=GPL-3.0",
         "method": "github-api"
       }
@@ -93,14 +93,14 @@
   },
   "github": {
     "repo": "KDE/krita",
-    "stars": 10599,
-    "lastPush": "2026-10-20",
+    "stars": 10601,
+    "lastPush": "2026-10-21",
     "archived": false,
     "latestRelease": null,
     "fetchedAt": "2026-10-21",
     "official": {
       "host": "https://invent.kde.org/graphics/krita",
-      "lastActivity": "2026-10-20",
+      "lastActivity": "2026-10-21",
       "latestRelease": {
         "tag": "v6.0.4.1",
         "date": "2026-09-30",
@@ -108,15 +108,21 @@
         "fromTag": true
       },
       "license": "gpl-3.0",
-      "fetchedAt": "2026-10-20"
+      "fetchedAt": "2026-10-21"
     }
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261021-002905",
-    "at": "2026-10-21T00:29:05+00:00",
-    "unresolved": [],
-    "notes": []
+    "runId": "verify-20261021094335",
+    "at": "2026-10-21T09:43:35+00:00",
+    "unresolved": [
+      "GitHub 릴리스 없음 — 태그 목록은 날짜순이 아니라 최신 버전으로 쓰지 않음"
+    ],
+    "notes": [
+      "GitHub 저장소는 미러로 보임(설명: 'Krita is a free and open source cross-platform application that offers an end-to-end solution for creating digital art files from scratch built on the KDE and Qt frameworks.')",
+      "공식 저장소 https://invent.kde.org/graphics/krita 활동 2026-10-21, 최신 {'tag': 'v6.0.4.1', 'date': '2026-09-30', 'url': 'https://invent.kde.org/graphics/krita/-/tags/v6.0.4.1', 'fromTag': True}",
+      "공식 저장소 라이선스 키: gpl-3.0 (SPDX 표기 확인 후 반영 — C등급)"
+    ]
   },
   "koreanUI": {
     "value": "yes",

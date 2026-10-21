@@ -103,7 +103,7 @@
   "github": {
     "repo": "GNOME/gimp",
     "stars": 6538,
-    "lastPush": "2026-10-20",
+    "lastPush": "2026-10-21",
     "archived": false,
     "latestRelease": {
       "tag": "GIMP_3_2_6",
@@ -113,7 +113,7 @@
     "fetchedAt": "2026-10-21",
     "official": {
       "host": "https://gitlab.gnome.org/GNOME/gimp",
-      "lastActivity": "2026-10-20",
+      "lastActivity": "2026-10-21",
       "latestRelease": {
         "tag": "GIMP_3_2_6",
         "date": "2026-09-10",
@@ -125,10 +125,14 @@
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261021-002905",
-    "at": "2026-10-21T00:29:05+00:00",
+    "runId": "verify-20261021094335",
+    "at": "2026-10-21T09:43:35+00:00",
     "unresolved": [],
-    "notes": []
+    "notes": [
+      "GitHub 저장소는 미러로 보임(설명: 'Read-only mirror of https://gitlab.gnome.org/GNOME/gimp')",
+      "공식 저장소 https://gitlab.gnome.org/GNOME/gimp 활동 2026-10-21, 최신 {'tag': 'GIMP_3_2_6', 'date': '2026-09-10', 'url': 'https://gitlab.gnome.org/GNOME/gimp/-/releases/GIMP_3_2_6'}",
+      "공식 저장소 라이선스 키: gpl-3.0+ (SPDX 표기 확인 후 반영 — C등급)"
+    ]
   },
   "koreanUI": {
     "value": "yes",

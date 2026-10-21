@@ -28,8 +28,9 @@ const ldBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const json = (data: Record<string, unknown>) => JSON.stringify(data).replace(/</g, '\\u003c');
 const fontHref = 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap';
 const navLinks = [
-  { href: base, label: '대안 찾기', match: `${base}apps/` },
+  { href: base, label: '오픈소스', match: `${base}apps/` },
   { href: `${base}skills/`, label: '오픈스킬', match: `${base}skills/` },
+  { href: `${base}guides/`, label: '가이드·사례', match: `${base}guides/` },
   { href: `${base}about/`, label: '소개', match: `${base}about/` },
 ];
 ---
@@ -95,10 +96,10 @@ const navLinks = [
     <section>
       <b>콘텐츠</b>
       <ul>
-        <li><a href={base}>대안 찾기 (오픈소스 대안)</a></li>
+        <li><a href={base}>오픈소스 대안</a></li>
         <li><a href={`${base}skills/`}>오픈스킬</a></li>
+        <li><a href={`${base}guides/`}>가이드·사례</a></li>
       </ul>
-      <p class="foot-note">현장사례·수업지도안·심층리뷰는 정식 콘텐츠가 모이면 공개됩니다. 현재 운영은 위 2개 축만 제공합니다.</p>
     </section>
     <section>
       <b>함께</b>
