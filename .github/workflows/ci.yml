@@ -26,7 +26,10 @@ jobs:
         with:
           # 피드 new 항목의 날짜는 콘텐츠 파일을 처음 넣은 커밋 시각이다.
           fetch-depth: 0
-      
+
+      - name: Deploy health check
+        run: bash scripts/test_health_check.sh
+
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:

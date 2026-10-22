@@ -10,6 +10,8 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
+# shellcheck source=health_check.sh
+. "$(dirname "$0")/health_check.sh"
 
 [ -f ops/FREEZE ] && { echo "⛔ ops/FREEZE 존재 — 배포 중단:"; cat ops/FREEZE; exit 1; }
 : "${DEPLOY_HOST:?DEPLOY_HOST 환경변수 필요. ops/DEPLOY_KEY_SETUP.md}"
@@ -87,48 +89,18 @@ SSH "set -e
   [ -d /var/www/alternatives ] && rm -rf /var/www/alternatives
   mv /var/www/alternatives.new /var/www/alternatives"
 
-# 4) 헬스체크
-echo "▶ 헬스체크"
-FAIL=0
-for u in \
-  "https://edtechnewsroom.com/alternatives/" \
-  "https://edtechnewsroom.com/alternatives/skills/" \
-  "https://edtechnewsroom.com/alternatives/about/" \
-  "https://edtechnewsroom.com/alternatives/pagefind/pagefind.js" \
-  "https://edtechnewsroom.com/"; do
-  CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$u" || echo "000")
-  echo "  ${CODE}  ${u}"
-  [ "$CODE" = "200" ] || FAIL=1
-done
-
-# 4-1) HTML이 실제로 참조하는 CSS·JS가 로드되는지 + 하위경로 누락 감지 (2026-10-13 사고 재발 방지)
-echo "▶ 에셋 참조 검사 (홈 HTML 기준)"
-HTML=$(curl -s --max-time 20 "https://edtechnewsroom.com/alternatives/")
-# 캐시 무효화용 쿼리(?v=...)가 붙은 주소도 잡는다
-echo "$HTML" | grep -oE '(href|src)="/[^"]+\.(css|js)(\?[^"]*)?"' | sed -E 's/^(href|src)="//; s/"$//' | sort -u | head -8 > /tmp/live-assets.txt
-if [ ! -s /tmp/live-assets.txt ]; then
-  echo "✗ 홈 HTML에서 에셋 참조를 찾지 못함"; FAIL=1
-fi
-while IFS= read -r a; do
-  CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "https://edtechnewsroom.com${a}" || echo "000")
-  echo "  ${CODE}  ${a}"
-  [ "$CODE" = "200" ] || FAIL=1
-done < /tmp/live-assets.txt
-# 4-2) CDN이 예전 style.css 를 내보내는지 검사 (2026-10-14 사고: 새 HTML + 캐시된 예전 CSS로 화면 깨짐)
-LIVE_CSS=$(echo "$HTML" | grep -oE 'href="/alternatives/style\.css[^"]*"' | head -1 | sed -E 's/^href="//; s/"$//')
-if [ -z "$LIVE_CSS" ]; then
-  echo "✗ 홈 HTML에서 style.css 참조를 찾지 못함"; FAIL=1
-elif ! curl -s --max-time 20 "https://edtechnewsroom.com${LIVE_CSS}" | cmp -s - dist/style.css; then
-  echo "✗ 운영 ${LIVE_CSS} 내용이 이번 빌드(dist/style.css)와 다름 — CDN 캐시 의심"; FAIL=1
-else
-  echo "  ✓ ${LIVE_CSS} = dist/style.css"
-fi
-if echo "$HTML" | grep -qE 'href="/(apps|tools|skills|compare|_astro)/'; then
-  echo "✗ 하위경로(/alternatives) 누락 빌드로 보임 — 루트 절대 링크 발견"; FAIL=1
-fi
-
-if [ "$FAIL" != "0" ]; then
+# 4) 헬스체크. 일시적 지연은 scripts/health_check.sh 가 재시도한다.
+# if 안의 exit 은 ERR 트랩을 돌리지 않으므로, 실패하면 rollback 을 직접 호출한다.
+# 검사 도중 ERR 이 돌면 return 코드가 트랩에 먹히고 롤백이 두 번 날 수 있어 잠시 끈다.
+trap - ERR
+set +e
+check_deploy_health "dist/style.css"
+health_rc=$?
+set -e
+trap rollback ERR
+if [ "$health_rc" -ne 0 ]; then
   echo "✗ 헬스체크 실패 — 롤백합니다"
+  rollback
   exit 1
 fi
 
