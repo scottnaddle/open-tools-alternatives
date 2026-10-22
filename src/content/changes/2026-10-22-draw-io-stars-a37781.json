@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-22T00:33:03+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261022-003303",
+  "target": "tools/draw-io.github.stars",
+  "before": 63573,
+  "after": 63592,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/jgraph/drawio-desktop",
+      "fetchedAt": "2026-10-22T00:33:03+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

@@ -90,20 +90,20 @@
   },
   "github": {
     "repo": "flameshot-org/flameshot",
-    "stars": 31271,
-    "lastPush": "2026-10-16",
+    "stars": 31282,
+    "lastPush": "2026-10-21",
     "archived": false,
     "latestRelease": {
       "tag": "v14.0.0",
       "date": "2026-06-19",
       "url": "https://github.com/flameshot-org/flameshot/releases/tag/v14.0.0"
     },
-    "fetchedAt": "2026-10-21"
+    "fetchedAt": "2026-10-22"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261021-002905",
-    "at": "2026-10-21T00:29:05+00:00",
+    "runId": "daily-20261022-003303",
+    "at": "2026-10-22T00:33:03+00:00",
     "unresolved": [],
     "notes": []
   },

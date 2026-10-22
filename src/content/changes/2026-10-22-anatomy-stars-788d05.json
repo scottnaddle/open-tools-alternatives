@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-22T00:33:03+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261022-003303",
+  "target": "skills/anatomy.stars",
+  "before": 17579,
+  "after": 18534,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/wheresryan22/anatomy",
+      "fetchedAt": "2026-10-22T00:33:03+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}
