@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T00:30:05+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261023-003005",
+  "target": "skills/nexu-io-html-anything.stars",
+  "before": 9204,
+  "after": 9208,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/nexu-io/html-anything",
+      "fetchedAt": "2026-10-23T00:30:05+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

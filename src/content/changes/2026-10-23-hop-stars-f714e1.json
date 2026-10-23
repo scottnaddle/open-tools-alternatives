@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T00:30:05+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261023-003005",
+  "target": "tools/hop.github.stars",
+  "before": 1931,
+  "after": 1933,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/golbin/hop",
+      "fetchedAt": "2026-10-23T00:30:05+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

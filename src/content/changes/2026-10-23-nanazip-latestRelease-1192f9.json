@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-23T00:30:05+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261023-003005",
+  "target": "tools/nanazip.github.latestRelease",
+  "before": {
+    "tag": "7.0.1843.0",
+    "date": "2026-09-17",
+    "url": "https://github.com/M2Team/NanaZip/releases/tag/7.0.1843.0"
+  },
+  "after": {
+    "tag": "7.0.1873.0",
+    "date": "2026-10-22",
+    "url": "https://github.com/M2Team/NanaZip/releases/tag/7.0.1873.0"
+  },
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/M2Team/NanaZip/releases/latest",
+      "fetchedAt": "2026-10-23T00:30:05+00:00",
+      "excerpt": "latest release",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

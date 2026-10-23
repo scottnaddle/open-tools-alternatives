@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T00:30:05+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261023-003005",
+  "target": "tools/gimp.github.lastPush",
+  "before": "2026-10-21",
+  "after": "2026-10-22",
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/GNOME/gimp",
+      "fetchedAt": "2026-10-23T00:30:05+00:00",
+      "excerpt": "lastPush from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}
