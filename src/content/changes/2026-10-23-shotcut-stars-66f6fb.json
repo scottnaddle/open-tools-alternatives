@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T00:30:05+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261023-003005",
+  "target": "tools/shotcut.github.stars",
+  "before": 15464,
+  "after": 15474,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/mltframework/shotcut",
+      "fetchedAt": "2026-10-23T00:30:05+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

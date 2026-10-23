@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T00:30:05+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261023-003005",
+  "target": "tools/peazip.github.stars",
+  "before": 7999,
+  "after": 8007,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/peazip/PeaZip",
+      "fetchedAt": "2026-10-23T00:30:05+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}
