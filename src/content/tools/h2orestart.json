@@ -93,7 +93,7 @@
   },
   "github": {
     "repo": "ebandal/H2Orestart",
-    "stars": 198,
+    "stars": 199,
     "lastPush": "2026-10-18",
     "archived": false,
     "latestRelease": {
@@ -101,12 +101,12 @@
       "date": "2026-10-18",
       "url": "https://github.com/ebandal/H2Orestart/releases/tag/v0.8.0"
     },
-    "fetchedAt": "2026-10-21"
+    "fetchedAt": "2026-10-24"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261021-002905",
-    "at": "2026-10-21T00:29:05+00:00",
+    "runId": "daily-20261024-002524",
+    "at": "2026-10-24T00:25:24+00:00",
     "unresolved": [],
     "notes": []
   },

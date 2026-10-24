@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-24T00:25:24+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261024-002524",
+  "target": "tools/libreoffice.github.stars",
+  "before": 4551,
+  "after": 4553,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/LibreOffice/core",
+      "fetchedAt": "2026-10-24T00:25:24+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

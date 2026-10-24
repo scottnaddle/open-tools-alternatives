@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-24T00:25:24+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261024-002524",
+  "target": "tools/obs-studio.github.latestRelease",
+  "before": {
+    "tag": "32.2.2",
+    "date": "2026-08-14",
+    "url": "https://github.com/obsproject/obs-studio/releases/tag/32.2.2"
+  },
+  "after": {
+    "tag": "33.0.0",
+    "date": "2026-10-23",
+    "url": "https://github.com/obsproject/obs-studio/releases/tag/33.0.0"
+  },
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/obsproject/obs-studio/releases/latest",
+      "fetchedAt": "2026-10-24T00:25:24+00:00",
+      "excerpt": "latest release",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}
