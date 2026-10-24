@@ -92,7 +92,7 @@
   },
   "github": {
     "repo": "inkscape/inkscape",
-    "stars": 4050,
+    "stars": 4055,
     "lastPush": "2022-03-03",
     "archived": false,
     "latestRelease": {
@@ -100,7 +100,7 @@
       "date": "2024-10-12",
       "url": "https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4"
     },
-    "fetchedAt": "2026-10-23",
+    "fetchedAt": "2026-10-24",
     "official": {
       "host": "https://gitlab.com/inkscape/inkscape",
       "lastActivity": "2026-10-23",
@@ -115,8 +115,8 @@
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261023-003005",
-    "at": "2026-10-23T00:30:05+00:00",
+    "runId": "daily-20261024-002524",
+    "at": "2026-10-24T00:25:24+00:00",
     "unresolved": [],
     "notes": []
   },

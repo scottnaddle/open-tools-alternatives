@@ -90,20 +90,20 @@
   },
   "github": {
     "repo": "jgraph/drawio-desktop",
-    "stars": 63612,
-    "lastPush": "2026-10-18",
+    "stars": 63631,
+    "lastPush": "2026-10-23",
     "archived": false,
     "latestRelease": {
-      "tag": "v32.5.5",
-      "date": "2026-10-18",
-      "url": "https://github.com/jgraph/drawio-desktop/releases/tag/v32.5.5"
+      "tag": "v32.6.1",
+      "date": "2026-10-23",
+      "url": "https://github.com/jgraph/drawio-desktop/releases/tag/v32.6.1"
     },
-    "fetchedAt": "2026-10-23"
+    "fetchedAt": "2026-10-24"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261023-003005",
-    "at": "2026-10-23T00:30:05+00:00",
+    "runId": "daily-20261024-002524",
+    "at": "2026-10-24T00:25:24+00:00",
     "unresolved": [],
     "notes": []
   },
