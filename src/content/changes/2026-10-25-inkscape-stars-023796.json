@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-25T00:09:30+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261025-000930",
+  "target": "tools/inkscape.github.stars",
+  "before": 4055,
+  "after": 4057,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/inkscape/inkscape",
+      "fetchedAt": "2026-10-25T00:09:30+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

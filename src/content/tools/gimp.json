@@ -103,30 +103,30 @@
   "github": {
     "repo": "GNOME/gimp",
     "stars": 6547,
-    "lastPush": "2026-10-23",
+    "lastPush": "2026-10-24",
     "archived": false,
     "latestRelease": {
       "tag": "GIMP_3_2_6",
       "date": "2026-09-10",
       "url": "https://gitlab.gnome.org/GNOME/gimp/-/releases/GIMP_3_2_6"
     },
-    "fetchedAt": "2026-10-24",
+    "fetchedAt": "2026-10-25",
     "official": {
       "host": "https://gitlab.gnome.org/GNOME/gimp",
-      "lastActivity": "2026-10-23",
+      "lastActivity": "2026-10-24",
       "latestRelease": {
         "tag": "GIMP_3_2_6",
         "date": "2026-09-10",
         "url": "https://gitlab.gnome.org/GNOME/gimp/-/releases/GIMP_3_2_6"
       },
       "license": "gpl-3.0+",
-      "fetchedAt": "2026-10-23"
+      "fetchedAt": "2026-10-25"
     }
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261024-002524",
-    "at": "2026-10-24T00:25:24+00:00",
+    "runId": "daily-20261025-000930",
+    "at": "2026-10-25T00:09:30+00:00",
     "unresolved": [],
     "notes": []
   },

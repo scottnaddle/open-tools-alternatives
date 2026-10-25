@@ -97,20 +97,20 @@
   },
   "github": {
     "repo": "M2Team/NanaZip",
-    "stars": 15976,
-    "lastPush": "2026-10-22",
+    "stars": 15988,
+    "lastPush": "2026-10-24",
     "archived": false,
     "latestRelease": {
       "tag": "7.0.1873.0",
       "date": "2026-10-22",
       "url": "https://github.com/M2Team/NanaZip/releases/tag/7.0.1873.0"
     },
-    "fetchedAt": "2026-10-24"
+    "fetchedAt": "2026-10-25"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261024-002524",
-    "at": "2026-10-24T00:25:24+00:00",
+    "runId": "daily-20261025-000930",
+    "at": "2026-10-25T00:09:30+00:00",
     "unresolved": [],
     "notes": []
   },
