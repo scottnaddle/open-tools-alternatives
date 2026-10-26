@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-26T05:43:00+00:00",
+  "agent": "engineer",
+  "runId": "weekly-20261026",
+  "target": "tools/inkscape.github.latestRelease",
+  "before": {
+    "tag": "INKSCAPE_1_4",
+    "date": "2024-10-12",
+    "url": "https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4"
+  },
+  "after": {
+    "tag": "INKSCAPE_1_4_4",
+    "date": "2026-05-05",
+    "url": "https://gitlab.com/inkscape/inkscape/-/tags/INKSCAPE_1_4_4"
+  },
+  "sources": [
+    {
+      "url": "https://gitlab.com/api/v4/projects/inkscape%2Finkscape/releases?per_page=1",
+      "fetchedAt": "2026-10-26T05:43:00+00:00",
+      "excerpt": "Releases API 최신 Release 객체는 INKSCAPE_1_4, released_at 2024-10-12. /-/releases/INKSCAPE_1_4_4 는 HTTP 404.",
+      "method": "release-assets"
+    },
+    {
+      "url": "https://gitlab.com/inkscape/inkscape/-/tags/INKSCAPE_1_4_4",
+      "fetchedAt": "2026-10-26T05:43:00+00:00",
+      "excerpt": "태그 INKSCAPE_1_4_4, 커밋 2026-05-05, 메시지 1.4.4. 같은 날 태그 목록(updated)의 맨 앞이며 1.4.3·1.4.2·1.4.1 태그가 그 뒤에 있다. HTTP 200.",
+      "method": "official-site"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}

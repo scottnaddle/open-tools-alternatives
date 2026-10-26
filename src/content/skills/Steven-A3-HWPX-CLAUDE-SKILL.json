@@ -1,0 +1,19 @@
+{
+  "name": "HWPX Claude Skill (한글 보고서 생성기)",
+  "slug": "Steven-A3-HWPX-CLAUDE-SKILL",
+  "category": "교사 업무·글쓰기",
+  "description": "JSON으로 적은 내용을 표지·제목바·표·계층 기호(□/ㅇ/-)가 갖춰진 HWPX 보고서로 만들어 주는 Claude 스킬입니다. 파이썬 표준 라이브러리만 써서 설치가 가볍고, 기존 HWPX 파일도 서식을 보존한 채 고칠 수 있습니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "GPL-3.0",
+  "sourceUrl": "https://github.com/Steven-A3/HWPX-CLAUDE-SKILL",
+  "dateChecked": "2026-10-26",
+  "previewType": "none",
+  "github": {
+    "repo": "Steven-A3/HWPX-CLAUDE-SKILL",
+    "stars": 24,
+    "createdAt": "2026-02-14T03:04:47Z",
+    "license": "GPL-3.0"
+  }
+}

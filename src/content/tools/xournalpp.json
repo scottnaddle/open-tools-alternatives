@@ -1,0 +1,186 @@
+{
+  "name": "Xournal++",
+  "category": "문서·오피스",
+  "notes": [
+    "PDF 위에 펜으로 필기·주석",
+    "태블릿/펜 지원, 판서 노트"
+  ],
+  "schoolUse": {
+    "value": "PDF 학습지·교과서 위 필기, 태블릿 판서, 손글씨 노트",
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageMode": {
+    "value": "pc",
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "yes",
+      "linux": "yes",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "no",
+      "ios": "no"
+    },
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 설치 안내 확인(2026-10-26)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "license": {
+    "value": "GPL-2.0",
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "GitHub API license.spdx_id",
+        "method": "github-api"
+      }
+    ],
+    "status": "verified",
+    "lastVerified": "2026-10-26"
+  },
+  "officialSite": {
+    "value": "https://xournalpp.github.io",
+    "sources": [
+      {
+        "url": "https://xournalpp.github.io",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "HTTP 200 확인(2026-10-26)",
+        "method": "official-site"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "github": {
+    "repo": "xournalpp/xournalpp",
+    "stars": 15572,
+    "lastPush": "2026-10-25",
+    "archived": false,
+    "latestRelease": {
+      "tag": "v1.3.8",
+      "date": "2026-09-26",
+      "url": "https://github.com/xournalpp/xournalpp/releases/tag/v1.3.8"
+    },
+    "fetchedAt": "2026-10-26"
+  },
+  "health": "active",
+  "features": {
+    "value": [
+      "PDF 주석·필기",
+      "펜 압력 지원",
+      "도형·LaTeX 수식",
+      "PDF 내보내기"
+    ],
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 기능 목록",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "tags": [
+    "판서",
+    "PDF",
+    "필기"
+  ],
+  "network": {
+    "value": "offline",
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "로컬 데스크톱 앱(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "account": {
+    "value": "none",
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "계정 없이 설치·사용(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "studentData": {
+    "value": "local-only",
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "파일을 로컬에서만 처리(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageScope": [
+    "personal",
+    "offline-install"
+  ],
+  "koreanUI": {
+    "value": "yes",
+    "sources": [
+      {
+        "url": "https://github.com/xournalpp/xournalpp/blob/master/po/ko.po",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "저장소에 한국어 번역 파일 존재(2026-10-26 확인)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  }
+}

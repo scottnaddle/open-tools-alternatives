@@ -1,0 +1,19 @@
+{
+  "name": "HWPX 플러그인 (python-hwpx 공식 스킬)",
+  "slug": "airmang-hwpx-plugins",
+  "category": "교사 업무·글쓰기",
+  "description": "한글(HWPX) 문서를 Claude Code·Codex·Cursor 같은 에이전트에게 자연어로 만들고 고치게 하는 스킬·플러그인입니다. 순수 파이썬 엔진(python-hwpx)이 처리해 한컴오피스 없이도 공문·계획서·양식 채우기를 자동화할 수 있습니다.",
+  "usageScope": "교사 개인용",
+  "installNeeded": true,
+  "apiKeyNeeded": false,
+  "license": "Apache-2.0",
+  "sourceUrl": "https://github.com/airmang/hwpx-plugins",
+  "dateChecked": "2026-10-26",
+  "previewType": "none",
+  "github": {
+    "repo": "airmang/hwpx-plugins",
+    "stars": 34,
+    "createdAt": "2026-02-27T12:47:05Z",
+    "license": "Apache-2.0"
+  }
+}

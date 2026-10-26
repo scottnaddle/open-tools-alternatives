@@ -1,0 +1,202 @@
+{
+  "name": "OpenBoard",
+  "category": "이미지·디자인",
+  "notes": [
+    "교실용 전자칠판(인터랙티브 화이트보드) 프로그램",
+    "스위스 대학 개발, 수업 녹화 기능"
+  ],
+  "schoolUse": {
+    "value": "전자칠판 판서, 수업 화면 녹화, 웹 위젯 활용",
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageMode": {
+    "value": "pc",
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "yes",
+      "linux": "partial",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "no",
+      "ios": "no"
+    },
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 설치 안내 확인(2026-10-26)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "license": {
+    "value": "GPL-3.0",
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "GitHub API license.spdx_id",
+        "method": "github-api"
+      }
+    ],
+    "status": "verified",
+    "lastVerified": "2026-10-26"
+  },
+  "officialSite": {
+    "value": "https://openboard.ch",
+    "sources": [
+      {
+        "url": "https://openboard.ch",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "HTTP 200 확인(2026-10-26)",
+        "method": "official-site"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "github": {
+    "repo": "OpenBoard-org/OpenBoard",
+    "stars": 3085,
+    "lastPush": "2026-10-23",
+    "archived": false,
+    "latestRelease": {
+      "tag": "v1.7.7",
+      "date": "2026-03-30",
+      "url": "https://github.com/OpenBoard-org/OpenBoard/releases/tag/v1.7.7"
+    },
+    "fetchedAt": "2026-10-26"
+  },
+  "health": "active",
+  "features": {
+    "value": [
+      "판서·펜",
+      "PDF 가져와 판서",
+      "수업 녹화",
+      "웹 위젯"
+    ],
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 기능 목록",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "tags": [
+    "판서",
+    "전자칠판"
+  ],
+  "network": {
+    "value": "offline",
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "로컬 데스크톱 앱(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "account": {
+    "value": "none",
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "계정 없이 설치·사용(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "studentData": {
+    "value": "local-only",
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "파일을 로컬에서만 처리(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageScope": [
+    "personal",
+    "offline-install"
+  ],
+  "koreanUI": {
+    "value": "yes",
+    "sources": [
+      {
+        "url": "https://github.com/OpenBoard-org/OpenBoard/blob/master/resources/i18n/OpenBoard_ko.ts",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "저장소에 한국어 번역 파일 존재(2026-10-26 확인)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "koreanReviews": [
+    {
+      "url": "https://wacomkoreablog.com/1236",
+      "summary": "와콤코리아 블로그: 온라인 수업용 무료 판서 프로그램으로 OpenBoard를 소개하고 신티크16과 함께 필기하는 방법을 안내(2020)"
+    },
+    {
+      "url": "https://arinpapatips.blogspot.com/2024/01/openboard.html",
+      "summary": "OpenBoard 설치(우분투 DEB)와 녹화·펜·라인 등 단축키를 정리한 사용 메모(2024)"
+    }
+  ],
+  "tutorials": [
+    {
+      "title": "OpenBoard (오픈보드) 디지털 화이트보드 전자칠판 for 강의, 수업, 학교, 대학, 회의 무료 Free - 다운로드 & 설치하기 download & install",
+      "channel": "CODEDRAGON - ITBrain",
+      "url": "https://www.youtube.com/watch?v=5xYEaSp_dJM"
+    }
+  ]
+}
