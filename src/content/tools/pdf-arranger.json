@@ -1,0 +1,190 @@
+{
+  "name": "PDF Arranger",
+  "category": "문서·오피스",
+  "notes": [
+    "PDF 병합·분할·회전·페이지 순서 정리",
+    "오프라인, 가벼움"
+  ],
+  "schoolUse": {
+    "value": "학습지·가정통신문 PDF 합치기·쪽 정리",
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageMode": {
+    "value": "pc",
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "partial",
+      "linux": "yes",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "no",
+      "ios": "no"
+    },
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 설치 안내 확인(2026-10-26)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "license": {
+    "value": "GPL-3.0",
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "GitHub API license.spdx_id",
+        "method": "github-api"
+      }
+    ],
+    "status": "verified",
+    "lastVerified": "2026-10-26"
+  },
+  "officialSite": {
+    "value": "https://github.com/pdfarranger/pdfarranger",
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "HTTP 200 확인(2026-10-26)",
+        "method": "official-site"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "github": {
+    "repo": "pdfarranger/pdfarranger",
+    "stars": 5997,
+    "lastPush": "2026-10-01",
+    "archived": false,
+    "latestRelease": {
+      "tag": "1.14.0",
+      "date": "2026-05-23",
+      "url": "https://github.com/pdfarranger/pdfarranger/releases/tag/1.14.0"
+    },
+    "fetchedAt": "2026-10-26"
+  },
+  "health": "active",
+  "features": {
+    "value": [
+      "PDF 병합",
+      "페이지 분할·추출",
+      "회전·자르기",
+      "썸네일 드래그 정렬"
+    ],
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 기능 목록",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "tags": [
+    "PDF"
+  ],
+  "network": {
+    "value": "offline",
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "로컬 데스크톱 앱(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "account": {
+    "value": "none",
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "계정 없이 설치·사용(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "studentData": {
+    "value": "local-only",
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "파일을 로컬에서만 처리(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageScope": [
+    "personal",
+    "offline-install"
+  ],
+  "koreanUI": {
+    "value": "yes",
+    "sources": [
+      {
+        "url": "https://github.com/pdfarranger/pdfarranger/blob/main/po/ko.po",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "저장소에 한국어 번역 파일 존재(2026-10-26 확인)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "koreanReviews": [
+    {
+      "url": "https://down.moamoang.co.kr/pdf-arranger",
+      "summary": "다운로드 안내 사이트(후기보다 안내 글): 페이지 재배열·추출·회전 기능과 무료 사용 범위·설치 방법을 한국어로 정리"
+    }
+  ]
+}

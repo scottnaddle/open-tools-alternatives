@@ -27,6 +27,14 @@ const categoryTasks = CATEGORY_TASKS[t.category] || [];
 const site = Astro.site ?? 'https://edtechnewsroom.com';
 const pageUrl = absUrl(base, `tools/${tool.id}/`, site);
 const appsUsing = (await getCollection('schoolApps')).filter((a) => a.data.alternatives.some((x) => x.tool.id === tool.id));
+const sameCategory = (await getCollection('tools'))
+  .filter((other) => other.id !== tool.id && other.data.category === t.category)
+  .sort((a, b) => a.data.name.localeCompare(b.data.name, 'ko'));
+function platState(key: string, value: string, on: boolean) {
+  if (on) return 'on';
+  if (key !== 'web' && value === 'partial') return 'part';
+  return 'off';
+}
 const seoTitle = `${t.name} – 학교에서 쓸 무료 프로그램`;
 const seoDesc = cut(t.schoolUse.value, 150);
 ---
@@ -72,7 +80,16 @@ const seoDesc = cut(t.schoolUse.value, 150);
           <tr>
             <th>쓸 수 있는 곳</th>
             <td>
-              {PLAT.map(([k, n, f]) => <span class={`plat ${f(t.platforms.value) ? 'on' : 'off'}`} style="margin-right:6px">{n}</span>)}
+              {PLAT.map(([k, n, f]) => {
+                const value = k === 'win' ? t.platforms.value.windows
+                  : k === 'mac' ? t.platforms.value.macos
+                  : k === 'linux' ? t.platforms.value.linux
+                  : k === 'web' ? t.platforms.value.web
+                  : k === 'and' ? t.platforms.value.android
+                  : t.platforms.value.ios;
+                const state = platState(k, value, f(t.platforms.value));
+                return <span class={`plat ${state}`} style="margin-right:6px">{n}{state === 'part' ? ' (일부)' : ''}</span>;
+              })}
               <Status fact={t.platforms} />
             </td>
           </tr>
@@ -103,7 +120,7 @@ const seoDesc = cut(t.schoolUse.value, 150);
           </tr>
           {t.github.latestRelease && (
             <tr>
-              <th>최신 릴리스</th>
+              <th>{t.github.official?.latestRelease?.fromTag ? '최신 안정 태그' : '최신 릴리스'}</th>
               <td>
                 <a href={t.github.latestRelease.url}>{t.github.latestRelease.tag}</a>
                 · {t.github.latestRelease.date}
@@ -113,6 +130,20 @@ const seoDesc = cut(t.schoolUse.value, 150);
         </tbody>
       </table>
     </div>
+
+    {t.features && (
+      <div class="panel" style="margin:24px 0">
+        <h2>할 수 있는 일</h2>
+        <ul style="margin:0;padding-left:20px">
+          {t.features.value.map((item) => <li>{item}</li>)}
+        </ul>
+        <Status fact={t.features} />
+      </div>
+    )}
+
+    {t.tags.length > 0 && (
+      <p class="hint">분류 단어: {t.tags.join(' · ')}</p>
+    )}
 
     <MediaGuide reviews={t.koreanReviews} tutorials={t.tutorials} />
 
@@ -130,6 +161,15 @@ const seoDesc = cut(t.schoolUse.value, 150);
         <h2>이 프로그램을 대안으로 소개하는 앱</h2>
         <ul style="margin:0;padding-left:20px">
           {appsUsing.map((a) => <li><a href={`${base}apps/${a.id}/`}>{a.data.name} 대신 쓸 프로그램</a></li>)}
+        </ul>
+      </div>
+    )}
+
+    {sameCategory.length > 0 && (
+      <div class="panel" style="margin:24px 0">
+        <h2>같은 분야의 프로그램</h2>
+        <ul style="margin:0;padding-left:20px">
+          {sameCategory.map((other) => <li><a href={`${base}tools/${other.id}/`}>{other.data.name}</a></li>)}
         </ul>
       </div>
     )}

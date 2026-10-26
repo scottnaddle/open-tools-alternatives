@@ -1,0 +1,207 @@
+{
+  "name": "LosslessCut",
+  "category": "영상·오디오",
+  "notes": [
+    "재인코딩 없이 영상 자르기·합치기(화질 손실 없음, 매우 빠름)",
+    "GitHub 배포는 무료, 스토어판은 유료(후원 성격)"
+  ],
+  "schoolUse": {
+    "value": "수업 영상 필요한 구간만 빠르게 자르기·합치기",
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageMode": {
+    "value": "pc",
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "yes",
+      "linux": "yes",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "no",
+      "ios": "no"
+    },
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 설치 안내 확인(2026-10-26)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "license": {
+    "value": "GPL-2.0",
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "GitHub API license.spdx_id",
+        "method": "github-api"
+      }
+    ],
+    "status": "verified",
+    "lastVerified": "2026-10-26"
+  },
+  "officialSite": {
+    "value": "https://losslesscut.app",
+    "sources": [
+      {
+        "url": "https://losslesscut.app",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "HTTP 200 확인(2026-10-26)",
+        "method": "official-site"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "github": {
+    "repo": "mifi/lossless-cut",
+    "stars": 45246,
+    "lastPush": "2026-10-25",
+    "archived": false,
+    "latestRelease": {
+      "tag": "v3.70.1",
+      "date": "2026-10-19",
+      "url": "https://github.com/mifi/lossless-cut/releases/tag/v3.70.1"
+    },
+    "fetchedAt": "2026-10-26"
+  },
+  "health": "active",
+  "features": {
+    "value": [
+      "무손실 자르기",
+      "구간 합치기",
+      "오디오 추출",
+      "스냅샷"
+    ],
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 기능 목록",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "tags": [
+    "영상",
+    "자르기"
+  ],
+  "network": {
+    "value": "offline",
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "로컬 데스크톱 앱(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "account": {
+    "value": "none",
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "계정 없이 설치·사용(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "studentData": {
+    "value": "local-only",
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "파일을 로컬에서만 처리(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageScope": [
+    "personal",
+    "offline-install"
+  ],
+  "koreanUI": {
+    "value": "yes",
+    "sources": [
+      {
+        "url": "https://github.com/mifi/lossless-cut/tree/master/locales/ko",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "저장소에 한국어 번역 파일 존재(2026-10-26 확인)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "koreanReviews": [
+    {
+      "url": "https://m.blog.naver.com/korovo/223945447778",
+      "summary": "인코딩 없이 화질 손실 없이 영상을 자르고 나누는 오픈소스 프로그램으로 소개, 설치·분할 과정을 단계별 설명"
+    },
+    {
+      "url": "https://fpkm.tistory.com/212",
+      "summary": "무손실 동영상 자르기 프로그램으로 LosslessCut의 기능과 사용법을 소개(2021)"
+    }
+  ],
+  "tutorials": [
+    {
+      "title": "동영상 자르기 - 초고속 무료 프로그램 3종, 워터마크 없음",
+      "channel": "컴싸부",
+      "url": "https://www.youtube.com/watch?v=YO-cVYi2oW4"
+    },
+    {
+      "title": "lossless cut 다운로드해서 동영상 합치고 자르기",
+      "channel": "whitehole1002",
+      "url": "https://www.youtube.com/watch?v=umhD6X-U2O0"
+    }
+  ]
+}

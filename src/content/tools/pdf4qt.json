@@ -1,0 +1,177 @@
+{
+  "name": "PDF4QT",
+  "category": "문서·오피스",
+  "notes": [
+    "PDF 보기·주석·페이지 편집·비교·서명 검증 도구 모음",
+    "Windows·Linux만 지원"
+  ],
+  "schoolUse": {
+    "value": "PDF 주석·페이지 편집, 문서 비교",
+    "sources": [
+      {
+        "url": "https://github.com/JakubMelka/PDF4QT",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageMode": {
+    "value": "pc",
+    "sources": [
+      {
+        "url": "https://github.com/JakubMelka/PDF4QT",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "installDifficulty": {
+    "value": "쉬움",
+    "sources": [
+      {
+        "url": "https://github.com/JakubMelka/PDF4QT",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "2026-10-26 조사(GitHub API)",
+        "method": "github-api"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "platforms": {
+    "value": {
+      "windows": "yes",
+      "macos": "no",
+      "linux": "yes",
+      "web": "no",
+      "mobileWeb": "no",
+      "android": "no",
+      "ios": "no"
+    },
+    "sources": [
+      {
+        "url": "https://github.com/JakubMelka/PDF4QT",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 설치 안내 확인(2026-10-26)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "license": {
+    "value": "MIT",
+    "sources": [
+      {
+        "url": "https://github.com/JakubMelka/PDF4QT",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "GitHub API license.spdx_id",
+        "method": "github-api"
+      }
+    ],
+    "status": "verified",
+    "lastVerified": "2026-10-26"
+  },
+  "officialSite": {
+    "value": "https://jakubmelka.github.io",
+    "sources": [
+      {
+        "url": "https://jakubmelka.github.io",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "HTTP 200 확인(2026-10-26)",
+        "method": "official-site"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "github": {
+    "repo": "JakubMelka/PDF4QT",
+    "stars": 1504,
+    "lastPush": "2026-10-25",
+    "archived": false,
+    "latestRelease": {
+      "tag": "v1.6.0.0",
+      "date": "2026-06-14",
+      "url": "https://github.com/JakubMelka/PDF4QT/releases/tag/v1.6.0.0"
+    },
+    "fetchedAt": "2026-10-26"
+  },
+  "health": "active",
+  "features": {
+    "value": [
+      "PDF 주석",
+      "페이지 편집·병합",
+      "문서 비교",
+      "전자서명 확인"
+    ],
+    "sources": [
+      {
+        "url": "https://github.com/JakubMelka/PDF4QT",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "README 기능 목록",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "tags": [
+    "PDF"
+  ],
+  "network": {
+    "value": "offline",
+    "sources": [
+      {
+        "url": "https://github.com/JakubMelka/PDF4QT",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "로컬 데스크톱 앱(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "account": {
+    "value": "none",
+    "sources": [
+      {
+        "url": "https://github.com/JakubMelka/PDF4QT",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "계정 없이 설치·사용(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "studentData": {
+    "value": "local-only",
+    "sources": [
+      {
+        "url": "https://github.com/JakubMelka/PDF4QT",
+        "fetchedAt": "2026-10-26T14:30:00+09:00",
+        "excerpt": "파일을 로컬에서만 처리(README)",
+        "method": "readme"
+      }
+    ],
+    "status": "unverified",
+    "lastVerified": null
+  },
+  "usageScope": [
+    "personal",
+    "offline-install"
+  ],
+  "koreanReviews": [
+    {
+      "url": "https://it365.janqi.com/pdf/pdf4qt/ko/",
+      "summary": "(소개 페이지, 광고 있음) 멀티스레드 렌더링·텍스트 편집·PDF 비교 등 기능을 한국어로 소개. 개인 후기는 찾지 못함"
+    }
+  ]
+}

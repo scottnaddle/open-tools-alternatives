@@ -2,7 +2,8 @@
   "name": "Inkscape",
   "category": "이미지·디자인",
   "notes": [
-    "GitHub 미러 정체, 실제 개발은 GitLab"
+    "GitHub 미러 정체, 실제 개발은 GitLab",
+    "GitLab Releases 목록의 최신 Release 객체는 INKSCAPE_1_4(2024-10-12)입니다. 1.4.1–1.4.4는 Release 항목 없이 태그만 있고, 최신 안정 태그는 INKSCAPE_1_4_4(커밋 2026-05-05, 메시지 1.4.4)입니다."
   ],
   "schoolUse": {
     "value": "벡터 그림, 포스터",
@@ -96,21 +97,22 @@
     "lastPush": "2022-03-03",
     "archived": false,
     "latestRelease": {
-      "tag": "INKSCAPE_1_4",
-      "date": "2024-10-12",
-      "url": "https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4"
+      "tag": "INKSCAPE_1_4_4",
+      "date": "2026-05-05",
+      "url": "https://gitlab.com/inkscape/inkscape/-/tags/INKSCAPE_1_4_4"
     },
     "fetchedAt": "2026-10-25",
     "official": {
       "host": "https://gitlab.com/inkscape/inkscape",
       "lastActivity": "2026-10-25",
       "latestRelease": {
-        "tag": "INKSCAPE_1_4",
-        "date": "2024-10-12",
-        "url": "https://gitlab.com/inkscape/inkscape/-/releases/INKSCAPE_1_4"
+        "tag": "INKSCAPE_1_4_4",
+        "date": "2026-05-05",
+        "url": "https://gitlab.com/inkscape/inkscape/-/tags/INKSCAPE_1_4_4",
+        "fromTag": true
       },
       "license": "other",
-      "fetchedAt": "2026-10-25"
+      "fetchedAt": "2026-10-26"
     }
   },
   "health": "active",
