@@ -92,7 +92,7 @@
   },
   "github": {
     "repo": "ShareX/ShareX",
-    "stars": 40383,
+    "stars": 40410,
     "lastPush": "2026-10-24",
     "archived": false,
     "latestRelease": {
@@ -100,12 +100,12 @@
       "date": "2026-07-03",
       "url": "https://github.com/ShareX/ShareX/releases/tag/v21.0.0"
     },
-    "fetchedAt": "2026-10-25"
+    "fetchedAt": "2026-10-26"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261025-000930",
-    "at": "2026-10-25T00:09:30+00:00",
+    "runId": "daily-20261026-000122",
+    "at": "2026-10-26T00:01:22+00:00",
     "unresolved": [],
     "notes": []
   },

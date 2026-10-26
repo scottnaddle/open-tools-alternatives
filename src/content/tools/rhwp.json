@@ -94,20 +94,20 @@
   },
   "github": {
     "repo": "edwardkim/rhwp",
-    "stars": 3998,
-    "lastPush": "2026-10-24",
+    "stars": 4001,
+    "lastPush": "2026-10-25",
     "archived": false,
     "latestRelease": {
       "tag": "v0.8.7",
       "date": "2026-10-06",
       "url": "https://github.com/edwardkim/rhwp/releases/tag/v0.8.7"
     },
-    "fetchedAt": "2026-10-25"
+    "fetchedAt": "2026-10-26"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261025-000930",
-    "at": "2026-10-25T00:09:30+00:00",
+    "runId": "daily-20261026-000122",
+    "at": "2026-10-26T00:01:22+00:00",
     "unresolved": [],
     "notes": []
   },
