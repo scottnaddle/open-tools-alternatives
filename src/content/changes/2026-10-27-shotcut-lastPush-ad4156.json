@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-27T01:21:00+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261027-012100",
+  "target": "tools/shotcut.github.lastPush",
+  "before": "2026-10-25",
+  "after": "2026-10-27",
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/mltframework/shotcut",
+      "fetchedAt": "2026-10-27T01:21:00+00:00",
+      "excerpt": "lastPush from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}
