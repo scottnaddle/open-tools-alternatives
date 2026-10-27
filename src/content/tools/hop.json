@@ -94,7 +94,7 @@
   },
   "github": {
     "repo": "golbin/hop",
-    "stars": 1942,
+    "stars": 1945,
     "lastPush": "2026-10-08",
     "archived": false,
     "latestRelease": {
@@ -102,12 +102,12 @@
       "date": "2026-10-08",
       "url": "https://github.com/golbin/hop/releases/tag/v0.4.5"
     },
-    "fetchedAt": "2026-10-26"
+    "fetchedAt": "2026-10-27"
   },
   "health": "active",
   "verification": {
-    "runId": "daily-20261026-000122",
-    "at": "2026-10-26T00:01:22+00:00",
+    "runId": "daily-20261027-012100",
+    "at": "2026-10-27T01:21:00+00:00",
     "unresolved": [],
     "notes": []
   },

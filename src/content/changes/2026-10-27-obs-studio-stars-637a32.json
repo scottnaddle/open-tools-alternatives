@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-27T01:21:00+00:00",
+  "agent": "daily-verifier",
+  "runId": "daily-20261027-012100",
+  "target": "tools/obs-studio.github.stars",
+  "before": 78210,
+  "after": 78290,
+  "sources": [
+    {
+      "url": "https://api.github.com/repos/obsproject/obs-studio",
+      "fetchedAt": "2026-10-27T01:21:00+00:00",
+      "excerpt": "stars from repos API",
+      "method": "github-api"
+    }
+  ],
+  "tier": "A",
+  "gates": [],
+  "commit": "pending"
+}
